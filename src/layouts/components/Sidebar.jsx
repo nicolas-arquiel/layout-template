@@ -62,17 +62,17 @@ export default function Sidebar({ className }) {
       {/* Sidebar */}
       <aside
         className={cn(
-          'fixed left-0 top-16 z-50 h-[calc(100vh-4rem)] overflow-y-auto border-r border-gray-200 bg-white transition-all duration-300 dark:border-gray-800 dark:bg-gray-900',
-          // Mobile styles
-          'w-[280px]',
+          'h-[calc(100vh-4rem)] overflow-y-auto border-r border-gray-200 bg-white transition-all duration-300 ease-in-out dark:border-gray-800 dark:bg-gray-900',
+          // Mobile: Fixed overlay
+          'fixed left-0 top-16 z-50 w-[280px]',
           {
-            '-translate-x-full md:translate-x-0': !mobileMenuOpen,
+            '-translate-x-full': !mobileMenuOpen,
             'translate-x-0': mobileMenuOpen,
           },
-          // Desktop styles
+          // Desktop: Fixed in place, parte del flujo
           {
-            'md:w-[280px]': !menuCollapsed,
-            'md:w-[70px]': menuCollapsed,
+            'md:translate-x-0 md:w-[280px]': !menuCollapsed,
+            'md:translate-x-0 md:w-[70px]': menuCollapsed,
           },
           className
         )}
@@ -115,14 +115,6 @@ export default function Sidebar({ className }) {
           </div>
         )}
       </aside>
-
-      {/* Spacer for desktop */}
-      <div
-        className={cn('hidden md:block', {
-          'md:w-[280px]': !menuCollapsed,
-          'md:w-[70px]': menuCollapsed,
-        })}
-      />
     </>
   )
 }

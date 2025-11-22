@@ -1,59 +1,79 @@
 import { Outlet } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { useEffect } from 'react'
 import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
 import Footer from './components/Footer'
+import ThemeCustomizer from '../components/ThemeCustomizer/ThemeCustomizer'
+import { useTheme } from '../context/ThemeContext'
 import { cn } from '../utils/cn'
 
 /**
  * Layout principal de la aplicación
- * Incluye Navbar, Sidebar, área de contenido y Footer
- * Maneja el tema (dark/light mode) y el estado del sidebar
+ * Incluye Navbar, Sidebar, área de contenido, Footer y Theme Customizer
+ * Responsive completo con sidebar que empuja el contenido (no overlay)
  *
  * @returns {JSX.Element}
  */
 export default function MainLayout() {
-  const skin = useSelector((state) => state.layout.skin)
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
-
-  // Aplicar clase dark al HTML según el tema
-  useEffect(() => {
-    if (skin === 'dark') {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-  }, [skin])
+  const { themeConfig } = useTheme()
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      {/* Navbar */}
+    <div className="flex min-h-screen flex-col bg-gray-50 dark:bg-gray-950">
+      {/* Navbar - Fixed at top */}
       <Navbar />
 
-      {/* Sidebar */}
-      <Sidebar />
+      {/* Main layout container - Flex row for sidebar + content */}
+      <div className="flex flex-1">
+        {/* Sidebar - Fixed width, pushes content */}
+        <Sidebar />
 
-      {/* Main Content Area */}
-      <main
-        className={cn(
-          'min-h-[calc(100vh-4rem)] transition-all duration-300',
-          // Ajustar padding según estado del sidebar en desktop
-          {
-            'md:pl-0': false, // El spacer dentro de Sidebar ya maneja el espacio
-          }
-        )}
-      >
-        <div className="flex min-h-[calc(100vh-4rem)] flex-col">
-          {/* Content */}
-          <div className="flex-1 p-6">
-            <Outlet />
+        {/* Main Content Area - Flex column with content + footer */}
+        <main
+          className={cn(
+            'flex flex-1 flex-col transition-all duration-300 ease-in-out',
+            // Mobile: Full width (sidebar is overlay)
+            'w-full',
+            // Desktop: Adjust for sidebar width
+            {
+              'md:ml-[280px]': !menuCollapsed, // Sidebar expandido
+              'md:ml-[70px]': menuCollapsed, // Sidebar colapsado
+            }
+          )}
+        >
+          {/* Content Container */}
+          <div
+            className={cn('flex-1 p-6', {
+              'mx-auto w-full': themeConfig.contentWidth === 'full',
+              'container mx-auto': themeConfig.contentWidth === 'boxed',
+            })}
+          >
+            {/* Outlet con animación de ruta */}
+            <div
+              className={cn('animate-fade-in', {
+                'opacity-0 animate-[fade-in_0.3s_ease-in-out_forwards]':
+                  themeConfig.routerTransition === 'fade',
+                'translate-x-4 opacity-0 animate-[slide-in-left_0.3s_ease-in-out_forwards]':
+                  themeConfig.routerTransition === 'slide',
+              })}
+            >
+              <Outlet />
+            </div>
           </div>
 
           {/* Footer */}
-          <Footer />
-        </div>
-      </main>
+          {themeConfig.footerType !== 'hidden' && (
+            <Footer
+              className={cn({
+                'sticky bottom-0': themeConfig.footerType === 'sticky',
+              })}
+            />
+          )}
+        </main>
+      </div>
+
+      {/* Theme Customizer (Floating button + Panel) */}
+      <ThemeCustomizer />
     </div>
   )
 }
