@@ -2,11 +2,11 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { LogIn, Mail, Lock } from 'react-feather'
+import { Box, Card, Heading, Text, TextField, Button, Flex, Checkbox } from '@radix-ui/themes'
 import { setAuth } from '../store/authSlice'
 
 /**
- * Componente de página de Login
- * Formulario de autenticación con validación básica
+ * Login - Página de inicio de sesión simple
  *
  * @returns {JSX.Element}
  */
@@ -23,139 +23,171 @@ export default function Login() {
 
     // Simular llamada a API
     setTimeout(() => {
-      // Mock user data con permisos
       const userData = {
         user: {
           id: 1,
           nombre: 'Juan Pérez',
           email: email,
         },
-        permisos: ['*'], // Todos los permisos para demo
+        permisos: ['*'],
         token: 'mock-jwt-token',
       }
 
-      // Guardar en Redux
       dispatch(setAuth(userData))
-
-      // Navegar a inicio
       navigate('/inicio')
       setLoading(false)
     }, 1000)
   }
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-8 shadow-xl dark:border-gray-800 dark:bg-gray-900">
-      {/* Logo/Header */}
-      <div className="mb-8 text-center">
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-600">
-          <LogIn size={32} className="text-white" />
-        </div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Bienvenido
-        </h1>
-        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-          Inicia sesión en tu cuenta
-        </p>
-      </div>
+    <Box
+      style={{
+        minHeight: '100vh',
+        backgroundColor: 'var(--bg-primary)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '24px',
+      }}
+    >
+      <Card
+        style={{
+          backgroundColor: 'var(--bg-secondary)',
+          width: '100%',
+          maxWidth: '400px',
+        }}
+      >
+        <Box p="6">
+          {/* Header */}
+          <Flex direction="column" align="center" mb="6">
+            <Flex
+              align="center"
+              justify="center"
+              mb="4"
+              style={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '50%',
+                backgroundColor: 'var(--accent-9)',
+              }}
+            >
+              <LogIn size={32} color="white" />
+            </Flex>
+            <Heading size="6" mb="2" align="center">
+              Bienvenido
+            </Heading>
+            <Text size="2" color="gray" align="center">
+              Inicia sesión en tu cuenta
+            </Text>
+          </Flex>
 
-      {/* Form */}
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Email Field */}
-        <div>
-          <label
-            htmlFor="email"
-            className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
-          >
-            Correo Electrónico
-          </label>
-          <div className="relative">
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-              <Mail size={20} className="text-gray-400" />
-            </div>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pl-10 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
-              placeholder="tu@email.com"
-            />
-          </div>
-        </div>
+          {/* Form */}
+          <form onSubmit={handleSubmit}>
+            <Flex direction="column" gap="4">
+              {/* Email */}
+              <Box>
+                <Text size="2" weight="medium" mb="2" as="label">
+                  Correo Electrónico
+                </Text>
+                <TextField.Root
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="tu@email.com"
+                  size="3"
+                  required
+                >
+                  <TextField.Slot>
+                    <Mail size={16} />
+                  </TextField.Slot>
+                </TextField.Root>
+              </Box>
 
-        {/* Password Field */}
-        <div>
-          <label
-            htmlFor="password"
-            className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
-          >
-            Contraseña
-          </label>
-          <div className="relative">
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-              <Lock size={20} className="text-gray-400" />
-            </div>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pl-10 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
-              placeholder="••••••••"
-            />
-          </div>
-        </div>
+              {/* Password */}
+              <Box>
+                <Text size="2" weight="medium" mb="2" as="label">
+                  Contraseña
+                </Text>
+                <TextField.Root
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  size="3"
+                  required
+                >
+                  <TextField.Slot>
+                    <Lock size={16} />
+                  </TextField.Slot>
+                </TextField.Root>
+              </Box>
 
-        {/* Remember & Forgot */}
-        <div className="flex items-center justify-between">
-          <label className="flex items-center">
-            <input
-              type="checkbox"
-              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-700"
-            />
-            <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">
-              Recordarme
-            </span>
-          </label>
-          <button
-            type="button"
-            className="text-sm font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400"
-          >
-            ¿Olvidaste tu contraseña?
-          </button>
-        </div>
+              {/* Remember & Forgot */}
+              <Flex justify="between" align="center">
+                <Flex asChild gap="2" align="center">
+                  <label style={{ cursor: 'pointer' }}>
+                    <Checkbox size="1" />
+                    <Text size="2" color="gray">
+                      Recordarme
+                    </Text>
+                  </label>
+                </Flex>
+                <Button variant="ghost" size="2" type="button">
+                  <Text size="2">¿Olvidaste tu contraseña?</Text>
+                </Button>
+              </Flex>
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={loading}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-3 font-medium text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:focus:ring-offset-gray-900"
-        >
-          {loading ? (
-            <>
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
-              <span>Iniciando sesión...</span>
-            </>
-          ) : (
-            <>
-              <LogIn size={20} />
-              <span>Iniciar Sesión</span>
-            </>
-          )}
-        </button>
-      </form>
+              {/* Submit Button */}
+              <Button type="submit" size="3" disabled={loading} style={{ width: '100%' }}>
+                {loading ? (
+                  <>
+                    <Box
+                      style={{
+                        width: '20px',
+                        height: '20px',
+                        border: '2px solid white',
+                        borderTopColor: 'transparent',
+                        borderRadius: '50%',
+                        animation: 'spin 1s linear infinite',
+                      }}
+                    />
+                    Iniciando sesión...
+                  </>
+                ) : (
+                  <>
+                    <LogIn size={20} />
+                    Iniciar Sesión
+                  </>
+                )}
+              </Button>
+            </Flex>
+          </form>
 
-      {/* Footer */}
-      <div className="mt-6 text-center">
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          ¿No tienes cuenta?{' '}
-          <button className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400">
-            Regístrate
-          </button>
-        </p>
-      </div>
-    </div>
+          {/* Footer */}
+          <Box mt="6" style={{ textAlign: 'center' }}>
+            <Text size="2" color="gray">
+              ¿No tienes cuenta?{' '}
+              <Button variant="ghost" size="2" style={{ display: 'inline', padding: 0 }}>
+                <Text size="2" weight="medium">
+                  Regístrate
+                </Text>
+              </Button>
+            </Text>
+          </Box>
+        </Box>
+      </Card>
+
+      {/* Spinner animation */}
+      <style>{`
+        @keyframes spin {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+      `}</style>
+    </Box>
   )
 }

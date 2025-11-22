@@ -1,14 +1,23 @@
 import { Outlet } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { Box, Flex, Text } from '@radix-ui/themes'
+import { Box } from '@radix-ui/themes'
 import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
 import ThemeCustomizer from '../components/ThemeCustomizer/ThemeCustomizer'
 import { useThemeConfig } from '../App'
 
 /**
- * Layout principal de la aplicación
- * ESTRUCTURA: Sidebar fijo a la izquierda (270px) + Main area con margin-left
+ * Layout principal - Sidebar fijo + Main area con margin-left
+ *
+ * ESTRUCTURA:
+ * ┌──────────────────────────────────────┐
+ * │ SIDEBAR (fijo) │ NAVBAR              │
+ * │                ├─────────────────────┤
+ * │                │ CONTENT             │
+ * │                │                     │
+ * │                ├─────────────────────┤
+ * │                │ FOOTER              │
+ * └──────────────────────────────────────┘
  *
  * @returns {JSX.Element}
  */
@@ -22,11 +31,11 @@ export default function MainLayout() {
   return (
     <Box
       style={{
-        minHeight: '100vh',
+        height: '100vh',
         backgroundColor: 'var(--bg-primary)',
       }}
     >
-      {/* ========== SIDEBAR - FIXED LEFT ========== */}
+      {/* ========== SIDEBAR - FIJO IZQUIERDA ========== */}
       <Box
         className="sidebar-container"
         style={{
@@ -37,90 +46,93 @@ export default function MainLayout() {
           height: '100vh',
           backgroundColor: 'var(--sidebar-bg)',
           borderRight: '1px solid var(--border-color)',
-          zIndex: 1000,
+          zIndex: 40,
           transition: 'width 300ms ease-in-out',
         }}
       >
         <Sidebar />
       </Box>
 
-      {/* ========== MAIN AREA (Navbar + Content + Footer) ========== */}
+      {/* ========== MAIN AREA - MARGIN LEFT ========== */}
       <Box
         style={{
           marginLeft: `${sidebarWidth}px`,
-          transition: 'margin-left 300ms ease-in-out',
-          minHeight: '100vh',
+          height: '100vh',
           display: 'flex',
           flexDirection: 'column',
+          transition: 'margin-left 300ms ease-in-out',
         }}
       >
-        {/* Navbar - Frame superior */}
+        {/* NAVBAR - Solo en main area, SIN hamburger */}
         <Box
           style={{
-            height: '72px',
+            height: '64px',
             backgroundColor: 'var(--navbar-bg)',
             borderBottom: '1px solid var(--border-color)',
             position: themeConfig.navbarSticky ? 'sticky' : 'relative',
             top: 0,
-            zIndex: 40,
+            zIndex: 30,
           }}
         >
           <Navbar />
         </Box>
 
-        {/* Content Area */}
+        {/* CONTENT AREA */}
         <Box
           style={{
             flex: 1,
+            overflow: 'auto',
             padding: '24px',
           }}
         >
           <Outlet />
         </Box>
 
-        {/* Footer */}
+        {/* FOOTER */}
         {themeConfig.footerType !== 'hidden' && (
           <Box
             style={{
+              height: '48px',
               backgroundColor: 'var(--sidebar-bg)',
               borderTop: '1px solid var(--border-color)',
-              padding: '12px 24px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '0 24px',
             }}
           >
-            <Text size="1" color="gray">
+            <Box
+              style={{
+                fontSize: 'var(--font-size-1)',
+                color: 'var(--gray-11)',
+              }}
+            >
               Sistema de gestión (UCU), Universidad de Concepción del Uruguay
-            </Text>
+            </Box>
           </Box>
         )}
       </Box>
 
-      {/* Theme Customizer Canvas */}
+      {/* Theme Customizer */}
       <ThemeCustomizer />
 
       {/* Mobile Overlay */}
       {mobileMenuOpen && (
         <Box
-          onClick={() => {}}
           style={{
             position: 'fixed',
             inset: 0,
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            zIndex: 999,
+            zIndex: 35,
           }}
         />
       )}
 
-      {/* CSS for responsive sidebar */}
+      {/* Responsive Styles */}
       <style>{`
-        /* Mobile: sidebar overlay */
         @media (max-width: 767px) {
           .sidebar-container {
             transform: ${mobileMenuOpen ? 'translateX(0)' : 'translateX(-100%)'};
-            transition: transform 300ms ease-in-out, width 300ms ease-in-out;
-          }
-
-          .main-area {
-            margin-left: 0 !important;
           }
         }
       `}</style>

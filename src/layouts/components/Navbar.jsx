@@ -1,13 +1,13 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Menu, Moon, Sun, User, Settings, LogOut } from 'react-feather'
-import { Flex, Text, IconButton, Avatar, DropdownMenu, Separator } from '@radix-ui/themes'
-import { toggleMobileMenu } from '../../store/layoutSlice'
+import { Moon, Sun, User, Settings, LogOut } from 'react-feather'
+import { Flex, Text, IconButton, Avatar, DropdownMenu, Separator, Box } from '@radix-ui/themes'
 import { clearAuth } from '../../store/authSlice'
 import { useThemeConfig } from '../../App'
+import { useDispatch } from 'react-redux'
 
 /**
- * Componente Navbar con breadcrumbs
+ * Navbar - Solo breadcrumbs y user menu (SIN hamburger)
  *
  * @returns {JSX.Element}
  */
@@ -20,10 +20,6 @@ export default function Navbar() {
 
   const toggleAppearance = () => {
     updateThemeConfig('appearance', themeConfig.appearance === 'light' ? 'dark' : 'light')
-  }
-
-  const handleToggleMobile = () => {
-    dispatch(toggleMobileMenu())
   }
 
   const handleLogout = () => {
@@ -52,32 +48,26 @@ export default function Navbar() {
   }
 
   return (
-    <Flex align="center" justify="between" px="6" style={{ height: '100%' }}>
-      {/* Left Section - Mobile menu toggle + Breadcrumbs */}
-      <Flex align="center" gap="4">
-        {/* Mobile Toggle */}
-        <IconButton
-          variant="ghost"
-          onClick={handleToggleMobile}
-          aria-label="Toggle mobile menu"
-          display={{ initial: 'flex', md: 'none' }}
-        >
-          <Menu size={20} />
-        </IconButton>
-
-        {/* Breadcrumbs */}
-        <Flex direction="column" gap="1">
-          <Text size="5" weight="medium">
-            {getPageTitle()}
-          </Text>
-          <Text size="2" color="gray">
-            UCU Gestión › {getPageTitle()}
-          </Text>
-        </Flex>
+    <Flex
+      align="center"
+      justify="between"
+      px="6"
+      style={{
+        height: '100%',
+      }}
+    >
+      {/* ========== LEFT: BREADCRUMBS ========== */}
+      <Flex direction="column" gap="1">
+        <Text size="4" weight="medium">
+          {getPageTitle()}
+        </Text>
+        <Text size="2" color="gray">
+          UCU Gestión › {getPageTitle()}
+        </Text>
       </Flex>
 
-      {/* Right Section - Theme Toggle & User Dropdown */}
-      <Flex align="center" gap="2">
+      {/* ========== RIGHT: THEME TOGGLE + USER MENU ========== */}
+      <Flex align="center" gap="3">
         {/* Theme Toggle */}
         <IconButton variant="ghost" onClick={toggleAppearance} aria-label="Toggle theme">
           {themeConfig.appearance === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
@@ -99,13 +89,11 @@ export default function Navbar() {
               >
                 <Avatar size="2" fallback={getUserInitials()} color="blue" />
                 {user && (
-                  <Text
-                    size="2"
-                    weight="medium"
-                    display={{ initial: 'none', md: 'block' }}
-                  >
-                    {user.nombre || 'Usuario'}
-                  </Text>
+                  <Box display={{ initial: 'none', md: 'block' }}>
+                    <Text size="2" weight="medium">
+                      {user.nombre || 'Usuario'}
+                    </Text>
+                  </Box>
                 )}
               </button>
             </Flex>

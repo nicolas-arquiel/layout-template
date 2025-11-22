@@ -2,36 +2,16 @@ import { Home, Users, UserPlus, TrendingUp } from 'react-feather'
 import { Box, Flex, Grid, Heading, Text, Card } from '@radix-ui/themes'
 
 /**
- * Página Dashboard/Inicio simple
+ * Dashboard - Página de inicio simple
  *
  * @returns {JSX.Element}
  */
 export default function Dashboard() {
   const stats = [
-    {
-      title: 'Total Usuarios',
-      value: '2,543',
-      icon: Users,
-      color: 'blue',
-    },
-    {
-      title: 'Inscripciones',
-      value: '1,234',
-      icon: UserPlus,
-      color: 'green',
-    },
-    {
-      title: 'Personas',
-      value: '856',
-      icon: Users,
-      color: 'purple',
-    },
-    {
-      title: 'Crecimiento',
-      value: '23.5%',
-      icon: TrendingUp,
-      color: 'orange',
-    },
+    { title: 'Total Usuarios', value: '2,543', icon: Users, color: 'blue' },
+    { title: 'Inscripciones', value: '1,234', icon: UserPlus, color: 'green' },
+    { title: 'Personas', value: '856', icon: Users, color: 'purple' },
+    { title: 'Crecimiento', value: '23.5%', icon: TrendingUp, color: 'orange' },
   ]
 
   const getIconColor = (color) => {
@@ -56,19 +36,6 @@ export default function Dashboard() {
 
   return (
     <Box>
-      {/* Header */}
-      <Flex align="center" justify="between" mb="6">
-        <Box>
-          <Heading size="8" mb="2">
-            Dashboard
-          </Heading>
-          <Text color="gray">Bienvenido a UCU Gestión</Text>
-        </Box>
-        <Flex align="center" gap="2">
-          <Home size={24} color="var(--gray-9)" />
-        </Flex>
-      </Flex>
-
       {/* Stats Grid */}
       <Grid columns={{ initial: '1', sm: '2', lg: '4' }} gap="4" mb="6">
         {stats.map((stat, index) => {
@@ -103,16 +70,17 @@ export default function Dashboard() {
         })}
       </Grid>
 
-      {/* Content Card */}
+      {/* Main Content Card */}
       <Card style={{ backgroundColor: 'var(--bg-secondary)' }}>
         <Box p="6">
-          <Heading size="5" mb="4">
-            Sistema de Gestión Universitaria
-          </Heading>
-          <Text>
-            Bienvenido al sistema de gestión de la Universidad de Concepción del Uruguay.
-            Este sistema te permite administrar estudiantes, inscripciones y toda la
-            información académica de manera centralizada.
+          <Flex align="center" gap="3" mb="4">
+            <Home size={28} color="var(--accent-9)" />
+            <Heading size="5">Sistema de Gestión Universitaria</Heading>
+          </Flex>
+          <Text size="3" style={{ lineHeight: '1.6' }}>
+            Bienvenido al sistema de gestión de la Universidad de Concepción del Uruguay (UCU).
+            Este sistema te permite administrar estudiantes, inscripciones y toda la información
+            académica de manera centralizada y eficiente.
           </Text>
         </Box>
       </Card>

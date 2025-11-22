@@ -1,13 +1,13 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { X, Menu } from 'react-feather'
+import { Menu, X } from 'react-feather'
 import { Box, Flex, Heading, IconButton, ScrollArea } from '@radix-ui/themes'
 import { closeMobileMenu, handleMenuCollapsed } from '../../store/layoutSlice'
 import NavigationItems from './Navigation/NavigationItems'
 import navigation from '../../navigation/vertical'
 
 /**
- * Componente Sidebar con header "UCU GESTIÓN"
+ * Sidebar - Fijo a la izquierda con header UCU GESTIÓN
  *
  * @returns {JSX.Element}
  */
@@ -40,46 +40,41 @@ export default function Sidebar() {
     <Flex direction="column" style={{ height: '100%' }}>
       {/* ========== SIDEBAR HEADER ========== */}
       <Box
-        p="4"
         style={{
+          padding: '16px',
           borderBottom: '1px solid var(--border-color)',
-          minHeight: '72px',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
+          gap: '12px',
         }}
       >
-        {/* Desktop: Toggle collapse button + App Name */}
-        <Flex align="center" gap="3" style={{ width: '100%' }}>
-          <Box display={{ initial: 'none', md: 'block' }}>
-            <IconButton variant="ghost" onClick={handleToggleCollapse} size="2">
-              <Menu size={18} />
-            </IconButton>
-          </Box>
+        {/* Desktop: Menu toggle */}
+        <Box display={{ initial: 'none', md: 'block' }}>
+          <IconButton variant="ghost" onClick={handleToggleCollapse} size="2">
+            <Menu size={18} />
+          </IconButton>
+        </Box>
 
-          {/* Mobile: Close button */}
-          <Box display={{ initial: 'block', md: 'none' }}>
-            <IconButton variant="ghost" onClick={handleCloseMobile} size="2">
-              <X size={18} />
-            </IconButton>
-          </Box>
+        {/* Mobile: Close button */}
+        <Box display={{ initial: 'block', md: 'none' }}>
+          <IconButton variant="ghost" onClick={handleCloseMobile} size="2">
+            <X size={18} />
+          </IconButton>
+        </Box>
 
-          {/* App Name - UCU GESTIÓN */}
-          {!menuCollapsed && (
-            <Heading
-              size="4"
-              style={{
-                color: 'var(--accent-9)',
-                transition: 'opacity 300ms ease-in-out',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                fontWeight: 600,
-              }}
-            >
-              UCU GESTIÓN
-            </Heading>
-          )}
-        </Flex>
+        {/* App Name */}
+        {!menuCollapsed && (
+          <Heading
+            size="4"
+            style={{
+              color: 'var(--accent-9)',
+              fontWeight: 600,
+              transition: 'opacity 300ms ease-in-out',
+            }}
+          >
+            UCU GESTIÓN
+          </Heading>
+        )}
       </Box>
 
       {/* ========== NAVIGATION ========== */}
