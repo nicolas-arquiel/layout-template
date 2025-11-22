@@ -1,18 +1,19 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Provider } from 'react-redux'
+import { RouterProvider } from 'react-router-dom'
+import store from './store'
+import router from './router'
 
+/**
+ * Componente raíz de la aplicación
+ * Configura Redux Provider y React Router
+ *
+ * @returns {JSX.Element}
+ */
 function App() {
   return (
-    <div className="min-h-screen bg-blue-500 text-white p-8">
-      <h1 className="text-4xl font-bold underline">
-        ¡Tailwind CSS v4 funcionando!
-      </h1>
-      <p className="text-lg mt-4">
-        Si ves este texto en azul con tipografía grande, todo está correcto.
-      </p>
-    </div>
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   )
 }
 
