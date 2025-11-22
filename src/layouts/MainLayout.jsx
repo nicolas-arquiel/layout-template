@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
-import ThemeCustomizer from '../components/ThemeCustomizer/ThemeCustomizer'
+
 import { useThemeConfig } from '../App'
 import { cn } from '../lib/utils'
 
@@ -81,7 +81,7 @@ export default function MainLayout() {
       </div>
 
       {/* Theme Customizer */}
-      <ThemeCustomizer />
+
 
       {/* Mobile Overlay */}
       {mobileMenuOpen && (

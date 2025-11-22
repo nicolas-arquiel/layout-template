@@ -1,7 +1,7 @@
 import { useState, useEffect, createContext, useContext } from 'react'
 import { Provider } from 'react-redux'
 import { RouterProvider } from 'react-router-dom'
-import { Theme } from '@radix-ui/themes'
+import { Theme, ThemePanel } from '@radix-ui/themes'
 import store from './store'
 import router from './router'
 import '@radix-ui/themes/styles.css'
@@ -33,11 +33,6 @@ function App() {
     return saved
       ? JSON.parse(saved)
       : {
-          appearance: 'light',
-          accentColor: 'blue',
-          grayColor: 'slate',
-          radius: 'medium',
-          scaling: '100%',
           navbarSticky: true,
           sidebarWidth: 280,
           contentWidth: 'boxed',
@@ -59,11 +54,6 @@ function App() {
 
   const resetThemeConfig = () => {
     const defaultConfig = {
-      appearance: 'light',
-      accentColor: 'blue',
-      grayColor: 'slate',
-      radius: 'medium',
-      scaling: '100%',
       navbarSticky: true,
       sidebarWidth: 280,
       contentWidth: 'boxed',
@@ -78,13 +68,8 @@ function App() {
       <ThemeConfigContext.Provider
         value={{ themeConfig, updateThemeConfig, resetThemeConfig }}
       >
-        <Theme
-          appearance={themeConfig.appearance}
-          accentColor={themeConfig.accentColor}
-          grayColor={themeConfig.grayColor}
-          radius={themeConfig.radius}
-          scaling={themeConfig.scaling}
-        >
+        <Theme>
+          <ThemePanel />
           <RouterProvider router={router} />
         </Theme>
       </ThemeConfigContext.Provider>
