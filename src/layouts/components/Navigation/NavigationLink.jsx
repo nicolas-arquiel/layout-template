@@ -44,7 +44,7 @@ export default function NavigationLink({ item, nested = false }) {
 
   return (
     <Box asChild>
-      <li>
+      <li style={{ listStyle: 'none' }}>
         <Tooltip content={item.title} side="right" delayDuration={200} hidden={!menuCollapsed}>
           <NavLink
             to={item.navLink}
@@ -53,32 +53,35 @@ export default function NavigationLink({ item, nested = false }) {
               display: 'flex',
               alignItems: 'center',
               gap: 'var(--space-3)',
-              paddingLeft: nested && !menuCollapsed ? 'var(--space-8)' : 'var(--space-6)',
-              paddingRight: 'var(--space-6)',
-              paddingTop: 'var(--space-3)',
-              paddingBottom: 'var(--space-3)',
+              paddingLeft: nested && !menuCollapsed ? 'var(--space-8)' : 'var(--space-4)',
+              paddingRight: 'var(--space-4)',
+              paddingTop: 'var(--space-2)',
+              paddingBottom: 'var(--space-2)',
+              marginBottom: '4px',
               fontSize: 'var(--font-size-2)',
-              fontWeight: '500',
+              fontWeight: isActive ? '600' : '500',
               textDecoration: 'none',
-              transition: 'background-color 200ms',
-              backgroundColor: isActive ? 'var(--accent-3)' : 'transparent',
-              color: isActive ? 'var(--accent-11)' : 'var(--gray-12)',
-              borderRight: isActive ? '4px solid var(--accent-9)' : 'none',
+              borderRadius: 'var(--radius-2)',
+              transition: 'all 200ms ease-in-out',
+              backgroundColor: isActive ? 'var(--accent-9)' : 'transparent',
+              color: isActive ? 'white' : 'var(--gray-12)',
               justifyContent: menuCollapsed ? 'center' : 'flex-start',
             })}
           >
             {Icon && (
-              <Box style={{ flexShrink: 0 }}>
-                <Icon size={20} />
+              <Box style={{ flexShrink: 0, display: 'flex', alignItems: 'center' }}>
+                <Icon size={18} />
               </Box>
             )}
 
             {!menuCollapsed && (
               <Flex align="center" gap="2" style={{ flex: 1 }}>
-                <Text style={{ flex: 1 }}>{item.title}</Text>
+                <Text size="2" style={{ flex: 1 }}>
+                  {item.title}
+                </Text>
 
                 {item.badge && (
-                  <Badge color={getBadgeColor(item.badgeColor)} variant="soft">
+                  <Badge color={getBadgeColor(item.badgeColor)} variant="soft" size="1">
                     {item.badge}
                   </Badge>
                 )}

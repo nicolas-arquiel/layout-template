@@ -31,8 +31,8 @@ export default function Personas() {
       </Flex>
 
       {/* Search & Filters */}
-      <Card mb="4">
-        <Flex direction={{ initial: 'column', sm: 'row' }} gap="4">
+      <Card mb="4" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+        <Flex direction={{ initial: 'column', sm: 'row' }} gap="4" p="4">
           <Box style={{ flex: 1 }}>
             <TextField.Root placeholder="Buscar personas..." size="3">
               <TextField.Slot>
@@ -52,7 +52,7 @@ export default function Personas() {
       </Card>
 
       {/* Table */}
-      <Card>
+      <Card style={{ backgroundColor: 'var(--bg-secondary)' }}>
         <Box style={{ overflowX: 'auto' }}>
           <Table.Root>
             <Table.Header>
