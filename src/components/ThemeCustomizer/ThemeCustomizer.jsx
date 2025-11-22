@@ -1,222 +1,363 @@
-import { X, Settings, Sun, Moon, Layout, Monitor } from 'react-feather'
-import { useTheme } from '../../context/ThemeContext'
-import { cn } from '../../utils/cn'
+import { useState, useEffect } from 'react'
+import { Settings, Sliders, Sun, Moon } from 'react-feather'
+import {
+  Dialog,
+  Flex,
+  Box,
+  Button,
+  Text,
+  Heading,
+  Select,
+  Slider,
+  Switch,
+  RadioGroup,
+  Separator,
+} from '@radix-ui/themes'
+import { useThemeConfig } from '../../App'
 
 /**
- * Theme Customizer Component
- * Panel lateral para personalizar el tema de la aplicación
- * Se abre/cierra con la tecla 'T'
+ * Theme Customizer Component con Radix UI
+ * Panel completo para personalizar todos los aspectos del tema
+ * Se abre con la tecla 'T' o botón flotante
  *
  * @returns {JSX.Element}
  */
 export default function ThemeCustomizer() {
-  const { themeConfig, updateThemeConfig, resetTheme, customizerOpen, setCustomizerOpen } =
-    useTheme()
+  const { themeConfig, updateThemeConfig, resetThemeConfig } = useThemeConfig()
+  const [open, setOpen] = useState(false)
 
-  // Colores primarios disponibles
-  const primaryColors = [
-    { name: 'Blue', value: '#3b82f6', class: 'bg-blue-500' },
-    { name: 'Purple', value: '#a855f7', class: 'bg-purple-500' },
-    { name: 'Green', value: '#22c55e', class: 'bg-green-500' },
-    { name: 'Orange', value: '#f97316', class: 'bg-orange-500' },
-    { name: 'Red', value: '#ef4444', class: 'bg-red-500' },
-    { name: 'Pink', value: '#ec4899', class: 'bg-pink-500' },
+  // Tecla T para abrir el customizer
+  useEffect(() => {
+    const handleKeyPress = (e) => {
+      // Abrir con T, cerrar con Escape
+      if ((e.key === 't' || e.key === 'T') && !e.target.matches('input, textarea, [contenteditable]')) {
+        e.preventDefault()
+        setOpen(true)
+      }
+      if (e.key === 'Escape') {
+        setOpen(false)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyPress)
+    return () => window.removeEventListener('keydown', handleKeyPress)
+  }, [])
+
+  // Mapeo de radius para slider
+  const getRadiusValue = (radius) => {
+    const map = { none: 0, small: 25, medium: 50, large: 75, full: 100 }
+    return map[radius] || 50
+  }
+
+  const setRadiusFromValue = (value) => {
+    if (value === 0) return 'none'
+    if (value <= 25) return 'small'
+    if (value <= 50) return 'medium'
+    if (value <= 75) return 'large'
+    return 'full'
+  }
+
+  // Colores disponibles
+  const accentColors = [
+    'blue',
+    'green',
+    'red',
+    'purple',
+    'orange',
+    'pink',
+    'cyan',
+    'yellow',
+    'indigo',
+    'teal',
   ]
 
   return (
     <>
-      {/* Overlay */}
-      {customizerOpen && (
-        <div
-          className="fixed inset-0 z-50 bg-black/50 transition-opacity duration-300"
-          onClick={() => setCustomizerOpen(false)}
-          aria-hidden="true"
-        />
-      )}
-
-      {/* Customizer Panel */}
-      <div
-        className={cn(
-          'fixed right-0 top-0 z-50 h-full w-80 transform overflow-y-auto border-l border-gray-200 bg-white shadow-xl transition-transform duration-300 ease-in-out dark:border-gray-800 dark:bg-gray-900',
-          customizerOpen ? 'translate-x-0' : 'translate-x-full'
-        )}
+      {/* Floating Settings Button */}
+      <Button
+        onClick={() => setOpen(true)}
+        size="3"
+        style={{
+          position: 'fixed',
+          right: '20px',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          zIndex: 999,
+          borderRadius: 'var(--radius-3) 0 0 var(--radius-3)',
+          boxShadow: 'var(--shadow-5)',
+        }}
+        title="Personalización del Tema (Presiona T)"
       >
-        {/* Header */}
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4 dark:border-gray-800 dark:bg-gray-900">
-          <div className="flex items-center gap-2">
-            <Settings size={20} className="text-blue-600 dark:text-blue-400" />
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Personalizaci&oacute;n
-            </h2>
-          </div>
-          <button
-            onClick={() => setCustomizerOpen(false)}
-            className="rounded-lg p-1.5 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-            aria-label="Cerrar customizer"
-          >
-            <X size={20} />
-          </button>
-        </div>
+        <Settings size={18} />
+      </Button>
 
-        {/* Content */}
-        <div className="p-6 space-y-6">
-          {/* Skin Mode */}
-          <div>
-            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-              Tema
-            </h3>
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                onClick={() => updateThemeConfig('skin', 'light')}
-                className={cn(
-                  'flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-all',
-                  themeConfig.skin === 'light'
-                    ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20'
-                    : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
-                )}
+      {/* Dialog */}
+      <Dialog.Root open={open} onOpenChange={setOpen}>
+        <Dialog.Content maxWidth="550px" style={{ maxHeight: '85vh', overflow: 'auto' }}>
+          {/* Header */}
+          <Dialog.Title>
+            <Flex align="center" gap="2">
+              <Sliders size={22} />
+              <Text>Personalizar Tema</Text>
+            </Flex>
+          </Dialog.Title>
+
+          <Dialog.Description size="2" mb="4">
+            Personaliza la apariencia completa de la aplicación. Presiona <strong>T</strong> para
+            abrir este panel en cualquier momento.
+          </Dialog.Description>
+
+          <Flex direction="column" gap="5">
+            {/* ===== APARIENCIA ===== */}
+            <Box>
+              <Heading size="3" mb="3">
+                Apariencia
+              </Heading>
+              <RadioGroup.Root
+                value={themeConfig.appearance}
+                onValueChange={(value) => updateThemeConfig('appearance', value)}
               >
-                <Sun size={24} className={themeConfig.skin === 'light' ? 'text-blue-600' : 'text-gray-600'} />
-                <span className="text-sm font-medium text-gray-900 dark:text-white">Light</span>
-              </button>
+                <Flex gap="4">
+                  <Flex asChild align="center" gap="2">
+                    <label>
+                      <RadioGroup.Item value="light" />
+                      <Flex align="center" gap="2">
+                        <Sun size={16} />
+                        <Text>Claro</Text>
+                      </Flex>
+                    </label>
+                  </Flex>
+                  <Flex asChild align="center" gap="2">
+                    <label>
+                      <RadioGroup.Item value="dark" />
+                      <Flex align="center" gap="2">
+                        <Moon size={16} />
+                        <Text>Oscuro</Text>
+                      </Flex>
+                    </label>
+                  </Flex>
+                </Flex>
+              </RadioGroup.Root>
+            </Box>
 
-              <button
-                onClick={() => updateThemeConfig('skin', 'dark')}
-                className={cn(
-                  'flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-all',
-                  themeConfig.skin === 'dark'
-                    ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20'
-                    : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
-                )}
+            <Separator size="4" />
+
+            {/* ===== COLOR PRINCIPAL ===== */}
+            <Box>
+              <Heading size="3" mb="3">
+                Color Principal
+              </Heading>
+              <Flex gap="2" wrap="wrap">
+                {accentColors.map((color) => (
+                  <Button
+                    key={color}
+                    size="2"
+                    variant={themeConfig.accentColor === color ? 'solid' : 'soft'}
+                    color={color}
+                    onClick={() => updateThemeConfig('accentColor', color)}
+                    style={{
+                      minWidth: '80px',
+                      textTransform: 'capitalize',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {color}
+                  </Button>
+                ))}
+              </Flex>
+            </Box>
+
+            <Separator size="4" />
+
+            {/* ===== COLOR GRIS ===== */}
+            <Box>
+              <Heading size="3" mb="3">
+                Color Gris
+              </Heading>
+              <Select.Root
+                value={themeConfig.grayColor}
+                onValueChange={(value) => updateThemeConfig('grayColor', value)}
               >
-                <Moon size={24} className={themeConfig.skin === 'dark' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'} />
-                <span className="text-sm font-medium text-gray-900 dark:text-white">Dark</span>
-              </button>
-            </div>
-          </div>
+                <Select.Trigger style={{ width: '100%' }} />
+                <Select.Content>
+                  <Select.Item value="gray">Gray</Select.Item>
+                  <Select.Item value="slate">Slate</Select.Item>
+                  <Select.Item value="mauve">Mauve</Select.Item>
+                  <Select.Item value="sage">Sage</Select.Item>
+                  <Select.Item value="olive">Olive</Select.Item>
+                  <Select.Item value="sand">Sand</Select.Item>
+                </Select.Content>
+              </Select.Root>
+            </Box>
 
-          {/* Primary Color */}
-          <div>
-            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-              Color Primario
-            </h3>
-            <div className="grid grid-cols-3 gap-3">
-              {primaryColors.map((color) => (
-                <button
-                  key={color.value}
-                  onClick={() => updateThemeConfig('primaryColor', color.value)}
-                  className={cn(
-                    'flex flex-col items-center gap-2 rounded-lg border-2 p-3 transition-all',
-                    themeConfig.primaryColor === color.value
-                      ? 'border-gray-900 dark:border-white'
-                      : 'border-transparent hover:border-gray-200 dark:hover:border-gray-700'
-                  )}
-                  title={color.name}
-                >
-                  <div className={cn('h-8 w-8 rounded-full', color.class)} />
-                  <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
-                    {color.name}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
+            <Separator size="4" />
 
-          {/* Content Width */}
-          <div>
-            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-              Ancho del Contenido
-            </h3>
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                onClick={() => updateThemeConfig('contentWidth', 'full')}
-                className={cn(
-                  'flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-all',
-                  themeConfig.contentWidth === 'full'
-                    ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20'
-                    : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
-                )}
-              >
-                <Monitor size={24} className={themeConfig.contentWidth === 'full' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'} />
-                <span className="text-sm font-medium text-gray-900 dark:text-white">Completo</span>
-              </button>
+            {/* ===== BORDES REDONDEADOS ===== */}
+            <Box>
+              <Heading size="3" mb="3">
+                Bordes Redondeados: {themeConfig.radius}
+              </Heading>
+              <Flex direction="column" gap="2">
+                <Slider
+                  value={[getRadiusValue(themeConfig.radius)]}
+                  onValueChange={([value]) => {
+                    updateThemeConfig('radius', setRadiusFromValue(value))
+                  }}
+                  max={100}
+                  step={25}
+                />
+                <Flex justify="between">
+                  <Text size="1" color="gray">
+                    Ninguno
+                  </Text>
+                  <Text size="1" color="gray">
+                    Completo
+                  </Text>
+                </Flex>
+              </Flex>
+            </Box>
 
-              <button
-                onClick={() => updateThemeConfig('contentWidth', 'boxed')}
-                className={cn(
-                  'flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-all',
-                  themeConfig.contentWidth === 'boxed'
-                    ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20'
-                    : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
-                )}
-              >
-                <Layout size={24} className={themeConfig.contentWidth === 'boxed' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'} />
-                <span className="text-sm font-medium text-gray-900 dark:text-white">Contenedor</span>
-              </button>
-            </div>
-          </div>
+            <Separator size="4" />
 
-          {/* Router Transition */}
-          <div>
-            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-              Transición de Rutas
-            </h3>
-            <select
-              value={themeConfig.routerTransition}
-              onChange={(e) => updateThemeConfig('routerTransition', e.target.value)}
-              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            >
-              <option value="fade">Fade</option>
-              <option value="slide">Slide</option>
-              <option value="none">Ninguna</option>
-            </select>
-          </div>
+            {/* ===== ZOOM/SCALING ===== */}
+            <Box>
+              <Heading size="3" mb="3">
+                Zoom: {themeConfig.scaling}
+              </Heading>
+              <Flex direction="column" gap="2">
+                <Slider
+                  value={[parseInt(themeConfig.scaling)]}
+                  onValueChange={([value]) => updateThemeConfig('scaling', `${value}%`)}
+                  min={90}
+                  max={110}
+                  step={5}
+                />
+                <Flex justify="between">
+                  <Text size="1" color="gray">
+                    90%
+                  </Text>
+                  <Text size="1" color="gray">
+                    110%
+                  </Text>
+                </Flex>
+              </Flex>
+            </Box>
 
-          {/* Footer Type */}
-          <div>
-            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-              Tipo de Footer
-            </h3>
-            <select
-              value={themeConfig.footerType}
-              onChange={(e) => updateThemeConfig('footerType', e.target.value)}
-              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            >
-              <option value="static">Estático</option>
-              <option value="sticky">Pegajoso</option>
-              <option value="hidden">Oculto</option>
-            </select>
-          </div>
+            <Separator size="4" />
 
-          {/* Reset Button */}
-          <div className="pt-4">
-            <button
-              onClick={resetTheme}
-              className="w-full rounded-lg bg-red-600 px-4 py-2.5 font-medium text-white transition-colors hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
-            >
-              Restaurar Valores por Defecto
-            </button>
-          </div>
+            {/* ===== LAYOUT OPTIONS ===== */}
+            <Box>
+              <Heading size="3" mb="3">
+                Opciones de Layout
+              </Heading>
+              <Flex direction="column" gap="4">
+                {/* Navbar Sticky */}
+                <Flex justify="between" align="center">
+                  <Flex direction="column" gap="1">
+                    <Text weight="medium">Navbar Fijo</Text>
+                    <Text size="1" color="gray">
+                      Mantener navbar visible al hacer scroll
+                    </Text>
+                  </Flex>
+                  <Switch
+                    checked={themeConfig.navbarSticky}
+                    onCheckedChange={(checked) => updateThemeConfig('navbarSticky', checked)}
+                  />
+                </Flex>
+
+                {/* Sidebar Width */}
+                <Box>
+                  <Text weight="medium" mb="2">
+                    Ancho Sidebar: {themeConfig.sidebarWidth}px
+                  </Text>
+                  <Flex direction="column" gap="2">
+                    <Slider
+                      value={[themeConfig.sidebarWidth]}
+                      onValueChange={([value]) => updateThemeConfig('sidebarWidth', value)}
+                      min={240}
+                      max={400}
+                      step={20}
+                    />
+                    <Flex justify="between">
+                      <Text size="1" color="gray">
+                        240px
+                      </Text>
+                      <Text size="1" color="gray">
+                        400px
+                      </Text>
+                    </Flex>
+                  </Flex>
+                </Box>
+
+                {/* Content Width */}
+                <Box>
+                  <Text weight="medium" mb="2">
+                    Ancho del Contenido
+                  </Text>
+                  <RadioGroup.Root
+                    value={themeConfig.contentWidth}
+                    onValueChange={(value) => updateThemeConfig('contentWidth', value)}
+                  >
+                    <Flex gap="4">
+                      <Flex asChild align="center" gap="2">
+                        <label>
+                          <RadioGroup.Item value="boxed" />
+                          <Text>Contenedor (Boxed)</Text>
+                        </label>
+                      </Flex>
+                      <Flex asChild align="center" gap="2">
+                        <label>
+                          <RadioGroup.Item value="full" />
+                          <Text>Completo (Full)</Text>
+                        </label>
+                      </Flex>
+                    </Flex>
+                  </RadioGroup.Root>
+                </Box>
+
+                {/* Footer Type */}
+                <Box>
+                  <Text weight="medium" mb="2">
+                    Tipo de Footer
+                  </Text>
+                  <Select.Root
+                    value={themeConfig.footerType}
+                    onValueChange={(value) => updateThemeConfig('footerType', value)}
+                  >
+                    <Select.Trigger style={{ width: '100%' }} />
+                    <Select.Content>
+                      <Select.Item value="static">Estático</Select.Item>
+                      <Select.Item value="sticky">Pegajoso (Sticky)</Select.Item>
+                      <Select.Item value="hidden">Oculto</Select.Item>
+                    </Select.Content>
+                  </Select.Root>
+                </Box>
+              </Flex>
+            </Box>
+          </Flex>
+
+          {/* Actions */}
+          <Flex gap="3" mt="6" justify="end">
+            <Button variant="soft" color="red" onClick={resetThemeConfig}>
+              Restablecer
+            </Button>
+            <Button onClick={() => setOpen(false)}>Cerrar</Button>
+          </Flex>
 
           {/* Keyboard Hint */}
-          <div className="rounded-lg bg-blue-50 p-4 dark:bg-blue-900/20">
-            <p className="text-sm text-blue-900 dark:text-blue-200">
-              <strong>Tip:</strong> Presiona la tecla <kbd className="rounded bg-blue-200 px-2 py-1 text-xs font-semibold dark:bg-blue-800">T</kbd> para abrir/cerrar este panel
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Floating Button (cuando está cerrado) */}
-      {!customizerOpen && (
-        <button
-          onClick={() => setCustomizerOpen(true)}
-          className="fixed right-6 bottom-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-blue-600 text-white shadow-lg transition-all hover:scale-110 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
-          aria-label="Abrir customizer"
-          title="Personalización (Presiona T)"
-        >
-          <Settings size={24} className="animate-spin-slow" />
-        </button>
-      )}
+          <Box mt="4" p="3" style={{ background: 'var(--accent-3)', borderRadius: 'var(--radius-3)' }}>
+            <Text size="2">
+              <strong>Tip:</strong> Presiona <kbd style={{
+                background: 'var(--accent-9)',
+                color: 'white',
+                padding: '2px 6px',
+                borderRadius: 'var(--radius-2)',
+                fontWeight: 'bold'
+              }}>T</kbd> para abrir este panel
+            </Text>
+          </Box>
+        </Dialog.Content>
+      </Dialog.Root>
     </>
   )
 }

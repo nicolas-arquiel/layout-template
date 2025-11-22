@@ -5,23 +5,24 @@ import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
 import Footer from './components/Footer'
 import ThemeCustomizer from '../components/ThemeCustomizer/ThemeCustomizer'
-import { useTheme } from '../context/ThemeContext'
+import { useThemeConfig } from '../App'
 
 /**
  * Layout principal de la aplicación con Radix UI
  * Usa CSS Grid para layout donde sidebar está AL LADO del contenido (desktop)
  * En mobile, el sidebar es un overlay
+ * Aplica configuración del Theme Customizer
  *
  * @returns {JSX.Element}
  */
 export default function MainLayout() {
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
   const mobileMenuOpen = useSelector((state) => state.layout.mobileMenuOpen)
-  const { themeConfig } = useTheme()
+  const { themeConfig } = useThemeConfig()
 
   return (
     <Box style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* Navbar - Fixed at top */}
+      {/* Navbar - Sticky o normal según configuración */}
       <Navbar />
 
       {/* Main Layout Container */}
@@ -30,8 +31,8 @@ export default function MainLayout() {
         <Box
           className="sidebar-container"
           style={{
-            // Desktop behavior
-            '--sidebar-width-expanded': '280px',
+            // Desktop behavior con ancho configurable
+            '--sidebar-width-expanded': `${themeConfig.sidebarWidth}px`,
             '--sidebar-width-collapsed': '70px',
           }}
         >
@@ -67,18 +68,18 @@ export default function MainLayout() {
       {/* CSS for responsive sidebar */}
       <style>{`
         .sidebar-container {
-          /* Desktop: parte del flujo normal */
-          width: ${menuCollapsed ? '70px' : '280px'};
+          /* Desktop: parte del flujo normal con ancho configurable */
+          width: ${menuCollapsed ? '70px' : `${themeConfig.sidebarWidth}px`};
           transition: width 300ms ease;
         }
 
-        /* Mobile: fixed overlay */
+        /* Mobile: fixed overlay */}
         @media (max-width: 767px) {
           .sidebar-container {
             position: fixed;
             top: 64px;
             left: 0;
-            width: 280px;
+            width: ${themeConfig.sidebarWidth}px;
             height: calc(100vh - 64px);
             z-index: 50;
             transform: ${mobileMenuOpen ? 'translateX(0)' : 'translateX(-100%)'};

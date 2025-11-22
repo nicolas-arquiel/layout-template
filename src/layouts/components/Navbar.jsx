@@ -4,11 +4,12 @@ import { Menu, Moon, Sun, User, Settings, LogOut } from 'react-feather'
 import { Box, Flex, Heading, Text, IconButton, Avatar, DropdownMenu, Separator } from '@radix-ui/themes'
 import { handleMenuCollapsed, toggleMobileMenu } from '../../store/layoutSlice'
 import { clearAuth } from '../../store/authSlice'
-import { useTheme } from '../../context/ThemeContext'
+import { useThemeConfig } from '../../App'
 
 /**
  * Componente Navbar principal con Radix UI Themes
  * Incluye toggle del sidebar, dropdown de usuario, y toggle de tema
+ * Puede ser sticky según configuración
  *
  * @returns {JSX.Element}
  */
@@ -17,7 +18,11 @@ export default function Navbar() {
   const navigate = useNavigate()
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
   const user = useSelector((state) => state.auth.user)
-  const { appearance, toggleAppearance } = useTheme()
+  const { themeConfig, updateThemeConfig } = useThemeConfig()
+
+  const toggleAppearance = () => {
+    updateThemeConfig('appearance', themeConfig.appearance === 'light' ? 'dark' : 'light')
+  }
 
   const handleToggleSidebar = () => {
     dispatch(handleMenuCollapsed(!menuCollapsed))
@@ -46,8 +51,8 @@ export default function Navbar() {
     <Box
       asChild
       style={{
-        position: 'sticky',
-        top: 0,
+        position: themeConfig.navbarSticky ? 'sticky' : 'relative',
+        top: themeConfig.navbarSticky ? 0 : 'auto',
         zIndex: 40,
         borderBottom: '1px solid var(--gray-6)',
         height: '64px',
@@ -90,7 +95,7 @@ export default function Navbar() {
               onClick={toggleAppearance}
               aria-label="Toggle theme"
             >
-              {appearance === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+              {themeConfig.appearance === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
             </IconButton>
 
             {/* User Dropdown */}
