@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Moon, Sun, User, Settings, LogOut } from 'react-feather'
 import { Flex, Text, IconButton, Avatar, DropdownMenu, Separator, Box } from '@radix-ui/themes'
 import { clearAuth } from '../../store/authSlice'
@@ -7,14 +7,13 @@ import { useThemeConfig } from '../../App'
 import { useDispatch } from 'react-redux'
 
 /**
- * Navbar - Solo breadcrumbs y user menu (SIN hamburger)
+ * Navbar - Theme toggle y user menu (SIN hamburger)
  *
  * @returns {JSX.Element}
  */
 export default function Navbar() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const location = useLocation()
   const user = useSelector((state) => state.auth.user)
   const { themeConfig, updateThemeConfig } = useThemeConfig()
 
@@ -37,36 +36,16 @@ export default function Navbar() {
       .slice(0, 2)
   }
 
-  // Obtener título de página basado en ruta
-  const getPageTitle = () => {
-    const path = location.pathname
-    if (path.includes('personas')) return 'Personas'
-    if (path.includes('inscripcion-aspirante')) return 'Inscripción Aspirante'
-    if (path.includes('inscripcion-curso')) return 'Inscripción Curso'
-    if (path.includes('inicio')) return 'Inicio'
-    return 'Dashboard'
-  }
-
   return (
     <Flex
       align="center"
-      justify="between"
+      justify="end"
       px="6"
       style={{
         height: '100%',
       }}
     >
-      {/* ========== LEFT: BREADCRUMBS ========== */}
-      <Flex direction="column" gap="1">
-        <Text size="4" weight="medium">
-          {getPageTitle()}
-        </Text>
-        <Text size="2" color="gray">
-          UCU Gestión › {getPageTitle()}
-        </Text>
-      </Flex>
-
-      {/* ========== RIGHT: THEME TOGGLE + USER MENU ========== */}
+      {/* ========== THEME TOGGLE + USER MENU ========== */}
       <Flex align="center" gap="3">
         {/* Theme Toggle */}
         <IconButton variant="ghost" onClick={toggleAppearance} aria-label="Toggle theme">

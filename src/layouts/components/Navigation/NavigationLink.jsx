@@ -42,53 +42,62 @@ export default function NavigationLink({ item, nested = false }) {
     }
   }
 
+  const linkContent = (
+    <NavLink
+      to={item.navLink}
+      onClick={handleClick}
+      className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+      style={({ isActive }) => ({
+        display: 'flex',
+        alignItems: 'center',
+        gap: 'var(--space-3)',
+        paddingLeft: nested && !menuCollapsed ? 'var(--space-8)' : 'var(--space-4)',
+        paddingRight: 'var(--space-4)',
+        paddingTop: 'var(--space-2)',
+        paddingBottom: 'var(--space-2)',
+        marginBottom: '4px',
+        fontSize: 'var(--font-size-2)',
+        fontWeight: isActive ? '600' : '500',
+        textDecoration: 'none',
+        borderRadius: 'var(--radius-2)',
+        transition: 'all 200ms ease-in-out',
+        backgroundColor: isActive ? 'var(--accent-9)' : 'transparent',
+        color: isActive ? 'white' : 'var(--gray-12)',
+        justifyContent: menuCollapsed ? 'center' : 'flex-start',
+      })}
+    >
+      {Icon && (
+        <Box style={{ flexShrink: 0, display: 'flex', alignItems: 'center' }}>
+          <Icon size={18} />
+        </Box>
+      )}
+
+      {!menuCollapsed && (
+        <Flex align="center" gap="2" style={{ flex: 1 }}>
+          <Text size="2" style={{ flex: 1 }}>
+            {item.title}
+          </Text>
+
+          {item.badge && (
+            <Badge color={getBadgeColor(item.badgeColor)} variant="soft" size="1">
+              {item.badge}
+            </Badge>
+          )}
+        </Flex>
+      )}
+    </NavLink>
+  )
+
   return (
     <Box asChild>
       <li style={{ listStyle: 'none' }}>
-        <Tooltip content={item.title} side="right" delayDuration={200} hidden={!menuCollapsed}>
-          <NavLink
-            to={item.navLink}
-            onClick={handleClick}
-            style={({ isActive }) => ({
-              display: 'flex',
-              alignItems: 'center',
-              gap: 'var(--space-3)',
-              paddingLeft: nested && !menuCollapsed ? 'var(--space-8)' : 'var(--space-4)',
-              paddingRight: 'var(--space-4)',
-              paddingTop: 'var(--space-2)',
-              paddingBottom: 'var(--space-2)',
-              marginBottom: '4px',
-              fontSize: 'var(--font-size-2)',
-              fontWeight: isActive ? '600' : '500',
-              textDecoration: 'none',
-              borderRadius: 'var(--radius-2)',
-              transition: 'all 200ms ease-in-out',
-              backgroundColor: isActive ? 'var(--accent-9)' : 'transparent',
-              color: isActive ? 'white' : 'var(--gray-12)',
-              justifyContent: menuCollapsed ? 'center' : 'flex-start',
-            })}
-          >
-            {Icon && (
-              <Box style={{ flexShrink: 0, display: 'flex', alignItems: 'center' }}>
-                <Icon size={18} />
-              </Box>
-            )}
-
-            {!menuCollapsed && (
-              <Flex align="center" gap="2" style={{ flex: 1 }}>
-                <Text size="2" style={{ flex: 1 }}>
-                  {item.title}
-                </Text>
-
-                {item.badge && (
-                  <Badge color={getBadgeColor(item.badgeColor)} variant="soft" size="1">
-                    {item.badge}
-                  </Badge>
-                )}
-              </Flex>
-            )}
-          </NavLink>
-        </Tooltip>
+        {menuCollapsed ? (
+          <Tooltip content={item.title} side="right" delayDuration={200}>
+            {linkContent}
+          </Tooltip>
+        ) : (
+          linkContent
+        )}
       </li>
     </Box>
   )

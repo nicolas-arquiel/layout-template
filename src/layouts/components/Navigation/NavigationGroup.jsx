@@ -75,18 +75,21 @@ export default function NavigationGroup({ item }) {
         <Collapsible.Root open={open} onOpenChange={setOpen}>
           <Collapsible.Trigger asChild>
             <button
+              className="nav-group-trigger"
               style={{
                 display: 'flex',
                 width: '100%',
                 alignItems: 'center',
                 gap: 'var(--space-3)',
-                paddingLeft: 'var(--space-6)',
-                paddingRight: 'var(--space-6)',
-                paddingTop: 'var(--space-3)',
-                paddingBottom: 'var(--space-3)',
+                paddingLeft: 'var(--space-4)',
+                paddingRight: 'var(--space-4)',
+                paddingTop: 'var(--space-2)',
+                paddingBottom: 'var(--space-2)',
+                marginBottom: '4px',
                 fontSize: 'var(--font-size-2)',
                 fontWeight: '500',
-                transition: 'background-color 200ms',
+                borderRadius: 'var(--radius-2)',
+                transition: 'all 200ms ease-in-out',
                 backgroundColor: isActive ? 'var(--gray-3)' : 'transparent',
                 color: 'var(--gray-12)',
                 border: 'none',

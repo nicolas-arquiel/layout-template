@@ -195,3 +195,26 @@ html {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
+
+/* Navigation Link Styles */
+.nav-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: all 200ms ease-in-out;
+}
+
+.nav-link:hover:not(.active) {
+  background-color: var(--gray-3) !important;
+}
+
+.nav-group-trigger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 200ms ease-in-out;
+}
+
+.nav-group-trigger:hover {
+  background-color: var(--gray-3) !important;
+}
