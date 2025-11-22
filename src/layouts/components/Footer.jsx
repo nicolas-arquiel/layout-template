@@ -1,35 +1,46 @@
 import { Heart } from 'react-feather'
-import { cn } from '../../utils/cn'
+import { Box, Flex, Text } from '@radix-ui/themes'
 
 /**
- * Componente Footer para el layout principal
+ * Componente Footer para el layout principal con Radix UI
  * Muestra información de copyright y créditos
  *
- * @param {Object} props
- * @param {string} [props.className] - Clases CSS adicionales
  * @returns {JSX.Element}
  */
-export default function Footer({ className }) {
+export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer
-      className={cn(
-        'border-t border-gray-200 bg-white px-6 py-4 dark:border-gray-800 dark:bg-gray-900',
-        className
-      )}
+    <Box
+      asChild
+      style={{
+        borderTop: '1px solid var(--gray-6)',
+      }}
+      px="6"
+      py="4"
     >
-      <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          © {currentYear} Mi App. Todos los derechos reservados.
-        </p>
+      <footer>
+        <Flex
+          direction={{ initial: 'column', sm: 'row' }}
+          align="center"
+          justify="between"
+          gap="2"
+        >
+          <Text size="2" color="gray">
+            © {currentYear} Mi App. Todos los derechos reservados.
+          </Text>
 
-        <div className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400">
-          <span>Hecho con</span>
-          <Heart size={14} className="fill-red-500 text-red-500" />
-          <span>usando React + Radix UI</span>
-        </div>
-      </div>
-    </footer>
+          <Flex align="center" gap="1">
+            <Text size="2" color="gray">
+              Hecho con
+            </Text>
+            <Heart size={14} fill="var(--red-9)" color="var(--red-9)" />
+            <Text size="2" color="gray">
+              usando React + Radix UI
+            </Text>
+          </Flex>
+        </Flex>
+      </footer>
+    </Box>
   )
 }

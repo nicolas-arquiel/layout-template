@@ -1,20 +1,18 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { X } from 'react-feather'
+import { Box, Flex, Heading, Text, IconButton } from '@radix-ui/themes'
 import { closeMobileMenu } from '../../store/layoutSlice'
 import NavigationItems from './Navigation/NavigationItems'
 import navigation from '../../navigation/vertical'
-import { cn } from '../../utils/cn'
 
 /**
- * Componente Sidebar con navegación vertical
+ * Componente Sidebar con navegación vertical usando Radix UI
  * Responsive con overlay en mobile y colapsible en desktop
  *
- * @param {Object} props
- * @param {string} [props.className] - Clases CSS adicionales
  * @returns {JSX.Element}
  */
-export default function Sidebar({ className }) {
+export default function Sidebar() {
   const dispatch = useDispatch()
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
   const mobileMenuOpen = useSelector((state) => state.layout.mobileMenuOpen)
@@ -52,69 +50,97 @@ export default function Sidebar({ className }) {
     <>
       {/* Overlay para mobile */}
       {mobileMenuOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/50 md:hidden"
+        <Box
+          display={{ initial: 'block', md: 'none' }}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 40,
+            background: 'rgba(0, 0, 0, 0.5)',
+          }}
           onClick={handleCloseMobile}
-          aria-hidden="true"
         />
       )}
 
       {/* Sidebar */}
-      <aside
-        className={cn(
-          'h-[calc(100vh-4rem)] overflow-y-auto border-r border-gray-200 bg-white transition-all duration-300 ease-in-out dark:border-gray-800 dark:bg-gray-900',
-          // Mobile: Fixed overlay
-          'fixed left-0 top-16 z-50 w-[280px]',
-          {
-            '-translate-x-full': !mobileMenuOpen,
-            'translate-x-0': mobileMenuOpen,
-          },
-          // Desktop: Fixed in place, parte del flujo
-          {
-            'md:translate-x-0 md:w-[280px]': !menuCollapsed,
-            'md:translate-x-0 md:w-[70px]': menuCollapsed,
-          },
-          className
-        )}
+      <Box
+        asChild
+        style={{
+          height: 'calc(100vh - 64px)',
+          overflowY: 'auto',
+          borderRight: '1px solid var(--gray-6)',
+          position: 'relative',
+        }}
       >
-        {/* Mobile close button */}
-        <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3 dark:border-gray-800 md:hidden">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Menú
-          </h2>
-          <button
-            onClick={handleCloseMobile}
-            className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
-            aria-label="Close menu"
-          >
-            <X size={20} />
-          </button>
-        </div>
+        <aside>
+          {/* Mobile close button - solo visible en mobile */}
+          <Box display={{ initial: 'block', md: 'none' }}>
+            <Flex
+              align="center"
+              justify="between"
+              px="4"
+              py="3"
+              style={{ borderBottom: '1px solid var(--gray-6)' }}
+            >
+              <Heading size="4">Menú</Heading>
+              <IconButton
+                variant="ghost"
+                onClick={handleCloseMobile}
+                aria-label="Close menu"
+              >
+                <X size={20} />
+              </IconButton>
+            </Flex>
+          </Box>
 
-        {/* Navigation */}
-        <nav className="py-4">
-          <NavigationItems items={navigation} />
-        </nav>
+          {/* Navigation */}
+          <Box py="4" asChild>
+            <nav>
+              <NavigationItems items={navigation} />
+            </nav>
+          </Box>
 
-        {/* Sidebar footer (opcional) */}
-        {!menuCollapsed && (
-          <div className="absolute bottom-0 left-0 right-0 border-t border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-800/50">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600 text-white">
-                <span className="text-sm font-bold">MA</span>
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-900 dark:text-white">
-                  Mi Aplicación
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  v1.0.0
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-      </aside>
+          {/* Sidebar footer (opcional) - solo cuando no está colapsado */}
+          {!menuCollapsed && (
+            <Box
+              style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                borderTop: '1px solid var(--gray-6)',
+              }}
+              p="4"
+            >
+              <Flex align="center" gap="3">
+                <Flex
+                  align="center"
+                  justify="center"
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: 'var(--radius-3)',
+                    background: 'var(--accent-9)',
+                    color: 'white',
+                  }}
+                >
+                  <Text size="2" weight="bold">
+                    MA
+                  </Text>
+                </Flex>
+                <Box style={{ flex: 1 }}>
+                  <Text size="2" weight="medium">
+                    Mi Aplicación
+                  </Text>
+                  <Text size="1" color="gray">
+                    v1.0.0
+                  </Text>
+                </Box>
+              </Flex>
+            </Box>
+          )}
+        </aside>
+      </Box>
     </>
   )
 }

@@ -1,10 +1,10 @@
 import { NavLink } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import { Box, Flex, Text, Badge } from '@radix-ui/themes'
 import { closeMobileMenu } from '../../../store/layoutSlice'
-import { cn } from '../../../utils/cn'
 
 /**
- * Componente para links individuales en la navegación
+ * Componente para links individuales en la navegación con Radix UI
  * Utiliza NavLink de React Router para manejar estados activos
  *
  * @param {Object} props
@@ -15,10 +15,9 @@ import { cn } from '../../../utils/cn'
  * @param {string|number} [props.item.badge] - Texto del badge
  * @param {string} [props.item.badgeColor] - Color del badge
  * @param {boolean} [props.nested] - Si es un item anidado (hijo de un grupo)
- * @param {string} [props.className] - Clases CSS adicionales
  * @returns {JSX.Element}
  */
-export default function NavigationLink({ item, nested = false, className }) {
+export default function NavigationLink({ item, nested = false }) {
   const dispatch = useDispatch()
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
   const Icon = item.icon
@@ -28,58 +27,64 @@ export default function NavigationLink({ item, nested = false, className }) {
     dispatch(closeMobileMenu())
   }
 
+  const getBadgeColor = (color) => {
+    switch (color) {
+      case 'error':
+        return 'red'
+      case 'success':
+        return 'green'
+      case 'primary':
+        return 'blue'
+      case 'warning':
+        return 'amber'
+      default:
+        return 'red'
+    }
+  }
+
   return (
-    <li className={cn('nav-item', className)}>
-      <NavLink
-        to={item.navLink}
-        onClick={handleClick}
-        className={({ isActive }) =>
-          cn(
-            'flex items-center gap-3 px-6 py-3 text-sm font-medium transition-colors duration-200',
-            'hover:bg-gray-100 dark:hover:bg-gray-800',
-            'focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500',
-            {
-              'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400 border-r-4 border-blue-600':
-                isActive,
-              'text-gray-700 dark:text-gray-300': !isActive,
-              'pl-14': nested && !menuCollapsed,
-              'justify-center': menuCollapsed,
-            }
-          )
-        }
-      >
-        {Icon && (
-          <span className="flex-shrink-0">
-            <Icon size={20} />
-          </span>
-        )}
+    <Box asChild>
+      <li>
+        <NavLink
+          to={item.navLink}
+          onClick={handleClick}
+          style={({ isActive }) => ({
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--space-3)',
+            paddingLeft: nested && !menuCollapsed ? 'var(--space-8)' : 'var(--space-6)',
+            paddingRight: 'var(--space-6)',
+            paddingTop: 'var(--space-3)',
+            paddingBottom: 'var(--space-3)',
+            fontSize: 'var(--font-size-2)',
+            fontWeight: '500',
+            textDecoration: 'none',
+            transition: 'background-color 200ms',
+            backgroundColor: isActive ? 'var(--accent-3)' : 'transparent',
+            color: isActive ? 'var(--accent-11)' : 'var(--gray-12)',
+            borderRight: isActive ? '4px solid var(--accent-9)' : 'none',
+            justifyContent: menuCollapsed ? 'center' : 'flex-start',
+          })}
+        >
+          {Icon && (
+            <Box style={{ flexShrink: 0 }}>
+              <Icon size={20} />
+            </Box>
+          )}
 
-        {!menuCollapsed && (
-          <>
-            <span className="flex-1">{item.title}</span>
+          {!menuCollapsed && (
+            <Flex align="center" gap="2" style={{ flex: 1 }}>
+              <Text style={{ flex: 1 }}>{item.title}</Text>
 
-            {item.badge && (
-              <span
-                className={cn(
-                  'inline-flex items-center justify-center px-2 py-0.5 text-xs font-semibold rounded-full',
-                  {
-                    'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400':
-                      item.badgeColor === 'error' || !item.badgeColor,
-                    'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400':
-                      item.badgeColor === 'success',
-                    'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400':
-                      item.badgeColor === 'primary',
-                    'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400':
-                      item.badgeColor === 'warning',
-                  }
-                )}
-              >
-                {item.badge}
-              </span>
-            )}
-          </>
-        )}
-      </NavLink>
-    </li>
+              {item.badge && (
+                <Badge color={getBadgeColor(item.badgeColor)} variant="soft">
+                  {item.badge}
+                </Badge>
+              )}
+            </Flex>
+          )}
+        </NavLink>
+      </li>
+    </Box>
   )
 }

@@ -1,79 +1,91 @@
 import { Outlet } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { Box, Flex } from '@radix-ui/themes'
 import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
 import Footer from './components/Footer'
 import ThemeCustomizer from '../components/ThemeCustomizer/ThemeCustomizer'
 import { useTheme } from '../context/ThemeContext'
-import { cn } from '../utils/cn'
 
 /**
- * Layout principal de la aplicación
- * Incluye Navbar, Sidebar, área de contenido, Footer y Theme Customizer
- * Responsive completo con sidebar que empuja el contenido (no overlay)
+ * Layout principal de la aplicación con Radix UI
+ * Usa CSS Grid para layout donde sidebar está AL LADO del contenido (desktop)
+ * En mobile, el sidebar es un overlay
  *
  * @returns {JSX.Element}
  */
 export default function MainLayout() {
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
+  const mobileMenuOpen = useSelector((state) => state.layout.mobileMenuOpen)
   const { themeConfig } = useTheme()
 
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50 dark:bg-gray-950">
+    <Box style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Navbar - Fixed at top */}
       <Navbar />
 
-      {/* Main layout container - Flex row for sidebar + content */}
-      <div className="flex flex-1">
-        {/* Sidebar - Fixed width, pushes content */}
-        <Sidebar />
-
-        {/* Main Content Area - Flex column with content + footer */}
-        <main
-          className={cn(
-            'flex flex-1 flex-col transition-all duration-300 ease-in-out',
-            // Mobile: Full width (sidebar is overlay)
-            'w-full',
-            // Desktop: Adjust for sidebar width
-            {
-              'md:ml-[280px]': !menuCollapsed, // Sidebar expandido
-              'md:ml-[70px]': menuCollapsed, // Sidebar colapsado
-            }
-          )}
+      {/* Main Layout Container */}
+      <Box style={{ flex: 1, position: 'relative', display: 'flex' }}>
+        {/* Sidebar - Mobile: fixed overlay, Desktop: parte del flujo */}
+        <Box
+          className="sidebar-container"
+          style={{
+            // Desktop behavior
+            '--sidebar-width-expanded': '280px',
+            '--sidebar-width-collapsed': '70px',
+          }}
         >
+          <Sidebar />
+        </Box>
+
+        {/* Main Content Area */}
+        <Flex direction="column" style={{ flex: 1, minWidth: 0, overflow: 'auto' }}>
           {/* Content Container */}
-          <div
-            className={cn('flex-1 p-6', {
-              'mx-auto w-full': themeConfig.contentWidth === 'full',
-              'container mx-auto': themeConfig.contentWidth === 'boxed',
-            })}
+          <Box
+            style={{
+              flex: 1,
+              padding: 'var(--space-6)',
+              maxWidth: themeConfig.contentWidth === 'boxed' ? '1280px' : '100%',
+              margin: themeConfig.contentWidth === 'boxed' ? '0 auto' : '0',
+              width: '100%',
+            }}
           >
-            {/* Outlet con animación de ruta */}
-            <div
-              className={cn('animate-fade-in', {
-                'opacity-0 animate-[fade-in_0.3s_ease-in-out_forwards]':
-                  themeConfig.routerTransition === 'fade',
-                'translate-x-4 opacity-0 animate-[slide-in-left_0.3s_ease-in-out_forwards]':
-                  themeConfig.routerTransition === 'slide',
-              })}
-            >
+            {/* Outlet */}
+            <Box>
               <Outlet />
-            </div>
-          </div>
+            </Box>
+          </Box>
 
           {/* Footer */}
-          {themeConfig.footerType !== 'hidden' && (
-            <Footer
-              className={cn({
-                'sticky bottom-0': themeConfig.footerType === 'sticky',
-              })}
-            />
-          )}
-        </main>
-      </div>
+          {themeConfig.footerType !== 'hidden' && <Footer />}
+        </Flex>
+      </Box>
 
       {/* Theme Customizer (Floating button + Panel) */}
       <ThemeCustomizer />
-    </div>
+
+      {/* CSS for responsive sidebar */}
+      <style>{`
+        .sidebar-container {
+          /* Desktop: parte del flujo normal */
+          width: ${menuCollapsed ? '70px' : '280px'};
+          transition: width 300ms ease;
+        }
+
+        /* Mobile: fixed overlay */
+        @media (max-width: 767px) {
+          .sidebar-container {
+            position: fixed;
+            top: 64px;
+            left: 0;
+            width: 280px;
+            height: calc(100vh - 64px);
+            z-index: 50;
+            transform: ${mobileMenuOpen ? 'translateX(0)' : 'translateX(-100%)'};
+            transition: transform 300ms ease;
+          }
+        }
+      `}</style>
+    </Box>
   )
 }

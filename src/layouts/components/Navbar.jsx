@@ -1,27 +1,23 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { Menu, Moon, Sun, User, Settings, LogOut } from 'react-feather'
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
-import * as Avatar from '@radix-ui/react-avatar'
-import * as Separator from '@radix-ui/react-separator'
-import { handleMenuCollapsed, toggleMobileMenu, toggleSkin } from '../../store/layoutSlice'
+import { Box, Flex, Heading, Text, IconButton, Avatar, DropdownMenu, Separator } from '@radix-ui/themes'
+import { handleMenuCollapsed, toggleMobileMenu } from '../../store/layoutSlice'
 import { clearAuth } from '../../store/authSlice'
-import { cn } from '../../utils/cn'
+import { useTheme } from '../../context/ThemeContext'
 
 /**
- * Componente Navbar principal
+ * Componente Navbar principal con Radix UI Themes
  * Incluye toggle del sidebar, dropdown de usuario, y toggle de tema
  *
- * @param {Object} props
- * @param {string} [props.className] - Clases CSS adicionales
  * @returns {JSX.Element}
  */
-export default function Navbar({ className }) {
+export default function Navbar() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
-  const skin = useSelector((state) => state.layout.skin)
   const user = useSelector((state) => state.auth.user)
+  const { appearance, toggleAppearance } = useTheme()
 
   const handleToggleSidebar = () => {
     dispatch(handleMenuCollapsed(!menuCollapsed))
@@ -29,10 +25,6 @@ export default function Navbar({ className }) {
 
   const handleToggleMobile = () => {
     dispatch(toggleMobileMenu())
-  }
-
-  const handleToggleTheme = () => {
-    dispatch(toggleSkin())
   }
 
   const handleLogout = () => {
@@ -51,125 +43,123 @@ export default function Navbar({ className }) {
   }
 
   return (
-    <nav
-      className={cn(
-        'sticky top-0 z-40 flex h-16 items-center justify-between gap-4 border-b border-gray-200 bg-white px-6 dark:border-gray-800 dark:bg-gray-900',
-        className
-      )}
+    <Box
+      asChild
+      style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 40,
+        borderBottom: '1px solid var(--gray-6)',
+        height: '64px',
+      }}
     >
-      {/* Left Section - Menu Toggle */}
-      <div className="flex items-center gap-4">
-        {/* Desktop Toggle */}
-        <button
-          onClick={handleToggleSidebar}
-          className="hidden rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 md:block"
-          aria-label="Toggle sidebar"
-        >
-          <Menu size={20} />
-        </button>
+      <nav>
+        <Flex align="center" justify="between" gap="4" px="6" style={{ height: '100%' }}>
+          {/* Left Section - Menu Toggle */}
+          <Flex align="center" gap="4">
+            {/* Desktop Toggle - Hidden on mobile */}
+            <Box display={{ initial: 'none', md: 'block' }}>
+              <IconButton
+                variant="ghost"
+                onClick={handleToggleSidebar}
+                aria-label="Toggle sidebar"
+              >
+                <Menu size={20} />
+              </IconButton>
+            </Box>
 
-        {/* Mobile Toggle */}
-        <button
-          onClick={handleToggleMobile}
-          className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 md:hidden"
-          aria-label="Toggle mobile menu"
-        >
-          <Menu size={20} />
-        </button>
+            {/* Mobile Toggle - Visible only on mobile */}
+            <Box display={{ initial: 'block', md: 'none' }}>
+              <IconButton
+                variant="ghost"
+                onClick={handleToggleMobile}
+                aria-label="Toggle mobile menu"
+              >
+                <Menu size={20} />
+              </IconButton>
+            </Box>
 
-        <div className="flex items-center gap-2">
-          <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-            Mi App
-          </h1>
-        </div>
-      </div>
+            <Heading size="5">Mi App</Heading>
+          </Flex>
 
-      {/* Right Section - Theme Toggle & User Dropdown */}
-      <div className="flex items-center gap-2">
-        {/* Theme Toggle */}
-        <button
-          onClick={handleToggleTheme}
-          className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
-          aria-label="Toggle theme"
-        >
-          {skin === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-        </button>
-
-        {/* User Dropdown */}
-        <DropdownMenu.Root>
-          <DropdownMenu.Trigger asChild>
-            <button
-              className="flex items-center gap-2 rounded-lg p-1 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
-              aria-label="User menu"
+          {/* Right Section - Theme Toggle & User Dropdown */}
+          <Flex align="center" gap="2">
+            {/* Theme Toggle */}
+            <IconButton
+              variant="ghost"
+              onClick={toggleAppearance}
+              aria-label="Toggle theme"
             >
-              <Avatar.Root className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-blue-600">
-                <Avatar.Fallback className="text-sm font-medium text-white">
-                  {getUserInitials()}
-                </Avatar.Fallback>
-              </Avatar.Root>
+              {appearance === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+            </IconButton>
 
-              {user && (
-                <span className="hidden text-sm font-medium text-gray-700 dark:text-gray-300 md:block">
-                  {user.nombre || 'Usuario'}
-                </span>
-              )}
-            </button>
-          </DropdownMenu.Trigger>
-
-          <DropdownMenu.Portal>
-            <DropdownMenu.Content
-              className="z-50 min-w-[200px] overflow-hidden rounded-lg border border-gray-200 bg-white p-1 shadow-lg dark:border-gray-800 dark:bg-gray-900"
-              align="end"
-              sideOffset={5}
-            >
-              {/* User Info */}
-              {user && (
-                <>
-                  <div className="px-3 py-2">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">
-                      {user.nombre || 'Usuario'}
-                    </p>
-                    {user.email && (
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {user.email}
-                      </p>
+            {/* User Dropdown */}
+            <DropdownMenu.Root>
+              <DropdownMenu.Trigger>
+                <Flex asChild align="center" gap="2" style={{ cursor: 'pointer' }}>
+                  <button style={{ border: 'none', background: 'none', padding: 0 }}>
+                    <Avatar
+                      size="2"
+                      fallback={getUserInitials()}
+                      color="blue"
+                    />
+                    {user && (
+                      <Box display={{ initial: 'none', md: 'block' }}>
+                        <Text size="2" weight="medium">
+                          {user.nombre || 'Usuario'}
+                        </Text>
+                      </Box>
                     )}
-                  </div>
+                  </button>
+                </Flex>
+              </DropdownMenu.Trigger>
 
-                  <Separator.Root className="my-1 h-px bg-gray-200 dark:bg-gray-800" />
-                </>
-              )}
+              <DropdownMenu.Content align="end">
+                {/* User Info */}
+                {user && (
+                  <>
+                    <Box p="2">
+                      <Text size="2" weight="medium">
+                        {user.nombre || 'Usuario'}
+                      </Text>
+                      {user.email && (
+                        <Text size="1" color="gray">
+                          {user.email}
+                        </Text>
+                      )}
+                    </Box>
+                    <Separator size="4" />
+                  </>
+                )}
 
-              {/* Menu Items */}
-              <DropdownMenu.Item
-                className="flex cursor-pointer items-center gap-2 rounded px-3 py-2 text-sm text-gray-700 outline-none transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
-                onSelect={() => navigate('/perfil')}
-              >
-                <User size={16} />
-                <span>Mi Perfil</span>
-              </DropdownMenu.Item>
+                {/* Menu Items */}
+                <DropdownMenu.Item onSelect={() => navigate('/perfil')}>
+                  <Flex align="center" gap="2">
+                    <User size={16} />
+                    <Text>Mi Perfil</Text>
+                  </Flex>
+                </DropdownMenu.Item>
 
-              <DropdownMenu.Item
-                className="flex cursor-pointer items-center gap-2 rounded px-3 py-2 text-sm text-gray-700 outline-none transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
-                onSelect={() => navigate('/configuracion')}
-              >
-                <Settings size={16} />
-                <span>Configuración</span>
-              </DropdownMenu.Item>
+                <DropdownMenu.Item onSelect={() => navigate('/configuracion')}>
+                  <Flex align="center" gap="2">
+                    <Settings size={16} />
+                    <Text>Configuración</Text>
+                  </Flex>
+                </DropdownMenu.Item>
 
-              <Separator.Root className="my-1 h-px bg-gray-200 dark:bg-gray-800" />
+                <Separator size="4" />
 
-              <DropdownMenu.Item
-                className="flex cursor-pointer items-center gap-2 rounded px-3 py-2 text-sm text-red-600 outline-none transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
-                onSelect={handleLogout}
-              >
-                <LogOut size={16} />
-                <span>Cerrar Sesión</span>
-              </DropdownMenu.Item>
-            </DropdownMenu.Content>
-          </DropdownMenu.Portal>
-        </DropdownMenu.Root>
-      </div>
-    </nav>
+                <DropdownMenu.Item onSelect={handleLogout} color="red">
+                  <Flex align="center" gap="2">
+                    <LogOut size={16} />
+                    <Text>Cerrar Sesión</Text>
+                  </Flex>
+                </DropdownMenu.Item>
+              </DropdownMenu.Content>
+            </DropdownMenu.Root>
+          </Flex>
+        </Flex>
+      </nav>
+    </Box>
   )
 }

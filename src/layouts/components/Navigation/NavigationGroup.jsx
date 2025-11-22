@@ -3,8 +3,8 @@ import { useLocation } from 'react-router-dom'
 import { ChevronDown } from 'react-feather'
 import * as Collapsible from '@radix-ui/react-collapsible'
 import { useSelector } from 'react-redux'
+import { Box, Flex, Text, Badge } from '@radix-ui/themes'
 import NavigationLink from './NavigationLink'
-import { cn } from '../../../utils/cn'
 
 /**
  * Verifica si alguna ruta hija está activa
@@ -22,7 +22,7 @@ function hasActiveChild(children, currentPath) {
 }
 
 /**
- * Componente para grupos colapsibles en la navegación
+ * Componente para grupos colapsibles en la navegación con Radix UI
  * Utiliza Radix UI Collapsible para animaciones suaves
  *
  * @param {Object} props
@@ -32,10 +32,9 @@ function hasActiveChild(children, currentPath) {
  * @param {Array} props.item.children - Items hijos
  * @param {string|number} [props.item.badge] - Texto del badge
  * @param {string} [props.item.badgeColor] - Color del badge
- * @param {string} [props.className] - Clases CSS adicionales
  * @returns {JSX.Element}
  */
-export default function NavigationGroup({ item, className }) {
+export default function NavigationGroup({ item }) {
   const location = useLocation()
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
   const Icon = item.icon
@@ -49,65 +48,87 @@ export default function NavigationGroup({ item, className }) {
     return null
   }
 
+  const getBadgeColor = (color) => {
+    switch (color) {
+      case 'error':
+        return 'red'
+      case 'success':
+        return 'green'
+      case 'primary':
+        return 'blue'
+      case 'warning':
+        return 'amber'
+      default:
+        return 'red'
+    }
+  }
+
   return (
-    <li className={cn('nav-item nav-group', className)}>
-      <Collapsible.Root open={open} onOpenChange={setOpen}>
-        <Collapsible.Trigger
-          className={cn(
-            'flex w-full items-center gap-3 px-6 py-3 text-sm font-medium transition-colors duration-200',
-            'hover:bg-gray-100 dark:hover:bg-gray-800',
-            'focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500',
-            {
-              'bg-gray-50 dark:bg-gray-800/50': isActive,
-              'text-gray-700 dark:text-gray-300': !isActive,
-            }
-          )}
-        >
-          {Icon && (
-            <span className="flex-shrink-0">
-              <Icon size={20} />
-            </span>
-          )}
-
-          <span className="flex-1 text-left">{item.title}</span>
-
-          {item.badge && (
-            <span
-              className={cn(
-                'inline-flex items-center justify-center px-2 py-0.5 text-xs font-semibold rounded-full',
-                {
-                  'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400':
-                    item.badgeColor === 'error' || !item.badgeColor,
-                  'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400':
-                    item.badgeColor === 'success',
-                  'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400':
-                    item.badgeColor === 'primary',
-                  'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400':
-                    item.badgeColor === 'warning',
-                }
-              )}
+    <Box asChild>
+      <li>
+        <Collapsible.Root open={open} onOpenChange={setOpen}>
+          <Collapsible.Trigger asChild>
+            <button
+              style={{
+                display: 'flex',
+                width: '100%',
+                alignItems: 'center',
+                gap: 'var(--space-3)',
+                paddingLeft: 'var(--space-6)',
+                paddingRight: 'var(--space-6)',
+                paddingTop: 'var(--space-3)',
+                paddingBottom: 'var(--space-3)',
+                fontSize: 'var(--font-size-2)',
+                fontWeight: '500',
+                transition: 'background-color 200ms',
+                backgroundColor: isActive ? 'var(--gray-3)' : 'transparent',
+                color: 'var(--gray-12)',
+                border: 'none',
+                cursor: 'pointer',
+                textAlign: 'left',
+              }}
             >
-              {item.badge}
-            </span>
-          )}
+              {Icon && (
+                <Box style={{ flexShrink: 0 }}>
+                  <Icon size={20} />
+                </Box>
+              )}
 
-          <ChevronDown
-            size={16}
-            className={cn(
-              'flex-shrink-0 transition-transform duration-200',
-              open && 'rotate-180'
-            )}
-          />
-        </Collapsible.Trigger>
+              <Text style={{ flex: 1 }}>{item.title}</Text>
 
-        <Collapsible.Content className="overflow-hidden data-[state=closed]:animate-[collapsible-up_200ms_ease-out] data-[state=open]:animate-[collapsible-down_200ms_ease-out]">
-          <ul className="py-1">
-            {item.children.map((child) => (
-              <NavigationLink key={child.id} item={child} nested />
-            ))}
-          </ul>
-        </Collapsible.Content>
-      </Collapsible.Root>
-    </li>
+              {item.badge && (
+                <Badge color={getBadgeColor(item.badgeColor)} variant="soft">
+                  {item.badge}
+                </Badge>
+              )}
+
+              <Box
+                style={{
+                  flexShrink: 0,
+                  transition: 'transform 200ms',
+                  transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
+                }}
+              >
+                <ChevronDown size={16} />
+              </Box>
+            </button>
+          </Collapsible.Trigger>
+
+          <Collapsible.Content
+            style={{
+              overflow: 'hidden',
+            }}
+          >
+            <Box py="1" asChild>
+              <ul>
+                {item.children.map((child) => (
+                  <NavigationLink key={child.id} item={child} nested />
+                ))}
+              </ul>
+            </Box>
+          </Collapsible.Content>
+        </Collapsible.Root>
+      </li>
+    </Box>
   )
 }

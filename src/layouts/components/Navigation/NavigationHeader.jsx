@@ -1,20 +1,34 @@
-import { cn } from '../../../utils/cn'
+import { Box, Text } from '@radix-ui/themes'
 
 /**
- * Componente para headers de sección en la navegación
+ * Componente para headers de sección en la navegación con Radix UI
  * Muestra un título no interactivo que divide secciones del menú
  *
  * @param {Object} props
  * @param {string} props.title - Texto del header
- * @param {string} [props.className] - Clases CSS adicionales
  * @returns {JSX.Element}
  */
-export default function NavigationHeader({ title, className }) {
+export default function NavigationHeader({ title }) {
   return (
-    <li className={cn('navigation-header', className)}>
-      <span className="block px-6 py-3 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
-        {title}
-      </span>
-    </li>
+    <Box asChild>
+      <li>
+        <Text
+          size="1"
+          weight="bold"
+          style={{
+            display: 'block',
+            paddingLeft: 'var(--space-6)',
+            paddingRight: 'var(--space-6)',
+            paddingTop: 'var(--space-3)',
+            paddingBottom: 'var(--space-3)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+            color: 'var(--gray-9)',
+          }}
+        >
+          {title}
+        </Text>
+      </li>
+    </Box>
   )
 }

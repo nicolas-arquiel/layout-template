@@ -1,10 +1,9 @@
 import { Home, Users, UserPlus, TrendingUp } from 'react-feather'
-import { Container, Row, Col, Spacer } from '../components/Grid'
-import { cn } from '../utils/cn'
+import { Box, Flex, Grid, Heading, Text, Card, Button } from '@radix-ui/themes'
 
 /**
- * Componente de página Dashboard/Inicio
- * Muestra estadísticas y tarjetas de resumen usando Grid System
+ * Componente de página Dashboard/Inicio con Radix UI
+ * Muestra estadísticas y tarjetas de resumen usando Radix Grid
  *
  * @returns {JSX.Element}
  */
@@ -40,126 +39,144 @@ export default function Dashboard() {
     },
   ]
 
-  return (
-    <Container size="fluid">
-      {/* Header */}
-      <Row>
-        <Col xs={12}>
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
-              <p className="mt-2 text-gray-600 dark:text-gray-400">
-                Bienvenido a tu panel de control
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <Home size={24} className="text-gray-400" />
-            </div>
-          </div>
-        </Col>
-      </Row>
+  const getIconColor = (color) => {
+    const colors = {
+      blue: 'var(--blue-9)',
+      green: 'var(--green-9)',
+      purple: 'var(--purple-9)',
+      orange: 'var(--orange-9)',
+    }
+    return colors[color] || colors.blue
+  }
 
-      <Spacer size="lg" />
+  const getIconBgColor = (color) => {
+    const colors = {
+      blue: 'var(--blue-3)',
+      green: 'var(--green-3)',
+      purple: 'var(--purple-3)',
+      orange: 'var(--orange-3)',
+    }
+    return colors[color] || colors.blue
+  }
+
+  return (
+    <Box>
+      {/* Header */}
+      <Flex align="center" justify="between" mb="6">
+        <Box>
+          <Heading size="8" mb="2">
+            Dashboard
+          </Heading>
+          <Text color="gray">Bienvenido a tu panel de control</Text>
+        </Box>
+        <Flex align="center" gap="2">
+          <Home size={24} color="var(--gray-9)" />
+        </Flex>
+      </Flex>
 
       {/* Stats Grid - Responsive: 1 col mobile, 2 cols tablet, 4 cols desktop */}
-      <Row>
+      <Grid columns={{ initial: '1', sm: '2', lg: '4' }} gap="4" mb="6">
         {stats.map((stat, index) => {
           const Icon = stat.icon
           return (
-            <Col key={index} xs={12} sm={6} lg={3}>
-              <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md dark:border-gray-800 dark:bg-gray-900">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                      {stat.title}
-                    </p>
-                    <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">
-                      {stat.value}
-                    </p>
-                    <p className="mt-2 text-sm text-green-600 dark:text-green-400">
-                      {stat.trend}
-                    </p>
-                  </div>
-                  <div
-                    className={cn(
-                      'flex h-12 w-12 items-center justify-center rounded-lg',
-                      {
-                        'bg-blue-100 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400':
-                          stat.color === 'blue',
-                        'bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400':
-                          stat.color === 'green',
-                        'bg-purple-100 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400':
-                          stat.color === 'purple',
-                        'bg-orange-100 text-orange-600 dark:bg-orange-900/20 dark:text-orange-400':
-                          stat.color === 'orange',
-                      }
-                    )}
-                  >
-                    <Icon size={24} />
-                  </div>
-                </div>
-              </div>
-            </Col>
+            <Card key={index} variant="surface">
+              <Flex align="center" justify="between">
+                <Box>
+                  <Text size="2" color="gray" weight="medium">
+                    {stat.title}
+                  </Text>
+                  <Heading size="6" mt="2">
+                    {stat.value}
+                  </Heading>
+                  <Text size="2" color="green" mt="2">
+                    {stat.trend}
+                  </Text>
+                </Box>
+                <Flex
+                  align="center"
+                  justify="center"
+                  style={{
+                    width: '48px',
+                    height: '48px',
+                    borderRadius: 'var(--radius-3)',
+                    backgroundColor: getIconBgColor(stat.color),
+                    color: getIconColor(stat.color),
+                  }}
+                >
+                  <Icon size={24} />
+                </Flex>
+              </Flex>
+            </Card>
           )
         })}
-      </Row>
-
-      <Spacer size="lg" />
+      </Grid>
 
       {/* Content Cards - 8/4 split on desktop */}
-      <Row>
+      <Grid columns={{ initial: '1', lg: '3' }} gap="4">
         {/* Recent Activity - 2/3 on desktop */}
-        <Col xs={12} lg={8}>
-          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+        <Box style={{ gridColumn: 'span 1 / span 1', lg: { gridColumn: 'span 2 / span 2' } }}>
+          <Card>
+            <Heading size="5" mb="4">
               Actividad Reciente
-            </h2>
-            <div className="mt-4 space-y-4">
+            </Heading>
+            <Flex direction="column" gap="4">
               {[1, 2, 3].map((item) => (
-                <div
+                <Flex
                   key={item}
-                  className="flex items-center gap-4 border-b border-gray-100 pb-4 last:border-0 dark:border-gray-800"
+                  align="center"
+                  gap="4"
+                  pb="4"
+                  style={{
+                    borderBottom: item !== 3 ? '1px solid var(--gray-5)' : 'none',
+                  }}
                 >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/20">
-                    <Users size={20} className="text-blue-600 dark:text-blue-400" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  <Flex
+                    align="center"
+                    justify="center"
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '50%',
+                      backgroundColor: 'var(--blue-3)',
+                    }}
+                  >
+                    <Users size={20} color="var(--blue-9)" />
+                  </Flex>
+                  <Box style={{ flex: 1 }}>
+                    <Text size="2" weight="medium">
                       Nueva inscripción registrada
-                    </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                    </Text>
+                    <Text size="1" color="gray">
                       Hace {item} hora{item > 1 ? 's' : ''}
-                    </p>
-                  </div>
-                </div>
+                    </Text>
+                  </Box>
+                </Flex>
               ))}
-            </div>
-          </div>
-        </Col>
+            </Flex>
+          </Card>
+        </Box>
 
         {/* Quick Actions - 1/3 on desktop */}
-        <Col xs={12} lg={4}>
-          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Acciones Rápidas
-            </h2>
-            <div className="mt-4 grid gap-3">
-              <button className="flex items-center gap-3 rounded-lg border border-gray-200 p-4 transition-colors hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800">
-                <UserPlus size={20} className="text-blue-600 dark:text-blue-400" />
-                <span className="text-sm font-medium text-gray-900 dark:text-white">
-                  Nueva Inscripción
-                </span>
-              </button>
-              <button className="flex items-center gap-3 rounded-lg border border-gray-200 p-4 transition-colors hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800">
-                <Users size={20} className="text-green-600 dark:text-green-400" />
-                <span className="text-sm font-medium text-gray-900 dark:text-white">
-                  Gestionar Personas
-                </span>
-              </button>
-            </div>
-          </div>
-        </Col>
-      </Row>
-    </Container>
+        <Card>
+          <Heading size="5" mb="4">
+            Acciones Rápidas
+          </Heading>
+          <Flex direction="column" gap="3">
+            <Button variant="outline" size="3">
+              <Flex align="center" gap="3">
+                <UserPlus size={20} />
+                <Text>Nueva Inscripción</Text>
+              </Flex>
+            </Button>
+            <Button variant="outline" size="3">
+              <Flex align="center" gap="3">
+                <Users size={20} />
+                <Text>Gestionar Personas</Text>
+              </Flex>
+            </Button>
+          </Flex>
+        </Card>
+      </Grid>
+    </Box>
   )
 }

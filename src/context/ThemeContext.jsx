@@ -1,8 +1,8 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 
 /**
- * Theme Context
- * Maneja configuración de tema, colores, layout y personalización
+ * Theme Context para Radix UI Themes
+ * Maneja appearance (light/dark) y configuración de layout
  */
 const ThemeContext = createContext()
 
@@ -20,10 +20,10 @@ export function useTheme() {
 
 /**
  * Theme Provider Component
- * Provee configuración de tema a toda la aplicación
+ * Provee configuración de tema a toda la aplicación usando Radix Theme
  *
  * @param {Object} props
- * @param {React.ReactNode} props.children - Children components
+ * @param {Function} props.children - Render prop que recibe { appearance }
  * @returns {JSX.Element}
  */
 export function ThemeProvider({ children }) {
@@ -37,13 +37,13 @@ export function ThemeProvider({ children }) {
     return saved
       ? JSON.parse(saved)
       : {
-          primaryColor: '#3b82f6', // blue-500
-          skin: 'light', // 'light' | 'dark'
+          appearance: 'light', // 'light' | 'dark' - para Radix Theme
+          accentColor: 'blue',
+          grayColor: 'slate',
+          radius: 'medium',
           contentWidth: 'boxed', // 'full' | 'boxed'
           menuCollapsed: false,
-          navbarColor: 'white',
           footerType: 'static', // 'static' | 'sticky' | 'hidden'
-          routerTransition: 'fade', // 'fade' | 'slide' | 'none'
         }
   })
 
@@ -51,20 +51,6 @@ export function ThemeProvider({ children }) {
   useEffect(() => {
     localStorage.setItem('themeConfig', JSON.stringify(themeConfig))
   }, [themeConfig])
-
-  // Aplicar skin (light/dark) al HTML
-  useEffect(() => {
-    if (themeConfig.skin === 'dark') {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-  }, [themeConfig.skin])
-
-  // Aplicar color primario como CSS variable
-  useEffect(() => {
-    document.documentElement.style.setProperty('--primary-color', themeConfig.primaryColor)
-  }, [themeConfig.primaryColor])
 
   // Toggle customizer con tecla T
   useEffect(() => {
@@ -98,17 +84,27 @@ export function ThemeProvider({ children }) {
   }
 
   /**
+   * Toggle appearance (light/dark)
+   */
+  const toggleAppearance = () => {
+    setThemeConfig((prev) => ({
+      ...prev,
+      appearance: prev.appearance === 'light' ? 'dark' : 'light',
+    }))
+  }
+
+  /**
    * Resetea el tema a valores por defecto
    */
   const resetTheme = () => {
     const defaultConfig = {
-      primaryColor: '#3b82f6',
-      skin: 'light',
+      appearance: 'light',
+      accentColor: 'blue',
+      grayColor: 'slate',
+      radius: 'medium',
       contentWidth: 'boxed',
       menuCollapsed: false,
-      navbarColor: 'white',
       footerType: 'static',
-      routerTransition: 'fade',
     }
     setThemeConfig(defaultConfig)
     localStorage.setItem('themeConfig', JSON.stringify(defaultConfig))
@@ -117,11 +113,17 @@ export function ThemeProvider({ children }) {
   const value = {
     themeConfig,
     updateThemeConfig,
+    toggleAppearance,
     resetTheme,
     customizerOpen,
     setCustomizerOpen,
     toggleCustomizer: () => setCustomizerOpen((prev) => !prev),
+    appearance: themeConfig.appearance,
   }
 
-  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
+  return (
+    <ThemeContext.Provider value={value}>
+      {typeof children === 'function' ? children(value) : children}
+    </ThemeContext.Provider>
+  )
 }
