@@ -1,3 +1,4 @@
+import React from 'react'
 import { useSelector } from 'react-redux'
 import NavigationHeader from './NavigationHeader'
 import NavigationLink from './NavigationLink'
@@ -13,7 +14,7 @@ import { canViewMenuItem, canViewMenuGroup } from '../../../utils/permissions'
  * @param {string} [props.className] - Clases CSS adicionales
  * @returns {JSX.Element}
  */
-export default function NavigationItems({ items = [], className }) {
+const NavigationItems = ({ items = [], className }) => {
   const permisos = useSelector((state) => state.auth.permisos)
 
   /**
@@ -56,3 +57,5 @@ export default function NavigationItems({ items = [], className }) {
     </ul>
   )
 }
+
+export default NavigationItems

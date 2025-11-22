@@ -14,12 +14,6 @@ const layoutSlice = createSlice({
     menuCollapsed: false,
 
     /**
-     * @type {'light'|'dark'}
-     * Tema de la aplicación
-     */
-    skin: 'light',
-
-    /**
      * @type {boolean}
      * Estado del overlay en mobile (sidebar visible u oculto)
      */
@@ -50,23 +44,6 @@ const layoutSlice = createSlice({
     closeMobileMenu: (state) => {
       state.mobileMenuOpen = false
     },
-
-    /**
-     * Cambia el tema de la aplicación
-     * @param {Object} state - Estado actual
-     * @param {Object} action - Action con payload 'light' o 'dark'
-     */
-    setSkin: (state, action) => {
-      state.skin = action.payload
-    },
-
-    /**
-     * Toggle entre light y dark mode
-     * @param {Object} state - Estado actual
-     */
-    toggleSkin: (state) => {
-      state.skin = state.skin === 'light' ? 'dark' : 'light'
-    },
   },
 })
 
@@ -74,8 +51,6 @@ export const {
   handleMenuCollapsed,
   toggleMobileMenu,
   closeMobileMenu,
-  setSkin,
-  toggleSkin,
 } = layoutSlice.actions
 
 export default layoutSlice.reducer

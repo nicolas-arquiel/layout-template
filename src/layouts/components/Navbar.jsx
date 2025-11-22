@@ -1,26 +1,20 @@
-import { useSelector } from 'react-redux'
+import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { Moon, Sun, User, Settings, LogOut } from 'react-feather'
-import { Flex, Text, IconButton, Avatar, DropdownMenu, Separator } from '@radix-ui/themes'
+import { User, Settings, LogOut } from 'react-feather'
+import { Flex, Text, Avatar, DropdownMenu, Separator } from '@radix-ui/themes'
 import { clearAuth } from '../../store/authSlice'
-import { useThemeConfig } from '../../App'
-import { useDispatch } from 'react-redux'
 
 /**
  * Navbar - SOLO TAILWIND CLASSES
- * Theme toggle y user menu (SIN hamburger)
+ * User menu (theme toggle está en ThemePanel de Radix)
  *
  * @returns {JSX.Element}
  */
-export default function Navbar() {
+const Navbar = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const user = useSelector((state) => state.auth.user)
-  const { themeConfig, updateThemeConfig } = useThemeConfig()
-
-  const toggleAppearance = () => {
-    updateThemeConfig('appearance', themeConfig.appearance === 'light' ? 'dark' : 'light')
-  }
 
   const handleLogout = () => {
     dispatch(clearAuth())
@@ -39,13 +33,8 @@ export default function Navbar() {
 
   return (
     <Flex align="center" justify="end" px="6" className="h-full">
-      {/* ========== THEME TOGGLE + USER MENU ========== */}
+      {/* ========== USER MENU ========== */}
       <Flex align="center" gap="3">
-        {/* Theme Toggle */}
-        <IconButton variant="ghost" onClick={toggleAppearance} aria-label="Toggle theme">
-          {themeConfig.appearance === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-        </IconButton>
-
         {/* User Dropdown */}
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
@@ -108,3 +97,5 @@ export default function Navbar() {
     </Flex>
   )
 }
+
+export default Navbar

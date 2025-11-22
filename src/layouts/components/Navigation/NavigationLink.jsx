@@ -1,6 +1,7 @@
+import React from 'react'
 import { useDispatch } from 'react-redux'
 import { closeMobileMenu } from '../../../store/layoutSlice'
-import NavigationItem from '../../../components/ui/NavigationItem'
+import NavigationItem from './NavigationItem'
 
 /**
  * NavigationLink - Wrapper para NavigationItem con lógica de cierre mobile
@@ -11,7 +12,7 @@ import NavigationItem from '../../../components/ui/NavigationItem'
  * @param {boolean} [props.nested] - Si es item anidado
  * @returns {JSX.Element}
  */
-export default function NavigationLink({ item, nested = false }) {
+const NavigationLink = ({ item, nested = false }) => {
   const dispatch = useDispatch()
 
   const handleClick = () => {
@@ -27,3 +28,5 @@ export default function NavigationLink({ item, nested = false }) {
 
   return <NavigationItem item={itemWithHandler} nested={nested} showTooltip />
 }
+
+export default NavigationLink

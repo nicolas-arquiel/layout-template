@@ -26,6 +26,15 @@
 }
 
 :root {
+  /* Global Colors */
+  --body-bg-light: #F8F8F8;
+  --body-bg-dark: #161D31;
+  --card-bg-light: #FFFFFF;
+  --card-bg-dark: #283046;
+
+  /* Radix overrides */
+  --color-background: var(--body-bg-light);
+
   /* Typography */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.5;
@@ -38,6 +47,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.dark {
+  --color-background: var(--body-bg-dark);
+}
+
 /* Reset y estilos base */
 * {
   margin: 0;
@@ -46,9 +59,28 @@
 }
 
 body {
+  background-color: var(--color-background);
+  color: var(--gray-12);
+  font-family: 'Inter', sans-serif;
   margin: 0;
+  padding: 0;
+  transition: background-color 0.3s ease;
   min-width: 320px;
   min-height: 100vh;
+}
+
+/* Card Utility */
+.card {
+  background-color: var(--card-bg-light);
+  border-radius: var(--radius-3);
+  box-shadow: 0 4px 24px 0 rgba(34, 41, 47, 0.1);
+  border: none; /* No border as requested */
+  transition: all 0.3s ease;
+}
+
+.dark .card {
+  background-color: var(--card-bg-dark);
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.24);
 }
 
 /* Animaciones para Radix UI Collapsible */
