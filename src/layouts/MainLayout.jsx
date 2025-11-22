@@ -4,10 +4,13 @@ import { Box } from '@radix-ui/themes'
 import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
 import ThemeCustomizer from '../components/ThemeCustomizer/ThemeCustomizer'
+import ResponsiveContainer from '../components/ui/ResponsiveContainer'
 import { useThemeConfig } from '../App'
+import { cn } from '../lib/utils'
 
 /**
- * Layout principal - Sidebar fijo + Main area con margin-left
+ * Layout principal - SOLO TAILWIND CLASSES
+ * Sidebar fijo + Main area responsivo
  *
  * ESTRUCTURA:
  * ┌──────────────────────────────────────┐
@@ -26,116 +29,60 @@ export default function MainLayout() {
   const mobileMenuOpen = useSelector((state) => state.layout.mobileMenuOpen)
   const { themeConfig } = useThemeConfig()
 
-  const sidebarWidth = menuCollapsed ? 70 : 270
-
   return (
-    <Box
-      style={{
-        height: '100vh',
-        backgroundColor: 'var(--bg-primary)',
-      }}
-    >
+    <div className="h-screen bg-[var(--bg-primary)]">
       {/* ========== SIDEBAR - FIJO IZQUIERDA ========== */}
-      <Box
-        className="sidebar-container"
-        style={{
-          position: 'fixed',
-          left: 0,
-          top: 0,
-          width: `${sidebarWidth}px`,
-          height: '100vh',
-          backgroundColor: 'var(--sidebar-bg)',
-          borderRight: '1px solid var(--border-color)',
-          zIndex: 40,
-          transition: 'width 300ms ease-in-out',
-        }}
+      <div
+        className={cn(
+          'fixed left-0 top-0 h-screen z-40',
+          'bg-[var(--sidebar-bg)] border-r border-[var(--border-color)]',
+          'transition-all duration-300 ease-in-out',
+          menuCollapsed ? 'w-20' : 'w-[270px]',
+          // Mobile: slide from left
+          'md:translate-x-0',
+          mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+        )}
       >
         <Sidebar />
-      </Box>
+      </div>
 
       {/* ========== MAIN AREA - MARGIN LEFT ========== */}
-      <Box
-        style={{
-          marginLeft: `${sidebarWidth}px`,
-          height: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          transition: 'margin-left 300ms ease-in-out',
-        }}
-      >
-        {/* NAVBAR - Solo en main area, SIN hamburger */}
-        <Box
-          style={{
-            height: '64px',
-            backgroundColor: 'var(--navbar-bg)',
-            borderBottom: '1px solid var(--border-color)',
-            position: themeConfig.navbarSticky ? 'sticky' : 'relative',
-            top: 0,
-            zIndex: 30,
-          }}
-        >
-          <Navbar />
-        </Box>
-
-        {/* CONTENT AREA */}
-        <Box
-          style={{
-            flex: 1,
-            overflow: 'auto',
-            padding: '24px',
-          }}
-        >
-          <Outlet />
-        </Box>
-
-        {/* FOOTER */}
-        {themeConfig.footerType !== 'hidden' && (
-          <Box
-            style={{
-              height: '48px',
-              backgroundColor: 'var(--sidebar-bg)',
-              borderTop: '1px solid var(--border-color)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '0 24px',
-            }}
+      <ResponsiveContainer sidebarCollapsed={menuCollapsed}>
+        <div className="h-screen flex flex-col">
+          {/* NAVBAR - Solo en main area, SIN hamburger */}
+          <div
+            className={cn(
+              'h-16 bg-[var(--navbar-bg)] border-b border-[var(--border-color)]',
+              'z-30',
+              themeConfig.navbarSticky ? 'sticky top-0' : 'relative'
+            )}
           >
-            <Box
-              style={{
-                fontSize: 'var(--font-size-1)',
-                color: 'var(--gray-11)',
-              }}
-            >
-              Sistema de gestión (UCU), Universidad de Concepción del Uruguay
-            </Box>
-          </Box>
-        )}
-      </Box>
+            <Navbar />
+          </div>
+
+          {/* CONTENT AREA */}
+          <div className="flex-1 overflow-auto p-6">
+            <Outlet />
+          </div>
+
+          {/* FOOTER */}
+          {themeConfig.footerType !== 'hidden' && (
+            <div className="h-12 bg-[var(--sidebar-bg)] border-t border-[var(--border-color)] flex items-center justify-center px-6">
+              <span className="text-xs text-[var(--gray-11)]">
+                Sistema de gestión (UCU), Universidad de Concepción del Uruguay
+              </span>
+            </div>
+          )}
+        </div>
+      </ResponsiveContainer>
 
       {/* Theme Customizer */}
       <ThemeCustomizer />
 
       {/* Mobile Overlay */}
       {mobileMenuOpen && (
-        <Box
-          style={{
-            position: 'fixed',
-            inset: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            zIndex: 35,
-          }}
-        />
+        <div className="fixed inset-0 bg-black/50 z-35 md:hidden canvas-overlay" />
       )}
-
-      {/* Responsive Styles */}
-      <style>{`
-        @media (max-width: 767px) {
-          .sidebar-container {
-            transform: ${mobileMenuOpen ? 'translateX(0)' : 'translateX(-100%)'};
-          }
-        }
-      `}</style>
-    </Box>
+    </div>
   )
 }

@@ -1,0 +1,65 @@
+/**
+ * CSS Custom SOLO para gradients complejos que Tailwind no soporta nativamente
+ * Usa @theme para acceder a tokens de Tailwind CSS
+ */
+
+/* ========== NAVIGATION GRADIENTS ========== */
+/* Active state gradient - Purple */
+.gradient-active {
+  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+}
+
+.gradient-active:hover {
+  background: linear-gradient(135deg, #6d28d9 0%, #9333ea 100%);
+}
+
+/* ========== NAVBAR SHADOW ========== */
+.navbar-shadow {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark mode navbar shadow */
+.dark .navbar-shadow {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ========== SIDEBAR GRADIENTS ========== */
+/* Header gradient opcional para sidebar */
+.sidebar-header-gradient {
+  background: linear-gradient(180deg, rgba(124, 58, 237, 0.1) 0%, transparent 100%);
+}
+
+/* ========== CARD GRADIENTS ========== */
+/* Card hover gradient */
+.card-hover-gradient {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-hover-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+  pointer-events: none;
+}
+
+.card-hover-gradient:hover::before {
+  opacity: 1;
+}
+
+/* ========== THEME CUSTOMIZER GRADIENTS ========== */
+/* Canvas slide-in overlay */
+.canvas-overlay {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+}
+
+.dark .canvas-overlay {
+  background: rgba(0, 0, 0, 0.6);
+}

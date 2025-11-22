@@ -1,13 +1,15 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Menu, X } from 'react-feather'
-import { Box, Flex, Heading, IconButton, ScrollArea } from '@radix-ui/themes'
+import { Flex, Heading, IconButton, ScrollArea } from '@radix-ui/themes'
 import { closeMobileMenu, handleMenuCollapsed } from '../../store/layoutSlice'
 import NavigationItems from './Navigation/NavigationItems'
 import navigation from '../../navigation/vertical'
+import { cn } from '../../lib/utils'
 
 /**
- * Sidebar - Fijo a la izquierda con header UCU GESTIÓN
+ * Sidebar - SOLO TAILWIND CLASSES
+ * Fijo a la izquierda con header UCU GESTIÓN
  *
  * @returns {JSX.Element}
  */
@@ -37,56 +39,45 @@ export default function Sidebar() {
   }, [mobileMenuOpen])
 
   return (
-    <Flex direction="column" style={{ height: '100%' }}>
+    <Flex direction="column" className="h-full">
       {/* ========== SIDEBAR HEADER ========== */}
-      <Box
-        style={{
-          padding: '16px',
-          borderBottom: '1px solid var(--border-color)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px',
-        }}
-      >
+      <div className="p-4 border-b border-[var(--border-color)] flex items-center gap-3">
         {/* Desktop: Menu toggle */}
-        <Box display={{ initial: 'none', md: 'block' }}>
+        <div className="hidden md:block">
           <IconButton variant="ghost" onClick={handleToggleCollapse} size="2">
             <Menu size={18} />
           </IconButton>
-        </Box>
+        </div>
 
         {/* Mobile: Close button */}
-        <Box display={{ initial: 'block', md: 'none' }}>
+        <div className="block md:hidden">
           <IconButton variant="ghost" onClick={handleCloseMobile} size="2">
             <X size={18} />
           </IconButton>
-        </Box>
+        </div>
 
         {/* App Name */}
         {!menuCollapsed && (
           <Heading
             size="4"
-            style={{
-              color: 'var(--accent-9)',
-              fontWeight: 600,
-              transition: 'opacity 300ms ease-in-out',
-            }}
+            className={cn(
+              'text-[var(--accent-9)] font-semibold',
+              'transition-opacity duration-300 ease-in-out'
+            )}
           >
             UCU GESTIÓN
           </Heading>
         )}
-      </Box>
+      </div>
 
       {/* ========== NAVIGATION ========== */}
-      <Box style={{ flex: 1, overflow: 'hidden' }}>
-        <ScrollArea style={{ height: '100%' }}>
-          <Box p="3" asChild>
-            <nav>
-              <NavigationItems items={navigation} />
-            </nav>
-          </Box>
+      <div className="flex-1 overflow-hidden">
+        <ScrollArea className="h-full">
+          <nav className="p-3">
+            <NavigationItems items={navigation} />
+          </nav>
         </ScrollArea>
-      </Box>
+      </div>
     </Flex>
   )
 }

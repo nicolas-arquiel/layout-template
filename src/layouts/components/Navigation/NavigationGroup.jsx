@@ -3,8 +3,9 @@ import { useLocation } from 'react-router-dom'
 import { ChevronDown } from 'react-feather'
 import * as Collapsible from '@radix-ui/react-collapsible'
 import { useSelector } from 'react-redux'
-import { Box, Flex, Text, Badge, Tooltip } from '@radix-ui/themes'
+import { Text, Badge } from '@radix-ui/themes'
 import NavigationLink from './NavigationLink'
+import { cn } from '../../../lib/utils'
 
 /**
  * Verifica si alguna ruta hija está activa
@@ -22,16 +23,11 @@ function hasActiveChild(children, currentPath) {
 }
 
 /**
- * Componente para grupos colapsibles en la navegación con Radix UI
- * Utiliza Radix UI Collapsible para animaciones suaves
+ * NavigationGroup - SOLO TAILWIND CLASSES
+ * Grupos colapsibles en la navegación con Radix UI
  *
  * @param {Object} props
  * @param {Object} props.item - Item de navegación con children
- * @param {string} props.item.title - Título del grupo
- * @param {React.Component} [props.item.icon] - Componente de icono
- * @param {Array} props.item.children - Items hijos
- * @param {string|number} [props.item.badge] - Texto del badge
- * @param {string} [props.item.badgeColor] - Color del badge
  * @returns {JSX.Element}
  */
 export default function NavigationGroup({ item }) {
@@ -70,74 +66,53 @@ export default function NavigationGroup({ item }) {
   }
 
   return (
-    <Box asChild>
-      <li>
-        <Collapsible.Root open={open} onOpenChange={setOpen}>
-          <Collapsible.Trigger asChild>
-            <button
-              className="nav-group-trigger"
-              style={{
-                display: 'flex',
-                width: '100%',
-                alignItems: 'center',
-                gap: 'var(--space-3)',
-                paddingLeft: 'var(--space-4)',
-                paddingRight: 'var(--space-4)',
-                paddingTop: 'var(--space-2)',
-                paddingBottom: 'var(--space-2)',
-                marginBottom: '4px',
-                fontSize: 'var(--font-size-2)',
-                fontWeight: '500',
-                borderRadius: 'var(--radius-2)',
-                transition: 'all 200ms ease-in-out',
-                backgroundColor: isActive ? 'var(--gray-3)' : 'transparent',
-                color: 'var(--gray-12)',
-                border: 'none',
-                cursor: 'pointer',
-                textAlign: 'left',
-              }}
-            >
-              {Icon && (
-                <Box style={{ flexShrink: 0 }}>
-                  <Icon size={20} />
-                </Box>
-              )}
-
-              <Text style={{ flex: 1 }}>{item.title}</Text>
-
-              {item.badge && (
-                <Badge color={getBadgeColor(item.badgeColor)} variant="soft">
-                  {item.badge}
-                </Badge>
-              )}
-
-              <Box
-                style={{
-                  flexShrink: 0,
-                  transition: 'transform 200ms',
-                  transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
-                }}
-              >
-                <ChevronDown size={16} />
-              </Box>
-            </button>
-          </Collapsible.Trigger>
-
-          <Collapsible.Content
-            style={{
-              overflow: 'hidden',
-            }}
+    <li className="list-none">
+      <Collapsible.Root open={open} onOpenChange={setOpen}>
+        <Collapsible.Trigger asChild>
+          <button
+            className={cn(
+              'flex w-full items-center gap-3 px-4 py-2 mb-1 rounded-md',
+              'text-sm font-medium border-none cursor-pointer text-left',
+              'transition-all duration-300 ease-in-out',
+              isActive
+                ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100'
+                : 'bg-transparent text-gray-600 dark:text-gray-300',
+              'hover:bg-gray-100 dark:hover:bg-gray-700'
+            )}
           >
-            <Box py="1" asChild>
-              <ul>
-                {item.children.map((child) => (
-                  <NavigationLink key={child.id} item={child} nested />
-                ))}
-              </ul>
-            </Box>
-          </Collapsible.Content>
-        </Collapsible.Root>
-      </li>
-    </Box>
+            {Icon && (
+              <span className="flex-shrink-0 flex items-center">
+                <Icon size={20} />
+              </span>
+            )}
+
+            <Text className="flex-1">{item.title}</Text>
+
+            {item.badge && (
+              <Badge color={getBadgeColor(item.badgeColor)} variant="soft">
+                {item.badge}
+              </Badge>
+            )}
+
+            <span
+              className={cn(
+                'flex-shrink-0 transition-transform duration-200',
+                open && 'rotate-180'
+              )}
+            >
+              <ChevronDown size={16} />
+            </span>
+          </button>
+        </Collapsible.Trigger>
+
+        <Collapsible.Content className="overflow-hidden">
+          <ul className="py-1">
+            {item.children.map((child) => (
+              <NavigationLink key={child.id} item={child} nested />
+            ))}
+          </ul>
+        </Collapsible.Content>
+      </Collapsible.Root>
+    </li>
   )
 }

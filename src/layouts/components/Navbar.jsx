@@ -1,13 +1,14 @@
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { Moon, Sun, User, Settings, LogOut } from 'react-feather'
-import { Flex, Text, IconButton, Avatar, DropdownMenu, Separator, Box } from '@radix-ui/themes'
+import { Flex, Text, IconButton, Avatar, DropdownMenu, Separator } from '@radix-ui/themes'
 import { clearAuth } from '../../store/authSlice'
 import { useThemeConfig } from '../../App'
 import { useDispatch } from 'react-redux'
 
 /**
- * Navbar - Theme toggle y user menu (SIN hamburger)
+ * Navbar - SOLO TAILWIND CLASSES
+ * Theme toggle y user menu (SIN hamburger)
  *
  * @returns {JSX.Element}
  */
@@ -37,14 +38,7 @@ export default function Navbar() {
   }
 
   return (
-    <Flex
-      align="center"
-      justify="end"
-      px="6"
-      style={{
-        height: '100%',
-      }}
-    >
+    <Flex align="center" justify="end" px="6" className="h-full">
       {/* ========== THEME TOGGLE + USER MENU ========== */}
       <Flex align="center" gap="3">
         {/* Theme Toggle */}
@@ -55,27 +49,16 @@ export default function Navbar() {
         {/* User Dropdown */}
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
-            <Flex asChild align="center" gap="2" style={{ cursor: 'pointer' }}>
-              <button
-                style={{
-                  border: 'none',
-                  background: 'none',
-                  padding: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                }}
-              >
-                <Avatar size="2" fallback={getUserInitials()} color="blue" />
-                {user && (
-                  <Box display={{ initial: 'none', md: 'block' }}>
-                    <Text size="2" weight="medium">
-                      {user.nombre || 'Usuario'}
-                    </Text>
-                  </Box>
-                )}
-              </button>
-            </Flex>
+            <button className="border-none bg-transparent p-0 flex items-center gap-2 cursor-pointer">
+              <Avatar size="2" fallback={getUserInitials()} color="blue" />
+              {user && (
+                <div className="hidden md:block">
+                  <Text size="2" weight="medium">
+                    {user.nombre || 'Usuario'}
+                  </Text>
+                </div>
+              )}
+            </button>
           </DropdownMenu.Trigger>
 
           <DropdownMenu.Content align="end">
