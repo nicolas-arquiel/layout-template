@@ -4,8 +4,8 @@ import { cn } from '../../lib/utils'
 import { useSelector } from 'react-redux'
 
 /**
- * NavigationItem - Item de navegación reutilizable con estados active/hover
- * USA SOLO CLASES DE TAILWIND - Sin estilos inline
+ * NavigationItem - ALTURA CORRECTA + THEME VARS
+ * Item de navegación con altura h-11, texto legible, theme provider vars
  *
  * @param {Object} props
  * @param {Object} props.item - Item de navegación (title, icon, navLink, badge, etc)
@@ -39,20 +39,21 @@ export default function NavigationItem({ item, nested = false, showTooltip = fal
       onClick={item.onClick}
       className={({ isActive }) =>
         cn(
-          // Base styles
-          'flex items-center gap-3 px-4 py-2 mb-1 rounded-md',
+          // ALTURA Y PADDING CORRECTOS
+          'flex items-center gap-3 px-3 py-2 mb-1 rounded-md',
+          'h-11', // ALTURA FIJA CORRECTA
           'text-sm font-medium no-underline',
-          'transition-all duration-300 ease-in-out',
+          'transition-all duration-200 ease-in-out',
           // Nested padding
           nested && !menuCollapsed && 'pl-8',
           // Collapsed center alignment
           menuCollapsed && 'justify-center',
-          // Active state - Purple gradient
+          // Active state - Theme provider vars
           isActive &&
-            'gradient-active text-white font-semibold shadow-lg',
-          // Inactive state
+            'bg-[var(--accent-9)] text-[var(--accent-9-contrast)] font-semibold shadow-lg',
+          // Inactive state - Theme provider vars
           !isActive &&
-            'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700',
+            'text-[var(--gray-11)] hover:bg-[var(--gray-3)] hover:text-[var(--gray-12)]',
           className
         )
       }
@@ -60,13 +61,14 @@ export default function NavigationItem({ item, nested = false, showTooltip = fal
     >
       {Icon && (
         <span className="flex-shrink-0 flex items-center">
-          <Icon size={18} />
+          <Icon size={20} />
         </span>
       )}
 
       {!menuCollapsed && (
         <Flex align="center" gap="2" className="flex-1">
-          <Text size="2" className="flex-1">
+          {/* TEXTO LEGIBLE - Size 3 */}
+          <Text size="3" weight="medium" className="flex-1">
             {item.title}
           </Text>
 

@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { ChevronDown } from 'react-feather'
 import * as Collapsible from '@radix-ui/react-collapsible'
 import { useSelector } from 'react-redux'
-import { Text, Badge } from '@radix-ui/themes'
+import { Flex, Text, Badge } from '@radix-ui/themes'
 import NavigationLink from './NavigationLink'
 import { cn } from '../../../lib/utils'
 
@@ -23,8 +23,8 @@ function hasActiveChild(children, currentPath) {
 }
 
 /**
- * NavigationGroup - SOLO TAILWIND CLASSES
- * Grupos colapsibles en la navegación con Radix UI
+ * NavigationGroup - ALTURA CORRECTA + THEME VARS
+ * Grupos colapsibles con altura h-11, texto legible, theme provider vars
  *
  * @param {Object} props
  * @param {Object} props.item - Item de navegación con children
@@ -71,13 +71,16 @@ export default function NavigationGroup({ item }) {
         <Collapsible.Trigger asChild>
           <button
             className={cn(
-              'flex w-full items-center gap-3 px-4 py-2 mb-1 rounded-md',
+              // ALTURA Y PADDING CORRECTOS
+              'flex w-full items-center gap-3 px-3 py-2 mb-1 rounded-md',
+              'h-11', // ALTURA FIJA CORRECTA
               'text-sm font-medium border-none cursor-pointer text-left',
-              'transition-all duration-300 ease-in-out',
+              'transition-all duration-200 ease-in-out',
+              // Theme provider vars
               isActive
-                ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100'
-                : 'bg-transparent text-gray-600 dark:text-gray-300',
-              'hover:bg-gray-100 dark:hover:bg-gray-700'
+                ? 'bg-[var(--gray-3)] text-[var(--gray-12)]'
+                : 'bg-transparent text-[var(--gray-11)]',
+              'hover:bg-[var(--gray-3)] hover:text-[var(--gray-12)]'
             )}
           >
             {Icon && (
@@ -86,7 +89,10 @@ export default function NavigationGroup({ item }) {
               </span>
             )}
 
-            <Text className="flex-1">{item.title}</Text>
+            {/* TEXTO LEGIBLE - Size 3 */}
+            <Text size="3" weight="medium" className="flex-1">
+              {item.title}
+            </Text>
 
             {item.badge && (
               <Badge color={getBadgeColor(item.badgeColor)} variant="soft">
