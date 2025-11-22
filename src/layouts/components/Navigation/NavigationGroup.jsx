@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { ChevronDown } from 'react-feather'
 import * as Collapsible from '@radix-ui/react-collapsible'
 import { useSelector } from 'react-redux'
-import { Box, Flex, Text, Badge } from '@radix-ui/themes'
+import { Box, Flex, Text, Badge, Tooltip } from '@radix-ui/themes'
 import NavigationLink from './NavigationLink'
 
 /**
@@ -43,9 +43,15 @@ export default function NavigationGroup({ item }) {
   const isActive = hasActiveChild(item.children, location.pathname)
   const [open, setOpen] = useState(isActive)
 
-  // Si el menú está colapsado, no mostrar el grupo
+  // Si el menú está colapsado, mostrar solo los hijos como links individuales con tooltips
   if (menuCollapsed) {
-    return null
+    return (
+      <>
+        {item.children.map((child) => (
+          <NavigationLink key={child.id} item={child} />
+        ))}
+      </>
+    )
   }
 
   const getBadgeColor = (color) => {

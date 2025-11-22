@@ -2,30 +2,24 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { Menu, Moon, Sun, User, Settings, LogOut } from 'react-feather'
 import { Box, Flex, Heading, Text, IconButton, Avatar, DropdownMenu, Separator } from '@radix-ui/themes'
-import { handleMenuCollapsed, toggleMobileMenu } from '../../store/layoutSlice'
+import { toggleMobileMenu } from '../../store/layoutSlice'
 import { clearAuth } from '../../store/authSlice'
 import { useThemeConfig } from '../../App'
 
 /**
  * Componente Navbar principal con Radix UI Themes
- * Incluye toggle del sidebar, dropdown de usuario, y toggle de tema
- * Puede ser sticky según configuración
+ * Frame superior con breadcrumbs, theme toggle y user dropdown
  *
  * @returns {JSX.Element}
  */
 export default function Navbar() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
   const user = useSelector((state) => state.auth.user)
   const { themeConfig, updateThemeConfig } = useThemeConfig()
 
   const toggleAppearance = () => {
     updateThemeConfig('appearance', themeConfig.appearance === 'light' ? 'dark' : 'light')
-  }
-
-  const handleToggleSidebar = () => {
-    dispatch(handleMenuCollapsed(!menuCollapsed))
   }
 
   const handleToggleMobile = () => {
@@ -49,54 +43,31 @@ export default function Navbar() {
 
   return (
     <Box
-      asChild
       style={{
-        position: themeConfig.navbarSticky ? 'sticky' : 'relative',
-        top: themeConfig.navbarSticky ? 0 : 'auto',
-        zIndex: 40,
         borderBottom: '1px solid var(--gray-6)',
-        height: '64px',
+        minHeight: '64px',
       }}
     >
-      <nav>
-        <Flex align="center" justify="between" gap="4" px="6" style={{ height: '100%' }}>
-          {/* Left Section - Menu Toggle */}
-          <Flex align="center" gap="4">
-            {/* Desktop Toggle - Hidden on mobile */}
-            <Box display={{ initial: 'none', md: 'block' }}>
-              <IconButton
-                variant="ghost"
-                onClick={handleToggleSidebar}
-                aria-label="Toggle sidebar"
-              >
-                <Menu size={20} />
-              </IconButton>
-            </Box>
-
-            {/* Mobile Toggle - Visible only on mobile */}
-            <Box display={{ initial: 'block', md: 'none' }}>
-              <IconButton
-                variant="ghost"
-                onClick={handleToggleMobile}
-                aria-label="Toggle mobile menu"
-              >
-                <Menu size={20} />
-              </IconButton>
-            </Box>
-
-            <Heading size="5">Mi App</Heading>
-          </Flex>
-
-          {/* Right Section - Theme Toggle & User Dropdown */}
-          <Flex align="center" gap="2">
-            {/* Theme Toggle */}
-            <IconButton
-              variant="ghost"
-              onClick={toggleAppearance}
-              aria-label="Toggle theme"
-            >
-              {themeConfig.appearance === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+      <Flex align="center" justify="between" gap="4" px="6" style={{ height: '64px' }}>
+        {/* Left Section - Mobile menu toggle + Breadcrumbs */}
+        <Flex align="center" gap="4">
+          {/* Mobile Toggle - Visible only on mobile */}
+          <Box display={{ initial: 'block', md: 'none' }}>
+            <IconButton variant="ghost" onClick={handleToggleMobile} aria-label="Toggle mobile menu">
+              <Menu size={20} />
             </IconButton>
+          </Box>
+
+          {/* Breadcrumbs placeholder */}
+          <Heading size="4">Dashboard</Heading>
+        </Flex>
+
+        {/* Right Section - Theme Toggle & User Dropdown */}
+        <Flex align="center" gap="2">
+          {/* Theme Toggle */}
+          <IconButton variant="ghost" onClick={toggleAppearance} aria-label="Toggle theme">
+            {themeConfig.appearance === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+          </IconButton>
 
             {/* User Dropdown */}
             <DropdownMenu.Root>
@@ -164,7 +135,6 @@ export default function Navbar() {
             </DropdownMenu.Root>
           </Flex>
         </Flex>
-      </nav>
     </Box>
   )
 }

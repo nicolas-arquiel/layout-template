@@ -1,7 +1,8 @@
 import { BookOpen, Users, Calendar, DollarSign } from 'react-feather'
+import { Box, Flex, Heading, Text, Card, TextField, Select, TextArea, Button, Grid } from '@radix-ui/themes'
 
 /**
- * Componente de página Inscripción Curso
+ * Componente de página Inscripción Curso con Radix UI
  * Formulario para inscribir estudiantes a cursos
  *
  * @returns {JSX.Element}
@@ -25,214 +26,183 @@ export default function InscripcionCurso() {
   ]
 
   return (
-    <div className="space-y-6">
+    <Box>
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+      <Flex align="center" justify="between" mb="6">
+        <Box>
+          <Heading size="8" mb="2">
             Inscripción a Curso
-          </h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
-            Inscribe estudiantes en los cursos disponibles
-          </p>
-        </div>
-        <BookOpen size={32} className="text-gray-400" />
-      </div>
+          </Heading>
+          <Text color="gray">Inscribe estudiantes en los cursos disponibles</Text>
+        </Box>
+        <BookOpen size={32} color="var(--gray-9)" />
+      </Flex>
 
       {/* Form Card */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Course Selection */}
-          <div>
-            <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-              Selección de Curso
-            </h2>
-            <div className="grid gap-6 md:grid-cols-2">
-              {/* Curso */}
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Curso
-                </label>
-                <div className="relative">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <BookOpen size={20} className="text-gray-400" />
-                  </div>
-                  <select
-                    required
-                    className="block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pl-10 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                  >
-                    <option value="">Seleccionar curso...</option>
-                    {cursos.map((curso) => (
-                      <option key={curso.id} value={curso.id}>
-                        {curso.nombre} ({curso.disponibles} disponibles)
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
+      <Card>
+        <form onSubmit={handleSubmit}>
+          <Flex direction="column" gap="6">
+            {/* Course Selection */}
+            <Box>
+              <Heading size="4" mb="4">
+                Selección de Curso
+              </Heading>
+              <Grid columns={{ initial: '1', md: '2' }} gap="4">
+                {/* Curso */}
+                <Box>
+                  <Text size="2" weight="medium" mb="2" as="label">
+                    Curso
+                  </Text>
+                  <Select.Root defaultValue="" size="3">
+                    <Select.Trigger style={{ width: '100%' }} placeholder="Seleccionar curso..." />
+                    <Select.Content>
+                      {cursos.map((curso) => (
+                        <Select.Item key={curso.id} value={String(curso.id)}>
+                          {curso.nombre} ({curso.disponibles} disponibles)
+                        </Select.Item>
+                      ))}
+                    </Select.Content>
+                  </Select.Root>
+                </Box>
 
-              {/* Estudiante */}
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Estudiante
-                </label>
-                <div className="relative">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <Users size={20} className="text-gray-400" />
-                  </div>
-                  <select
-                    required
-                    className="block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pl-10 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                  >
-                    <option value="">Seleccionar estudiante...</option>
-                    {estudiantes.map((estudiante) => (
-                      <option key={estudiante.id} value={estudiante.id}>
-                        {estudiante.nombre}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
+                {/* Estudiante */}
+                <Box>
+                  <Text size="2" weight="medium" mb="2" as="label">
+                    Estudiante
+                  </Text>
+                  <Select.Root defaultValue="" size="3">
+                    <Select.Trigger style={{ width: '100%' }} placeholder="Seleccionar estudiante..." />
+                    <Select.Content>
+                      {estudiantes.map((estudiante) => (
+                        <Select.Item key={estudiante.id} value={String(estudiante.id)}>
+                          {estudiante.nombre}
+                        </Select.Item>
+                      ))}
+                    </Select.Content>
+                  </Select.Root>
+                </Box>
+              </Grid>
+            </Box>
 
-          {/* Schedule Information */}
-          <div>
-            <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-              Información de Horario
-            </h2>
-            <div className="grid gap-6 md:grid-cols-2">
-              {/* Fecha Inicio */}
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Fecha de Inicio
-                </label>
-                <div className="relative">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <Calendar size={20} className="text-gray-400" />
-                  </div>
-                  <input
-                    type="date"
-                    required
-                    className="block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pl-10 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                  />
-                </div>
-              </div>
+            {/* Schedule Information */}
+            <Box>
+              <Heading size="4" mb="4">
+                Información de Horario
+              </Heading>
+              <Grid columns={{ initial: '1', md: '2' }} gap="4">
+                {/* Fecha Inicio */}
+                <Box>
+                  <Text size="2" weight="medium" mb="2" as="label">
+                    Fecha de Inicio
+                  </Text>
+                  <TextField.Root type="date" size="3" required>
+                    <TextField.Slot>
+                      <Calendar size={16} />
+                    </TextField.Slot>
+                  </TextField.Root>
+                </Box>
 
-              {/* Fecha Fin */}
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Fecha de Finalización
-                </label>
-                <div className="relative">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <Calendar size={20} className="text-gray-400" />
-                  </div>
-                  <input
-                    type="date"
-                    required
-                    className="block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pl-10 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                  />
-                </div>
-              </div>
+                {/* Fecha Fin */}
+                <Box>
+                  <Text size="2" weight="medium" mb="2" as="label">
+                    Fecha de Finalización
+                  </Text>
+                  <TextField.Root type="date" size="3" required>
+                    <TextField.Slot>
+                      <Calendar size={16} />
+                    </TextField.Slot>
+                  </TextField.Root>
+                </Box>
 
-              {/* Horario */}
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Horario
-                </label>
-                <select className="block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
-                  <option>Matutino (8:00 - 12:00)</option>
-                  <option>Vespertino (13:00 - 17:00)</option>
-                  <option>Nocturno (18:00 - 22:00)</option>
-                </select>
-              </div>
+                {/* Horario */}
+                <Box>
+                  <Text size="2" weight="medium" mb="2" as="label">
+                    Horario
+                  </Text>
+                  <Select.Root defaultValue="matutino" size="3">
+                    <Select.Trigger style={{ width: '100%' }} />
+                    <Select.Content>
+                      <Select.Item value="matutino">Matutino (8:00 - 12:00)</Select.Item>
+                      <Select.Item value="vespertino">Vespertino (13:00 - 17:00)</Select.Item>
+                      <Select.Item value="nocturno">Nocturno (18:00 - 22:00)</Select.Item>
+                    </Select.Content>
+                  </Select.Root>
+                </Box>
 
-              {/* Modalidad */}
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Modalidad
-                </label>
-                <select className="block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
-                  <option>Presencial</option>
-                  <option>Virtual</option>
-                  <option>Híbrido</option>
-                </select>
-              </div>
-            </div>
-          </div>
+                {/* Modalidad */}
+                <Box>
+                  <Text size="2" weight="medium" mb="2" as="label">
+                    Modalidad
+                  </Text>
+                  <Select.Root defaultValue="presencial" size="3">
+                    <Select.Trigger style={{ width: '100%' }} />
+                    <Select.Content>
+                      <Select.Item value="presencial">Presencial</Select.Item>
+                      <Select.Item value="virtual">Virtual</Select.Item>
+                      <Select.Item value="hibrido">Híbrido</Select.Item>
+                    </Select.Content>
+                  </Select.Root>
+                </Box>
+              </Grid>
+            </Box>
 
-          {/* Payment Information */}
-          <div>
-            <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-              Información de Pago
-            </h2>
-            <div className="grid gap-6 md:grid-cols-2">
-              {/* Costo */}
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Costo del Curso
-                </label>
-                <div className="relative">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <DollarSign size={20} className="text-gray-400" />
-                  </div>
-                  <input
-                    type="number"
-                    required
-                    min="0"
-                    step="0.01"
-                    className="block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pl-10 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                    placeholder="0.00"
-                  />
-                </div>
-              </div>
+            {/* Payment Information */}
+            <Box>
+              <Heading size="4" mb="4">
+                Información de Pago
+              </Heading>
+              <Grid columns={{ initial: '1', md: '2' }} gap="4">
+                {/* Costo */}
+                <Box>
+                  <Text size="2" weight="medium" mb="2" as="label">
+                    Costo del Curso
+                  </Text>
+                  <TextField.Root type="number" placeholder="0.00" size="3" required min="0" step="0.01">
+                    <TextField.Slot>
+                      <DollarSign size={16} />
+                    </TextField.Slot>
+                  </TextField.Root>
+                </Box>
 
-              {/* Método de Pago */}
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Método de Pago
-                </label>
-                <select className="block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
-                  <option>Efectivo</option>
-                  <option>Tarjeta de Crédito</option>
-                  <option>Transferencia Bancaria</option>
-                  <option>Pago en Línea</option>
-                </select>
-              </div>
-            </div>
-          </div>
+                {/* Método de Pago */}
+                <Box>
+                  <Text size="2" weight="medium" mb="2" as="label">
+                    Método de Pago
+                  </Text>
+                  <Select.Root defaultValue="efectivo" size="3">
+                    <Select.Trigger style={{ width: '100%' }} />
+                    <Select.Content>
+                      <Select.Item value="efectivo">Efectivo</Select.Item>
+                      <Select.Item value="tarjeta">Tarjeta de Crédito</Select.Item>
+                      <Select.Item value="transferencia">Transferencia Bancaria</Select.Item>
+                      <Select.Item value="online">Pago en Línea</Select.Item>
+                    </Select.Content>
+                  </Select.Root>
+                </Box>
+              </Grid>
+            </Box>
 
-          {/* Observaciones */}
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Observaciones
-            </label>
-            <textarea
-              rows={4}
-              className="block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-              placeholder="Notas adicionales sobre la inscripción..."
-            />
-          </div>
+            {/* Observaciones */}
+            <Box>
+              <Text size="2" weight="medium" mb="2" as="label">
+                Observaciones
+              </Text>
+              <TextArea placeholder="Notas adicionales sobre la inscripción..." rows={4} size="3" />
+            </Box>
 
-          {/* Actions */}
-          <div className="flex justify-end gap-4">
-            <button
-              type="button"
-              className="rounded-lg border border-gray-300 bg-white px-6 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              className="flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-2 font-medium text-white transition-colors hover:bg-blue-700"
-            >
-              <BookOpen size={20} />
-              <span>Confirmar Inscripción</span>
-            </button>
-          </div>
+            {/* Actions */}
+            <Flex justify="end" gap="4" pt="4">
+              <Button type="button" variant="outline" size="3">
+                Cancelar
+              </Button>
+              <Button type="submit" size="3">
+                <BookOpen size={20} />
+                Confirmar Inscripción
+              </Button>
+            </Flex>
+          </Flex>
         </form>
-      </div>
-    </div>
+      </Card>
+    </Box>
   )
 }

@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Flex, Text, Badge } from '@radix-ui/themes'
+import { Box, Flex, Text, Badge, Tooltip } from '@radix-ui/themes'
 import { closeMobileMenu } from '../../../store/layoutSlice'
 
 /**
@@ -45,45 +45,47 @@ export default function NavigationLink({ item, nested = false }) {
   return (
     <Box asChild>
       <li>
-        <NavLink
-          to={item.navLink}
-          onClick={handleClick}
-          style={({ isActive }) => ({
-            display: 'flex',
-            alignItems: 'center',
-            gap: 'var(--space-3)',
-            paddingLeft: nested && !menuCollapsed ? 'var(--space-8)' : 'var(--space-6)',
-            paddingRight: 'var(--space-6)',
-            paddingTop: 'var(--space-3)',
-            paddingBottom: 'var(--space-3)',
-            fontSize: 'var(--font-size-2)',
-            fontWeight: '500',
-            textDecoration: 'none',
-            transition: 'background-color 200ms',
-            backgroundColor: isActive ? 'var(--accent-3)' : 'transparent',
-            color: isActive ? 'var(--accent-11)' : 'var(--gray-12)',
-            borderRight: isActive ? '4px solid var(--accent-9)' : 'none',
-            justifyContent: menuCollapsed ? 'center' : 'flex-start',
-          })}
-        >
-          {Icon && (
-            <Box style={{ flexShrink: 0 }}>
-              <Icon size={20} />
-            </Box>
-          )}
+        <Tooltip content={item.title} side="right" delayDuration={200} hidden={!menuCollapsed}>
+          <NavLink
+            to={item.navLink}
+            onClick={handleClick}
+            style={({ isActive }) => ({
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-3)',
+              paddingLeft: nested && !menuCollapsed ? 'var(--space-8)' : 'var(--space-6)',
+              paddingRight: 'var(--space-6)',
+              paddingTop: 'var(--space-3)',
+              paddingBottom: 'var(--space-3)',
+              fontSize: 'var(--font-size-2)',
+              fontWeight: '500',
+              textDecoration: 'none',
+              transition: 'background-color 200ms',
+              backgroundColor: isActive ? 'var(--accent-3)' : 'transparent',
+              color: isActive ? 'var(--accent-11)' : 'var(--gray-12)',
+              borderRight: isActive ? '4px solid var(--accent-9)' : 'none',
+              justifyContent: menuCollapsed ? 'center' : 'flex-start',
+            })}
+          >
+            {Icon && (
+              <Box style={{ flexShrink: 0 }}>
+                <Icon size={20} />
+              </Box>
+            )}
 
-          {!menuCollapsed && (
-            <Flex align="center" gap="2" style={{ flex: 1 }}>
-              <Text style={{ flex: 1 }}>{item.title}</Text>
+            {!menuCollapsed && (
+              <Flex align="center" gap="2" style={{ flex: 1 }}>
+                <Text style={{ flex: 1 }}>{item.title}</Text>
 
-              {item.badge && (
-                <Badge color={getBadgeColor(item.badgeColor)} variant="soft">
-                  {item.badge}
-                </Badge>
-              )}
-            </Flex>
-          )}
-        </NavLink>
+                {item.badge && (
+                  <Badge color={getBadgeColor(item.badgeColor)} variant="soft">
+                    {item.badge}
+                  </Badge>
+                )}
+              </Flex>
+            )}
+          </NavLink>
+        </Tooltip>
       </li>
     </Box>
   )

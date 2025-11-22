@@ -1,7 +1,8 @@
 import { UserPlus, User, Mail, Phone, Calendar } from 'react-feather'
+import { Box, Flex, Heading, Text, Card, TextField, Select, TextArea, Button, Grid } from '@radix-ui/themes'
 
 /**
- * Componente de página Inscripción Aspirante
+ * Componente de página Inscripción Aspirante con Radix UI
  * Formulario para inscribir aspirantes
  *
  * @returns {JSX.Element}
@@ -13,167 +14,131 @@ export default function InscripcionAspirante() {
   }
 
   return (
-    <div className="space-y-6">
+    <Box>
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+      <Flex align="center" justify="between" mb="6">
+        <Box>
+          <Heading size="8" mb="2">
             Inscripción Aspirante
-          </h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
-            Registra un nuevo aspirante en el sistema
-          </p>
-        </div>
-        <UserPlus size={32} className="text-gray-400" />
-      </div>
+          </Heading>
+          <Text color="gray">Registra un nuevo aspirante en el sistema</Text>
+        </Box>
+        <UserPlus size={32} color="var(--gray-9)" />
+      </Flex>
 
       {/* Form Card */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Personal Information Section */}
-          <div>
-            <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-              Información Personal
-            </h2>
-            <div className="grid gap-6 md:grid-cols-2">
-              {/* Nombre */}
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Nombre Completo
-                </label>
-                <div className="relative">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <User size={20} className="text-gray-400" />
-                  </div>
-                  <input
-                    type="text"
-                    required
-                    className="block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pl-10 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                    placeholder="Juan Pérez"
-                  />
-                </div>
-              </div>
+      <Card>
+        <form onSubmit={handleSubmit}>
+          <Flex direction="column" gap="6">
+            {/* Personal Information Section */}
+            <Box>
+              <Heading size="4" mb="4">
+                Información Personal
+              </Heading>
+              <Grid columns={{ initial: '1', md: '2' }} gap="4">
+                {/* Nombre */}
+                <Box>
+                  <Text size="2" weight="medium" mb="2" as="label">
+                    Nombre Completo
+                  </Text>
+                  <TextField.Root placeholder="Juan Pérez" size="3" required>
+                    <TextField.Slot>
+                      <User size={16} />
+                    </TextField.Slot>
+                  </TextField.Root>
+                </Box>
 
-              {/* Email */}
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Correo Electrónico
-                </label>
-                <div className="relative">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <Mail size={20} className="text-gray-400" />
-                  </div>
-                  <input
-                    type="email"
-                    required
-                    className="block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pl-10 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                    placeholder="juan@email.com"
-                  />
-                </div>
-              </div>
+                {/* Email */}
+                <Box>
+                  <Text size="2" weight="medium" mb="2" as="label">
+                    Correo Electrónico
+                  </Text>
+                  <TextField.Root type="email" placeholder="juan@email.com" size="3" required>
+                    <TextField.Slot>
+                      <Mail size={16} />
+                    </TextField.Slot>
+                  </TextField.Root>
+                </Box>
 
-              {/* Teléfono */}
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Teléfono
-                </label>
-                <div className="relative">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <Phone size={20} className="text-gray-400" />
-                  </div>
-                  <input
-                    type="tel"
-                    required
-                    className="block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pl-10 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                    placeholder="123-456-7890"
-                  />
-                </div>
-              </div>
+                {/* Teléfono */}
+                <Box>
+                  <Text size="2" weight="medium" mb="2" as="label">
+                    Teléfono
+                  </Text>
+                  <TextField.Root type="tel" placeholder="123-456-7890" size="3" required>
+                    <TextField.Slot>
+                      <Phone size={16} />
+                    </TextField.Slot>
+                  </TextField.Root>
+                </Box>
 
-              {/* Fecha Nacimiento */}
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Fecha de Nacimiento
-                </label>
-                <div className="relative">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <Calendar size={20} className="text-gray-400" />
-                  </div>
-                  <input
-                    type="date"
-                    required
-                    className="block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pl-10 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+                {/* Fecha Nacimiento */}
+                <Box>
+                  <Text size="2" weight="medium" mb="2" as="label">
+                    Fecha de Nacimiento
+                  </Text>
+                  <TextField.Root type="date" size="3" required>
+                    <TextField.Slot>
+                      <Calendar size={16} />
+                    </TextField.Slot>
+                  </TextField.Root>
+                </Box>
+              </Grid>
+            </Box>
 
-          {/* Academic Information Section */}
-          <div>
-            <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-              Información Académica
-            </h2>
-            <div className="grid gap-6 md:grid-cols-2">
-              {/* Nivel Educativo */}
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Nivel Educativo
-                </label>
-                <select className="block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
-                  <option>Seleccionar...</option>
-                  <option>Secundaria</option>
-                  <option>Bachillerato</option>
-                  <option>Universidad</option>
-                  <option>Postgrado</option>
-                </select>
-              </div>
+            {/* Academic Information Section */}
+            <Box>
+              <Heading size="4" mb="4">
+                Información Académica
+              </Heading>
+              <Grid columns={{ initial: '1', md: '2' }} gap="4">
+                {/* Nivel Educativo */}
+                <Box>
+                  <Text size="2" weight="medium" mb="2" as="label">
+                    Nivel Educativo
+                  </Text>
+                  <Select.Root defaultValue="" size="3">
+                    <Select.Trigger style={{ width: '100%' }} placeholder="Seleccionar..." />
+                    <Select.Content>
+                      <Select.Item value="secundaria">Secundaria</Select.Item>
+                      <Select.Item value="bachillerato">Bachillerato</Select.Item>
+                      <Select.Item value="universidad">Universidad</Select.Item>
+                      <Select.Item value="postgrado">Postgrado</Select.Item>
+                    </Select.Content>
+                  </Select.Root>
+                </Box>
 
-              {/* Institución */}
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Institución
-                </label>
-                <input
-                  type="text"
-                  required
-                  className="block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                  placeholder="Nombre de la institución"
-                />
-              </div>
-            </div>
-          </div>
+                {/* Institución */}
+                <Box>
+                  <Text size="2" weight="medium" mb="2" as="label">
+                    Institución
+                  </Text>
+                  <TextField.Root placeholder="Nombre de la institución" size="3" required />
+                </Box>
+              </Grid>
+            </Box>
 
-          {/* Comentarios */}
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Comentarios Adicionales
-            </label>
-            <textarea
-              rows={4}
-              className="block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-              placeholder="Información adicional..."
-            />
-          </div>
+            {/* Comentarios */}
+            <Box>
+              <Text size="2" weight="medium" mb="2" as="label">
+                Comentarios Adicionales
+              </Text>
+              <TextArea placeholder="Información adicional..." rows={4} size="3" />
+            </Box>
 
-          {/* Actions */}
-          <div className="flex justify-end gap-4">
-            <button
-              type="button"
-              className="rounded-lg border border-gray-300 bg-white px-6 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              className="flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-2 font-medium text-white transition-colors hover:bg-blue-700"
-            >
-              <UserPlus size={20} />
-              <span>Registrar Aspirante</span>
-            </button>
-          </div>
+            {/* Actions */}
+            <Flex justify="end" gap="4" pt="4">
+              <Button type="button" variant="outline" size="3">
+                Cancelar
+              </Button>
+              <Button type="submit" size="3">
+                <UserPlus size={20} />
+                Registrar Aspirante
+              </Button>
+            </Flex>
+          </Flex>
         </form>
-      </div>
-    </div>
+      </Card>
+    </Box>
   )
 }

@@ -1,14 +1,15 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { X } from 'react-feather'
-import { Box, Flex, Heading, Text, IconButton } from '@radix-ui/themes'
-import { closeMobileMenu } from '../../store/layoutSlice'
+import { X, Menu } from 'react-feather'
+import { Box, Flex, Heading, Text, IconButton, ScrollArea } from '@radix-ui/themes'
+import { closeMobileMenu, handleMenuCollapsed } from '../../store/layoutSlice'
 import NavigationItems from './Navigation/NavigationItems'
 import navigation from '../../navigation/vertical'
 
 /**
- * Componente Sidebar con navegación vertical usando Radix UI
- * Responsive con overlay en mobile y colapsible en desktop
+ * Componente Sidebar FULL HEIGHT con Radix UI
+ * Incluye header propio con logo/nombre de la app
+ * El nombre se oculta cuando está collapsed
  *
  * @returns {JSX.Element}
  */
@@ -19,6 +20,10 @@ export default function Sidebar() {
 
   const handleCloseMobile = () => {
     dispatch(closeMobileMenu())
+  }
+
+  const handleToggleCollapse = () => {
+    dispatch(handleMenuCollapsed(!menuCollapsed))
   }
 
   // Cerrar menú mobile al cambiar tamaño de ventana
@@ -62,85 +67,98 @@ export default function Sidebar() {
         />
       )}
 
-      {/* Sidebar */}
-      <Box
-        asChild
+      {/* ========== SIDEBAR HEADER ========== */}
+      <Flex
+        align="center"
+        justify="between"
+        p="4"
         style={{
-          height: 'calc(100vh - 64px)',
-          overflowY: 'auto',
-          borderRight: '1px solid var(--gray-6)',
-          position: 'relative',
+          borderBottom: '1px solid var(--gray-6)',
+          minHeight: '64px',
         }}
       >
-        <aside>
-          {/* Mobile close button - solo visible en mobile */}
-          <Box display={{ initial: 'block', md: 'none' }}>
-            <Flex
-              align="center"
-              justify="between"
-              px="4"
-              py="3"
-              style={{ borderBottom: '1px solid var(--gray-6)' }}
-            >
-              <Heading size="4">Menú</Heading>
-              <IconButton
-                variant="ghost"
-                onClick={handleCloseMobile}
-                aria-label="Close menu"
-              >
-                <X size={20} />
-              </IconButton>
-            </Flex>
+        {/* Desktop: Toggle collapse button */}
+        <Flex align="center" gap="3" style={{ width: '100%' }}>
+          <Box display={{ initial: 'none', md: 'block' }}>
+            <IconButton variant="ghost" onClick={handleToggleCollapse} size="2">
+              <Menu size={18} />
+            </IconButton>
           </Box>
 
-          {/* Navigation */}
-          <Box py="4" asChild>
+          {/* Mobile: Close button */}
+          <Box display={{ initial: 'block', md: 'none' }}>
+            <IconButton variant="ghost" onClick={handleCloseMobile} size="2">
+              <X size={18} />
+            </IconButton>
+          </Box>
+
+          {/* App Name - Hidden when collapsed on desktop */}
+          {!menuCollapsed && (
+            <Heading
+              size="5"
+              style={{
+                transition: 'opacity 300ms ease-in-out',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+              }}
+            >
+              Mi App
+            </Heading>
+          )}
+        </Flex>
+      </Flex>
+
+      {/* ========== NAVIGATION ========== */}
+      <Box style={{ flex: 1, overflow: 'hidden' }}>
+        <ScrollArea style={{ height: '100%' }}>
+          <Box py="3" asChild>
             <nav>
               <NavigationItems items={navigation} />
             </nav>
           </Box>
-
-          {/* Sidebar footer (opcional) - solo cuando no está colapsado */}
-          {!menuCollapsed && (
-            <Box
-              style={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                borderTop: '1px solid var(--gray-6)',
-              }}
-              p="4"
-            >
-              <Flex align="center" gap="3">
-                <Flex
-                  align="center"
-                  justify="center"
-                  style={{
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: 'var(--radius-3)',
-                    background: 'var(--accent-9)',
-                    color: 'white',
-                  }}
-                >
-                  <Text size="2" weight="bold">
-                    MA
-                  </Text>
-                </Flex>
-                <Box style={{ flex: 1 }}>
-                  <Text size="2" weight="medium">
-                    Mi Aplicación
-                  </Text>
-                  <Text size="1" color="gray">
-                    v1.0.0
-                  </Text>
-                </Box>
-              </Flex>
-            </Box>
-          )}
-        </aside>
+        </ScrollArea>
       </Box>
+
+      {/* ========== SIDEBAR FOOTER (opcional) ========== */}
+      {!menuCollapsed && (
+        <Box
+          style={{
+            borderTop: '1px solid var(--gray-6)',
+          }}
+          p="4"
+        >
+          <Flex align="center" gap="3">
+            <Flex
+              align="center"
+              justify="center"
+              style={{
+                width: '40px',
+                height: '40px',
+                borderRadius: 'var(--radius-3)',
+                background: 'var(--accent-9)',
+                color: 'white',
+                flexShrink: 0,
+              }}
+            >
+              <Text size="2" weight="bold" style={{ color: 'white' }}>
+                MA
+              </Text>
+            </Flex>
+            <Box style={{ flex: 1, minWidth: 0 }}>
+              <Text
+                size="2"
+                weight="medium"
+                style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+              >
+                Mi Aplicación
+              </Text>
+              <Text size="1" color="gray" style={{ whiteSpace: 'nowrap' }}>
+                v1.0.0
+              </Text>
+            </Box>
+          </Flex>
+        </Box>
+      )}
     </>
   )
 }

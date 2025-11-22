@@ -32,7 +32,7 @@ body {
 }
 
 /* Animaciones para Radix UI Collapsible */
-@keyframes collapsible-down {
+@keyframes slideDown {
   from {
     height: 0;
     opacity: 0;
@@ -43,7 +43,7 @@ body {
   }
 }
 
-@keyframes collapsible-up {
+@keyframes slideUp {
   from {
     height: var(--radix-collapsible-content-height);
     opacity: 1;
@@ -52,6 +52,15 @@ body {
     height: 0;
     opacity: 0;
   }
+}
+
+/* Aplicar animaciones a Collapsible */
+[data-state='open'] > [data-radix-collapsible-content] {
+  animation: slideDown 300ms ease-in-out;
+}
+
+[data-state='closed'] > [data-radix-collapsible-content] {
+  animation: slideUp 300ms ease-in-out;
 }
 
 /* Scrollbar personalizado (solo para navegadores webkit) */
