@@ -50,11 +50,24 @@ const Sidebar = () => {
   return (
     <div
       className={cn(
-        "h-full flex flex-col transition-all duration-300 ease-in-out",
-        // Cuando está expanded (hover flyout), usar absolute positioning
-        shouldShowExpanded
-          ? "absolute inset-y-0 left-0 w-[var(--menu-width)] bg-[var(--color-panel-solid)] z-50 menu-shadow"
-          : "bg-[var(--color-panel-solid)] w-full"
+        // Base styles con transición
+        "h-full flex flex-col bg-[var(--color-panel-solid)]",
+        "transition-all duration-300 ease-in-out overflow-hidden",
+
+        // Hover expanded (flyout absoluto)
+        shouldShowExpanded && "absolute inset-y-0 left-0 w-[260px] z-50 menu-shadow",
+
+        // Estados normales (NO hover)
+        !shouldShowExpanded && [
+          // Mobile: siempre expandido
+          isMobile && "w-[260px]",
+
+          // Desktop collapsed: 80px
+          !isMobile && menuCollapsed && "w-[80px]",
+
+          // Desktop expanded: 260px
+          !isMobile && !menuCollapsed && "w-[260px]",
+        ]
       )}
       onMouseEnter={() => effectiveCollapsed && setHoverExpanded(true)}
       onMouseLeave={() => setHoverExpanded(false)}
