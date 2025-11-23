@@ -42,97 +42,85 @@ const NavigationGroup = ({ item, forceExpanded = false, onHoverChange }) => {
     dispatch(closeMobileMenu())
   }
 
-  // Handlers para hover en modo collapsed
-  const handleMouseEnter = () => {
-    if (isCollapsed && onHoverChange) {
-      onHoverChange(item.id)
-    }
-  }
-
-  const handleMouseLeave = () => {
-    if (isCollapsed && onHoverChange) {
-      onHoverChange('')
-    }
-  }
-
-  // MODE COLLAPSED: Usar NavigationMenu nativo de Radix
+  // ========== MODE COLLAPSED: NavigationMenu con Hover ==========
   if (isCollapsed) {
     return (
       <NavigationMenu.Item
         value={item.id}
-        className="list-none flex justify-center w-full my-1"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        className="list-none w-full my-1"
+        onMouseEnter={() => onHoverChange && onHoverChange(item.id)}
+        onMouseLeave={() => onHoverChange && onHoverChange('')}
       >
+        {/* Trigger - Solo icono en modo collapsed */}
         <NavigationMenu.Trigger
           className={cn(
-            "flex items-center justify-center",
+            "flex items-center justify-center mx-auto",
             "w-[48px] h-[48px] rounded-md",
-            "transition-all duration-300 ease-in-out",
-            "cursor-pointer border-none bg-transparent",
-            "NavigationMenuTrigger",
-            // Active state si algún child está activo - ESTILOS VUEXY
+            "transition-all duration-200",
+            "cursor-pointer bg-transparent border-none",
+            "outline-none focus:outline-none",
+            // Active state - ESTILOS VUEXY
             isActive
               ? "text-[var(--accent-9)] bg-[color-mix(in_srgb,var(--accent-9),transparent_88%)]"
               : "text-[rgb(110,107,123)] hover:bg-[rgba(0,0,0,0.05)]"
           )}
         >
-          {Icon && (
-            <span className="flex items-center justify-center w-[24px] h-[24px]">
-              <Icon size={20} />
-            </span>
-          )}
+          {Icon && <Icon size={20} />}
         </NavigationMenu.Trigger>
 
-        <NavigationMenu.Content className="NavigationMenuContent">
-          {/* Header con nombre del grupo - ESTILOS VUEXY */}
-          <div className="px-4 py-3 mb-1">
-            <Text size="1" weight="bold" className="text-[var(--gray-9)] uppercase tracking-wide">
+        {/* Content - Aparece en el Viewport cuando está activo */}
+        <NavigationMenu.Content
+          className="NavigationMenuContent data-[motion]:animate-in data-[motion]:fade-in"
+        >
+          {/* Header del grupo - ESTILOS VUEXY */}
+          <div className="px-4 py-3">
+            <Text
+              size="1"
+              weight="bold"
+              className="text-[var(--gray-9)] uppercase tracking-wide"
+            >
               {item.title}
             </Text>
           </div>
 
-          <div className="h-px bg-[var(--border-color)] mb-1" />
+          <div className="h-px bg-[var(--border-color)] mx-2" />
 
-          {/* Children con ESTILOS VUEXY */}
-          <ul className="p-2">
+          {/* Children - ESTILOS VUEXY */}
+          <div className="p-2 space-y-1">
             {item.children.map((child) => {
               const ChildIcon = child.icon
               const childIsActive = child.navLink === location.pathname
 
               return (
-                <li key={child.id}>
-                  <NavigationMenu.Link asChild active={childIsActive}>
-                    <NavLink
-                      to={child.navLink}
-                      onClick={handleChildClick}
-                      className={cn(
-                        // ESTILOS VUEXY - exactamente como NavigationItem
-                        "flex items-center gap-3 px-3 py-2 rounded-md",
-                        "transition-all duration-200",
-                        "text-[15px] font-[Montserrat] font-medium",
-                        "outline-none cursor-pointer no-underline",
-                        childIsActive
-                          ? "text-white"
-                          : "text-[rgb(110,107,123)] hover:bg-[var(--accent-3)] hover:text-[var(--accent-9)]"
-                      )}
-                      style={childIsActive ? {
-                        backgroundImage: 'linear-gradient(118deg, var(--accent-9), color-mix(in srgb, var(--accent-9), transparent 30%))',
-                        boxShadow: '0 0 10px 1px color-mix(in srgb, var(--accent-9), transparent 30%)'
-                      } : {}}
-                    >
-                      {ChildIcon && (
-                        <span className="flex items-center justify-center w-[18px] h-[18px]">
-                          <ChildIcon size={18} />
-                        </span>
-                      )}
-                      <span className="text-sm truncate">{child.title}</span>
-                    </NavLink>
-                  </NavigationMenu.Link>
-                </li>
+                <NavigationMenu.Link
+                  key={child.id}
+                  asChild
+                  active={childIsActive}
+                >
+                  <NavLink
+                    to={child.navLink}
+                    onClick={handleChildClick}
+                    className={cn(
+                      "flex items-center gap-3 px-3 py-2.5 rounded-md",
+                      "transition-all duration-200",
+                      "text-[15px] font-[Montserrat] font-medium",
+                      "no-underline outline-none",
+                      childIsActive
+                        ? "text-white shadow-lg"
+                        : "text-[rgb(110,107,123)] hover:bg-[var(--accent-3)] hover:text-[var(--accent-9)]"
+                    )}
+                    style={childIsActive ? {
+                      backgroundImage: 'linear-gradient(118deg, var(--accent-9), color-mix(in srgb, var(--accent-9), transparent 30%))',
+                      boxShadow: '0 0 10px 1px color-mix(in srgb, var(--accent-9), transparent 30%)'
+                    } : {}}
+                  >
+                    {ChildIcon && <ChildIcon size={18} />}
+                    <span>{child.title}</span>
+                  </NavLink>
+                </NavigationMenu.Link>
               )
             })}
-          </ul>
+          </div>
         </NavigationMenu.Content>
       </NavigationMenu.Item>
     )
