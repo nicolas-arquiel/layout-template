@@ -44,7 +44,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
           // Spacing & Sizing
           isCollapsed
             ? 'justify-center w-[48px] h-[48px] mx-auto px-0'
-            : 'w-full mx-2 mb-[5px] gap-3 px-4 py-3', // Reducir px de 6 a 4 para más espacio interno
+            : 'w-full mx-4 mb-[5px] gap-3 px-4 py-3', // mx-4 para más separación de bordes
 
           // Typography
           'font-[Montserrat] text-[15px] tracking-[0.14px] font-semibold',

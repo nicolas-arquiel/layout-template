@@ -478,18 +478,21 @@ html {
   border-radius: 8px;
   border: 1px solid var(--border-color);
   box-shadow: 0 8px 32px 0 rgba(34, 41, 47, 0.12);
-  overflow: hidden;
-  transition: width 300ms ease, height 300ms ease;
+  overflow: visible !important; /* Permitir que el contenido sea visible */
+  transition: width 300ms ease, height 300ms ease, opacity 300ms ease;
 }
 
 /* Viewport - Estado de animación */
 .NavigationMenuViewport[data-state="open"] {
+  display: block;
+  opacity: 1;
   animation: viewportFadeIn 200ms ease-out;
 }
 
 .NavigationMenuViewport[data-state="closed"] {
-  animation: viewportFadeOut 150ms ease-in;
+  opacity: 0;
   pointer-events: none; /* No permitir interacción cuando está cerrado */
+  /* NO usar display: none para que las transiciones funcionen */
 }
 
 /* Dark mode shadow */
@@ -508,9 +511,16 @@ html {
   animation-timing-function: ease-out;
 }
 
+/* Mostrar Content cuando está abierto */
+.NavigationMenuContent[data-state="open"] {
+  display: block !important;
+  opacity: 1;
+}
+
 /* Ocultar Content cuando está cerrado (con forceMount está siempre en DOM) */
 .NavigationMenuContent[data-state="closed"] {
-  display: none;
+  display: none !important;
+  opacity: 0;
 }
 
 /* Content - Animaciones con data-motion (Radix automático) */

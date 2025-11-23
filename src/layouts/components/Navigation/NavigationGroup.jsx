@@ -180,7 +180,7 @@ const NavigationGroup = ({ item, forceExpanded = false, onHoverChange }) => {
               // Spacing & Sizing
               isCollapsed
                 ? 'justify-center w-[48px] h-[48px] mx-auto mb-2 px-0'
-                : 'w-full mx-2 mb-[5px] gap-3 px-4 py-3',
+                : 'w-full mx-4 mb-[5px] gap-3 px-4 py-3', // mx-4 para más separación de bordes
 
               // Typography
               'font-[Montserrat] text-[15px] tracking-[0.14px] font-semibold',
