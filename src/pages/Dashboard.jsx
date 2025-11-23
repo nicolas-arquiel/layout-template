@@ -1,8 +1,9 @@
 import { Home, Users, UserPlus, TrendingUp } from 'react-feather'
-import { Container, Row, Col, Card, CardBody, CardHeader, CardTitle } from '../components/ui'
+import { Container, Grid, Box, Card, Flex, Text, Heading } from '@radix-ui/themes'
 
 /**
- * Dashboard - Página de inicio con Cards estilo Vuexy
+ * Dashboard - Página de inicio con Radix Themes
+ * Grid responsive + Cards con box-shadow estilo Vuexy
  *
  * @returns {JSX.Element}
  */
@@ -35,64 +36,58 @@ export default function Dashboard() {
   }
 
   return (
-    <Container fluid>
-      {/* Stats Grid */}
-      <Row>
+    <Container size="4" px={{ initial: '4', md: '6' }}>
+      {/* Stats Grid - Responsive: 1 col mobile, 2 tablet, 4 desktop */}
+      <Grid columns={{ initial: '1', sm: '2', lg: '4' }} gap="4" mb="6">
         {stats.map((stat, index) => {
           const Icon = stat.icon
           return (
-            <Col key={index} xs={12} sm={6} lg={3}>
+            <Box key={index}>
               <Card>
-                <CardBody className="!p-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-gray-600 font-medium mb-2">
-                        {stat.title}
-                      </p>
-                      <h3 className="text-2xl font-bold">
-                        {stat.value}
-                      </h3>
-                    </div>
-                    <div
-                      className="flex items-center justify-center"
-                      style={{
-                        width: '48px',
-                        height: '48px',
-                        borderRadius: 'var(--radius-3)',
-                        backgroundColor: getIconBgColor(stat.color),
-                        color: getIconColor(stat.color),
-                      }}
-                    >
-                      <Icon size={24} />
-                    </div>
-                  </div>
-                </CardBody>
+                <Flex align="center" justify="between">
+                  <Box>
+                    <Text size="2" weight="medium" color="gray" mb="2">
+                      {stat.title}
+                    </Text>
+                    <Heading size="6" weight="bold">
+                      {stat.value}
+                    </Heading>
+                  </Box>
+                  <Flex
+                    align="center"
+                    justify="center"
+                    style={{
+                      width: '48px',
+                      height: '48px',
+                      borderRadius: 'var(--radius-3)',
+                      backgroundColor: getIconBgColor(stat.color),
+                      color: getIconColor(stat.color),
+                      flexShrink: 0,
+                    }}
+                  >
+                    <Icon size={24} />
+                  </Flex>
+                </Flex>
               </Card>
-            </Col>
+            </Box>
           )
         })}
-      </Row>
+      </Grid>
 
       {/* Main Content Card */}
-      <Row>
-        <Col xs={12}>
-          <Card>
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <Home size={28} color="var(--accent-9)" />
-                <CardTitle>Sistema de Gestión Universitaria</CardTitle>
-              </div>
-            </CardHeader>
-            <CardBody className="!pt-0">
-              <p className="text-base leading-relaxed text-gray-700">
-                Bienvenido al sistema de gestión de la Universidad de Concepción del Uruguay (UCU).
-                Este sistema te permite administrar estudiantes, inscripciones y toda la información
-                académica de manera centralizada y eficiente.
-              </p>
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
+      <Card>
+        <Flex align="center" gap="3" mb="4">
+          <Home size={28} color="var(--accent-9)" />
+          <Heading size="5" weight="medium">
+            Sistema de Gestión Universitaria
+          </Heading>
+        </Flex>
+        <Text size="3" color="gray" style={{ lineHeight: '1.6' }}>
+          Bienvenido al sistema de gestión de la Universidad de Concepción del Uruguay (UCU).
+          Este sistema te permite administrar estudiantes, inscripciones y toda la información
+          académica de manera centralizada y eficiente.
+        </Text>
+      </Card>
     </Container>
   )
 }
