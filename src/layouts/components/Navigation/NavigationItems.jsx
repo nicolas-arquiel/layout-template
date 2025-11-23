@@ -52,7 +52,7 @@ const NavigationItems = ({ items = [], className }) => {
   }
 
   return (
-    <ul className={className}>
+    <ul className={`navigation-main ${className || ''}`}>
       {items.map((item) => renderItem(item))}
     </ul>
   )

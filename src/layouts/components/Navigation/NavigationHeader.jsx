@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Text } from '@radix-ui/themes'
+import { MoreHorizontal } from 'react-feather'
 
 /**
  * NavigationHeader - SOLO TAILWIND CLASSES
@@ -20,14 +21,17 @@ const NavigationHeader = ({ title }) => {
   }
 
   return (
-    <li className="list-none">
-      <Text
-        size="1"
-        weight="bold"
-        className="block px-10 py-4 mt-2 uppercase tracking-wide text-[var(--gray-9)]"
-      >
-        {title}
-      </Text>
+    <li className="navigation-header list-none">
+      <div className="flex items-center justify-between px-6 pt-6 pb-2">
+        <Text
+          size="1"
+          weight="bold"
+          className="uppercase tracking-wide text-[var(--gray-9)]"
+        >
+          {title}
+        </Text>
+        <MoreHorizontal size={18} className="text-[var(--gray-9)]" />
+      </div>
     </li>
   )
 }

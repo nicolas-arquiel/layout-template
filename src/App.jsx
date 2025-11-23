@@ -15,7 +15,7 @@ import '@radix-ui/themes/styles.css'
 const App = () => {
   return (
     <Provider store={store}>
-      <Theme>
+      <Theme panelBackground="translucent">
         <ThemePanel />
         <RouterProvider router={router} />
       </Theme>

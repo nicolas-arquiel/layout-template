@@ -41,7 +41,7 @@ export default function Dashboard() {
         {stats.map((stat, index) => {
           const Icon = stat.icon
           return (
-            <Card key={index} style={{ backgroundColor: 'var(--bg-secondary)' }}>
+            <Card key={index} style={{ backgroundColor: 'var(--content-bg)' }}>
               <Flex align="center" justify="between" p="4">
                 <Box>
                   <Text size="2" color="gray" weight="medium">
@@ -71,7 +71,7 @@ export default function Dashboard() {
       </Grid>
 
       {/* Main Content Card */}
-      <Card style={{ backgroundColor: 'var(--bg-secondary)' }}>
+      <Card style={{ backgroundColor: 'var(--content-bg)' }}>
         <Box p="6">
           <Flex align="center" gap="3" mb="4">
             <Home size={28} color="var(--accent-9)" />

@@ -32,8 +32,15 @@ const Navbar = () => {
   }
 
   return (
-    <Flex align="center" justify="end" px="6" className="h-full">
-      {/* ========== USER MENU ========== */}
+    <Flex align="center" justify="between" px="6" className="h-full" style={{ backgroundColor: 'yellow' }}>
+      {/* Left side - Breadcrumbs or Title */}
+      <Flex align="center" gap="3">
+        <Text size="3" weight="medium" className="text-[var(--gray-12)]">
+          {import.meta.env.VITE_APP_NAME}
+        </Text>
+      </Flex>
+
+      {/* Right side - User menu */}
       <Flex align="center" gap="3">
         {/* User Dropdown */}
         <DropdownMenu.Root>

@@ -55,7 +55,7 @@ const NavigationGroup = ({ item }) => {
               // Spacing & Sizing
               menuCollapsed 
                 ? 'justify-center w-[48px] h-[48px] mx-auto mb-2 px-0' 
-                : 'w-[calc(100%-48px)] !mx-6 mb-[5px] gap-4 px-6 py-3',
+                : 'w-full mx-0 mb-[5px] gap-4 px-6 py-3', // Vuexy style: full width with internal padding
 
               // Typography
               'font-[Montserrat] text-[15px] tracking-[0.14px] font-bold',
