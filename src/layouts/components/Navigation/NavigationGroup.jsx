@@ -141,6 +141,7 @@ const NavigationGroup = ({ item, forceExpanded = false, onHoverChange }) => {
         {/* Content - Aparece en el Viewport cuando está activo */}
         <NavigationMenu.Content
           className="NavigationMenuContent data-[motion]:animate-in data-[motion]:fade-in"
+          forceMount
         >
           {/* Header del grupo - ESTILOS VUEXY */}
           <div className="px-4 py-3">
