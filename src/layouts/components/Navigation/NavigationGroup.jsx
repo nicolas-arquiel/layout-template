@@ -67,58 +67,54 @@ const NavigationGroup = ({ item, forceExpanded = false }) => {
         </NavigationMenu.Trigger>
 
         <NavigationMenu.Content className="NavigationMenuContent">
-          <div className={cn(
-            // Base - ESTILOS VUEXY
-            "min-w-[200px] rounded-md shadow-lg",
-            "bg-[var(--color-panel-solid)]",
-            "border border-[var(--border-color)]",
-            "p-2"
-          )}>
-            {/* Header con nombre del grupo - ESTILOS VUEXY */}
-            <div className="px-3 py-2 mb-1">
-              <Text size="1" weight="bold" className="text-[var(--gray-9)] uppercase tracking-wide">
-                {item.title}
-              </Text>
-            </div>
+          {/* Header con nombre del grupo - ESTILOS VUEXY */}
+          <div className="px-4 py-3 mb-1">
+            <Text size="1" weight="bold" className="text-[var(--gray-9)] uppercase tracking-wide">
+              {item.title}
+            </Text>
+          </div>
 
-            <div className="h-px bg-[var(--border-color)] mb-1" />
+          <div className="h-px bg-[var(--border-color)] mb-1" />
 
-            {/* Children con ESTILOS VUEXY */}
+          {/* Children con ESTILOS VUEXY */}
+          <ul className="p-2">
             {item.children.map((child) => {
               const ChildIcon = child.icon
               const childIsActive = child.navLink === location.pathname
 
               return (
-                <NavigationMenu.Link asChild key={child.id} active={childIsActive}>
-                  <NavLink
-                    to={child.navLink}
-                    onClick={handleChildClick}
-                    className={cn(
-                      // ESTILOS VUEXY - exactamente como NavigationItem
-                      "flex items-center gap-3 px-3 py-2 rounded-md",
-                      "transition-all duration-200",
-                      "text-[15px] font-[Montserrat] font-medium",
-                      "outline-none cursor-pointer no-underline",
-                      childIsActive
-                        ? "text-white"
-                        : "text-[rgb(110,107,123)] hover:bg-[var(--accent-3)] hover:text-[var(--accent-9)]"
-                    )}
-                    style={childIsActive ? {
-                      backgroundImage: 'linear-gradient(118deg, var(--accent-9), color-mix(in srgb, var(--accent-9), transparent 30%))',
-                      boxShadow: '0 0 10px 1px color-mix(in srgb, var(--accent-9), transparent 30%)'
-                    } : {}}
-                  >
-                    {ChildIcon && (
-                      <span className="flex items-center justify-center w-[18px] h-[18px]">
-                        <ChildIcon size={18} />
-                      </span>
-                    )}
-                    <span className="text-sm truncate">{child.title}</span>
-                  </NavLink>
-                </NavigationMenu.Link>
+                <li key={child.id}>
+                  <NavigationMenu.Link asChild active={childIsActive}>
+                    <NavLink
+                      to={child.navLink}
+                      onClick={handleChildClick}
+                      className={cn(
+                        // ESTILOS VUEXY - exactamente como NavigationItem
+                        "flex items-center gap-3 px-3 py-2 rounded-md",
+                        "transition-all duration-200",
+                        "text-[15px] font-[Montserrat] font-medium",
+                        "outline-none cursor-pointer no-underline",
+                        childIsActive
+                          ? "text-white"
+                          : "text-[rgb(110,107,123)] hover:bg-[var(--accent-3)] hover:text-[var(--accent-9)]"
+                      )}
+                      style={childIsActive ? {
+                        backgroundImage: 'linear-gradient(118deg, var(--accent-9), color-mix(in srgb, var(--accent-9), transparent 30%))',
+                        boxShadow: '0 0 10px 1px color-mix(in srgb, var(--accent-9), transparent 30%)'
+                      } : {}}
+                    >
+                      {ChildIcon && (
+                        <span className="flex items-center justify-center w-[18px] h-[18px]">
+                          <ChildIcon size={18} />
+                        </span>
+                      )}
+                      <span className="text-sm truncate">{child.title}</span>
+                    </NavLink>
+                  </NavigationMenu.Link>
+                </li>
               )
             })}
-          </div>
+          </ul>
         </NavigationMenu.Content>
       </NavigationMenu.Item>
     )

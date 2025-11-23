@@ -58,14 +58,14 @@ const NavigationItems = ({ items = [], className, forceExpanded = false }) => {
   }
 
   return (
-    <NavigationMenu.Root orientation="vertical" className={cn('w-full', className)}>
+    <NavigationMenu.Root orientation="vertical" className={cn('w-full relative', className)}>
       <NavigationMenu.List className="navigation-main w-full flex flex-col gap-0">
         {items.map((item) => renderItem(item))}
       </NavigationMenu.List>
 
-      {/* Viewport para Content flotante cuando está collapsed */}
+      {/* Viewport para Content flotante cuando está collapsed - Patrón Radix */}
       {isCollapsed && (
-        <div className="absolute left-full top-0 ml-2 perspective-[2000px]">
+        <div className="ViewportPosition">
           <NavigationMenu.Viewport className="NavigationMenuViewport" />
         </div>
       )}
