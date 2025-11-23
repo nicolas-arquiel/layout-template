@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { ChevronDown } from 'react-feather'
 import * as Collapsible from '@radix-ui/react-collapsible'
 import { useSelector } from 'react-redux'
-import { Badge } from '@radix-ui/themes'
+import { Badge, Tooltip } from '@radix-ui/themes'
 import NavigationLink from './NavigationLink'
 import { cn } from '../../../lib/utils'
 
@@ -79,6 +79,18 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle }) => {
 
   const isCollapsed = menuCollapsed && !forceExpanded
 
+  const triggerButton = (
+    <Collapsible.Trigger asChild>
+      <GroupButton
+        item={item}
+        isActive={isActive}
+        isOpen={isOpen}
+        isCollapsed={isCollapsed}
+        title={isCollapsed ? item.title : undefined}
+      />
+    </Collapsible.Trigger>
+  )
+
   return (
     <li className={cn("list-none", isCollapsed ? "w-full flex flex-col items-center" : "w-full")}>
       <Collapsible.Root
@@ -86,15 +98,15 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle }) => {
         onOpenChange={onToggle}
         className={cn("w-full", isCollapsed && "flex flex-col items-center")}
       >
-        <Collapsible.Trigger asChild>
-          <GroupButton
-            item={item}
-            isActive={isActive}
-            isOpen={isOpen}
-            isCollapsed={isCollapsed}
-            title={isCollapsed ? item.title : undefined}
-          />
-        </Collapsible.Trigger>
+        {isCollapsed ? (
+          <Tooltip content={item.title} side="right">
+            <div className="outline-none w-full flex justify-center">
+              {triggerButton}
+            </div>
+          </Tooltip>
+        ) : (
+          triggerButton
+        )}
 
         <Collapsible.Content
           className={cn(
