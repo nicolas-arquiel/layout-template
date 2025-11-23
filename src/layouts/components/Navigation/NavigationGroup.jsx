@@ -101,7 +101,7 @@ const NavigationGroup = ({ item, forceExpanded = false }) => {
 
               <span
                 className={cn(
-                  'flex-shrink-0 transition-transform duration-200 ml-2',
+                  'flex-shrink-0 transition-transform duration-300 ease-out ml-2',
                   open && 'rotate-180'
                 )}
               >
@@ -111,7 +111,9 @@ const NavigationGroup = ({ item, forceExpanded = false }) => {
           </button>
         </Collapsible.Trigger>
 
-        <Collapsible.Content>
+        <Collapsible.Content
+          className="overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up"
+        >
           <ul className="py-1">
             {item.children.map((child) => (
               <NavigationLink key={child.id} item={child} nested forceExpanded={forceExpanded} />

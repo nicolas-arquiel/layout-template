@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Menu, X, Disc, Circle } from 'react-feather'
-import { Heading, IconButton, ScrollArea, Box } from '@radix-ui/themes'
+import { Heading, IconButton, ScrollArea } from '@radix-ui/themes'
 import { closeMobileMenu, handleMenuCollapsed } from '../../store/layoutSlice'
 import NavigationItems from './Navigation/NavigationItems'
 import navigation from '../../navigation/vertical'
@@ -113,11 +113,16 @@ const Sidebar = () => {
       {/* ========== SCROLLBAR CONTAINER ========== */}
       <div className="flex-1 overflow-hidden scrollbar-container main-menu-content">
         <ScrollArea className="h-full" type="auto">
-          <Box px="3" py="4">
+          {/*
+            IMPORTANTE: El padding debe ir en un div dentro del ScrollArea.
+            ScrollArea de Radix tiene estructura: Root > Viewport > children
+            El padding necesita estar en el children directo del Viewport
+          */}
+          <div className="p-4">
             <nav>
               <NavigationItems items={navigation} forceExpanded={shouldShowExpanded || isMobile} />
             </nav>
-          </Box>
+          </div>
         </ScrollArea>
       </div>
     </div>
