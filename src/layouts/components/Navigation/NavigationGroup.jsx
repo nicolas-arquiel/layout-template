@@ -22,6 +22,74 @@ function hasActiveChild(children, currentPath) {
 }
 
 /**
+ * Renderiza un child item recursivamente
+ * Si el child tiene children, muestra un subdropdown
+ */
+const renderChildItem = (child, handleClick, location) => {
+  const ChildIcon = child.icon
+  const childIsActive = child.navLink === location.pathname
+
+  // Si el child tiene children, renderizar como subdropdown
+  if (child.children && child.children.length > 0) {
+    const hasActiveNested = hasActiveChild(child.children, location.pathname)
+
+    return (
+      <div key={child.id} className="relative">
+        {/* Parent del subdropdown */}
+        <div
+          className={cn(
+            "flex items-center justify-between gap-2 px-3 py-2.5 rounded-md",
+            "transition-all duration-200 cursor-pointer",
+            "text-[15px] font-[Montserrat] font-medium",
+            "group",
+            hasActiveNested
+              ? "text-[var(--accent-9)] bg-[var(--accent-3)]"
+              : "text-[rgb(110,107,123)] hover:bg-[var(--accent-3)] hover:text-[var(--accent-9)]"
+          )}
+        >
+          <div className="flex items-center gap-3">
+            {ChildIcon && <ChildIcon size={18} />}
+            <span>{child.title}</span>
+          </div>
+          <ChevronDown size={14} className="transition-transform group-hover:rotate-180" />
+        </div>
+
+        {/* Subdropdown nested children */}
+        <div className="pl-4 mt-1 space-y-1">
+          {child.children.map(nestedChild => renderChildItem(nestedChild, handleClick, location))}
+        </div>
+      </div>
+    )
+  }
+
+  // Child simple sin children - NavLink directo
+  return (
+    <NavigationMenu.Link key={child.id} asChild active={childIsActive}>
+      <NavLink
+        to={child.navLink}
+        onClick={handleClick}
+        className={cn(
+          "flex items-center gap-3 px-3 py-2.5 rounded-md",
+          "transition-all duration-200",
+          "text-[15px] font-[Montserrat] font-medium",
+          "no-underline outline-none",
+          childIsActive
+            ? "text-white shadow-lg"
+            : "text-[rgb(110,107,123)] hover:bg-[var(--accent-3)] hover:text-[var(--accent-9)]"
+        )}
+        style={childIsActive ? {
+          backgroundImage: 'linear-gradient(118deg, var(--accent-9), color-mix(in srgb, var(--accent-9), transparent 30%))',
+          boxShadow: '0 0 10px 1px color-mix(in srgb, var(--accent-9), transparent 30%)'
+        } : {}}
+      >
+        {ChildIcon && <ChildIcon size={18} />}
+        <span>{child.title}</span>
+      </NavLink>
+    </NavigationMenu.Link>
+  )
+}
+
+/**
  * NavigationGroup - Grupos de menú con children
  * Usa NavigationMenu nativo en collapsed, Collapsible en expanded
  */
@@ -87,41 +155,9 @@ const NavigationGroup = ({ item, forceExpanded = false, onHoverChange }) => {
 
           <div className="h-px bg-[var(--border-color)] mx-2" />
 
-          {/* Children - ESTILOS VUEXY */}
+          {/* Children - ESTILOS VUEXY - Soporte recursivo */}
           <div className="p-2 space-y-1">
-            {item.children.map((child) => {
-              const ChildIcon = child.icon
-              const childIsActive = child.navLink === location.pathname
-
-              return (
-                <NavigationMenu.Link
-                  key={child.id}
-                  asChild
-                  active={childIsActive}
-                >
-                  <NavLink
-                    to={child.navLink}
-                    onClick={handleChildClick}
-                    className={cn(
-                      "flex items-center gap-3 px-3 py-2.5 rounded-md",
-                      "transition-all duration-200",
-                      "text-[15px] font-[Montserrat] font-medium",
-                      "no-underline outline-none",
-                      childIsActive
-                        ? "text-white shadow-lg"
-                        : "text-[rgb(110,107,123)] hover:bg-[var(--accent-3)] hover:text-[var(--accent-9)]"
-                    )}
-                    style={childIsActive ? {
-                      backgroundImage: 'linear-gradient(118deg, var(--accent-9), color-mix(in srgb, var(--accent-9), transparent 30%))',
-                      boxShadow: '0 0 10px 1px color-mix(in srgb, var(--accent-9), transparent 30%)'
-                    } : {}}
-                  >
-                    {ChildIcon && <ChildIcon size={18} />}
-                    <span>{child.title}</span>
-                  </NavLink>
-                </NavigationMenu.Link>
-              )
-            })}
+            {item.children.map((child) => renderChildItem(child, handleChildClick, location))}
           </div>
         </NavigationMenu.Content>
       </NavigationMenu.Item>
