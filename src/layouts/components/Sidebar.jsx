@@ -87,7 +87,7 @@ const Sidebar = () => {
       {/* ========== NAVIGATION ========== */}
       <div className="flex-1 overflow-hidden">
         <ScrollArea className="h-full w-full" type="auto">
-          <div className="py-4 px-4">
+          <div className="py-4">
             <nav>
               <NavigationItems items={navigation} forceExpanded={isMobile} />
             </nav>
