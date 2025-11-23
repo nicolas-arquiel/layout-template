@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { ChevronDown } from 'react-feather'
 import * as Collapsible from '@radix-ui/react-collapsible'
@@ -67,6 +67,9 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle }) => {
 
   const isActive = hasActiveChild(item.children, location.pathname)
 
+  // Estado para accordion de children - solo un child group abierto a la vez
+  const [openChildGroupId, setOpenChildGroupId] = useState(null)
+
   // Abrir automáticamente si contiene la ruta activa
   useEffect(() => {
     if (isActive && !isOpen && onToggle) {
@@ -107,20 +110,22 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle }) => {
               // Recursive check: if child has children, render NavigationGroup
               if (child.children && child.children.length > 0) {
                 return (
-                  <NavigationGroup 
-                    key={child.id} 
-                    item={child} 
-                    forceExpanded={forceExpanded} 
+                  <NavigationGroup
+                    key={child.id}
+                    item={child}
+                    forceExpanded={forceExpanded}
+                    isOpen={openChildGroupId === child.id}
+                    onToggle={() => setOpenChildGroupId(openChildGroupId === child.id ? null : child.id)}
                   />
                 )
               }
               // Otherwise render Link
               return (
-                <NavigationLink 
-                  key={child.id} 
-                  item={child} 
-                  nested 
-                  forceExpanded={forceExpanded} 
+                <NavigationLink
+                  key={child.id}
+                  item={child}
+                  nested
+                  forceExpanded={forceExpanded}
                 />
               )
             })}
