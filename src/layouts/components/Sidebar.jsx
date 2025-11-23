@@ -43,6 +43,10 @@ const Sidebar = () => {
   // Determinar si se debe mostrar expandido (hover flyout)
   const shouldShowExpanded = menuCollapsed && hoverExpanded
 
+  // En mobile, SIEMPRE mostrar expandido (ignorar menuCollapsed)
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+  const effectiveCollapsed = isMobile ? false : menuCollapsed
+
   return (
     <div
       className={cn(
@@ -52,33 +56,36 @@ const Sidebar = () => {
           ? "absolute inset-y-0 left-0 w-[var(--menu-width)] bg-[var(--color-panel-solid)] z-50 menu-shadow"
           : "bg-[var(--color-panel-solid)] w-full"
       )}
-      onMouseEnter={() => menuCollapsed && setHoverExpanded(true)}
+      onMouseEnter={() => effectiveCollapsed && setHoverExpanded(true)}
       onMouseLeave={() => setHoverExpanded(false)}
     >
       {/* ========== NAVBAR HEADER ========== */}
       <div className="navbar-header">
         <div className="h-[80px] px-6 flex items-center justify-between">
           {/* App Name & Logo Container */}
-          <div
-            className={cn(
-              "flex items-center gap-3 overflow-hidden transition-all duration-300 ease-in-out",
-              menuCollapsed && !shouldShowExpanded ? "w-0 opacity-0" : "w-full opacity-100"
+          <div className="flex items-center gap-3 overflow-hidden transition-all duration-300 ease-in-out w-full">
+            {/* Cuando está colapsado (sin hover), mostrar solo iniciales */}
+            {effectiveCollapsed && !shouldShowExpanded ? (
+              <Heading
+                size="5"
+                className="text-[var(--accent-9)] font-bold tracking-tight"
+              >
+                {import.meta.env.VITE_APP_NAME?.split(' ').map(word => word[0]).join('').slice(0, 2) || 'MA'}
+              </Heading>
+            ) : (
+              <Heading
+                size="5"
+                className="text-[var(--accent-9)] font-bold truncate tracking-tight whitespace-nowrap"
+              >
+                {import.meta.env.VITE_APP_NAME}
+              </Heading>
             )}
-          >
-            {/* Logo placeholder if needed */}
-            {/* <img src="/logo.png" alt="logo" className="w-8 h-8" /> */}
-            <Heading
-              size="5"
-              className="text-[var(--accent-9)] font-bold truncate tracking-tight whitespace-nowrap"
-            >
-              {import.meta.env.VITE_APP_NAME}
-            </Heading>
           </div>
 
           {/* Toggle Button (Desktop) - Solo mostrar cuando no está colapsado o está en hover */}
           <div className={cn(
             "hidden md:block ml-auto transition-opacity duration-300",
-            menuCollapsed && !shouldShowExpanded && "opacity-0 pointer-events-none"
+            effectiveCollapsed && !shouldShowExpanded && "opacity-0 pointer-events-none"
           )}>
             <IconButton
               variant="ghost"
@@ -87,7 +94,7 @@ const Sidebar = () => {
               className="text-[var(--gray-11)] hover:text-[var(--accent-9)] hover:bg-[var(--accent-3)] transition-colors"
             >
               {/* Disc/Circle metaphor for pinned/unpinned */}
-              {!menuCollapsed ? <Disc size={20} /> : <Circle size={20} />}
+              {!effectiveCollapsed ? <Disc size={20} /> : <Circle size={20} />}
             </IconButton>
           </div>
 
@@ -108,7 +115,7 @@ const Sidebar = () => {
         <ScrollArea className="h-full" type="auto">
           <Box px="3" py="4">
             <nav>
-              <NavigationItems items={navigation} forceExpanded={shouldShowExpanded} />
+              <NavigationItems items={navigation} forceExpanded={shouldShowExpanded || isMobile} />
             </nav>
           </Box>
         </ScrollArea>
