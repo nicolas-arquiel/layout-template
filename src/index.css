@@ -455,6 +455,106 @@ html {
   box-shadow: 0 -4px 24px 0 rgba(34, 41, 47, 0.05);
 }
 
+/* ========== RADIX UI NAVIGATION MENU STYLES - VUEXY ========== */
+
+/* NavigationMenu Viewport */
+.NavigationMenuViewport {
+  position: relative;
+  transform-origin: top left;
+  width: var(--radix-navigation-menu-viewport-width);
+  height: var(--radix-navigation-menu-viewport-height);
+  background-color: transparent;
+  overflow: visible;
+  transition: width, height 300ms ease;
+}
+
+.NavigationMenuViewport[data-state="open"] {
+  animation: fadeIn 200ms ease;
+}
+
+.NavigationMenuViewport[data-state="closed"] {
+  animation: fadeOut 200ms ease;
+}
+
+/* NavigationMenu Content */
+.NavigationMenuContent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation-duration: 250ms;
+  animation-timing-function: ease;
+}
+
+.NavigationMenuContent[data-motion="from-start"] {
+  animation-name: slideInFromLeft;
+}
+
+.NavigationMenuContent[data-motion="from-end"] {
+  animation-name: slideInFromRight;
+}
+
+.NavigationMenuContent[data-motion="to-start"] {
+  animation-name: slideOutToLeft;
+}
+
+.NavigationMenuContent[data-motion="to-end"] {
+  animation-name: slideOutToRight;
+}
+
+/* NavigationMenu Trigger */
+.NavigationMenuTrigger {
+  outline: none;
+}
+
+.NavigationMenuTrigger:focus {
+  outline: none;
+}
+
+/* Animaciones */
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutToLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+}
+
+@keyframes slideOutToRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+}
+
 
 
 

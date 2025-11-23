@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Menu, X, Disc, Circle, ChevronRight } from 'react-feather'
+import { Menu, X, Disc, Circle, ChevronRight, ChevronLeft } from 'react-feather'
 import { Heading, IconButton, ScrollArea } from '@radix-ui/themes'
 import { closeMobileMenu, handleMenuCollapsed } from '../../store/layoutSlice'
 import NavigationItems from './Navigation/NavigationItems'
@@ -84,19 +84,17 @@ const Sidebar = () => {
             )}
           </div>
 
-          {/* Toggle Button (Desktop) - Solo mostrar cuando no está colapsado */}
-          <div className={cn(
-            "hidden md:block ml-3 transition-opacity duration-300",
-            effectiveCollapsed && "opacity-0 pointer-events-none"
-          )}>
+          {/* Toggle Button (Desktop) - Siempre visible con iconos apropiados */}
+          <div className="hidden md:flex ml-3">
             <IconButton
               variant="ghost"
               onClick={handleToggleCollapse}
               size="2"
               className="text-[var(--gray-11)] hover:text-[var(--accent-9)] hover:bg-[var(--accent-3)] transition-colors"
+              title={effectiveCollapsed ? "Expandir sidebar" : "Contraer sidebar"}
             >
-              {/* Disc/Circle metaphor for pinned/unpinned */}
-              {!effectiveCollapsed ? <Disc size={20} /> : <Circle size={20} />}
+              {/* ChevronLeft para contraer, ChevronRight para expandir */}
+              {effectiveCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
             </IconButton>
           </div>
 
@@ -127,25 +125,6 @@ const Sidebar = () => {
           </div>
         </ScrollArea>
       </div>
-
-      {/* ========== BOTÓN DE EXPANDIR (Visible cuando está colapsado) ========== */}
-      {effectiveCollapsed && (
-        <div className="p-4 border-t border-[var(--border-color)]">
-          <IconButton
-            variant="ghost"
-            onClick={handleToggleCollapse}
-            size="2"
-            className={cn(
-              "w-[48px] h-[48px] mx-auto",
-              "text-[var(--gray-11)] hover:text-[var(--accent-9)] hover:bg-[var(--accent-3)]",
-              "transition-colors"
-            )}
-            title="Expandir sidebar"
-          >
-            <ChevronRight size={20} />
-          </IconButton>
-        </div>
-      )}
     </div>
   )
 }

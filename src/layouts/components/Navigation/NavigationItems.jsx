@@ -1,22 +1,27 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import * as NavigationMenu from '@radix-ui/react-navigation-menu'
 import NavigationHeader from './NavigationHeader'
 import NavigationLink from './NavigationLink'
 import NavigationGroup from './NavigationGroup'
 import { canViewMenuItem, canViewMenuGroup } from '../../../utils/permissions'
+import { cn } from '../../../lib/utils'
 
 /**
  * Componente principal que renderiza todos los items de navegación
- * Filtra items basándose en permisos del usuario
+ * Usa NavigationMenu nativo de Radix para sidebar vertical
  *
  * @param {Object} props
  * @param {Array} props.items - Array de items de navegación
  * @param {string} [props.className] - Clases CSS adicionales
- * @param {boolean} [props.forceExpanded] - Fuerza la visualización expandida (para hover)
+ * @param {boolean} [props.forceExpanded] - Fuerza la visualización expandida
  * @returns {JSX.Element}
  */
 const NavigationItems = ({ items = [], className, forceExpanded = false }) => {
   const permisos = useSelector((state) => state.auth.permisos)
+  const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
+
+  const isCollapsed = menuCollapsed && !forceExpanded
 
   /**
    * Renderiza un item individual según su tipo
@@ -53,9 +58,18 @@ const NavigationItems = ({ items = [], className, forceExpanded = false }) => {
   }
 
   return (
-    <ul className={`navigation-main ${className || ''}`}>
-      {items.map((item) => renderItem(item))}
-    </ul>
+    <NavigationMenu.Root orientation="vertical" className={cn('w-full', className)}>
+      <NavigationMenu.List className="navigation-main w-full flex flex-col gap-0">
+        {items.map((item) => renderItem(item))}
+      </NavigationMenu.List>
+
+      {/* Viewport para Content flotante cuando está collapsed */}
+      {isCollapsed && (
+        <div className="absolute left-full top-0 ml-2 perspective-[2000px]">
+          <NavigationMenu.Viewport className="NavigationMenuViewport" />
+        </div>
+      )}
+    </NavigationMenu.Root>
   )
 }
 
