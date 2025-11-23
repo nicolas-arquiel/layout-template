@@ -1,9 +1,10 @@
 import { Home, Users, UserPlus, TrendingUp } from 'react-feather'
-import { Container, Grid, Box, Card, Flex, Text, Heading } from '@radix-ui/themes'
+import { Grid, Box, Card, Flex, Text, Heading } from '@radix-ui/themes'
 
 /**
  * Dashboard - Página de inicio con Radix Themes
  * Grid responsive + Cards con box-shadow estilo Vuexy
+ * NOTA: NO usar Container de Radix, el MainLayout ya maneja el ancho con container-xxl
  *
  * @returns {JSX.Element}
  */
@@ -36,7 +37,7 @@ export default function Dashboard() {
   }
 
   return (
-    <Container size="4" px={{ initial: '4', md: '6' }}>
+    <>
       {/* Stats Grid - Responsive: 1 col mobile, 2 tablet, 4 desktop */}
       <Grid columns={{ initial: '1', sm: '2', lg: '4' }} gap="4" mb="6">
         {stats.map((stat, index) => {
@@ -88,6 +89,6 @@ export default function Dashboard() {
           académica de manera centralizada y eficiente.
         </Text>
       </Card>
-    </Container>
+    </>
   )
 }

@@ -1,0 +1,12 @@
+import { Database } from 'react-feather'
+import PageTemplate from '../../../components/PageTemplate'
+
+export default function ConfigSistemaDatabase() {
+  return (
+    <PageTemplate
+      icon={Database}
+      title="Base de Datos"
+      description="Configuración y mantenimiento de la base de datos"
+    />
+  )
+}
