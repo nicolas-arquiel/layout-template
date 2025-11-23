@@ -39,9 +39,9 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, className, 
           'cursor-pointer', // Removed overflow-hidden
 
           // Spacing & Sizing
-          menuCollapsed 
-            ? 'justify-center w-[48px] h-[48px] mx-auto px-0' 
-            : 'w-full mx-0 mb-[5px] gap-4 px-6 py-3', // Vuexy style: full width with internal padding
+          menuCollapsed
+            ? 'justify-center w-[48px] h-[48px] mx-auto px-0'
+            : 'w-full mx-2 mb-[5px] gap-4 px-6 py-3', // Vuexy style: full width with internal padding + horizontal margin
 
           // Typography
           'font-[Montserrat] text-[15px] tracking-[0.14px] font-bold',

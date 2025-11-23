@@ -88,7 +88,7 @@ const Sidebar = () => {
       {/* ========== SCROLLBAR CONTAINER ========== */}
       <div className="flex-1 overflow-hidden scrollbar-container main-menu-content">
         <ScrollArea className="h-full" type="auto">
-          <Box px="4" py="4">
+          <Box px="3" py="4">
             <nav>
               <NavigationItems items={navigation} />
             </nav>
