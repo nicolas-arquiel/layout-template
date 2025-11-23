@@ -1,8 +1,8 @@
 import { Home, Users, UserPlus, TrendingUp } from 'react-feather'
-import { Box, Flex, Grid, Heading, Text, Card } from '@radix-ui/themes'
+import { Container, Row, Col, Card, CardBody, CardHeader, CardTitle } from '../components/ui'
 
 /**
- * Dashboard - Página de inicio simple
+ * Dashboard - Página de inicio con Cards estilo Vuexy
  *
  * @returns {JSX.Element}
  */
@@ -35,55 +35,64 @@ export default function Dashboard() {
   }
 
   return (
-    <Box>
+    <Container fluid>
       {/* Stats Grid */}
-      <Grid columns={{ initial: '1', sm: '2', lg: '4' }} gap="4" mb="6">
+      <Row>
         {stats.map((stat, index) => {
           const Icon = stat.icon
           return (
-            <Card key={index} style={{ backgroundColor: 'var(--content-bg)' }}>
-              <Flex align="center" justify="between" p="4">
-                <Box>
-                  <Text size="2" color="gray" weight="medium">
-                    {stat.title}
-                  </Text>
-                  <Heading size="6" mt="2">
-                    {stat.value}
-                  </Heading>
-                </Box>
-                <Flex
-                  align="center"
-                  justify="center"
-                  style={{
-                    width: '48px',
-                    height: '48px',
-                    borderRadius: 'var(--radius-3)',
-                    backgroundColor: getIconBgColor(stat.color),
-                    color: getIconColor(stat.color),
-                  }}
-                >
-                  <Icon size={24} />
-                </Flex>
-              </Flex>
-            </Card>
+            <Col key={index} xs={12} sm={6} lg={3}>
+              <Card>
+                <CardBody className="!p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600 font-medium mb-2">
+                        {stat.title}
+                      </p>
+                      <h3 className="text-2xl font-bold">
+                        {stat.value}
+                      </h3>
+                    </div>
+                    <div
+                      className="flex items-center justify-center"
+                      style={{
+                        width: '48px',
+                        height: '48px',
+                        borderRadius: 'var(--radius-3)',
+                        backgroundColor: getIconBgColor(stat.color),
+                        color: getIconColor(stat.color),
+                      }}
+                    >
+                      <Icon size={24} />
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
           )
         })}
-      </Grid>
+      </Row>
 
       {/* Main Content Card */}
-      <Card style={{ backgroundColor: 'var(--content-bg)' }}>
-        <Box p="6">
-          <Flex align="center" gap="3" mb="4">
-            <Home size={28} color="var(--accent-9)" />
-            <Heading size="5">Sistema de Gestión Universitaria</Heading>
-          </Flex>
-          <Text size="3" style={{ lineHeight: '1.6' }}>
-            Bienvenido al sistema de gestión de la Universidad de Concepción del Uruguay (UCU).
-            Este sistema te permite administrar estudiantes, inscripciones y toda la información
-            académica de manera centralizada y eficiente.
-          </Text>
-        </Box>
-      </Card>
-    </Box>
+      <Row>
+        <Col xs={12}>
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <Home size={28} color="var(--accent-9)" />
+                <CardTitle>Sistema de Gestión Universitaria</CardTitle>
+              </div>
+            </CardHeader>
+            <CardBody className="!pt-0">
+              <p className="text-base leading-relaxed text-gray-700">
+                Bienvenido al sistema de gestión de la Universidad de Concepción del Uruguay (UCU).
+                Este sistema te permite administrar estudiantes, inscripciones y toda la información
+                académica de manera centralizada y eficiente.
+              </p>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   )
 }
