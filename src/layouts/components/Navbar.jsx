@@ -32,7 +32,7 @@ const Navbar = () => {
   }
 
   return (
-    <Flex align="center" justify="between" px="6" className="h-full" style={{ backgroundColor: 'yellow' }}>
+    <Flex align="center" justify="between" px="6" className="h-full" >
       {/* Left side - Breadcrumbs or Title */}
       <Flex align="center" gap="3">
         <Text size="3" weight="medium" className="text-[var(--gray-12)]">

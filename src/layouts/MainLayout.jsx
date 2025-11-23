@@ -23,7 +23,7 @@ const MainLayout = () => {
 
   return (
     <div className="min-h-screen bg-[var(--bg-primary)]">
-      <div className="flex h-screen overflow-hidden" style={{ backgroundColor: 'red' }}>
+      <div className="flex h-screen overflow-hidden">
         {/* ========== SIDEBAR - menu-shadow ========== */}
         <aside
           style={{ backgroundColor: 'blue' }}
@@ -46,7 +46,7 @@ const MainLayout = () => {
         </aside>
 
         {/* ========== CONTENT AREA ========== */}
-        <div className="flex-1 flex flex-col overflow-hidden" style={{ backgroundColor: 'green' }}>
+        <div className="flex-1 flex flex-col overflow-hidden">
           {/* NAVBAR - floating-nav con margin exacto */}
           <div 
             className="px-[var(--content-padding)]" 
