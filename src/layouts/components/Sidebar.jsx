@@ -85,7 +85,7 @@ const Sidebar = () => {
       </div>
 
       {/* ========== NAVIGATION ========== */}
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-hidden px-4">
         <ScrollArea className="h-full w-full" type="auto">
           <div className="py-4">
             <nav>
