@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Menu, X, Disc, Circle } from 'react-feather'
-import { Flex, Heading, IconButton, ScrollArea, Box } from '@radix-ui/themes'
+import { Heading, IconButton, ScrollArea, Box } from '@radix-ui/themes'
 import { closeMobileMenu, handleMenuCollapsed } from '../../store/layoutSlice'
 import NavigationItems from './Navigation/NavigationItems'
 import navigation from '../../navigation/vertical'
@@ -63,7 +63,7 @@ const Sidebar = () => {
       <div className="navbar-header">
         <div className="h-[80px] px-6 py-4 flex items-center justify-between">
           {/* App Name & Logo Container */}
-          <Flex align="center" gap="3" className="flex-1 overflow-hidden">
+          <div className="flex items-center gap-3 flex-1 overflow-hidden">
             {/* Cuando está colapsado (sin hover), mostrar solo iniciales */}
             {effectiveCollapsed && !shouldShowExpanded ? (
               <Heading
@@ -80,11 +80,11 @@ const Sidebar = () => {
                 {import.meta.env.VITE_APP_NAME}
               </Heading>
             )}
-          </Flex>
+          </div>
 
           {/* Toggle Button (Desktop) - Solo mostrar cuando no está colapsado o está en hover */}
-          <Flex className={cn(
-            "hidden md:flex ml-3 transition-opacity duration-300",
+          <div className={cn(
+            "hidden md:block ml-3 transition-opacity duration-300",
             effectiveCollapsed && !shouldShowExpanded && "opacity-0 pointer-events-none"
           )}>
             <IconButton
@@ -96,14 +96,14 @@ const Sidebar = () => {
               {/* Disc/Circle metaphor for pinned/unpinned */}
               {!effectiveCollapsed ? <Disc size={20} /> : <Circle size={20} />}
             </IconButton>
-          </Flex>
+          </div>
 
           {/* Close Button (Mobile) - Solo en mobile */}
-          <Flex className="flex md:hidden ml-3">
+          <div className="block md:hidden ml-3">
             <IconButton variant="ghost" onClick={handleCloseMobile} size="2">
               <X size={20} />
             </IconButton>
-          </Flex>
+          </div>
         </div>
       </div>
 
