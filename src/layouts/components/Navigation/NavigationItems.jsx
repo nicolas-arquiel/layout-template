@@ -78,12 +78,11 @@ const NavigationItems = ({ items = [], className, forceExpanded = false }) => {
         {items.map((item) => renderItem(item))}
       </NavigationMenu.List>
 
-      {/* Viewport para Content flotante cuando está collapsed - Patrón Radix */}
-      {isCollapsed && (
-        <div className="ViewportPosition">
-          <NavigationMenu.Viewport className="NavigationMenuViewport" />
-        </div>
-      )}
+      {/* Viewport para Content flotante - SIEMPRE renderizado para que Radix pueda usarlo */}
+      {/* Solo visible cuando está collapsed */}
+      <div className={cn("ViewportPosition", !isCollapsed && "hidden")}>
+        <NavigationMenu.Viewport className="NavigationMenuViewport" />
+      </div>
     </NavigationMenu.Root>
   )
 }
