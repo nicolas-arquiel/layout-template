@@ -488,6 +488,7 @@ html {
 
 .NavigationMenuViewport[data-state="closed"] {
   animation: viewportFadeOut 150ms ease-in;
+  pointer-events: none; /* No permitir interacción cuando está cerrado */
 }
 
 /* Dark mode shadow */
@@ -504,6 +505,11 @@ html {
   min-width: 240px; /* Match con Viewport */
   animation-duration: 250ms;
   animation-timing-function: ease-out;
+}
+
+/* Ocultar Content cuando está cerrado (con forceMount está siempre en DOM) */
+.NavigationMenuContent[data-state="closed"] {
+  display: none;
 }
 
 /* Content - Animaciones con data-motion (Radix automático) */
