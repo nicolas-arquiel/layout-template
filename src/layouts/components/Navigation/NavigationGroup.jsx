@@ -86,7 +86,6 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle }) => {
         isActive={isActive}
         isOpen={isOpen}
         isCollapsed={isCollapsed}
-        title={isCollapsed ? item.title : undefined}
       />
     </Collapsible.Trigger>
   )

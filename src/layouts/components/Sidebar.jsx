@@ -66,7 +66,6 @@ const Sidebar = () => {
             onClick={handleToggleCollapse}
             size="2"
             className="text-[var(--gray-11)] hover:text-[var(--accent-9)] hover:bg-[var(--accent-3)] transition-colors"
-            title={effectiveCollapsed ? "Expandir sidebar" : "Contraer sidebar"}
           >
             {effectiveCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
           </IconButton>
