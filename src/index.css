@@ -632,6 +632,34 @@ html {
   }
 }
 
+/* ========== SIDEBAR SCROLL PERSONALIZADO ========== */
+/* Ocultar scrollbar por defecto, mostrar solo en hover */
+.sidebar-scroll [data-radix-scroll-area-viewport] {
+  overflow-x: hidden !important; /* Eliminar scroll horizontal */
+}
 
+/* Scrollbar thumb - solo visible en hover */
+.sidebar-scroll:not(:hover) [data-radix-scroll-area-scrollbar] {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
 
+.sidebar-scroll:hover [data-radix-scroll-area-scrollbar] {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
 
+/* Personalizar scrollbar para que sea más delgado y sutil */
+.sidebar-scroll [data-radix-scroll-area-scrollbar][data-orientation="vertical"] {
+  width: 6px;
+  padding: 2px;
+}
+
+.sidebar-scroll [data-radix-scroll-area-thumb] {
+  background-color: var(--gray-a6);
+  border-radius: 4px;
+}
+
+.sidebar-scroll [data-radix-scroll-area-thumb]:hover {
+  background-color: var(--gray-a8);
+}

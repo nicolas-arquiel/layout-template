@@ -43,7 +43,7 @@ const Sidebar = () => {
   return (
     <div className="h-full flex flex-col bg-[var(--color-panel-solid)] overflow-hidden">
       {/* ========== HEADER ========== */}
-      <div className="flex-shrink-0 h-[80px] px-4 py-4 flex items-center justify-between border-b border-[var(--gray-4)]">
+      <div className="flex-shrink-0 h-[80px] !px-4 py-4 flex items-center justify-between border-b border-[var(--gray-4)]">
         {/* Logo / App Name */}
         <div className="flex items-center gap-3 flex-1 overflow-hidden">
           {effectiveCollapsed ? (
@@ -64,7 +64,7 @@ const Sidebar = () => {
         </div>
 
         {/* Toggle Button (Desktop) */}
-        <div className="hidden md:flex ml-3">
+        <div className="hidden md:flex">
           <IconButton
             variant="ghost"
             onClick={handleToggleCollapse}
@@ -77,7 +77,7 @@ const Sidebar = () => {
         </div>
 
         {/* Close Button (Mobile) */}
-        <div className="block md:hidden ml-3">
+        <div className="block md:hidden">
           <IconButton variant="ghost" onClick={handleCloseMobile} size="2">
             <X size={20} />
           </IconButton>
@@ -86,7 +86,11 @@ const Sidebar = () => {
 
       {/* ========== NAVIGATION ========== */}
       <div className="flex-1 overflow-hidden !px-4">
-        <ScrollArea className="h-full w-full" type="auto">
+        <ScrollArea
+          className="h-full w-full sidebar-scroll"
+          type="hover"
+          scrollbars="vertical"
+        >
           <div className="py-4">
             <nav>
               <NavigationItems items={navigation} forceExpanded={isMobile} />
