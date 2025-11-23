@@ -43,25 +43,21 @@ const Sidebar = () => {
   return (
     <div className="h-full flex flex-col bg-[var(--color-panel-solid)] overflow-hidden">
       {/* ========== HEADER ========== */}
-      <div className="flex-shrink-0 h-[80px] !px-4 py-4 flex items-center justify-between border-b border-[var(--gray-4)]">
-        {/* Logo / App Name */}
-        <div className="flex items-center gap-3 flex-1 overflow-hidden">
-          {effectiveCollapsed ? (
-            <Heading
-              size="5"
-              className="text-[var(--accent-9)] font-extrabold tracking-tight"
-            >
-              {import.meta.env.VITE_APP_NAME?.split(' ').map(word => word[0]).join('').slice(0, 2) || 'MA'}
-            </Heading>
-          ) : (
+      <div className={cn(
+        "flex-shrink-0 h-[80px] !px-4 py-4 flex items-center border-b border-[var(--gray-4)]",
+        effectiveCollapsed ? "justify-center" : "justify-between"
+      )}>
+        {/* Logo / App Name - Solo mostrar cuando NO está colapsado */}
+        {!effectiveCollapsed && (
+          <div className="flex items-center gap-3 flex-1 overflow-hidden">
             <Heading
               size="5"
               className="text-[var(--accent-9)] font-extrabold truncate tracking-tight whitespace-nowrap"
             >
               {import.meta.env.VITE_APP_NAME}
             </Heading>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Toggle Button (Desktop) */}
         <div className="hidden md:flex">
@@ -77,11 +73,13 @@ const Sidebar = () => {
         </div>
 
         {/* Close Button (Mobile) */}
-        <div className="block md:hidden">
-          <IconButton variant="ghost" onClick={handleCloseMobile} size="2">
-            <X size={20} />
-          </IconButton>
-        </div>
+        {!effectiveCollapsed && (
+          <div className="block md:hidden">
+            <IconButton variant="ghost" onClick={handleCloseMobile} size="2">
+              <X size={20} />
+            </IconButton>
+          </div>
+        )}
       </div>
 
       {/* ========== NAVIGATION ========== */}

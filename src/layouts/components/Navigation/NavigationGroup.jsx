@@ -1,12 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { ChevronDown } from 'react-feather'
 import * as Collapsible from '@radix-ui/react-collapsible'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Badge } from '@radix-ui/themes'
 import NavigationLink from './NavigationLink'
 import { cn } from '../../../lib/utils'
-import { handleMenuCollapsed } from '../../../store/layoutSlice'
 
 /**
  * Check if any child route is active
@@ -59,45 +58,37 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isCollapsed, ...
 /**
  * NavigationGroup - Grupos de menú con children
  * Behavior:
- * - Expanded: Standard Accordion
+ * - Expanded: Standard Accordion (solo un grupo abierto a la vez)
  * - Collapsed: Vertical Accordion (Icons only)
  */
-const NavigationGroup = ({ item, forceExpanded = false }) => {
+const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle }) => {
   const location = useLocation()
-  const dispatch = useDispatch()
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
 
   const isActive = hasActiveChild(item.children, location.pathname)
-  const [collapsibleOpen, setCollapsibleOpen] = useState(isActive)
 
-  // Sync collapsible state with active route
+  // Abrir automáticamente si contiene la ruta activa
   useEffect(() => {
-    if (isActive) {
-      setCollapsibleOpen(true)
+    if (isActive && !isOpen && onToggle) {
+      onToggle()
     }
-  }, [isActive])
+  }, [isActive, isOpen, onToggle])
 
   const isCollapsed = menuCollapsed && !forceExpanded
 
-  // Toggle handler for both modes
-  const handleToggle = () => {
-    setCollapsibleOpen(!collapsibleOpen)
-  }
-
   return (
     <li className={cn("list-none", isCollapsed ? "w-full flex flex-col items-center" : "w-full")}>
-      <Collapsible.Root 
-        open={collapsibleOpen} 
-        onOpenChange={setCollapsibleOpen}
+      <Collapsible.Root
+        open={isOpen}
+        onOpenChange={onToggle}
         className={cn("w-full", isCollapsed && "flex flex-col items-center")}
       >
         <Collapsible.Trigger asChild>
-          <GroupButton 
-            item={item} 
-            isActive={isActive} 
-            isOpen={collapsibleOpen}
+          <GroupButton
+            item={item}
+            isActive={isActive}
+            isOpen={isOpen}
             isCollapsed={isCollapsed}
-            onClick={handleToggle}
             title={isCollapsed ? item.title : undefined}
           />
         </Collapsible.Trigger>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import NavigationHeader from './NavigationHeader'
@@ -20,6 +20,9 @@ import { cn } from '../../../lib/utils'
 const NavigationItems = ({ items = [], className, forceExpanded = false }) => {
   const permisos = useSelector((state) => state.auth.permisos)
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
+
+  // Estado para accordion - solo un grupo abierto a la vez
+  const [openGroupId, setOpenGroupId] = useState(null)
 
   /**
    * Renderiza un item individual según su tipo
@@ -44,6 +47,8 @@ const NavigationItems = ({ items = [], className, forceExpanded = false }) => {
           key={item.id}
           item={item}
           forceExpanded={forceExpanded}
+          isOpen={openGroupId === item.id}
+          onToggle={() => setOpenGroupId(openGroupId === item.id ? null : item.id)}
         />
       )
     }
