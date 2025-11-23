@@ -28,15 +28,16 @@ const MainLayout = () => {
         <aside
           className={cn(
             'bg-[var(--color-panel-solid)]',
-            'transition-[width] duration-300 ease-in-out',
+            // ANIMACIÓN CRÍTICA: usar transition-all para animar width
+            'transition-all duration-300 ease-in-out',
             'flex-shrink-0',
             'relative', // Para positioning del flyout
-            // Desktop width - Vuexy exact
-            menuCollapsed ? 'w-[var(--menu-collapsed)]' : 'w-[var(--menu-width)]',
+            // Desktop width - VALORES ESPECÍFICOS (NO variables CSS)
+            menuCollapsed ? 'w-[80px]' : 'w-[260px]',
             // Mobile
             'max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:z-40',
-            'max-md:w-[var(--menu-width)]',
-            'max-md:transform',
+            'max-md:w-[260px]',
+            'max-md:transform max-md:transition-transform max-md:duration-300',
             mobileMenuOpen ? 'max-md:translate-x-0' : 'max-md:-translate-x-full',
             // Vuexy menu-shadow
             'menu-shadow'
@@ -93,11 +94,11 @@ const MainLayout = () => {
           </footer>
         </div>
 
-        {/* Mobile Overlay */}
+        {/* Mobile Overlay con fade-in */}
         {mobileMenuOpen && (
-          <div 
-            className="fixed inset-0 bg-black/50 z-30 md:hidden" 
-            onClick={() => dispatch(closeMobileMenu())} 
+          <div
+            className="fixed inset-0 bg-black/50 z-30 md:hidden animate-in fade-in duration-300"
+            onClick={() => dispatch(closeMobileMenu())}
           />
         )}
       </div>

@@ -52,7 +52,8 @@ const Sidebar = () => {
       className={cn(
         // Base styles con transición
         "h-full flex flex-col bg-[var(--color-panel-solid)]",
-        "transition-all duration-300 ease-in-out overflow-hidden",
+        "transition-all duration-300 ease-in-out",
+        "overflow-hidden overflow-x-hidden", // Prevenir scroll horizontal
 
         // Hover expanded (flyout absoluto)
         shouldShowExpanded && "absolute inset-y-0 left-0 w-[260px] z-50 menu-shadow",
@@ -125,13 +126,13 @@ const Sidebar = () => {
 
       {/* ========== SCROLLBAR CONTAINER ========== */}
       <div className="flex-1 overflow-hidden scrollbar-container main-menu-content">
-        <ScrollArea className="h-full" type="auto">
+        <ScrollArea className="h-full w-full" type="auto">
           {/*
             IMPORTANTE: El padding debe ir en un div dentro del ScrollArea.
             ScrollArea de Radix tiene estructura: Root > Viewport > children
             El padding necesita estar en el children directo del Viewport
           */}
-          <div className="p-4">
+          <div className="p-4 max-w-full overflow-x-hidden">
             <nav>
               <NavigationItems items={navigation} forceExpanded={shouldShowExpanded || isMobile} />
             </nav>

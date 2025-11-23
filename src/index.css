@@ -294,12 +294,9 @@ html {
   }
 }
 
-/* Transiciones suaves para el tema */
-* {
-  transition-property: background-color, border-color, color, fill, stroke, box-shadow;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 200ms;
-}
+/* Transiciones suaves para el tema - NO aplicar a width/height/transform */
+/* IMPORTANTE: Esta regla NO debe interferir con animaciones de layout (width, height, transform)
+   Solo aplicar a propiedades visuales (colores, sombras, etc.) */
 
 /* ========== VUEXY SIDEBAR STYLES ========== */
 

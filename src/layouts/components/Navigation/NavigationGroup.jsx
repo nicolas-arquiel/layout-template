@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { ChevronDown } from 'react-feather'
 import * as Collapsible from '@radix-ui/react-collapsible'
 import { useSelector } from 'react-redux'
-import { Text, Badge } from '@radix-ui/themes'
+import { Text, Badge, Tooltip } from '@radix-ui/themes'
 import NavigationLink from './NavigationLink'
 import { cn } from '../../../lib/utils'
 
@@ -33,14 +33,35 @@ const NavigationGroup = ({ item, forceExpanded = false }) => {
   // Considerar forceExpanded para determinar si está colapsado
   const isCollapsed = menuCollapsed && !forceExpanded
 
-  // When collapsed, show children as individual items
+  // When collapsed, show ONLY parent icon (no children)
   if (isCollapsed) {
     return (
-      <>
-        {item.children.map((child) => (
-          <NavigationLink key={child.id} item={child} forceExpanded={forceExpanded} />
-        ))}
-      </>
+      <li className="list-none flex justify-center w-full my-1">
+        <Tooltip content={item.title} side="right">
+          <button
+            className={cn(
+              "flex items-center justify-center",
+              "w-[48px] h-[48px] rounded-md",
+              "transition-all duration-300 ease-in-out",
+              "cursor-pointer",
+              // Active state si algún child está activo
+              isActive
+                ? "text-[var(--accent-9)] bg-[color-mix(in_srgb,var(--accent-9),transparent_88%)]"
+                : "text-[rgb(110,107,123)] hover:bg-[rgba(0,0,0,0.05)]"
+            )}
+            onClick={(e) => {
+              e.preventDefault()
+              // No hacer nada - el hover del sidebar mostrará el contenido
+            }}
+          >
+            {Icon && (
+              <span className="flex items-center justify-center w-[24px] h-[24px]">
+                <Icon size={20} />
+              </span>
+            )}
+          </button>
+        </Tooltip>
+      </li>
     )
   }
 
