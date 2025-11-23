@@ -4,7 +4,6 @@ import { RouterProvider } from 'react-router-dom'
 import { Theme, ThemePanel } from '@radix-ui/themes'
 import store from './store'
 import router from './router'
-import '@radix-ui/themes/styles.css'
 
 /**
  * Componente raíz de la aplicación
