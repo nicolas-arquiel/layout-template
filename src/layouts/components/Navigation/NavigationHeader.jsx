@@ -19,9 +19,21 @@ const NavigationHeader = ({ title, forceExpanded = false }) => {
   // Considerar forceExpanded para determinar si está colapsado
   const isCollapsed = menuCollapsed && !forceExpanded
 
-  // Ocultar headers cuando el menú está colapsado
+  // Cuando está colapsado, mostrar solo "..."
   if (isCollapsed) {
-    return null
+    return (
+      <li className="navigation-header list-none">
+        <div className="flex items-center justify-center pt-6 pb-2">
+          <Text
+            size="1"
+            weight="bold"
+            className="text-[var(--gray-9)]"
+          >
+            ⋯
+          </Text>
+        </div>
+      </li>
+    )
   }
 
   return (
