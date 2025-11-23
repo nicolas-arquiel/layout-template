@@ -61,30 +61,30 @@ const Sidebar = () => {
     >
       {/* ========== NAVBAR HEADER ========== */}
       <div className="navbar-header">
-        <div className="h-[80px] px-6 flex items-center justify-between">
+        <div className="h-[80px] px-6 py-4 flex items-center justify-between">
           {/* App Name & Logo Container */}
-          <div className="flex items-center gap-3 overflow-hidden transition-all duration-300 ease-in-out w-full">
+          <Flex align="center" gap="3" className="flex-1 overflow-hidden">
             {/* Cuando está colapsado (sin hover), mostrar solo iniciales */}
             {effectiveCollapsed && !shouldShowExpanded ? (
               <Heading
                 size="5"
-                className="text-[var(--accent-9)] font-bold tracking-tight"
+                className="text-[var(--accent-9)] font-extrabold tracking-tight"
               >
                 {import.meta.env.VITE_APP_NAME?.split(' ').map(word => word[0]).join('').slice(0, 2) || 'MA'}
               </Heading>
             ) : (
               <Heading
                 size="5"
-                className="text-[var(--accent-9)] font-bold truncate tracking-tight whitespace-nowrap"
+                className="text-[var(--accent-9)] font-extrabold truncate tracking-tight whitespace-nowrap"
               >
                 {import.meta.env.VITE_APP_NAME}
               </Heading>
             )}
-          </div>
+          </Flex>
 
           {/* Toggle Button (Desktop) - Solo mostrar cuando no está colapsado o está en hover */}
-          <div className={cn(
-            "hidden md:block ml-auto transition-opacity duration-300",
+          <Flex className={cn(
+            "hidden md:flex ml-3 transition-opacity duration-300",
             effectiveCollapsed && !shouldShowExpanded && "opacity-0 pointer-events-none"
           )}>
             <IconButton
@@ -96,14 +96,14 @@ const Sidebar = () => {
               {/* Disc/Circle metaphor for pinned/unpinned */}
               {!effectiveCollapsed ? <Disc size={20} /> : <Circle size={20} />}
             </IconButton>
-          </div>
+          </Flex>
 
           {/* Close Button (Mobile) - Solo en mobile */}
-          <div className="block md:hidden ml-auto">
+          <Flex className="flex md:hidden ml-3">
             <IconButton variant="ghost" onClick={handleCloseMobile} size="2">
               <X size={20} />
             </IconButton>
-          </div>
+          </Flex>
         </div>
       </div>
 
