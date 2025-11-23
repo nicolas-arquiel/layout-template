@@ -44,7 +44,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
           // Spacing & Sizing
           isCollapsed
             ? 'justify-center w-[48px] h-[48px] mx-auto my-1 px-0' // Centered square with vertical margin
-            : 'mx-4 mb-1 px-4 py-3 w-[calc(100%-2rem)]', // Floating effect with correct width
+            : 'mb-1 px-4 py-3 w-full', // Full width with padding
 
           // Typography
           'font-[Montserrat] text-[15px] tracking-[0.14px] font-semibold',

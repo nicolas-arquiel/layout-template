@@ -33,7 +33,7 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isCollapsed, ...
         'min-h-[48px] cursor-pointer border-none outline-none',
         isCollapsed
           ? 'justify-center w-[48px] h-[48px] mx-auto my-1' // Centered square in collapsed
-          : 'w-[calc(100%-2rem)] mx-4 px-4 py-3 text-left', // Full width with margin in expanded
+          : 'w-full px-4 py-3 text-left', // Full width with padding in expanded
         isActive
           ? 'text-[var(--accent-9)] bg-[color-mix(in_srgb,var(--accent-9),transparent_88%)]'
           : 'text-[var(--gray-11)] bg-transparent hover:bg-[var(--gray-3)]',

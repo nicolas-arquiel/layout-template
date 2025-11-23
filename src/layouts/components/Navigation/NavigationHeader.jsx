@@ -38,7 +38,7 @@ const NavigationHeader = ({ title, forceExpanded = false }) => {
 
   return (
     <li className="navigation-header list-none">
-      <div className="flex items-center justify-between px-6 pt-6 pb-2">
+      <div className="flex items-center justify-between px-4 pt-6 pb-2">
         <Text
           size="1"
           weight="bold"
