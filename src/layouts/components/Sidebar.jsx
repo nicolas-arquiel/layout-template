@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Menu, X, Disc, Circle } from 'react-feather'
-import { Flex, Heading, IconButton, ScrollArea } from '@radix-ui/themes'
+import { Flex, Heading, IconButton, ScrollArea, Box } from '@radix-ui/themes'
 import { closeMobileMenu, handleMenuCollapsed } from '../../store/layoutSlice'
 import NavigationItems from './Navigation/NavigationItems'
 import navigation from '../../navigation/vertical'
@@ -88,9 +88,11 @@ const Sidebar = () => {
       {/* ========== SCROLLBAR CONTAINER ========== */}
       <div className="flex-1 overflow-hidden scrollbar-container main-menu-content">
         <ScrollArea className="h-full" type="auto">
-          <nav>
-            <NavigationItems items={navigation} />
-          </nav>
+          <Box px="4" py="4">
+            <nav>
+              <NavigationItems items={navigation} />
+            </nav>
+          </Box>
         </ScrollArea>
       </div>
     </div>
