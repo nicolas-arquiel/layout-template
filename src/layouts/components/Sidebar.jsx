@@ -10,6 +10,7 @@ import { cn } from '../../lib/utils'
 /**
  * Sidebar - SOLO TAILWIND CLASSES
  * Fijo a la izquierda con header UCU GESTIÓN
+ * Con hover flyout cuando está colapsado (desktop)
  *
  * @returns {JSX.Element}
  */
@@ -17,6 +18,7 @@ const Sidebar = () => {
   const dispatch = useDispatch()
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
   const mobileMenuOpen = useSelector((state) => state.layout.mobileMenuOpen)
+  const [hoverExpanded, setHoverExpanded] = React.useState(false)
 
   const handleCloseMobile = () => {
     dispatch(closeMobileMenu())
@@ -38,16 +40,29 @@ const Sidebar = () => {
     return () => window.removeEventListener('resize', handleResize)
   }, [mobileMenuOpen])
 
+  // Determinar si se debe mostrar expandido (hover flyout)
+  const shouldShowExpanded = menuCollapsed && hoverExpanded
+
   return (
-    <div className="h-full bg-[var(--color-panel-solid)] flex flex-col transition-all duration-300 ease-in-out">
+    <div
+      className={cn(
+        "h-full flex flex-col transition-all duration-300 ease-in-out",
+        // Cuando está expanded (hover flyout), usar absolute positioning
+        shouldShowExpanded
+          ? "absolute inset-y-0 left-0 w-[var(--menu-width)] bg-[var(--color-panel-solid)] z-50 menu-shadow"
+          : "bg-[var(--color-panel-solid)] w-full"
+      )}
+      onMouseEnter={() => menuCollapsed && setHoverExpanded(true)}
+      onMouseLeave={() => setHoverExpanded(false)}
+    >
       {/* ========== NAVBAR HEADER ========== */}
       <div className="navbar-header">
         <div className="h-[80px] px-6 flex items-center justify-between">
           {/* App Name & Logo Container */}
-          <div 
+          <div
             className={cn(
               "flex items-center gap-3 overflow-hidden transition-all duration-300 ease-in-out",
-              menuCollapsed ? "w-0 opacity-0" : "w-full opacity-100"
+              menuCollapsed && !shouldShowExpanded ? "w-0 opacity-0" : "w-full opacity-100"
             )}
           >
             {/* Logo placeholder if needed */}
@@ -60,11 +75,14 @@ const Sidebar = () => {
             </Heading>
           </div>
 
-          {/* Toggle Button (Desktop) */}
-          <div className="hidden md:block ml-auto">
-            <IconButton 
-              variant="ghost" 
-              onClick={handleToggleCollapse} 
+          {/* Toggle Button (Desktop) - Solo mostrar cuando no está colapsado o está en hover */}
+          <div className={cn(
+            "hidden md:block ml-auto transition-opacity duration-300",
+            menuCollapsed && !shouldShowExpanded && "opacity-0 pointer-events-none"
+          )}>
+            <IconButton
+              variant="ghost"
+              onClick={handleToggleCollapse}
               size="2"
               className="text-[var(--gray-11)] hover:text-[var(--accent-9)] hover:bg-[var(--accent-3)] transition-colors"
             >
@@ -73,7 +91,7 @@ const Sidebar = () => {
             </IconButton>
           </div>
 
-          {/* Close Button (Mobile) */}
+          {/* Close Button (Mobile) - Solo en mobile */}
           <div className="block md:hidden ml-auto">
             <IconButton variant="ghost" onClick={handleCloseMobile} size="2">
               <X size={20} />
@@ -90,7 +108,7 @@ const Sidebar = () => {
         <ScrollArea className="h-full" type="auto">
           <Box px="3" py="4">
             <nav>
-              <NavigationItems items={navigation} />
+              <NavigationItems items={navigation} forceExpanded={shouldShowExpanded} />
             </nav>
           </Box>
         </ScrollArea>

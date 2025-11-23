@@ -8,9 +8,12 @@ import { useSelector } from 'react-redux'
  * NavigationItem - Reactstrap/Bootstrap style
  * Clean, well-spaced navigation items with proper active states
  */
-const NavigationItem = ({ item, nested = false, showTooltip = false, className, ...props }) => {
+const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpanded = false, className, ...props }) => {
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
   const Icon = item.icon
+
+  // Considerar forceExpanded para determinar si está colapsado
+  const isCollapsed = menuCollapsed && !forceExpanded
 
   const getBadgeColor = (color) => {
     switch (color) {
@@ -39,7 +42,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, className, 
           'cursor-pointer', // Removed overflow-hidden
 
           // Spacing & Sizing
-          menuCollapsed
+          isCollapsed
             ? 'justify-center w-[48px] h-[48px] mx-auto px-0'
             : 'w-full mx-2 mb-[5px] gap-4 px-6 py-3', // Vuexy style: full width with internal padding + horizontal margin
 
@@ -52,7 +55,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, className, 
             : 'text-[rgb(110,107,123)] hover:bg-[rgba(0,0,0,0.05)] hover:translate-x-[5px]',
 
           // Nested indentation
-          !menuCollapsed && nested && 'pl-10',
+          !isCollapsed && nested && 'pl-10',
 
           className
         )
@@ -79,7 +82,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, className, 
         className={cn(
           "flex items-center whitespace-nowrap overflow-hidden transition-all duration-300 ease-in-out",
           // When collapsed: width 0, opacity 0. When expanded: flex-1, opacity 100
-          menuCollapsed ? "w-0 opacity-0 ml-0 border-none" : "w-auto opacity-100 flex-1 ml-3"
+          isCollapsed ? "w-0 opacity-0 ml-0 border-none" : "w-auto opacity-100 flex-1 ml-3"
         )}
       >
         <div className="flex items-center justify-between gap-2 w-full">
@@ -96,8 +99,8 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, className, 
     </NavLink>
   )
 
-  // Tooltip when collapsed
-  if (menuCollapsed && showTooltip) {
+  // Tooltip when collapsed (solo si realmente está colapsado, no en hover)
+  if (isCollapsed && showTooltip) {
     return (
       <li className="list-none flex justify-center w-full my-1">
         <Tooltip content={item.title} side="right">

@@ -22,7 +22,7 @@ function hasActiveChild(children, currentPath) {
 /**
  * NavigationGroup - Collapsible menu groups
  */
-const NavigationGroup = ({ item }) => {
+const NavigationGroup = ({ item, forceExpanded = false }) => {
   const location = useLocation()
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
   const Icon = item.icon
@@ -30,12 +30,15 @@ const NavigationGroup = ({ item }) => {
   const isActive = hasActiveChild(item.children, location.pathname)
   const [open, setOpen] = useState(isActive)
 
+  // Considerar forceExpanded para determinar si está colapsado
+  const isCollapsed = menuCollapsed && !forceExpanded
+
   // When collapsed, show children as individual items
-  if (menuCollapsed) {
+  if (isCollapsed) {
     return (
       <>
         {item.children.map((child) => (
-          <NavigationLink key={child.id} item={child} />
+          <NavigationLink key={child.id} item={child} forceExpanded={forceExpanded} />
         ))}
       </>
     )
@@ -53,7 +56,7 @@ const NavigationGroup = ({ item }) => {
               'cursor-pointer border-none text-left overflow-hidden',
 
               // Spacing & Sizing
-              menuCollapsed
+              isCollapsed
                 ? 'justify-center w-[48px] h-[48px] mx-auto mb-2 px-0'
                 : 'w-full mx-2 mb-[5px] gap-4 px-6 py-3', // Vuexy style: full width with internal padding + horizontal margin
 
@@ -83,7 +86,7 @@ const NavigationGroup = ({ item }) => {
             <div
               className={cn(
                 "flex items-center whitespace-nowrap overflow-hidden transition-all duration-300 ease-in-out",
-                menuCollapsed ? "w-0 opacity-0 ml-0" : "w-auto opacity-100 flex-1 ml-3"
+                isCollapsed ? "w-0 opacity-0 ml-0" : "w-auto opacity-100 flex-1 ml-3"
               )}
             >
               <Text size="2" weight="medium" className="truncate flex-1">
@@ -111,7 +114,7 @@ const NavigationGroup = ({ item }) => {
         <Collapsible.Content>
           <ul className="py-1">
             {item.children.map((child) => (
-              <NavigationLink key={child.id} item={child} nested />
+              <NavigationLink key={child.id} item={child} nested forceExpanded={forceExpanded} />
             ))}
           </ul>
         </Collapsible.Content>

@@ -12,9 +12,10 @@ import { canViewMenuItem, canViewMenuGroup } from '../../../utils/permissions'
  * @param {Object} props
  * @param {Array} props.items - Array de items de navegación
  * @param {string} [props.className] - Clases CSS adicionales
+ * @param {boolean} [props.forceExpanded] - Fuerza la visualización expandida (para hover)
  * @returns {JSX.Element}
  */
-const NavigationItems = ({ items = [], className }) => {
+const NavigationItems = ({ items = [], className, forceExpanded = false }) => {
   const permisos = useSelector((state) => state.auth.permisos)
 
   /**
@@ -25,7 +26,7 @@ const NavigationItems = ({ items = [], className }) => {
   const renderItem = (item) => {
     // Headers de sección
     if (item.header) {
-      return <NavigationHeader key={item.header} title={item.header} />
+      return <NavigationHeader key={item.header} title={item.header} forceExpanded={forceExpanded} />
     }
 
     // Grupos con children
@@ -35,7 +36,7 @@ const NavigationItems = ({ items = [], className }) => {
         return null
       }
 
-      return <NavigationGroup key={item.id} item={item} />
+      return <NavigationGroup key={item.id} item={item} forceExpanded={forceExpanded} />
     }
 
     // Links individuales
@@ -45,7 +46,7 @@ const NavigationItems = ({ items = [], className }) => {
         return null
       }
 
-      return <NavigationLink key={item.id} item={item} />
+      return <NavigationLink key={item.id} item={item} forceExpanded={forceExpanded} />
     }
 
     return null

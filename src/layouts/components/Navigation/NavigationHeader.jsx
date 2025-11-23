@@ -10,13 +10,17 @@ import { MoreHorizontal } from 'react-feather'
  *
  * @param {Object} props
  * @param {string} props.title - Texto del header
+ * @param {boolean} [props.forceExpanded] - Fuerza visualización expandida
  * @returns {JSX.Element|null}
  */
-const NavigationHeader = ({ title }) => {
+const NavigationHeader = ({ title, forceExpanded = false }) => {
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
 
+  // Considerar forceExpanded para determinar si está colapsado
+  const isCollapsed = menuCollapsed && !forceExpanded
+
   // Ocultar headers cuando el menú está colapsado
-  if (menuCollapsed) {
+  if (isCollapsed) {
     return null
   }
 

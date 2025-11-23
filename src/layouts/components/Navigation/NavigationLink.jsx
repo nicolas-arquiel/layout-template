@@ -10,9 +10,10 @@ import NavigationItem from './NavigationItem'
  * @param {Object} props
  * @param {Object} props.item - Item de navegación
  * @param {boolean} [props.nested] - Si es item anidado
+ * @param {boolean} [props.forceExpanded] - Fuerza visualización expandida
  * @returns {JSX.Element}
  */
-const NavigationLink = ({ item, nested = false }) => {
+const NavigationLink = ({ item, nested = false, forceExpanded = false }) => {
   const dispatch = useDispatch()
 
   const handleClick = () => {
@@ -26,7 +27,7 @@ const NavigationLink = ({ item, nested = false }) => {
     onClick: handleClick,
   }
 
-  return <NavigationItem item={itemWithHandler} nested={nested} showTooltip />
+  return <NavigationItem item={itemWithHandler} nested={nested} showTooltip forceExpanded={forceExpanded} />
 }
 
 export default NavigationLink

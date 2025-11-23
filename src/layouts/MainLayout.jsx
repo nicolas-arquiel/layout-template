@@ -30,6 +30,7 @@ const MainLayout = () => {
             'bg-[var(--color-panel-solid)]',
             'transition-[width] duration-300 ease-in-out',
             'flex-shrink-0',
+            'relative', // Para positioning del flyout
             // Desktop width - Vuexy exact
             menuCollapsed ? 'w-[var(--menu-collapsed)]' : 'w-[var(--menu-width)]',
             // Mobile
