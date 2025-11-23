@@ -1,10 +1,11 @@
-@import "tailwindcss";
-@import "./styles/components.css";
-
 /* ========================================
    GOOGLE FONTS - MONTSERRAT
+   Debe ir PRIMERO antes de todos los @import
    ======================================== */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+@import "tailwindcss";
+@import "./styles/components.css";
 
 /* ========================================
    TAILWIND 4 CUSTOM THEME - ANIMACIONES COLLAPSIBLE
