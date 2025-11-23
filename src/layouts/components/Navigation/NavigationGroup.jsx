@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, NavLink } from 'react-router-dom'
 import { ChevronDown } from 'react-feather'
 import * as Collapsible from '@radix-ui/react-collapsible'
-import { useSelector } from 'react-redux'
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
+import { useSelector, useDispatch } from 'react-redux'
 import { Text, Badge, Tooltip } from '@radix-ui/themes'
 import NavigationLink from './NavigationLink'
 import { cn } from '../../../lib/utils'
+import { closeMobileMenu } from '../../../store/layoutSlice'
 
 /**
  * Check if any child route is active
@@ -24,50 +26,123 @@ function hasActiveChild(children, currentPath) {
  */
 const NavigationGroup = ({ item, forceExpanded = false }) => {
   const location = useLocation()
+  const dispatch = useDispatch()
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
   const Icon = item.icon
 
   const isActive = hasActiveChild(item.children, location.pathname)
-  const [open, setOpen] = useState(isActive)
+  const [collapsibleOpen, setCollapsibleOpen] = useState(isActive)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
 
   // Considerar forceExpanded para determinar si está colapsado
   const isCollapsed = menuCollapsed && !forceExpanded
 
-  // When collapsed, show ONLY parent icon (no children)
+  const handleChildClick = () => {
+    // Cerrar menú mobile y dropdown al hacer click
+    dispatch(closeMobileMenu())
+    setDropdownOpen(false)
+  }
+
+  // MODE COLLAPSED: Usar DropdownMenu de Radix
   if (isCollapsed) {
     return (
       <li className="list-none flex justify-center w-full my-1">
-        <Tooltip content={item.title} side="right">
-          <button
-            className={cn(
-              "flex items-center justify-center",
-              "w-[48px] h-[48px] rounded-md",
-              "transition-all duration-300 ease-in-out",
-              "cursor-pointer",
-              // Active state si algún child está activo
-              isActive
-                ? "text-[var(--accent-9)] bg-[color-mix(in_srgb,var(--accent-9),transparent_88%)]"
-                : "text-[rgb(110,107,123)] hover:bg-[rgba(0,0,0,0.05)]"
-            )}
-            onClick={(e) => {
-              e.preventDefault()
-              // No hacer nada - el hover del sidebar mostrará el contenido
-            }}
-          >
-            {Icon && (
-              <span className="flex items-center justify-center w-[24px] h-[24px]">
-                <Icon size={20} />
-              </span>
-            )}
-          </button>
-        </Tooltip>
+        <DropdownMenu.Root open={dropdownOpen} onOpenChange={setDropdownOpen}>
+          <DropdownMenu.Trigger asChild>
+            <button
+              className={cn(
+                "flex items-center justify-center",
+                "w-[48px] h-[48px] rounded-md",
+                "transition-all duration-300 ease-in-out",
+                "cursor-pointer border-none bg-transparent",
+                // Active state si algún child está activo - ESTILOS VUEXY
+                isActive
+                  ? "text-[var(--accent-9)] bg-[color-mix(in_srgb,var(--accent-9),transparent_88%)]"
+                  : "text-[rgb(110,107,123)] hover:bg-[rgba(0,0,0,0.05)]"
+              )}
+              onMouseEnter={() => setDropdownOpen(true)}
+              onMouseLeave={() => setDropdownOpen(false)}
+            >
+              {Icon && (
+                <span className="flex items-center justify-center w-[24px] h-[24px]">
+                  <Icon size={20} />
+                </span>
+              )}
+            </button>
+          </DropdownMenu.Trigger>
+
+          <DropdownMenu.Portal>
+            <DropdownMenu.Content
+              side="right"
+              align="start"
+              sideOffset={8}
+              className={cn(
+                // Base - ESTILOS VUEXY
+                "min-w-[200px] rounded-md shadow-lg",
+                "bg-[var(--color-panel-solid)]",
+                "border border-[var(--border-color)]",
+                "p-2",
+                // Z-index
+                "z-50"
+              )}
+              onMouseEnter={() => setDropdownOpen(true)}
+              onMouseLeave={() => setDropdownOpen(false)}
+            >
+              {/* Header con nombre del grupo - ESTILOS VUEXY */}
+              <div className="px-3 py-2 mb-1">
+                <Text size="1" weight="bold" className="text-[var(--gray-9)] uppercase tracking-wide">
+                  {item.title}
+                </Text>
+              </div>
+
+              <div className="h-px bg-[var(--border-color)] mb-1" />
+
+              {/* Children con ESTILOS VUEXY */}
+              {item.children.map((child) => {
+                const ChildIcon = child.icon
+                return (
+                  <DropdownMenu.Item asChild key={child.id}>
+                    <NavLink
+                      to={child.navLink}
+                      onClick={handleChildClick}
+                      className={({ isActive }) =>
+                        cn(
+                          // ESTILOS VUEXY - exactamente como NavigationItem
+                          "flex items-center gap-3 px-3 py-2 rounded-md",
+                          "transition-all duration-200",
+                          "text-[15px] font-[Montserrat] font-medium",
+                          "outline-none cursor-pointer",
+                          isActive
+                            ? "text-white"
+                            : "text-[rgb(110,107,123)] hover:bg-[var(--accent-3)] hover:text-[var(--accent-9)]"
+                        )
+                      }
+                      style={({ isActive }) => isActive ? {
+                        backgroundImage: 'linear-gradient(118deg, var(--accent-9), color-mix(in srgb, var(--accent-9), transparent 30%))',
+                        boxShadow: '0 0 10px 1px color-mix(in srgb, var(--accent-9), transparent 30%)'
+                      } : {}}
+                    >
+                      {ChildIcon && (
+                        <span className="flex items-center justify-center w-[18px] h-[18px]">
+                          <ChildIcon size={18} />
+                        </span>
+                      )}
+                      <span className="text-sm truncate">{child.title}</span>
+                    </NavLink>
+                  </DropdownMenu.Item>
+                )
+              })}
+            </DropdownMenu.Content>
+          </DropdownMenu.Portal>
+        </DropdownMenu.Root>
       </li>
     )
   }
 
+  // MODE EXPANDED: Usar Collapsible como antes - ESTILOS VUEXY INTACTOS
   return (
     <li className="list-none">
-      <Collapsible.Root open={open} onOpenChange={setOpen}>
+      <Collapsible.Root open={collapsibleOpen} onOpenChange={setCollapsibleOpen}>
         <Collapsible.Trigger asChild>
           <button
             className={cn(
@@ -123,7 +198,7 @@ const NavigationGroup = ({ item, forceExpanded = false }) => {
               <span
                 className={cn(
                   'flex-shrink-0 transition-transform duration-300 ease-out ml-2',
-                  open && 'rotate-180'
+                  collapsibleOpen && 'rotate-180'
                 )}
               >
                 <ChevronDown size={16} />

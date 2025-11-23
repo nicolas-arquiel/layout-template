@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Menu, X, Disc, Circle } from 'react-feather'
+import { Menu, X, Disc, Circle, ChevronRight } from 'react-feather'
 import { Heading, IconButton, ScrollArea } from '@radix-ui/themes'
 import { closeMobileMenu, handleMenuCollapsed } from '../../store/layoutSlice'
 import NavigationItems from './Navigation/NavigationItems'
@@ -8,9 +8,9 @@ import navigation from '../../navigation/vertical'
 import { cn } from '../../lib/utils'
 
 /**
- * Sidebar - SOLO TAILWIND CLASSES
- * Fijo a la izquierda con header UCU GESTIÓN
- * Con hover flyout cuando está colapsado (desktop)
+ * Sidebar - Navegación lateral con estilos Vuexy
+ * Fijo a la izquierda con header
+ * Botón de expandir visible cuando está colapsado
  *
  * @returns {JSX.Element}
  */
@@ -18,7 +18,6 @@ const Sidebar = () => {
   const dispatch = useDispatch()
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
   const mobileMenuOpen = useSelector((state) => state.layout.mobileMenuOpen)
-  const [hoverExpanded, setHoverExpanded] = React.useState(false)
 
   const handleCloseMobile = () => {
     dispatch(closeMobileMenu())
@@ -40,9 +39,6 @@ const Sidebar = () => {
     return () => window.removeEventListener('resize', handleResize)
   }, [mobileMenuOpen])
 
-  // Determinar si se debe mostrar expandido (hover flyout)
-  const shouldShowExpanded = menuCollapsed && hoverExpanded
-
   // En mobile, SIEMPRE mostrar expandido (ignorar menuCollapsed)
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
   const effectiveCollapsed = isMobile ? false : menuCollapsed
@@ -55,31 +51,23 @@ const Sidebar = () => {
         "transition-all duration-300 ease-in-out",
         "overflow-hidden overflow-x-hidden", // Prevenir scroll horizontal
 
-        // Hover expanded (flyout absoluto)
-        shouldShowExpanded && "absolute inset-y-0 left-0 w-[260px] z-50 menu-shadow",
+        // Mobile: siempre expandido
+        isMobile && "w-[260px]",
 
-        // Estados normales (NO hover)
-        !shouldShowExpanded && [
-          // Mobile: siempre expandido
-          isMobile && "w-[260px]",
+        // Desktop collapsed: 80px
+        !isMobile && menuCollapsed && "w-[80px]",
 
-          // Desktop collapsed: 80px
-          !isMobile && menuCollapsed && "w-[80px]",
-
-          // Desktop expanded: 260px
-          !isMobile && !menuCollapsed && "w-[260px]",
-        ]
+        // Desktop expanded: 260px
+        !isMobile && !menuCollapsed && "w-[260px]",
       )}
-      onMouseEnter={() => effectiveCollapsed && setHoverExpanded(true)}
-      onMouseLeave={() => setHoverExpanded(false)}
     >
       {/* ========== NAVBAR HEADER ========== */}
       <div className="navbar-header">
         <div className="h-[80px] px-6 py-4 flex items-center justify-between">
           {/* App Name & Logo Container */}
           <div className="flex items-center gap-3 flex-1 overflow-hidden">
-            {/* Cuando está colapsado (sin hover), mostrar solo iniciales */}
-            {effectiveCollapsed && !shouldShowExpanded ? (
+            {/* Cuando está colapsado, mostrar solo iniciales */}
+            {effectiveCollapsed ? (
               <Heading
                 size="5"
                 className="text-[var(--accent-9)] font-extrabold tracking-tight"
@@ -96,10 +84,10 @@ const Sidebar = () => {
             )}
           </div>
 
-          {/* Toggle Button (Desktop) - Solo mostrar cuando no está colapsado o está en hover */}
+          {/* Toggle Button (Desktop) - Solo mostrar cuando no está colapsado */}
           <div className={cn(
             "hidden md:block ml-3 transition-opacity duration-300",
-            effectiveCollapsed && !shouldShowExpanded && "opacity-0 pointer-events-none"
+            effectiveCollapsed && "opacity-0 pointer-events-none"
           )}>
             <IconButton
               variant="ghost"
@@ -134,11 +122,30 @@ const Sidebar = () => {
           */}
           <div className="p-4 max-w-full overflow-x-hidden">
             <nav>
-              <NavigationItems items={navigation} forceExpanded={shouldShowExpanded || isMobile} />
+              <NavigationItems items={navigation} forceExpanded={isMobile} />
             </nav>
           </div>
         </ScrollArea>
       </div>
+
+      {/* ========== BOTÓN DE EXPANDIR (Visible cuando está colapsado) ========== */}
+      {effectiveCollapsed && (
+        <div className="p-4 border-t border-[var(--border-color)]">
+          <IconButton
+            variant="ghost"
+            onClick={handleToggleCollapse}
+            size="2"
+            className={cn(
+              "w-[48px] h-[48px] mx-auto",
+              "text-[var(--gray-11)] hover:text-[var(--accent-9)] hover:bg-[var(--accent-3)]",
+              "transition-colors"
+            )}
+            title="Expandir sidebar"
+          >
+            <ChevronRight size={20} />
+          </IconButton>
+        </div>
+      )}
     </div>
   )
 }
