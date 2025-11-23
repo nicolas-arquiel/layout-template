@@ -38,7 +38,7 @@ const NavigationHeader = ({ title, forceExpanded = false }) => {
 
   return (
     <li className="navigation-header list-none">
-      <div className="flex items-center justify-between pt-6 pb-2">
+      <div className="flex items-center justify-between !px-3 pt-6 pb-2">
         <Text
           size="1"
           weight="bold"
@@ -46,7 +46,6 @@ const NavigationHeader = ({ title, forceExpanded = false }) => {
         >
           {title}
         </Text>
-        <MoreHorizontal size={18} className="text-[var(--gray-9)]" />
       </div>
     </li>
   )

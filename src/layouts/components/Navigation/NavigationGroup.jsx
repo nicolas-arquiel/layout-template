@@ -41,7 +41,7 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isCollapsed, ...
       )}
       {...props}
     >
-      {Icon && <Icon size={20} className={cn("flex-shrink-0", !isCollapsed && "mr-3")} />}
+      {Icon && <Icon size={20} className={cn("flex-shrink-0", !isCollapsed && "!mr-4")} />}
       
       {!isCollapsed && (
         <>

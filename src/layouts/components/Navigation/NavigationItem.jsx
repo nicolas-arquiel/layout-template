@@ -80,7 +80,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
       <div
         className={cn(
           "flex items-center whitespace-nowrap overflow-hidden transition-all duration-300 ease-in-out",
-          isCollapsed ? "w-0 opacity-0 ml-0 border-none" : "w-auto opacity-100 flex-1 ml-3"
+          isCollapsed ? "w-0 opacity-0 ml-0 border-none" : "w-auto opacity-100 flex-1 !ml-4"
         )}
       >
         <div className="flex items-center justify-between gap-2 w-full">
