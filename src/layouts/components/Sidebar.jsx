@@ -60,50 +60,48 @@ const Sidebar = () => {
       onMouseLeave={() => setHoverExpanded(false)}
     >
       {/* ========== NAVBAR HEADER ========== */}
-      <div className="navbar-header">
-        <div className="h-[80px] px-6 py-4 flex items-center justify-between">
+      <div className="navbar-header px-6 py-4">
+        <div className="h-[64px] flex items-center justify-center gap-3">
           {/* App Name & Logo Container */}
-          <div className="flex items-center gap-3 flex-1 overflow-hidden">
-            {/* Cuando está colapsado (sin hover), mostrar solo iniciales */}
-            {effectiveCollapsed && !shouldShowExpanded ? (
+          {effectiveCollapsed && !shouldShowExpanded ? (
+            <Heading
+              size="5"
+              className="text-[var(--accent-9)] font-extrabold tracking-tight"
+            >
+              {import.meta.env.VITE_APP_NAME?.split(' ').map(word => word[0]).join('').slice(0, 2) || 'MA'}
+            </Heading>
+          ) : (
+            <>
               <Heading
                 size="5"
-                className="text-[var(--accent-9)] font-extrabold tracking-tight"
-              >
-                {import.meta.env.VITE_APP_NAME?.split(' ').map(word => word[0]).join('').slice(0, 2) || 'MA'}
-              </Heading>
-            ) : (
-              <Heading
-                size="5"
-                className="text-[var(--accent-9)] font-extrabold truncate tracking-tight whitespace-nowrap"
+                className="text-[var(--accent-9)] font-extrabold truncate tracking-tight whitespace-nowrap flex-1"
               >
                 {import.meta.env.VITE_APP_NAME}
               </Heading>
-            )}
-          </div>
 
-          {/* Toggle Button (Desktop) - Solo mostrar cuando no está colapsado o está en hover */}
-          <div className={cn(
-            "hidden md:block ml-3 transition-opacity duration-300",
-            effectiveCollapsed && !shouldShowExpanded && "opacity-0 pointer-events-none"
-          )}>
-            <IconButton
-              variant="ghost"
-              onClick={handleToggleCollapse}
-              size="2"
-              className="text-[var(--gray-11)] hover:text-[var(--accent-9)] hover:bg-[var(--accent-3)] transition-colors"
-            >
-              {/* Disc/Circle metaphor for pinned/unpinned */}
-              {!effectiveCollapsed ? <Disc size={20} /> : <Circle size={20} />}
-            </IconButton>
-          </div>
+              {/* Toggle Button (Desktop) */}
+              <div className={cn(
+                "hidden md:block transition-opacity duration-300",
+                effectiveCollapsed && "opacity-0 pointer-events-none"
+              )}>
+                <IconButton
+                  variant="ghost"
+                  onClick={handleToggleCollapse}
+                  size="2"
+                  className="text-[var(--gray-11)] hover:text-[var(--accent-9)] hover:bg-[var(--accent-3)] transition-colors"
+                >
+                  {!effectiveCollapsed ? <Disc size={20} /> : <Circle size={20} />}
+                </IconButton>
+              </div>
 
-          {/* Close Button (Mobile) - Solo en mobile */}
-          <div className="block md:hidden ml-3">
-            <IconButton variant="ghost" onClick={handleCloseMobile} size="2">
-              <X size={20} />
-            </IconButton>
-          </div>
+              {/* Close Button (Mobile) */}
+              <div className="block md:hidden">
+                <IconButton variant="ghost" onClick={handleCloseMobile} size="2">
+                  <X size={20} />
+                </IconButton>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
