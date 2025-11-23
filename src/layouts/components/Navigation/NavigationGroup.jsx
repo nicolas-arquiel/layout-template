@@ -25,7 +25,7 @@ function hasActiveChild(children, currentPath) {
  * NavigationGroup - Grupos de menú con children
  * Usa NavigationMenu nativo en collapsed, Collapsible en expanded
  */
-const NavigationGroup = ({ item, forceExpanded = false }) => {
+const NavigationGroup = ({ item, forceExpanded = false, onHoverChange }) => {
   const location = useLocation()
   const dispatch = useDispatch()
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
@@ -42,10 +42,28 @@ const NavigationGroup = ({ item, forceExpanded = false }) => {
     dispatch(closeMobileMenu())
   }
 
+  // Handlers para hover en modo collapsed
+  const handleMouseEnter = () => {
+    if (isCollapsed && onHoverChange) {
+      onHoverChange(item.id)
+    }
+  }
+
+  const handleMouseLeave = () => {
+    if (isCollapsed && onHoverChange) {
+      onHoverChange('')
+    }
+  }
+
   // MODE COLLAPSED: Usar NavigationMenu nativo de Radix
   if (isCollapsed) {
     return (
-      <NavigationMenu.Item value={item.id} className="list-none flex justify-center w-full my-1">
+      <NavigationMenu.Item
+        value={item.id}
+        className="list-none flex justify-center w-full my-1"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
         <NavigationMenu.Trigger
           className={cn(
             "flex items-center justify-center",

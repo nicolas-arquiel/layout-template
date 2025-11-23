@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import * as NavigationMenu from '@radix-ui/react-navigation-menu'
 import NavigationHeader from './NavigationHeader'
@@ -23,6 +23,9 @@ const NavigationItems = ({ items = [], className, forceExpanded = false }) => {
 
   const isCollapsed = menuCollapsed && !forceExpanded
 
+  // Estado para controlar qué item está con hover (para dropdown en modo collapsed)
+  const [hoveredValue, setHoveredValue] = useState('')
+
   /**
    * Renderiza un item individual según su tipo
    * @param {Object} item - Item de navegación
@@ -41,7 +44,14 @@ const NavigationItems = ({ items = [], className, forceExpanded = false }) => {
         return null
       }
 
-      return <NavigationGroup key={item.id} item={item} forceExpanded={forceExpanded} />
+      return (
+        <NavigationGroup
+          key={item.id}
+          item={item}
+          forceExpanded={forceExpanded}
+          onHoverChange={setHoveredValue}
+        />
+      )
     }
 
     // Links individuales
@@ -58,7 +68,12 @@ const NavigationItems = ({ items = [], className, forceExpanded = false }) => {
   }
 
   return (
-    <NavigationMenu.Root orientation="vertical" className={cn('w-full relative', className)}>
+    <NavigationMenu.Root
+      orientation="vertical"
+      className={cn('w-full relative', className)}
+      value={hoveredValue}
+      onValueChange={setHoveredValue}
+    >
       <NavigationMenu.List className="navigation-main w-full flex flex-col gap-0">
         {items.map((item) => renderItem(item))}
       </NavigationMenu.List>
