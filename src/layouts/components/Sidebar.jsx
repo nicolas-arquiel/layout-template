@@ -39,7 +39,7 @@ const Sidebar = () => {
   }, [mobileMenuOpen])
 
   return (
-    <div className="h-full bg-[var(--sidebar-bg)] flex flex-col transition-all duration-300 ease-in-out">
+    <div className="h-full bg-[var(--color-panel-solid)] flex flex-col transition-all duration-300 ease-in-out">
       {/* ========== NAVBAR HEADER ========== */}
       <div className="navbar-header">
         <div className="h-[80px] px-6 flex items-center justify-between">

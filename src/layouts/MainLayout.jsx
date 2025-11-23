@@ -26,9 +26,8 @@ const MainLayout = () => {
       <div className="flex h-screen overflow-hidden">
         {/* ========== SIDEBAR - menu-shadow ========== */}
         <aside
-          style={{ backgroundColor: 'blue' }}
           className={cn(
-            'bg-[var(--sidebar-bg)]',
+            'bg-[var(--color-panel-solid)]',
             'transition-[width] duration-300 ease-in-out',
             'flex-shrink-0',
             // Desktop width - Vuexy exact
@@ -53,9 +52,9 @@ const MainLayout = () => {
             style={{ paddingTop: 'var(--floating-nav-margin)' }}
           >
             <div className="container-xxl mx-auto">
-              <nav 
+              <nav
                 className={cn(
-                  'bg-[var(--navbar-bg)]',
+                  'bg-[var(--color-panel-solid)]',
                   'rounded-lg',
                   'navbar-shadow',
                   'transition-all duration-300'
