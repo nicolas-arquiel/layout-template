@@ -24,23 +24,20 @@ const MainLayout = () => {
   return (
     <div className="min-h-screen bg-[var(--bg-primary)]">
       <div className="flex h-screen overflow-hidden">
-        {/* ========== SIDEBAR - menu-shadow ========== */}
+        {/* ========== SIDEBAR ========== */}
         <aside
           className={cn(
-            'bg-[var(--color-panel-solid)]',
-            // ANIMACIÓN CRÍTICA: usar transition-all para animar width
             'transition-all duration-300 ease-in-out',
             'flex-shrink-0',
-            'relative', // Para positioning del flyout
-            // Desktop width - VALORES ESPECÍFICOS (NO variables CSS)
+            'relative',
+            'h-screen',
+            // Desktop width
             menuCollapsed ? 'w-[80px]' : 'w-[260px]',
             // Mobile
             'max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:z-40',
             'max-md:w-[260px]',
             'max-md:transform max-md:transition-transform max-md:duration-300',
-            mobileMenuOpen ? 'max-md:translate-x-0' : 'max-md:-translate-x-full',
-            // Vuexy menu-shadow
-            'menu-shadow'
+            mobileMenuOpen ? 'max-md:translate-x-0' : 'max-md:-translate-x-full'
           )}
         >
           <Sidebar />

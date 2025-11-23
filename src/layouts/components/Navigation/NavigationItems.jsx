@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
-import * as NavigationMenu from '@radix-ui/react-navigation-menu'
+
 import NavigationHeader from './NavigationHeader'
 import NavigationLink from './NavigationLink'
 import NavigationGroup from './NavigationGroup'
@@ -20,11 +20,6 @@ import { cn } from '../../../lib/utils'
 const NavigationItems = ({ items = [], className, forceExpanded = false }) => {
   const permisos = useSelector((state) => state.auth.permisos)
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
-
-  const isCollapsed = menuCollapsed && !forceExpanded
-
-  // Estado para controlar qué item está con hover (para dropdown en modo collapsed)
-  const [hoveredValue, setHoveredValue] = useState('')
 
   /**
    * Renderiza un item individual según su tipo
@@ -49,41 +44,23 @@ const NavigationItems = ({ items = [], className, forceExpanded = false }) => {
           key={item.id}
           item={item}
           forceExpanded={forceExpanded}
-          onHoverChange={setHoveredValue}
         />
       )
     }
 
-    // Links individuales
-    if (item.navLink) {
-      // Verificar si el usuario puede ver el item
-      if (!canViewMenuItem(item, permisos)) {
-        return null
-      }
-
-      return <NavigationLink key={item.id} item={item} forceExpanded={forceExpanded} />
+    // Items individuales (links)
+    // Verificar si el usuario puede ver el item
+    if (!canViewMenuItem(item, permisos)) {
+      return null
     }
 
-    return null
+    return <NavigationLink key={item.id} item={item} forceExpanded={forceExpanded} />
   }
 
   return (
-    <NavigationMenu.Root
-      orientation="vertical"
-      className={cn('w-full relative', className)}
-      value={hoveredValue}
-      onValueChange={setHoveredValue}
-    >
-      <NavigationMenu.List className="navigation-main w-full flex flex-col gap-0">
-        {items.map((item) => renderItem(item))}
-      </NavigationMenu.List>
-
-      {/* Viewport para Content flotante - SIEMPRE renderizado para que Radix pueda usarlo */}
-      {/* Solo visible cuando está collapsed */}
-      <div className={cn("ViewportPosition", !isCollapsed && "hidden")}>
-        <NavigationMenu.Viewport className="NavigationMenuViewport" />
-      </div>
-    </NavigationMenu.Root>
+    <ul className={cn('flex flex-col gap-1 py-2', className)}>
+      {items.map((item) => renderItem(item))}
+    </ul>
   )
 }
 

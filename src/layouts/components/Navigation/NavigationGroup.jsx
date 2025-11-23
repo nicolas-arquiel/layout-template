@@ -1,13 +1,12 @@
-import React, { useState } from 'react'
-import { useLocation, NavLink } from 'react-router-dom'
+import React, { useState, useRef, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { ChevronDown } from 'react-feather'
 import * as Collapsible from '@radix-ui/react-collapsible'
-import * as NavigationMenu from '@radix-ui/react-navigation-menu'
 import { useSelector, useDispatch } from 'react-redux'
-import { Text, Badge } from '@radix-ui/themes'
+import { Badge } from '@radix-ui/themes'
 import NavigationLink from './NavigationLink'
 import { cn } from '../../../lib/utils'
-import { closeMobileMenu } from '../../../store/layoutSlice'
+import { handleMenuCollapsed } from '../../../store/layoutSlice'
 
 /**
  * Check if any child route is active
@@ -22,224 +21,118 @@ function hasActiveChild(children, currentPath) {
 }
 
 /**
- * Renderiza un child item recursivamente
- * Si el child tiene children, muestra un subdropdown
+ * Shared Button Component for consistency
  */
-const renderChildItem = (child, handleClick, location) => {
-  const ChildIcon = child.icon
-  const childIsActive = child.navLink === location.pathname
-
-  // Si el child tiene children, renderizar como subdropdown
-  if (child.children && child.children.length > 0) {
-    const hasActiveNested = hasActiveChild(child.children, location.pathname)
-
-    return (
-      <div key={child.id} className="relative">
-        {/* Parent del subdropdown */}
-        <div
-          className={cn(
-            "flex items-center justify-between gap-2 px-3 py-2.5 rounded-md",
-            "transition-all duration-200 cursor-pointer",
-            "text-[15px] font-[Montserrat] font-medium",
-            "group",
-            hasActiveNested
-              ? "text-[var(--accent-9)] bg-[var(--accent-3)]"
-              : "text-[rgb(110,107,123)] hover:bg-[var(--accent-3)] hover:text-[var(--accent-9)]"
-          )}
-        >
-          <div className="flex items-center gap-3">
-            {ChildIcon && <ChildIcon size={18} />}
-            <span>{child.title}</span>
-          </div>
-          <ChevronDown size={14} className="transition-transform group-hover:rotate-180" />
-        </div>
-
-        {/* Subdropdown nested children */}
-        <div className="pl-4 mt-1 space-y-1">
-          {child.children.map(nestedChild => renderChildItem(nestedChild, handleClick, location))}
-        </div>
-      </div>
-    )
-  }
-
-  // Child simple sin children - NavLink directo
+const GroupButton = React.forwardRef(({ item, isActive, isOpen, isCollapsed, ...props }, ref) => {
+  const Icon = item.icon
   return (
-    <NavigationMenu.Link key={child.id} asChild active={childIsActive}>
-      <NavLink
-        to={child.navLink}
-        onClick={handleClick}
-        className={cn(
-          "flex items-center gap-3 px-3 py-2.5 rounded-md",
-          "transition-all duration-200",
-          "text-[15px] font-[Montserrat] font-medium",
-          "no-underline outline-none",
-          childIsActive
-            ? "text-white shadow-lg"
-            : "text-[rgb(110,107,123)] hover:bg-[var(--accent-3)] hover:text-[var(--accent-9)]"
-        )}
-        style={childIsActive ? {
-          backgroundImage: 'linear-gradient(118deg, var(--accent-9), color-mix(in srgb, var(--accent-9), transparent 30%))',
-          boxShadow: '0 0 10px 1px color-mix(in srgb, var(--accent-9), transparent 30%)'
-        } : {}}
-      >
-        {ChildIcon && <ChildIcon size={18} />}
-        <span>{child.title}</span>
-      </NavLink>
-    </NavigationMenu.Link>
+    <button
+      ref={ref}
+      className={cn(
+        'flex items-center rounded-md transition-all duration-300 ease-in-out',
+        'min-h-[48px] cursor-pointer border-none outline-none',
+        isCollapsed
+          ? 'justify-center w-[48px] h-[48px] mx-auto my-1' // Centered square in collapsed
+          : 'w-[calc(100%-2rem)] mx-4 px-4 py-3 text-left', // Full width with margin in expanded
+        isActive
+          ? 'text-[var(--accent-9)] bg-[color-mix(in_srgb,var(--accent-9),transparent_88%)]'
+          : 'text-[var(--gray-11)] bg-transparent hover:bg-[var(--gray-3)]',
+        !isCollapsed && !isActive && 'hover:translate-x-[5px]'
+      )}
+      {...props}
+    >
+      {Icon && <Icon size={20} className={cn("flex-shrink-0", !isCollapsed && "mr-3")} />}
+      
+      {!isCollapsed && (
+        <>
+          <span className="flex-1 truncate font-[Montserrat] text-[15px] font-medium">
+            {item.title}
+          </span>
+          {item.badge && <Badge size="1" variant="soft" className="ml-2 mr-2">{item.badge}</Badge>}
+          <ChevronDown size={16} className={cn("transition-transform duration-300", isOpen && "rotate-180")} />
+        </>
+      )}
+    </button>
   )
-}
+})
 
 /**
  * NavigationGroup - Grupos de menú con children
- * Usa NavigationMenu nativo en collapsed, Collapsible en expanded
+ * Behavior:
+ * - Expanded: Standard Accordion
+ * - Collapsed: Vertical Accordion (Icons only)
  */
-const NavigationGroup = ({ item, forceExpanded = false, onHoverChange }) => {
+const NavigationGroup = ({ item, forceExpanded = false }) => {
   const location = useLocation()
   const dispatch = useDispatch()
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
-  const Icon = item.icon
 
   const isActive = hasActiveChild(item.children, location.pathname)
   const [collapsibleOpen, setCollapsibleOpen] = useState(isActive)
 
-  // Considerar forceExpanded para determinar si está colapsado
+  // Sync collapsible state with active route
+  useEffect(() => {
+    if (isActive) {
+      setCollapsibleOpen(true)
+    }
+  }, [isActive])
+
   const isCollapsed = menuCollapsed && !forceExpanded
 
-  const handleChildClick = () => {
-    // Cerrar menú mobile al hacer click
-    dispatch(closeMobileMenu())
+  // Toggle handler for both modes
+  const handleToggle = () => {
+    setCollapsibleOpen(!collapsibleOpen)
   }
 
-  // ========== MODE COLLAPSED: NavigationMenu con Hover ==========
-  if (isCollapsed) {
-    return (
-      <NavigationMenu.Item
-        value={item.id}
-        className="list-none flex justify-center w-full my-1"
-        onMouseEnter={() => onHoverChange && onHoverChange(item.id)}
-        onMouseLeave={() => onHoverChange && onHoverChange('')}
-      >
-        {/* Trigger - Solo icono en modo collapsed */}
-        <NavigationMenu.Trigger asChild>
-          <button
-            className={cn(
-              "flex items-center justify-center",
-              "w-[48px] h-[48px] rounded-md",
-              "transition-all duration-200",
-              "cursor-pointer bg-transparent border-none",
-              "outline-none focus:outline-none",
-              // Active state - ESTILOS VUEXY
-              isActive
-                ? "text-[var(--accent-9)] bg-[color-mix(in_srgb,var(--accent-9),transparent_88%)]"
-                : "text-[rgb(110,107,123)] hover:bg-[rgba(0,0,0,0.05)]"
-            )}
-          >
-            {Icon && <Icon size={20} />}
-          </button>
-        </NavigationMenu.Trigger>
-
-        {/* Content - Aparece en el Viewport cuando está activo */}
-        <NavigationMenu.Content
-          className="NavigationMenuContent data-[motion]:animate-in data-[motion]:fade-in"
-          forceMount
-        >
-          {/* Header del grupo - ESTILOS VUEXY */}
-          <div className="px-4 py-3">
-            <Text
-              size="1"
-              weight="bold"
-              className="text-[var(--gray-9)] uppercase tracking-wide"
-            >
-              {item.title}
-            </Text>
-          </div>
-
-          <div className="h-px bg-[var(--border-color)] mx-2" />
-
-          {/* Children - ESTILOS VUEXY - Soporte recursivo */}
-          <div className="p-2 space-y-1">
-            {item.children.map((child) => renderChildItem(child, handleChildClick, location))}
-          </div>
-        </NavigationMenu.Content>
-      </NavigationMenu.Item>
-    )
-  }
-
-  // MODE EXPANDED: Usar Collapsible como antes - ESTILOS VUEXY INTACTOS
   return (
-    <li className="list-none">
-      <Collapsible.Root open={collapsibleOpen} onOpenChange={setCollapsibleOpen}>
+    <li className={cn("list-none", isCollapsed ? "w-full flex flex-col items-center" : "w-full")}>
+      <Collapsible.Root 
+        open={collapsibleOpen} 
+        onOpenChange={setCollapsibleOpen}
+        className={cn("w-full", isCollapsed && "flex flex-col items-center")}
+      >
         <Collapsible.Trigger asChild>
-          <button
-            className={cn(
-              // Layout base
-              'flex items-center rounded-md transition-all duration-300 ease-in-out',
-              'min-h-[48px]',
-              'cursor-pointer border-none text-left overflow-hidden',
-
-              // Spacing & Sizing
-              isCollapsed
-                ? 'justify-center w-[48px] h-[48px] mx-auto mb-2 px-0'
-                : 'w-full mx-4 mb-[5px] gap-3 px-4 py-3', // mx-4 para más separación de bordes
-
-              // Typography
-              'font-[Montserrat] text-[15px] tracking-[0.14px] font-semibold',
-
-              // Active/Inactive
-              isActive
-                ? 'text-[var(--accent-9)]'
-                : 'bg-transparent text-[rgb(110,107,123)] hover:bg-[rgba(0,0,0,0.05)] hover:translate-x-[5px]'
-            )}
-            style={isActive ? {
-              backgroundColor: 'color-mix(in srgb, var(--accent-9), transparent 88%)'
-            } : {}}
-          >
-            {/* Icon - ALWAYS VISIBLE */}
-            {Icon && (
-              <span className={cn(
-                "flex items-center justify-center transition-all duration-300 flex-shrink-0",
-                "w-[24px] h-[24px]"
-              )}>
-                <Icon size={20} />
-              </span>
-            )}
-
-            {/* Text Container - Smooth transition */}
-            <div
-              className={cn(
-                "flex items-center whitespace-nowrap overflow-hidden transition-all duration-300 ease-in-out",
-                isCollapsed ? "w-0 opacity-0 ml-0" : "w-auto opacity-100 flex-1 ml-3"
-              )}
-            >
-              <Text size="2" weight="medium" className="truncate flex-1">
-                {item.title}
-              </Text>
-
-              {item.badge && (
-                <Badge size="1" variant="soft" className="ml-2">
-                  {item.badge}
-                </Badge>
-              )}
-
-              <span
-                className={cn(
-                  'flex-shrink-0 transition-transform duration-300 ease-out ml-2',
-                  collapsibleOpen && 'rotate-180'
-                )}
-              >
-                <ChevronDown size={16} />
-              </span>
-            </div>
-          </button>
+          <GroupButton 
+            item={item} 
+            isActive={isActive} 
+            isOpen={collapsibleOpen}
+            isCollapsed={isCollapsed}
+            onClick={handleToggle}
+            title={isCollapsed ? item.title : undefined}
+          />
         </Collapsible.Trigger>
 
         <Collapsible.Content
-          className="overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up"
+          className={cn(
+            "overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up",
+            isCollapsed ? "w-full flex flex-col items-center" : "w-full"
+          )}
         >
-          <ul className="py-1">
-            {item.children.map((child) => (
-              <NavigationLink key={child.id} item={child} nested forceExpanded={forceExpanded} />
-            ))}
+          <ul className={cn(
+            "py-1 space-y-1 w-full", 
+            isCollapsed && "flex flex-col items-center gap-1" // Ensure gap between icons
+          )}>
+            {item.children.map((child) => {
+              // Recursive check: if child has children, render NavigationGroup
+              if (child.children && child.children.length > 0) {
+                return (
+                  <NavigationGroup 
+                    key={child.id} 
+                    item={child} 
+                    forceExpanded={forceExpanded} 
+                  />
+                )
+              }
+              // Otherwise render Link
+              return (
+                <NavigationLink 
+                  key={child.id} 
+                  item={child} 
+                  nested 
+                  forceExpanded={forceExpanded} 
+                />
+              )
+            })}
           </ul>
         </Collapsible.Content>
       </Collapsible.Root>

@@ -39,22 +39,22 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
           // Layout base
           'flex items-center rounded-md transition-all duration-300 ease-in-out',
           'min-h-[48px]',
-          'cursor-pointer', // Removed overflow-hidden
+          'cursor-pointer',
 
           // Spacing & Sizing
           isCollapsed
-            ? 'justify-center w-[48px] h-[48px] mx-auto px-0'
-            : 'w-full mx-4 mb-[5px] gap-3 px-4 py-3', // mx-4 para más separación de bordes
+            ? 'justify-center w-[48px] h-[48px] mx-auto my-1 px-0' // Centered square with vertical margin
+            : 'mx-4 mb-1 px-4 py-3 w-[calc(100%-2rem)]', // Floating effect with correct width
 
           // Typography
           'font-[Montserrat] text-[15px] tracking-[0.14px] font-semibold',
 
           // Active State
           isActive
-            ? 'text-white rounded-md' // Background and shadow handled via style
+            ? 'text-white shadow-lg' // Background handled via style
             : 'text-[rgb(110,107,123)] hover:bg-[rgba(0,0,0,0.05)] hover:translate-x-[5px]',
 
-          // Nested indentation
+          // Nested indentation (only when expanded)
           !isCollapsed && nested && 'pl-10',
 
           className
@@ -69,8 +69,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
       {/* Icon - ALWAYS VISIBLE */}
       {Icon && (
         <span className={cn(
-          "flex items-center justify-center transition-all duration-300 flex-shrink-0", // Prevent shrinking
-          // Fixed width for icon container to ensure stability
+          "flex items-center justify-center transition-all duration-300 flex-shrink-0",
           "w-[24px] h-[24px]"
         )}>
           <Icon size={20} />
@@ -81,7 +80,6 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
       <div
         className={cn(
           "flex items-center whitespace-nowrap overflow-hidden transition-all duration-300 ease-in-out",
-          // When collapsed: width 0, opacity 0. When expanded: flex-1, opacity 100
           isCollapsed ? "w-0 opacity-0 ml-0 border-none" : "w-auto opacity-100 flex-1 ml-3"
         )}
       >
