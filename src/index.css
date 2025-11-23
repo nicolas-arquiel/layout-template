@@ -462,12 +462,7 @@ html {
   position: absolute;
   left: 100%; /* A la derecha del sidebar */
   top: 0;
-  display: flex;
-  justify-content: flex-start;
-  width: max-content;
-  perspective: 2000px;
-  z-index: 9999; /* Muy alto para aparecer sobre todo */
-  pointer-events: none; /* No bloquear interacciones */
+  z-index: 9999 !important; /* Muy alto para aparecer sobre todo */
 }
 
 /* NavigationMenu Viewport - Contenedor del Content flotante */
@@ -484,7 +479,6 @@ html {
   box-shadow: 0 8px 32px 0 rgba(34, 41, 47, 0.12);
   overflow: hidden;
   transition: width 300ms ease, height 300ms ease;
-  pointer-events: auto; /* Permitir interacciones con el contenido */
 }
 
 /* Viewport - Estado de animación */

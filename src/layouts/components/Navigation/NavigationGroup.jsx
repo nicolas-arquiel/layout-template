@@ -47,25 +47,27 @@ const NavigationGroup = ({ item, forceExpanded = false, onHoverChange }) => {
     return (
       <NavigationMenu.Item
         value={item.id}
-        className="list-none w-full my-1"
+        className="list-none flex justify-center w-full my-1"
         onMouseEnter={() => onHoverChange && onHoverChange(item.id)}
         onMouseLeave={() => onHoverChange && onHoverChange('')}
       >
         {/* Trigger - Solo icono en modo collapsed */}
-        <NavigationMenu.Trigger
-          className={cn(
-            "flex items-center justify-center mx-auto",
-            "w-[48px] h-[48px] rounded-md",
-            "transition-all duration-200",
-            "cursor-pointer bg-transparent border-none",
-            "outline-none focus:outline-none",
-            // Active state - ESTILOS VUEXY
-            isActive
-              ? "text-[var(--accent-9)] bg-[color-mix(in_srgb,var(--accent-9),transparent_88%)]"
-              : "text-[rgb(110,107,123)] hover:bg-[rgba(0,0,0,0.05)]"
-          )}
-        >
-          {Icon && <Icon size={20} />}
+        <NavigationMenu.Trigger asChild>
+          <button
+            className={cn(
+              "flex items-center justify-center",
+              "w-[48px] h-[48px] rounded-md",
+              "transition-all duration-200",
+              "cursor-pointer bg-transparent border-none",
+              "outline-none focus:outline-none",
+              // Active state - ESTILOS VUEXY
+              isActive
+                ? "text-[var(--accent-9)] bg-[color-mix(in_srgb,var(--accent-9),transparent_88%)]"
+                : "text-[rgb(110,107,123)] hover:bg-[rgba(0,0,0,0.05)]"
+            )}
+          >
+            {Icon && <Icon size={20} />}
+          </button>
         </NavigationMenu.Trigger>
 
         {/* Content - Aparece en el Viewport cuando está activo */}
