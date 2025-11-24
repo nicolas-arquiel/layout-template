@@ -736,16 +736,6 @@ html {
   }
 }
 
-/* Push effect - cuando se abre un nested, el padre se mueve a la izquierda */
-@keyframes pushLeft {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-80px);
-  }
-}
-
 /* Offcanvas base styles */
 .offcanvas-container {
   position: fixed;
@@ -770,23 +760,24 @@ html {
   animation: slideOutRight 250ms cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-/* Cuando un offcanvas tiene uno nested abierto, se empuja a la izquierda */
+/* EFECTO PUSH: Cuando un offcanvas nested se abre, el padre se mueve hacia la DERECHA */
+/* Esto hace que el padre se esconda parcialmente hacia la derecha */
+/* y el hijo quede visible al lado izquierdo del padre */
 .offcanvas-container.has-nested-open {
-  transform: translateX(-80px);
+  transform: translateX(320px); /* Mueve el padre 320px a la derecha */
   transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-/* Overlay más oscuro para cada nivel de anidamiento */
-.offcanvas-overlay {
-  background-color: rgba(0, 0, 0, 0.4);
+/* Posicionamiento para offcanvas nested (hijo) */
+/* El nested se posiciona donde estaba el padre originalmente */
+.offcanvas-container.level-1 {
+  right: 0; /* En la posición original */
 }
 
-.offcanvas-overlay.nested-level-1 {
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.offcanvas-overlay.nested-level-2 {
-  background-color: rgba(0, 0, 0, 0.6);
+/* El padre (level-0) cuando tiene nested abierto se ve parcialmente */
+.offcanvas-container.level-0.has-nested-open {
+  /* Se ve ~80px del padre a la izquierda del hijo */
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.2);
 }
 
 /* Z-index para offcanvas anidados */
@@ -811,7 +802,7 @@ html {
   z-index: 999 !important;
 }
 
-/* Overlay para nivel 1 (nested) */
+/* Overlay para nivel 1 (nested) - más oscuro */
 .rt-DialogOverlay:has(+ [data-offcanvas-level="1"]) {
   background-color: rgba(0, 0, 0, 0.5) !important;
   z-index: 1000 !important;
