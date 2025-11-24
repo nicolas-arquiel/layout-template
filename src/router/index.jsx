@@ -5,6 +5,7 @@ import Dashboard from '../pages/Dashboard'
 import DashboardCompleto from '../pages/DashboardCompleto'
 import Login from '../pages/Login'
 import Personas from '../pages/Personas'
+import InscripcionPersona from '../pages/InscripcionPersona'
 import InscripcionAspirante from '../pages/Inscripciones/InscripcionAspirante'
 import InscripcionCurso from '../pages/Inscripciones/InscripcionCurso'
 
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: 'personas',
         element: <Personas />,
+      },
+      {
+        path: 'inscripcion-persona',
+        element: <InscripcionPersona />,
       },
       {
         path: 'inscripcion-aspirante',

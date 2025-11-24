@@ -45,6 +45,13 @@ const navigation = [
     permiso: 'inscripcion',
     children: [
       {
+        id: 'inscripcion_persona',
+        title: 'Inscripcion Persona',
+        icon: CircleIcon,
+        navLink: '/inscripcion-persona',
+        permiso: 'inscripcion',
+      },
+      {
         id: 'inscripcion_aspirante',
         title: 'Inscripcion Aspirante',
         icon: CircleIcon,

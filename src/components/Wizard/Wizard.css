@@ -1,0 +1,211 @@
+/* Wizard Container */
+.wizard-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.wizard-container.wizard-vertical,
+.wizard-container.wizard-modern-vertical {
+  flex-direction: row;
+}
+
+/* Wizard Header */
+.wizard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) 0;
+  margin-bottom: var(--space-6);
+}
+
+.wizard-vertical .wizard-header,
+.wizard-modern-vertical .wizard-header {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 0 var(--space-4) 0 0;
+  margin-bottom: 0;
+  min-width: 250px;
+}
+
+/* Wizard Separator */
+.wizard-separator {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-8);
+  padding: 0 var(--space-2);
+}
+
+.wizard-vertical .wizard-separator,
+.wizard-modern-vertical .wizard-separator {
+  flex: 0;
+  width: 100%;
+  height: 2rem;
+  padding: 0;
+  justify-content: flex-start;
+  padding-left: 1.5rem;
+}
+
+.wizard-vertical .wizard-separator::before,
+.wizard-modern-vertical .wizard-separator::before {
+  content: '';
+  display: block;
+  width: 2px;
+  height: 100%;
+  background-color: var(--gray-6);
+}
+
+/* Wizard Step */
+.wizard-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.wizard-vertical .wizard-step,
+.wizard-modern-vertical .wizard-step {
+  align-items: flex-start;
+  width: 100%;
+}
+
+.wizard-step-trigger {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-2);
+  border-radius: var(--radius-2);
+  transition: background-color 0.2s;
+}
+
+.wizard-step-trigger:hover {
+  background-color: var(--gray-3);
+}
+
+.wizard-vertical .wizard-step-trigger,
+.wizard-modern-vertical .wizard-step-trigger {
+  flex-direction: row;
+  width: 100%;
+}
+
+/* Wizard Step Box (círculo con número/icono) */
+.wizard-step-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: var(--gray-4);
+  color: var(--gray-11);
+  font-weight: 600;
+  font-size: var(--font-size-2);
+  border: 2px solid var(--gray-6);
+  transition: all 0.2s;
+  margin-bottom: var(--space-2);
+}
+
+.wizard-vertical .wizard-step-box,
+.wizard-modern-vertical .wizard-step-box {
+  margin-bottom: 0;
+  margin-right: var(--space-3);
+}
+
+.wizard-step-active .wizard-step-box {
+  background-color: var(--accent-9);
+  color: white;
+  border-color: var(--accent-9);
+}
+
+.wizard-step-crossed .wizard-step-box {
+  background-color: var(--green-9);
+  color: white;
+  border-color: var(--green-9);
+}
+
+/* Wizard Step Label */
+.wizard-step-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.wizard-vertical .wizard-step-label,
+.wizard-modern-vertical .wizard-step-label {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.wizard-step-title {
+  font-weight: 600;
+  font-size: var(--font-size-2);
+  color: var(--gray-11);
+  margin-bottom: var(--space-1);
+}
+
+.wizard-step-active .wizard-step-title {
+  color: var(--accent-11);
+}
+
+.wizard-step-subtitle {
+  font-size: var(--font-size-1);
+  color: var(--gray-10);
+}
+
+/* Wizard Content Wrapper */
+.wizard-content-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.wizard-vertical .wizard-content-wrapper,
+.wizard-modern-vertical .wizard-content-wrapper {
+  flex: 1;
+}
+
+/* Wizard Content */
+.wizard-content {
+  display: none;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.wizard-content-active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modern styles */
+.wizard-modern-horizontal .wizard-header,
+.wizard-modern-vertical .wizard-header {
+  background-color: var(--gray-2);
+  border-radius: var(--radius-3);
+  padding: var(--space-5);
+}
+
+.wizard-modern-horizontal .wizard-step-box,
+.wizard-modern-vertical .wizard-step-box {
+  width: 3rem;
+  height: 3rem;
+  font-size: var(--font-size-3);
+}
+
+.wizard-modern-horizontal .wizard-step-trigger,
+.wizard-modern-vertical .wizard-step-trigger {
+  padding: var(--space-3);
+}
