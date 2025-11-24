@@ -75,7 +75,6 @@ export default function Offcanvas({
           style={{
             position: 'fixed',
             top: 0,
-            [side]: 0,
             bottom: 0,
             height: '100vh',
             maxWidth: width,
@@ -84,7 +83,7 @@ export default function Offcanvas({
             borderRadius: 0,
             padding: 0,
             overflow: 'hidden',
-            zIndex: 1000 + level,
+            // No establecer right/left aquí - se maneja con CSS classes
           }}
         >
           {/* Header */}

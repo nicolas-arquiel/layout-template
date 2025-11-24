@@ -740,14 +740,12 @@ html {
 .offcanvas-container {
   position: fixed;
   top: 0;
-  right: 0;
   bottom: 0;
   height: 100vh;
   width: 100%;
   margin: 0;
   border-radius: 0;
   overflow: hidden;
-  z-index: 1000;
 }
 
 /* Animación de entrada para offcanvas */
@@ -760,37 +758,49 @@ html {
   animation: slideOutRight 250ms cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-/* EFECTO PUSH: Cuando un offcanvas nested se abre, el padre se mueve hacia la DERECHA */
-/* Esto hace que el padre se esconda parcialmente hacia la derecha */
-/* y el hijo quede visible al lado izquierdo del padre */
-.offcanvas-container.has-nested-open {
-  transform: translateX(320px); /* Mueve el padre 320px a la derecha */
-  transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1);
-}
+/* EFECTO LADO A LADO: Padre y hijo visibles simultáneamente */
 
-/* Posicionamiento para offcanvas nested (hijo) */
-/* El nested se posiciona donde estaba el padre originalmente */
-.offcanvas-container.level-1 {
-  right: 0; /* En la posición original */
-}
-
-/* El padre (level-0) cuando tiene nested abierto se ve parcialmente */
-.offcanvas-container.level-0.has-nested-open {
-  /* Se ve ~80px del padre a la izquierda del hijo */
-  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.2);
-}
-
-/* Z-index para offcanvas anidados */
+/* Padre (level-0) - posición original a la derecha */
 .offcanvas-container.level-0 {
+  right: 0;
   z-index: 1000;
 }
 
+/* Cuando el padre tiene un nested abierto, NO se mueve */
+/* Se queda en su lugar para que ambos sean visibles */
+.offcanvas-container.level-0.has-nested-open {
+  right: 0; /* Se mantiene en su posición */
+  /* Opcional: agregar una sombra para dar profundidad */
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Hijo (level-1) - aparece a la IZQUIERDA del padre */
+/* Si el padre tiene 400px de ancho, el hijo aparece en right: 400px */
 .offcanvas-container.level-1 {
+  right: 400px; /* A la izquierda del padre (ancho del padre) */
   z-index: 1001;
 }
 
+/* Segundo nivel de nested (si existe) */
 .offcanvas-container.level-2 {
+  right: 800px; /* A la izquierda del level-1 */
   z-index: 1002;
+}
+
+/* Responsive: ajustar anchos si es necesario */
+/* En pantallas más pequeñas, podríamos reducir el ancho */
+@media (max-width: 1200px) {
+  .offcanvas-container {
+    max-width: 350px !important;
+  }
+  
+  .offcanvas-container.level-1 {
+    right: 350px;
+  }
+  
+  .offcanvas-container.level-2 {
+    right: 700px;
+  }
 }
 
 /* Overlay styles basados en el nivel de anidamiento */
