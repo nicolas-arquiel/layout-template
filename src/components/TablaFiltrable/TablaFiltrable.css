@@ -1,0 +1,26 @@
+/* TablaFiltrable Styles */
+
+.tabla-filtrable-container {
+  width: 100%;
+}
+
+.tabla-filtrable-header-cell {
+  background-color: var(--gray-3) !important;
+  padding: var(--space-3) !important;
+}
+
+.tabla-filtrable-row {
+  transition: background-color 0.2s;
+}
+
+.tabla-filtrable-row:hover {
+  background-color: var(--gray-2);
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.select-none {
+  user-select: none;
+}

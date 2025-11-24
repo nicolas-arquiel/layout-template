@@ -8,6 +8,7 @@ import Personas from '../pages/Personas'
 import InscripcionPersona from '../pages/InscripcionPersona'
 import InscripcionAspirante from '../pages/Inscripciones/InscripcionAspirante'
 import InscripcionCurso from '../pages/Inscripciones/InscripcionCurso'
+import EjemploTablas from '../pages/EjemploTablas'
 
 // Reportes
 import ReportesVentas from '../pages/Reportes/Ventas'
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: 'personas',
         element: <Personas />,
+      },
+      {
+        path: 'ejemplo-tablas',
+        element: <EjemploTablas />,
       },
       {
         path: 'inscripcion-persona',
