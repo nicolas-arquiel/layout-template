@@ -1,16 +1,14 @@
-# Instalación de Dependencias para Tablas
+# Instalación de Dependencias para TablaVirtualizada
 
-Se agregaron dos nuevos componentes de tablas que requieren dependencias adicionales:
+Componente de tabla con virtualización para datasets grandes.
 
-## 1. TablaVirtualizada
-Requiere: `react-window`
+## Dependencia requerida
 
-## 2. TablaFiltrable
-Requiere: `@tanstack/react-table`
+TablaVirtualizada requiere: `react-window`
 
 ## Instalación
 
-Las dependencias ya están agregadas en `package.json`. Solo necesitas instalar:
+La dependencia ya está agregada en `package.json`. Solo necesitas instalar:
 
 ### Con npm:
 ```bash
@@ -27,13 +25,12 @@ pnpm install
 yarn install
 ```
 
-## Dependencias Agregadas
+## Dependencia Agregada
 
 En `package.json`:
 ```json
 {
   "dependencies": {
-    "@tanstack/react-table": "^8.20.6",
     "react-window": "^1.8.10"
   }
 }
@@ -47,15 +44,24 @@ Después de instalar, ejecuta:
 npm run build
 ```
 
-Si no hay errores, las tablas están listas para usar.
-
-## Uso
-
-Ver la página de ejemplo en:
-- **Ruta**: `/ejemplo-tablas`
-- **Menú**: "Ejemplo Tablas" en el sidebar
+Si no hay errores, la tabla está lista para usar.
 
 ## Documentación
 
 - **TablaVirtualizada**: `src/components/TablaVirtualizada/README.md`
-- **TablaFiltrable**: `src/components/TablaFiltrable/README.md`
+
+## Cuándo Usar
+
+✅ **Usar TablaVirtualizada cuando:**
+- Tienes datasets grandes (10,000+ registros)
+- Prioridad en performance y velocidad de renderizado
+- Necesitas scroll infinito/continuo
+- No necesitas filtros complejos integrados
+
+## Próximos Pasos
+
+Se está desarrollando un sistema de tablas modular con:
+- Filtros externos independientes (AdvancedFilter, DateRangeFilter, etc.)
+- Soporte para backend y frontend
+- Context API para integración automática
+- Compatible con tu código actual

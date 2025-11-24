@@ -9,8 +9,7 @@ import {
   FileIcon,
   CubeIcon,
   LockClosedIcon,
-  StackIcon,
-  TableIcon
+  StackIcon
 } from '@radix-ui/react-icons'
 
 /**
@@ -74,12 +73,6 @@ const navigation = [
     icon: PersonIcon,
     navLink: '/personas',
     permiso: 'personas',
-  },
-  {
-    id: 'ejemplo-tablas',
-    title: 'Ejemplo Tablas',
-    icon: TableIcon,
-    navLink: '/ejemplo-tablas',
   },
 
   {
