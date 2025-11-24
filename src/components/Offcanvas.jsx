@@ -69,16 +69,9 @@ export default function Offcanvas({
       <Dialog.Root open={open} onOpenChange={onOpenChange}>
         {trigger && <Dialog.Trigger>{trigger}</Dialog.Trigger>}
 
-        {/* Overlay con opacidad progresiva según el nivel */}
-        <Dialog.Overlay
-          className={`offcanvas-overlay nested-level-${level}`}
-          style={{
-            zIndex: 999 + level,
-          }}
-        />
-
         <Dialog.Content
           className={`offcanvas-container level-${level} ${hasChildOpen ? 'has-nested-open' : ''}`}
+          data-offcanvas-level={level}
           style={{
             position: 'fixed',
             top: 0,

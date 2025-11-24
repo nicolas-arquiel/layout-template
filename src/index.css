@@ -801,3 +801,24 @@ html {
 .offcanvas-container.level-2 {
   z-index: 1002;
 }
+
+/* Overlay styles basados en el nivel de anidamiento */
+/* Radix Themes genera automáticamente el overlay con clase .rt-DialogOverlay */
+
+/* Overlay para nivel 0 (primer offcanvas) */
+.rt-DialogOverlay:has(+ [data-offcanvas-level="0"]) {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+  z-index: 999 !important;
+}
+
+/* Overlay para nivel 1 (nested) */
+.rt-DialogOverlay:has(+ [data-offcanvas-level="1"]) {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  z-index: 1000 !important;
+}
+
+/* Overlay para nivel 2 (nested dentro de nested) */
+.rt-DialogOverlay:has(+ [data-offcanvas-level="2"]) {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  z-index: 1001 !important;
+}
