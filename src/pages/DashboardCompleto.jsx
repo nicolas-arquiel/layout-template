@@ -23,19 +23,19 @@ import {
   Strong,
 } from '@radix-ui/themes'
 import {
-  Users,
-  UserPlus,
-  TrendingUp,
-  DollarSign,
-  AlertCircle,
-  CheckCircle,
-  Info,
-  Plus,
-  Settings,
-  Bell,
-  Search,
-  Filter,
-} from 'react-feather'
+  PersonIcon,
+  PlusCircledIcon,
+  ArrowUpIcon,
+  SymbolIcon,
+  ExclamationTriangleIcon,
+  CheckCircledIcon,
+  InfoCircledIcon,
+  PlusIcon,
+  GearIcon,
+  BellIcon,
+  MagnifyingGlassIcon,
+  MixerHorizontalIcon,
+} from '@radix-ui/react-icons'
 import FormDialog from '../components/FormDialog'
 import DataTable from '../components/DataTable'
 
@@ -75,10 +75,10 @@ export default function DashboardCompleto() {
   ]
 
   const stats = [
-    { title: 'Total Usuarios', value: '2,543', change: '+12.5%', icon: Users, color: 'blue' },
-    { title: 'Nuevos Hoy', value: '234', change: '+5.2%', icon: UserPlus, color: 'green' },
-    { title: 'Crecimiento', value: '23.5%', change: '+2.1%', icon: TrendingUp, color: 'orange' },
-    { title: 'Ingresos', value: '$45,678', change: '+8.3%', icon: DollarSign, color: 'purple' },
+    { title: 'Total Usuarios', value: '2,543', change: '+12.5%', icon: PersonIcon, color: 'blue' },
+    { title: 'Nuevos Hoy', value: '234', change: '+5.2%', icon: PlusCircledIcon, color: 'green' },
+    { title: 'Crecimiento', value: '23.5%', change: '+2.1%', icon: ArrowUpIcon, color: 'orange' },
+    { title: 'Ingresos', value: '$45,678', change: '+8.3%', icon: SymbolIcon, color: 'purple' },
   ]
 
   const recentUsers = [
@@ -93,7 +93,7 @@ export default function DashboardCompleto() {
       <Grid columns={{ initial: '1', md: '2' }} gap="4" mb="6">
         <Callout.Root color="blue">
           <Callout.Icon>
-            <Info />
+            <InfoCircledIcon />
           </Callout.Icon>
           <Callout.Text>
             Bienvenido al Dashboard completo con <Strong>Radix Themes</Strong>
@@ -102,7 +102,7 @@ export default function DashboardCompleto() {
 
         <Callout.Root color="green">
           <Callout.Icon>
-            <CheckCircle />
+            <CheckCircledIcon />
           </Callout.Icon>
           <Callout.Text>Sistema funcionando correctamente</Callout.Text>
         </Callout.Root>
@@ -195,7 +195,7 @@ export default function DashboardCompleto() {
               <Flex direction="column" gap="3">
                 <Callout.Root color="orange">
                   <Callout.Icon>
-                    <AlertCircle />
+                    <ExclamationTriangleIcon />
                   </Callout.Icon>
                   <Callout.Text>Tienes 3 notificaciones pendientes</Callout.Text>
                 </Callout.Root>
@@ -214,15 +214,15 @@ export default function DashboardCompleto() {
               <Heading size="5">Usuarios del Sistema</Heading>
               <Flex gap="2">
                 <Button variant="soft" size="2">
-                  <Filter size={16} />
+                  <MixerHorizontalIcon width="16" height="16" />
                   Filtrar
                 </Button>
                 <Button variant="soft" size="2">
-                  <Search size={16} />
+                  <MagnifyingGlassIcon width="16" height="16" />
                   Buscar
                 </Button>
                 <Button size="2" onClick={() => setFormDialogOpen(true)}>
-                  <Plus size={16} />
+                  <PlusIcon width="16" height="16" />
                   Nuevo Usuario
                 </Button>
               </Flex>
@@ -269,16 +269,16 @@ export default function DashboardCompleto() {
               </Heading>
               <Flex direction="column" gap="2">
                 <Button variant="soft" onClick={() => setOffcanvasOpen(true)}>
-                  <Settings size={16} />
+                  <GearIcon width="16" height="16" />
                   Configuración (Offcanvas)
                 </Button>
                 <Button variant="soft">
-                  <Bell size={16} />
+                  <BellIcon width="16" height="16" />
                   Notificaciones
                 </Button>
                 <Link href="https://www.radix-ui.com/themes/docs" target="_blank">
                   <Button variant="soft" style={{ width: '100%' }}>
-                    <Info size={16} />
+                    <InfoCircledIcon width="16" height="16" />
                     Ver Docs de Radix
                   </Button>
                 </Link>
@@ -324,18 +324,7 @@ export default function DashboardCompleto() {
 
       {/* Offcanvas (Dialog fullScreen) */}
       <Dialog.Root open={offcanvasOpen} onOpenChange={setOffcanvasOpen}>
-        <Dialog.Content
-          style={{
-            position: 'fixed',
-            top: 0,
-            right: 0,
-            height: '100vh',
-            maxWidth: '400px',
-            width: '100%',
-            margin: 0,
-            borderRadius: 0,
-          }}
-        >
+        <Dialog.Content className="offcanvas">
           <Dialog.Title>Configuración</Dialog.Title>
           <Dialog.Description size="2" mb="4">
             Panel lateral tipo offcanvas usando Dialog de Radix
@@ -372,7 +361,7 @@ export default function DashboardCompleto() {
 
               <Callout.Root color="blue">
                 <Callout.Icon>
-                  <Info />
+                  <InfoCircledIcon />
                 </Callout.Icon>
                 <Callout.Text>
                   Este es un ejemplo de offcanvas usando Dialog con estilos personalizados

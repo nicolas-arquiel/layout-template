@@ -1,4 +1,4 @@
-import { Users, Search, Plus, Edit, Trash2 } from 'react-feather'
+import { PersonIcon, MagnifyingGlassIcon, PlusIcon, Pencil1Icon, TrashIcon } from '@radix-ui/react-icons'
 import { Box, Flex, Heading, Text, Button, TextField, Select, Card, Table, Badge, IconButton } from '@radix-ui/themes'
 
 /**
@@ -25,18 +25,18 @@ export default function Personas() {
           <Text color="gray">Gestiona el registro de personas</Text>
         </Box>
         <Button size="3">
-          <Plus size={20} />
+          <PlusIcon width="20" height="20" />
           Nueva Persona
         </Button>
       </Flex>
 
-      {/* Search & Filters */}
+      {/* MagnifyingGlassIcon & Filters */}
       <Card mb="4" style={{ backgroundColor: 'var(--content-bg)' }}>
         <Flex direction={{ initial: 'column', sm: 'row' }} gap="4" p="4">
           <Box style={{ flex: 1 }}>
             <TextField.Root placeholder="Buscar personas..." size="3">
               <TextField.Slot>
-                <Search size={16} />
+                <MagnifyingGlassIcon width="16" height="16" />
               </TextField.Slot>
             </TextField.Root>
           </Box>
@@ -81,7 +81,7 @@ export default function Personas() {
                           color: 'var(--blue-9)',
                         }}
                       >
-                        <Users size={20} />
+                        <PersonIcon width="20" height="20" />
                       </Flex>
                       <Text weight="medium">{persona.nombre}</Text>
                     </Flex>
@@ -104,10 +104,10 @@ export default function Personas() {
                   <Table.Cell align="right">
                     <Flex gap="2" justify="end">
                       <IconButton variant="ghost" color="blue" size="2">
-                        <Edit size={18} />
+                        <Pencil1Icon width="18" height="18" />
                       </IconButton>
                       <IconButton variant="ghost" color="red" size="2">
-                        <Trash2 size={18} />
+                        <TrashIcon width="18" height="18" />
                       </IconButton>
                     </Flex>
                   </Table.Cell>

@@ -1,17 +1,17 @@
-import { BarChart2, DollarSign, TrendingUp, ShoppingCart } from 'react-feather'
+import { BarChartIcon, SymbolIcon, ArrowUpIcon, BackpackIcon } from '@radix-ui/react-icons'
 import PageTemplate from '../../components/PageTemplate'
 import { Card, Grid, Heading, Text, Flex, Box } from '@radix-ui/themes'
 
 export default function ReportesVentas() {
   const stats = [
-    { title: 'Ventas Totales', value: '$45,678', icon: DollarSign, color: 'green' },
-    { title: 'Órdenes', value: '234', icon: ShoppingCart, color: 'blue' },
-    { title: 'Crecimiento', value: '+23.5%', icon: TrendingUp, color: 'orange' },
+    { title: 'Ventas Totales', value: '$45,678', icon: SymbolIcon, color: 'green' },
+    { title: 'Órdenes', value: '234', icon: BackpackIcon, color: 'blue' },
+    { title: 'Crecimiento', value: '+23.5%', icon: ArrowUpIcon, color: 'orange' },
   ]
 
   return (
     <PageTemplate
-      icon={BarChart2}
+      icon={BarChartIcon}
       title="Reporte de Ventas"
       description="Análisis detallado de ventas y transacciones"
       badge="Dashboard"

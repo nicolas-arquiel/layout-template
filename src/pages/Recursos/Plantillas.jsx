@@ -1,10 +1,10 @@
-import { Layers } from 'react-feather'
+import { StackIcon } from '@radix-ui/react-icons'
 import PageTemplate from '../../components/PageTemplate'
 
 export default function RecursosPlantillas() {
   return (
     <PageTemplate
-      icon={Layers}
+      icon={StackIcon}
       title="Plantillas"
       description="Administración de plantillas y documentos predefinidos"
     />

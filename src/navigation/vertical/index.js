@@ -1,17 +1,16 @@
 import {
-  Home,
-  UserPlus,
-  Circle,
-  Users,
-  Settings,
-  FileText,
-  BarChart2,
-  Folder,
-  Database,
-  Shield,
-  Package,
-  Layers
-} from 'react-feather'
+  HomeIcon,
+  PlusCircledIcon,
+  CircleIcon,
+  PersonIcon,
+  GearIcon,
+  FileTextIcon,
+  BarChartIcon,
+  FileIcon,
+  CubeIcon,
+  LockClosedIcon,
+  StackIcon
+} from '@radix-ui/react-icons'
 
 /**
  * Configuración de navegación vertical
@@ -35,27 +34,27 @@ const navigation = [
   {
     id: 'inicio',
     title: 'Inicio',
-    icon: Home,
+    icon: HomeIcon,
     navLink: '/inicio',
     // SIN permiso - accesible para todos
   },
   {
     id: 'inscripciones',
     title: 'Inscripciones',
-    icon: UserPlus,
+    icon: PlusCircledIcon,
     permiso: 'inscripcion',
     children: [
       {
         id: 'inscripcion_aspirante',
         title: 'Inscripcion Aspirante',
-        icon: Circle,
+        icon: CircleIcon,
         navLink: '/inscripcion-aspirante',
         permiso: 'inscripcion',
       },
       {
         id: 'inscripcion_curso',
         title: 'Inscripcion Curso',
-        icon: Circle,
+        icon: CircleIcon,
         navLink: '/inscripcion-curso',
         permiso: 'inscripcion',
       },
@@ -64,7 +63,7 @@ const navigation = [
   {
     id: 'personas',
     title: 'Personas',
-    icon: Users,
+    icon: PersonIcon,
     navLink: '/personas',
     permiso: 'personas',
   },
@@ -75,25 +74,25 @@ const navigation = [
   {
     id: 'reportes',
     title: 'Reportes',
-    icon: BarChart2,
+    icon: BarChartIcon,
     // SIN permiso - para testear dropdown
     children: [
       {
         id: 'reportes_ventas',
         title: 'Ventas',
-        icon: Circle,
+        icon: CircleIcon,
         navLink: '/reportes/ventas',
       },
       {
         id: 'reportes_usuarios',
         title: 'Usuarios',
-        icon: Circle,
+        icon: CircleIcon,
         navLink: '/reportes/usuarios',
       },
       {
         id: 'reportes_inventario',
         title: 'Inventario',
-        icon: Circle,
+        icon: CircleIcon,
         navLink: '/reportes/inventario',
       },
     ],
@@ -101,7 +100,7 @@ const navigation = [
   {
     id: 'documentos',
     title: 'Documentos',
-    icon: FileText,
+    icon: FileTextIcon,
     navLink: '/documentos',
     // SIN permiso
   },
@@ -112,43 +111,43 @@ const navigation = [
   {
     id: 'configuracion',
     title: 'Configuración',
-    icon: Settings,
+    icon: GearIcon,
     // SIN permiso - con children ANIDADOS (recursivo) para testear
     children: [
       {
         id: 'config_general',
         title: 'General',
-        icon: Circle,
+        icon: CircleIcon,
         navLink: '/config/general',
       },
       {
         id: 'config_usuarios',
         title: 'Usuarios',
-        icon: Users,
+        icon: PersonIcon,
         // NIVEL 2 - Children con más children (RECURSIVO)
         children: [
           {
             id: 'config_usuarios_lista',
             title: 'Lista de Usuarios',
-            icon: Circle,
+            icon: CircleIcon,
             navLink: '/config/usuarios/lista',
           },
           {
             id: 'config_usuarios_roles',
             title: 'Roles y Permisos',
-            icon: Shield,
+            icon: LockClosedIcon,
             // NIVEL 3 - Más anidamiento (RECURSIVO)
             children: [
               {
                 id: 'config_roles_admin',
                 title: 'Administradores',
-                icon: Circle,
+                icon: CircleIcon,
                 navLink: '/config/roles/admin',
               },
               {
                 id: 'config_roles_usuarios',
                 title: 'Usuarios',
-                icon: Circle,
+                icon: CircleIcon,
                 navLink: '/config/roles/usuarios',
               },
             ],
@@ -156,7 +155,7 @@ const navigation = [
           {
             id: 'config_usuarios_grupos',
             title: 'Grupos',
-            icon: Circle,
+            icon: CircleIcon,
             navLink: '/config/usuarios/grupos',
           },
         ],
@@ -164,18 +163,18 @@ const navigation = [
       {
         id: 'config_sistema',
         title: 'Sistema',
-        icon: Database,
+        icon: CubeIcon,
         children: [
           {
             id: 'config_sistema_database',
             title: 'Base de Datos',
-            icon: Circle,
+            icon: CircleIcon,
             navLink: '/config/sistema/database',
           },
           {
             id: 'config_sistema_api',
             title: 'API',
-            icon: Circle,
+            icon: CircleIcon,
             navLink: '/config/sistema/api',
           },
         ],
@@ -185,19 +184,19 @@ const navigation = [
   {
     id: 'recursos',
     title: 'Recursos',
-    icon: Package,
+    icon: CubeIcon,
     // SIN permiso - con children simples
     children: [
       {
         id: 'recursos_archivos',
         title: 'Archivos',
-        icon: Folder,
+        icon: FileIcon,
         navLink: '/recursos/archivos',
       },
       {
         id: 'recursos_plantillas',
         title: 'Plantillas',
-        icon: Layers,
+        icon: StackIcon,
         navLink: '/recursos/plantillas',
       },
     ],

@@ -713,3 +713,123 @@ html {
 .dark .rt-Card:hover {
   box-shadow: 0 6px 30px 0 rgba(0, 0, 0, 0.32) !important;
 }
+/* ========== RADIX DIALOG ANIMATIONS (Bootstrap style) ========== */
+
+/* Overlay fade animations */
+@keyframes overlayShow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes overlayHide {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Modal content animations (fade + scale) - Bootstrap style */
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes contentHide {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+}
+
+/* Offcanvas slide animations (from right) - Bootstrap style */
+@keyframes offcanvasShow {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes offcanvasHide {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+/* Apply animations to Radix Dialog */
+
+/* Overlay animations */
+[data-radix-dialog-overlay][data-state="open"],
+.rt-DialogOverlay[data-state="open"] {
+  animation: overlayShow 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-radix-dialog-overlay][data-state="closed"],
+.rt-DialogOverlay[data-state="closed"] {
+  animation: overlayHide 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Modal content animations (default) */
+[data-radix-dialog-content][data-state="open"]:not(.offcanvas),
+.rt-DialogContent[data-state="open"]:not(.offcanvas) {
+  animation: contentShow 250ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-radix-dialog-content][data-state="closed"]:not(.offcanvas),
+.rt-DialogContent[data-state="closed"]:not(.offcanvas) {
+  animation: contentHide 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Offcanvas animations (when has .offcanvas class) */
+[data-radix-dialog-content].offcanvas[data-state="open"],
+.rt-DialogContent.offcanvas[data-state="open"] {
+  animation: offcanvasShow 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-radix-dialog-content].offcanvas[data-state="closed"],
+.rt-DialogContent.offcanvas[data-state="closed"] {
+  animation: offcanvasHide 250ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Offcanvas fixed positioning (Bootstrap style) */
+.rt-DialogContent.offcanvas {
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  height: 100vh !important;
+  max-width: 400px !important;
+  width: 100% !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  transform: none !important; /* Override default centering */
+}
+
+/* Overlay darker for offcanvas (like Bootstrap) */
+.rt-DialogOverlay:has(+ .rt-DialogContent.offcanvas) {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}

@@ -1,10 +1,10 @@
-import { Layers } from 'react-feather'
+import { StackIcon } from '@radix-ui/react-icons'
 import PageTemplate from '../../../components/PageTemplate'
 
 export default function ConfigSistemaApi() {
   return (
     <PageTemplate
-      icon={Layers}
+      icon={StackIcon}
       title="API"
       description="Configuración de endpoints y servicios API"
     />

@@ -1,4 +1,4 @@
-import { Home, Users, UserPlus, TrendingUp } from 'react-feather'
+import { HomeIcon, PersonIcon, PlusCircledIcon, ArrowUpIcon } from '@radix-ui/react-icons'
 import { Grid, Box, Card, Flex, Text, Heading } from '@radix-ui/themes'
 
 /**
@@ -10,10 +10,10 @@ import { Grid, Box, Card, Flex, Text, Heading } from '@radix-ui/themes'
  */
 export default function Dashboard() {
   const stats = [
-    { title: 'Total Usuarios', value: '2,543', icon: Users, color: 'blue' },
-    { title: 'Inscripciones', value: '1,234', icon: UserPlus, color: 'green' },
-    { title: 'Personas', value: '856', icon: Users, color: 'purple' },
-    { title: 'Crecimiento', value: '23.5%', icon: TrendingUp, color: 'orange' },
+    { title: 'Total Usuarios', value: '2,543', icon: PersonIcon, color: 'blue' },
+    { title: 'Inscripciones', value: '1,234', icon: PlusCircledIcon, color: 'green' },
+    { title: 'Personas', value: '856', icon: PersonIcon, color: 'purple' },
+    { title: 'Crecimiento', value: '23.5%', icon: ArrowUpIcon, color: 'orange' },
   ]
 
   const getIconColor = (color) => {
@@ -78,7 +78,7 @@ export default function Dashboard() {
       {/* Main Content Card */}
       <Card>
         <Flex align="center" gap="3" mb="4">
-          <Home size={28} color="var(--accent-9)" />
+          <HomeIcon width="28" height="28" color="var(--accent-9)" />
           <Heading size="5" weight="medium">
             Sistema de Gestión Universitaria
           </Heading>

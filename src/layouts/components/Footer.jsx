@@ -1,4 +1,4 @@
-import { Heart } from 'react-feather'
+import { HeartIcon } from '@radix-ui/react-icons'
 import { Box, Flex, Text } from '@radix-ui/themes'
 
 /**
@@ -34,7 +34,7 @@ export default function Footer() {
             <Text size="2" color="gray">
               Hecho con
             </Text>
-            <Heart size={14} fill="var(--red-9)" color="var(--red-9)" />
+            <HeartIcon width="14" height="14" fill="var(--red-9)" color="var(--red-9)" />
             <Text size="2" color="gray">
               usando React + Radix UI
             </Text>

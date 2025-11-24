@@ -1,10 +1,10 @@
-import { Users } from 'react-feather'
+import { PersonIcon } from '@radix-ui/react-icons'
 import PageTemplate from '../../components/PageTemplate'
 
 export default function ReportesUsuarios() {
   return (
     <PageTemplate
-      icon={Users}
+      icon={PersonIcon}
       title="Reporte de Usuarios"
       description="Estadísticas y análisis de usuarios del sistema"
       badge="Analytics"

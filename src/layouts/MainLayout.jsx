@@ -46,10 +46,7 @@ const MainLayout = () => {
         {/* ========== CONTENT AREA ========== */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* NAVBAR - floating-nav con margin exacto */}
-          <div 
-            className="px-[var(--content-padding)]" 
-            style={{ paddingTop: 'var(--floating-nav-margin)' }}
-          >
+          <div style={{ paddingTop: 'var(--floating-nav-margin)' }}>
             <div className="container-xxl mx-auto">
               <nav
                 className={cn(
@@ -79,10 +76,7 @@ const MainLayout = () => {
           </main>
 
           {/* FOOTER - footer-height exacto */}
-          <footer 
-            className="px-[var(--content-padding)]"
-            style={{ height: 'var(--footer-height)' }}
-          >
+          <footer style={{ height: 'var(--footer-height)' }}>
             <div className="container-xxl mx-auto h-full flex items-center">
               <span className="text-xs text-[var(--gray-11)]">
                 Sistema de gestión (UCU), Universidad de Concepción del Uruguay

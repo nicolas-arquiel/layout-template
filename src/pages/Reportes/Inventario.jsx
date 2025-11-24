@@ -1,10 +1,10 @@
-import { Package } from 'react-feather'
+import { CubeIcon } from '@radix-ui/react-icons'
 import PageTemplate from '../../components/PageTemplate'
 
 export default function ReportesInventario() {
   return (
     <PageTemplate
-      icon={Package}
+      icon={CubeIcon}
       title="Reporte de Inventario"
       description="Control de stock y movimientos de inventario"
       badge="Almacén"

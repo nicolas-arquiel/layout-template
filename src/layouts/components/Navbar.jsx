@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { User, Settings, LogOut, Menu } from 'react-feather'
+import { PersonIcon, GearIcon, ExitIcon, HamburgerMenuIcon } from '@radix-ui/react-icons'
 import { Flex, Text, Avatar, DropdownMenu, Separator, IconButton } from '@radix-ui/themes'
 import { clearAuth } from '../../store/authSlice'
 import { toggleMobileMenu } from '../../store/layoutSlice'
@@ -48,7 +48,7 @@ const Navbar = () => {
             size="2"
             className="text-[var(--gray-11)] hover:text-[var(--accent-9)] hover:bg-[var(--accent-3)] transition-colors"
           >
-            <Menu size={20} />
+            <HamburgerMenuIcon width="20" height="20" />
           </IconButton>
         </div>
 
@@ -95,14 +95,14 @@ const Navbar = () => {
             {/* Menu Items */}
             <DropdownMenu.Item onSelect={() => navigate('/perfil')}>
               <Flex align="center" gap="2">
-                <User size={16} />
+                <PersonIcon width="16" height="16" />
                 <Text>Mi Perfil</Text>
               </Flex>
             </DropdownMenu.Item>
 
             <DropdownMenu.Item onSelect={() => navigate('/configuracion')}>
               <Flex align="center" gap="2">
-                <Settings size={16} />
+                <GearIcon width="16" height="16" />
                 <Text>Configuración</Text>
               </Flex>
             </DropdownMenu.Item>
@@ -111,7 +111,7 @@ const Navbar = () => {
 
             <DropdownMenu.Item onSelect={handleLogout} color="red">
               <Flex align="center" gap="2">
-                <LogOut size={16} />
+                <ExitIcon width="16" height="16" />
                 <Text>Cerrar Sesión</Text>
               </Flex>
             </DropdownMenu.Item>
