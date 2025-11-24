@@ -11,7 +11,7 @@ import { Cross1Icon } from '@radix-ui/react-icons'
  * @param {boolean} open - Estado de apertura
  * @param {function} onOpenChange - Función para abrir/cerrar
  * @param {string} title - Título del canvas
- * @param {string} width - Ancho del canvas (default: '400px')
+ * @param {string} width - Ancho del canvas (default: '45%')
  * @param {React.ReactNode} children - Contenido del canvas
  * @param {boolean} forceCloseButton - Backdrop static (no cierra al click fuera) (default: false)
  */
@@ -19,7 +19,7 @@ export default function Canvas({
   open,
   onOpenChange,
   title = 'Panel',
-  width = '400px',
+  width = '45%',
   children,
   forceCloseButton = false,
 }) {

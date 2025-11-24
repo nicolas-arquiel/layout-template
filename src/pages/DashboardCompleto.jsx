@@ -21,6 +21,8 @@ import {
   Quote,
   Em,
   Strong,
+  TextField,
+  Select,
 } from '@radix-ui/themes'
 import { PersonIcon,
   PlusCircledIcon,
@@ -35,9 +37,10 @@ import { PersonIcon,
   MagnifyingGlassIcon,
   MixerHorizontalIcon,
 } from '@radix-ui/react-icons'
+import { Controller } from 'react-hook-form'
 import FormDialog from '../components/FormDialog'
 import DataTable from '../components/DataTable'
-import { Canvas } from '../components/Canvas'
+import { Canvas, CanvasForm } from '../components/Canvas'
 
 /**
  * Dashboard Completo - Explorando TODO Radix Themes al máximo
@@ -64,6 +67,7 @@ import { Canvas } from '../components/Canvas'
 export default function DashboardCompleto() {
   const [formDialogOpen, setFormDialogOpen] = useState(false)
   const [canvasOpen, setCanvasOpen] = useState(false)
+  const [canvasFormOpen, setCanvasFormOpen] = useState(false)
 
   // Data de ejemplo para la tabla
   const tableData = [
@@ -268,6 +272,10 @@ export default function DashboardCompleto() {
                 Acciones Rápidas
               </Heading>
               <Flex direction="column" gap="2">
+                <Button variant="soft" onClick={() => setCanvasFormOpen(true)}>
+                  <PlusCircledIcon width="16" height="16" />
+                  Crear Usuario
+                </Button>
                 <Button variant="soft" onClick={() => setCanvasOpen(true)}>
                   <GearIcon width="16" height="16" />
                   Configuración
@@ -376,6 +384,113 @@ export default function DashboardCompleto() {
           </Flex>
         </Flex>
       </Canvas>
+
+      {/* CanvasForm para crear usuario */}
+      <CanvasForm
+        canvasOpen={canvasFormOpen}
+        toggleCanvas={() => setCanvasFormOpen(!canvasFormOpen)}
+        title="Crear Nuevo Usuario"
+        textBack="Cancelar"
+        textSend="Crear Usuario"
+        onSubmitCallback={(data) => {
+          console.log('Nuevo usuario:', data)
+          // Aquí iría la lógica para crear el usuario
+          setCanvasFormOpen(false)
+        }}
+      >
+        {({ control, formState: { errors } }) => (
+          <Flex direction="column" gap="4">
+            <Box>
+              <Text as="label" size="2" weight="medium" mb="1" style={{ display: 'block' }}>
+                Nombre Completo
+              </Text>
+              <Controller
+                name="nombre"
+                control={control}
+                rules={{ required: 'El nombre es requerido' }}
+                render={({ field }) => (
+                  <TextField.Root
+                    {...field}
+                    placeholder="Ej: Juan Pérez"
+                    size="3"
+                  />
+                )}
+              />
+              {errors.nombre && (
+                <Text color="red" size="1" mt="1">
+                  {errors.nombre.message}
+                </Text>
+              )}
+            </Box>
+
+            <Box>
+              <Text as="label" size="2" weight="medium" mb="1" style={{ display: 'block' }}>
+                Email
+              </Text>
+              <Controller
+                name="email"
+                control={control}
+                rules={{
+                  required: 'El email es requerido',
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: 'Email inválido',
+                  },
+                }}
+                render={({ field }) => (
+                  <TextField.Root
+                    {...field}
+                    type="email"
+                    placeholder="usuario@ejemplo.com"
+                    size="3"
+                  />
+                )}
+              />
+              {errors.email && (
+                <Text color="red" size="1" mt="1">
+                  {errors.email.message}
+                </Text>
+              )}
+            </Box>
+
+            <Box>
+              <Text as="label" size="2" weight="medium" mb="1" style={{ display: 'block' }}>
+                Rol
+              </Text>
+              <Controller
+                name="rol"
+                control={control}
+                rules={{ required: 'El rol es requerido' }}
+                render={({ field }) => (
+                  <Select.Root {...field} onValueChange={field.onChange} size="3">
+                    <Select.Trigger placeholder="Selecciona un rol" style={{ width: '100%' }} />
+                    <Select.Content>
+                      <Select.Item value="Admin">Admin</Select.Item>
+                      <Select.Item value="Editor">Editor</Select.Item>
+                      <Select.Item value="Moderador">Moderador</Select.Item>
+                      <Select.Item value="Usuario">Usuario</Select.Item>
+                    </Select.Content>
+                  </Select.Root>
+                )}
+              />
+              {errors.rol && (
+                <Text color="red" size="1" mt="1">
+                  {errors.rol.message}
+                </Text>
+              )}
+            </Box>
+
+            <Callout.Root color="blue">
+              <Callout.Icon>
+                <InfoCircledIcon />
+              </Callout.Icon>
+              <Callout.Text>
+                El nuevo usuario recibirá un email de confirmación con instrucciones para activar su cuenta.
+              </Callout.Text>
+            </Callout.Root>
+          </Flex>
+        )}
+      </CanvasForm>
     </>
   )
 }
