@@ -22,8 +22,7 @@ import {
   Em,
   Strong,
 } from '@radix-ui/themes'
-import {
-  PersonIcon,
+import { PersonIcon,
   PlusCircledIcon,
   ArrowUpIcon,
   SymbolIcon,
@@ -38,7 +37,7 @@ import {
 } from '@radix-ui/react-icons'
 import FormDialog from '../components/FormDialog'
 import DataTable from '../components/DataTable'
-import Offcanvas from '../components/Offcanvas'
+import { Canvas } from '../components/Canvas'
 
 /**
  * Dashboard Completo - Explorando TODO Radix Themes al máximo
@@ -64,8 +63,7 @@ import Offcanvas from '../components/Offcanvas'
  */
 export default function DashboardCompleto() {
   const [formDialogOpen, setFormDialogOpen] = useState(false)
-  const [offcanvasOpen, setOffcanvasOpen] = useState(false)
-  const [offcanvasNested, setOffcanvasNested] = useState(false)
+  const [canvasOpen, setCanvasOpen] = useState(false)
 
   // Data de ejemplo para la tabla
   const tableData = [
@@ -324,12 +322,11 @@ export default function DashboardCompleto() {
         onSubmit={(data) => console.log('Nuevo usuario:', data)}
       />
 
-      {/* Offcanvas con soporte para nested/recursivos */}
-      <Offcanvas
-        open={offcanvasOpen}
-        onOpenChange={setOffcanvasOpen}
+      {/* Canvas simple para configuración */}
+      <Canvas
+        open={canvasOpen}
+        onOpenChange={setCanvasOpen}
         title="Configuración"
-        side="right"
         width="400px"
       >
         <Flex direction="column" gap="4">
@@ -338,7 +335,7 @@ export default function DashboardCompleto() {
               <InfoCircledIcon />
             </Callout.Icon>
             <Callout.Text>
-              Este es un ejemplo de offcanvas. Puedes abrir otro offcanvas dentro de este.
+              Canvas simple sin complejidad de nested/niveles
             </Callout.Text>
           </Callout.Root>
 
@@ -346,13 +343,9 @@ export default function DashboardCompleto() {
             <Heading size="3" mb="2">
               Tema
             </Heading>
-            <Text size="2" color="gray" mb="3">
+            <Text size="2" color="gray">
               Personaliza la apariencia del sistema
             </Text>
-            <Button variant="soft" onClick={() => setOffcanvasNested(true)}>
-              <GearIcon width="16" height="16" />
-              Configuración Avanzada
-            </Button>
           </Card>
 
           <Card>
@@ -376,77 +369,13 @@ export default function DashboardCompleto() {
           <Separator size="4" />
 
           <Flex gap="3" justify="end">
-            <Button variant="soft" color="gray" onClick={() => setOffcanvasOpen(false)}>
+            <Button variant="soft" color="gray" onClick={() => setCanvasOpen(false)}>
               Cerrar
             </Button>
             <Button>Guardar Cambios</Button>
           </Flex>
         </Flex>
-
-        {/* Offcanvas Nested - Se abre dentro del primer offcanvas */}
-        <Offcanvas
-          open={offcanvasNested}
-          onOpenChange={setOffcanvasNested}
-          title="Configuración Avanzada"
-          side="right"
-          width="350px"
-        >
-          <Flex direction="column" gap="4">
-            <Callout.Root color="purple">
-              <Callout.Icon>
-                <InfoCircledIcon />
-              </Callout.Icon>
-              <Callout.Text>
-                <Strong>Offcanvas anidado!</Strong> Este panel se abrió desde el panel principal.
-              </Callout.Text>
-            </Callout.Root>
-
-            <Card>
-              <Heading size="3" mb="2">
-                Opciones de Desarrollo
-              </Heading>
-              <Flex direction="column" gap="2" mt="3">
-                <Text size="2">
-                  <Code>Debug Mode</Code> - Activar logs detallados
-                </Text>
-                <Text size="2">
-                  <Code>Performance</Code> - Monitoreo de rendimiento
-                </Text>
-                <Text size="2">
-                  <Code>Cache</Code> - Gestión de caché del sistema
-                </Text>
-              </Flex>
-            </Card>
-
-            <Card>
-              <Heading size="3" mb="2">
-                API Keys
-              </Heading>
-              <Text size="2" color="gray">
-                Gestiona tus claves de API y tokens de acceso
-              </Text>
-            </Card>
-
-            <Callout.Root color="orange">
-              <Callout.Icon>
-                <ExclamationTriangleIcon />
-              </Callout.Icon>
-              <Callout.Text>
-                Cambios en esta sección requieren permisos de administrador
-              </Callout.Text>
-            </Callout.Root>
-
-            <Separator size="4" />
-
-            <Flex gap="3" justify="end">
-              <Button variant="soft" color="gray" onClick={() => setOffcanvasNested(false)}>
-                Volver
-              </Button>
-              <Button color="purple">Aplicar</Button>
-            </Flex>
-          </Flex>
-        </Offcanvas>
-      </Offcanvas>
+      </Canvas>
     </>
   )
 }
