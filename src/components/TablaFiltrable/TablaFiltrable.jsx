@@ -411,7 +411,7 @@ const Filter = ({ column }) => {
   return (
     <TextField.Root
       placeholder="Filtrar..."
-      value={(columnFilterValue ?? '') as string}
+      value={String(columnFilterValue ?? '')}
       onChange={(e) => column.setFilterValue(e.target.value)}
       size="1"
     >
