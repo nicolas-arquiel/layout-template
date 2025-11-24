@@ -268,9 +268,9 @@ export default function DashboardCompleto() {
                 Acciones Rápidas
               </Heading>
               <Flex direction="column" gap="2">
-                <Button variant="soft" onClick={() => setOffcanvasOpen(true)}>
+                <Button variant="soft" onClick={() => setCanvasOpen(true)}>
                   <GearIcon width="16" height="16" />
-                  Configuración (Offcanvas)
+                  Configuración
                 </Button>
                 <Button variant="soft">
                   <BellIcon width="16" height="16" />
