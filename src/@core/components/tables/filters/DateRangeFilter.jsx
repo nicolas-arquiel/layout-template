@@ -1,12 +1,9 @@
 import React from 'react';
-import { Col } from 'reactstrap';
 import DateRangeInput from '../components/DateRangeInput';
 import { useTable } from '../context/TableContext';
 
 const DateRangeFilter = ({
   dataSearchField,
-  lg, md, sm, xs,
-  align = "end",
   onFilter,
   ...props
 }) => {
@@ -47,7 +44,7 @@ const DateRangeFilter = ({
     }
   };
 
-  const content = (
+  return (
     <DateRangeInput
       value={currentState.range}
       handleDateFilter={handleDateFilter}
@@ -56,19 +53,6 @@ const DateRangeFilter = ({
       {...props}
     />
   );
-
-  if (lg || md || sm || xs) {
-    return (
-      <Col
-        lg={lg} md={md} sm={sm} xs={xs}
-        className={`d-flex align-items-center justify-content-${align} mt-1`}
-      >
-        {content}
-      </Col>
-    );
-  }
-
-  return content;
 };
 
 export default DateRangeFilter;

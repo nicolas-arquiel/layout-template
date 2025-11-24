@@ -2,14 +2,7 @@ import React from 'react';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import Select from 'react-select';
 import { Flex, TextField, IconButton } from '@radix-ui/themes';
-import { selectThemeColors } from '@utils';
-import {
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-} from "reactstrap";
-import { ChevronDown } from "react-feather";
+import { selectThemeColors } from '../../../../utils';
 
 const customStyles = {
   control: (provided, state) => ({
@@ -17,16 +10,18 @@ const customStyles = {
     minHeight: "30px",
     height: "30px",
     marginRight: "-1px",
+    borderRadius: 'var(--radius-2) 0 0 var(--radius-2)',
+    borderColor: 'var(--gray-7)',
   }),
   container: (provided, state) => ({
     ...provided,
-    width: '125px'
+    width: '150px'
   }),
   valueContainer: (provided, state) => ({
     ...provided,
     height: "30px",
     padding: "0 6px",
-    fontSize: "0.857rem",
+    fontSize: "14px",
   }),
   input: (provided, state) => ({
     ...provided,
@@ -51,95 +46,65 @@ const BigDataSearchInput = ({
   valueOptions,
   resetSignal
 }) => {
+  // Filtrar las columnas que tienen opciones de filtro
   const columnsWithFilterOptions = columns.filter(
     (column) => column.filterOptions
   );
 
+  // Mapear las opciones del selector
   const selectorOptions = columnsWithFilterOptions.map((column) => ({
     value: column.filterOptions.value,
     label: column.filterOptions.label,
   }));
 
+  // Encontrar la opción seleccionada
   const selectedOption = selectorOptions.find(
     (option) => option.value === valueOptions
   );
 
   return (
-    <div key={resetSignal} className="d-flex align-items-center mx-2">
-      <Flex style={{ flexWrap: 'nowrap' }}>
-        <Select
-          theme={selectThemeColors}
-          classNamePrefix="select"
-          options={selectorOptions}
-          value={selectedOption}
-          onChange={handleOptionChange}
-          className="react-select d-none d-md-block"
-          isClearable={false}
-          placeholder={selectedOption ? selectedOption.label : "Filtrar por..."}
-          isSearchable={false}
-          styles={customStyles}
-        />
-
-        <div
-          style={{ width: "31px", height: "30px", marginRight: "-1px" }}
-          className="d-flex justify-content-center align-items-center cursor-pointer bg-light-secondary d-md-none"
-        >
-          <UncontrolledDropdown
-            tag="li"
-            className="dropdown-notification nav-item d-md-none me-25"
-          >
-            <DropdownToggle
-              tag="a"
-              className="nav-link d-md-none"
-              href="/"
-              onClick={(e) => e.preventDefault()}
-            >
-              <ChevronDown size={21} />
-            </DropdownToggle>
-            <DropdownMenu tag="ul">
-              {selectorOptions.map((item) => (
-                <DropdownItem
-                  key={item.value}
-                  onClick={() => handleOptionChange(item)}
-                >
-                  <span>{item.label}</span>
-                </DropdownItem>
-              ))}
-            </DropdownMenu>
-          </UncontrolledDropdown>
-        </div>
-
-        <TextField.Root
-          size="2"
-          value={value}
-          onChange={handleSearchChange}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleFilterClick();
-            }
-          }}
-          id={`big-data-search-input_${bigDataSearchKey}`}
-          autoComplete="off"
-          style={{
-            height: '30px',
-            borderRadius: 0,
-            minWidth: '200px',
-          }}
-        />
-
-        <IconButton
-          size="2"
-          onClick={handleFilterClick}
-          style={{
-            height: '30px',
-            borderRadius: '0 var(--radius-2) var(--radius-2) 0',
-            marginLeft: '-1px',
-          }}
-        >
-          <MagnifyingGlassIcon width="16" height="16" />
-        </IconButton>
-      </Flex>
-    </div>
+    <Flex style={{ flexWrap: 'nowrap' }} align="center">
+      <Select
+        theme={selectThemeColors}
+        classNamePrefix="select"
+        options={selectorOptions}
+        value={selectedOption}
+        onChange={handleOptionChange}
+        className="react-select"
+        isClearable={false}
+        placeholder={selectedOption ? selectedOption.label : "Filtrar por..."}
+        isSearchable={false}
+        styles={customStyles}
+      />
+      <TextField.Root
+        size="2"
+        value={value}
+        onChange={handleSearchChange}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleFilterClick();
+          }
+        }}
+        style={{
+          flex: 1,
+          borderRadius: '0',
+          borderLeft: 'none',
+          borderRight: 'none'
+        }}
+        placeholder="Buscar..."
+      />
+      <IconButton
+        size="2"
+        variant="soft"
+        onClick={handleFilterClick}
+        style={{
+          borderRadius: '0 var(--radius-2) var(--radius-2) 0',
+          height: '30px'
+        }}
+      >
+        <MagnifyingGlassIcon width="16" height="16" />
+      </IconButton>
+    </Flex>
   );
 };
 

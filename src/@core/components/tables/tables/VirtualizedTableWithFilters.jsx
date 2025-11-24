@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import TablaVirtualizada from '../../../components/TablaVirtualizada/TablaVirtualizada';
+import TablaVirtualizada from '../../../../components/TablaVirtualizada/TablaVirtualizada.jsx';
 import { useTable } from '../context/TableContext';
 import { TableContainer, TableHeader, DataCounter, ResetButton } from '../components';
 

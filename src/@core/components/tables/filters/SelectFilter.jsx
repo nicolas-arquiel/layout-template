@@ -1,13 +1,11 @@
 import React from 'react';
-import { Col } from 'reactstrap';
 import SelectFilterInput from '../components/SelectFilterInput';
 import { useTable } from '../context/TableContext';
 
 const SelectFilter = ({
-  options,
+  options = [],
   placeHolder,
-  lg, md, sm, xs,
-  align = "end",
+  targetField,
   onFilter,
   ...props
 }) => {
@@ -24,8 +22,9 @@ const SelectFilter = ({
 
   const handleSelectOption = (selected) => {
     const filterData = {
-      fields: selected.target,
-      searchValue: selected.value,
+      fields: targetField || selected?.value || '',
+      searchValue: selected?.label || '',
+      value: selected
     };
 
     if (isInProvider) {
@@ -41,7 +40,7 @@ const SelectFilter = ({
 
   const resetSignal = isInProvider ? tableContext.resetSignal : 0;
 
-  const content = (
+  return (
     <SelectFilterInput
       handleSelectOption={handleSelectOption}
       options={options}
@@ -51,19 +50,6 @@ const SelectFilter = ({
       {...props}
     />
   );
-
-  if (lg || md || sm || xs) {
-    return (
-      <Col
-        lg={lg} md={md} sm={sm} xs={xs}
-        className={`d-flex align-items-center justify-content-${align} mt-1`}
-      >
-        {content}
-      </Col>
-    );
-  }
-
-  return content;
 };
 
 export default SelectFilter;

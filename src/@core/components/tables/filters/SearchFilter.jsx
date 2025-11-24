@@ -1,5 +1,4 @@
 import React from 'react';
-import { Col } from 'reactstrap';
 import SearchInput from '../components/SearchInput';
 import { useTable } from '../context/TableContext';
 
@@ -7,8 +6,6 @@ const SearchFilter = ({
   fields = [],
   title,
   titleComponentSearch,
-  lg, md, sm, xs,
-  align = "end",
   onFilter,
   ...props
 }) => {
@@ -39,7 +36,7 @@ const SearchFilter = ({
 
   const resetSignal = isInProvider ? tableContext.resetSignal : 0;
 
-  const content = (
+  return (
     <SearchInput
       searchKey={`search-${resetSignal}`}
       value={currentState.searchValue}
@@ -49,19 +46,6 @@ const SearchFilter = ({
       {...props}
     />
   );
-
-  if (lg || md || sm || xs) {
-    return (
-      <Col
-        lg={lg} md={md} sm={sm} xs={xs}
-        className={`d-flex align-items-center justify-content-${align} mt-1`}
-      >
-        {content}
-      </Col>
-    );
-  }
-
-  return content;
 };
 
 export default SearchFilter;

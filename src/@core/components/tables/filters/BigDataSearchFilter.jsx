@@ -1,13 +1,9 @@
 import React from 'react';
-import { Col } from 'reactstrap';
 import BigDataSearchInput from '../components/BigDataSearchInput';
 import { useTable } from '../context/TableContext';
 
 const BigDataSearchFilter = ({
-  lg, md, sm, xs,
-  align = "end",
   columns = [],
-  standalone = false,
   onFilter,
   ...props
 }) => {
@@ -71,7 +67,7 @@ const BigDataSearchFilter = ({
 
   const resetSignal = isInProvider ? tableContext.resetSignal : 0;
 
-  const content = (
+  return (
     <BigDataSearchInput
       bigDataSearchKey={`bigdata-${resetSignal}`}
       value={currentState.searchValue}
@@ -84,19 +80,6 @@ const BigDataSearchFilter = ({
       {...props}
     />
   );
-
-  if (lg || md || sm || xs) {
-    return (
-      <Col
-        lg={lg} md={md} sm={sm} xs={xs}
-        className={`d-flex align-items-center justify-content-${align} mt-1`}
-      >
-        {content}
-      </Col>
-    );
-  }
-
-  return content;
 };
 
 export default BigDataSearchFilter;

@@ -10,7 +10,7 @@ import {
   Box,
   IconButton
 } from '@radix-ui/themes';
-import { selectThemeColors } from '@utils';
+import { selectThemeColors } from '../../../../utils';
 import { useFilterOperators } from '../hooks/useFilterOperators';
 
 const customStyles = {
