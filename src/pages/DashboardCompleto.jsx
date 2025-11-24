@@ -38,6 +38,7 @@ import {
 } from '@radix-ui/react-icons'
 import FormDialog from '../components/FormDialog'
 import DataTable from '../components/DataTable'
+import Offcanvas from '../components/Offcanvas'
 
 /**
  * Dashboard Completo - Explorando TODO Radix Themes al máximo
@@ -64,6 +65,7 @@ import DataTable from '../components/DataTable'
 export default function DashboardCompleto() {
   const [formDialogOpen, setFormDialogOpen] = useState(false)
   const [offcanvasOpen, setOffcanvasOpen] = useState(false)
+  const [offcanvasNested, setOffcanvasNested] = useState(false)
 
   // Data de ejemplo para la tabla
   const tableData = [
@@ -322,64 +324,129 @@ export default function DashboardCompleto() {
         onSubmit={(data) => console.log('Nuevo usuario:', data)}
       />
 
-      {/* Offcanvas (Dialog fullScreen) */}
-      <Dialog.Root open={offcanvasOpen} onOpenChange={setOffcanvasOpen}>
-        <Dialog.Content className="offcanvas">
-          <Dialog.Title>Configuración</Dialog.Title>
-          <Dialog.Description size="2" mb="4">
-            Panel lateral tipo offcanvas usando Dialog de Radix
-          </Dialog.Description>
+      {/* Offcanvas con soporte para nested/recursivos */}
+      <Offcanvas
+        open={offcanvasOpen}
+        onOpenChange={setOffcanvasOpen}
+        title="Configuración"
+        side="right"
+        width="400px"
+      >
+        <Flex direction="column" gap="4">
+          <Callout.Root color="blue">
+            <Callout.Icon>
+              <InfoCircledIcon />
+            </Callout.Icon>
+            <Callout.Text>
+              Este es un ejemplo de offcanvas. Puedes abrir otro offcanvas dentro de este.
+            </Callout.Text>
+          </Callout.Root>
 
-          <ScrollArea style={{ height: 'calc(100vh - 150px)' }}>
-            <Flex direction="column" gap="4">
-              <Card>
-                <Heading size="3" mb="2">
-                  Tema
-                </Heading>
-                <Text size="2" color="gray">
-                  Personaliza la apariencia del sistema
-                </Text>
-              </Card>
+          <Card>
+            <Heading size="3" mb="2">
+              Tema
+            </Heading>
+            <Text size="2" color="gray" mb="3">
+              Personaliza la apariencia del sistema
+            </Text>
+            <Button variant="soft" onClick={() => setOffcanvasNested(true)}>
+              <GearIcon width="16" height="16" />
+              Configuración Avanzada
+            </Button>
+          </Card>
 
-              <Card>
-                <Heading size="3" mb="2">
-                  Notificaciones
-                </Heading>
-                <Text size="2" color="gray">
-                  Gestiona tus preferencias de notificaciones
-                </Text>
-              </Card>
+          <Card>
+            <Heading size="3" mb="2">
+              Notificaciones
+            </Heading>
+            <Text size="2" color="gray">
+              Gestiona tus preferencias de notificaciones
+            </Text>
+          </Card>
 
-              <Card>
-                <Heading size="3" mb="2">
-                  Privacidad
-                </Heading>
-                <Text size="2" color="gray">
-                  Controla tu privacidad y seguridad
-                </Text>
-              </Card>
+          <Card>
+            <Heading size="3" mb="2">
+              Privacidad
+            </Heading>
+            <Text size="2" color="gray">
+              Controla tu privacidad y seguridad
+            </Text>
+          </Card>
 
-              <Callout.Root color="blue">
-                <Callout.Icon>
-                  <InfoCircledIcon />
-                </Callout.Icon>
-                <Callout.Text>
-                  Este es un ejemplo de offcanvas usando Dialog con estilos personalizados
-                </Callout.Text>
-              </Callout.Root>
-            </Flex>
-          </ScrollArea>
+          <Separator size="4" />
 
-          <Flex gap="3" mt="4" justify="end">
-            <Dialog.Close>
-              <Button variant="soft" color="gray">
-                Cerrar
-              </Button>
-            </Dialog.Close>
+          <Flex gap="3" justify="end">
+            <Button variant="soft" color="gray" onClick={() => setOffcanvasOpen(false)}>
+              Cerrar
+            </Button>
             <Button>Guardar Cambios</Button>
           </Flex>
-        </Dialog.Content>
-      </Dialog.Root>
+        </Flex>
+
+        {/* Offcanvas Nested - Se abre dentro del primer offcanvas */}
+        <Offcanvas
+          open={offcanvasNested}
+          onOpenChange={setOffcanvasNested}
+          title="Configuración Avanzada"
+          side="right"
+          width="350px"
+        >
+          <Flex direction="column" gap="4">
+            <Callout.Root color="purple">
+              <Callout.Icon>
+                <InfoCircledIcon />
+              </Callout.Icon>
+              <Callout.Text>
+                <Strong>Offcanvas anidado!</Strong> Este panel se abrió desde el panel principal.
+              </Callout.Text>
+            </Callout.Root>
+
+            <Card>
+              <Heading size="3" mb="2">
+                Opciones de Desarrollo
+              </Heading>
+              <Flex direction="column" gap="2" mt="3">
+                <Text size="2">
+                  <Code>Debug Mode</Code> - Activar logs detallados
+                </Text>
+                <Text size="2">
+                  <Code>Performance</Code> - Monitoreo de rendimiento
+                </Text>
+                <Text size="2">
+                  <Code>Cache</Code> - Gestión de caché del sistema
+                </Text>
+              </Flex>
+            </Card>
+
+            <Card>
+              <Heading size="3" mb="2">
+                API Keys
+              </Heading>
+              <Text size="2" color="gray">
+                Gestiona tus claves de API y tokens de acceso
+              </Text>
+            </Card>
+
+            <Callout.Root color="orange">
+              <Callout.Icon>
+                <ExclamationTriangleIcon />
+              </Callout.Icon>
+              <Callout.Text>
+                Cambios en esta sección requieren permisos de administrador
+              </Callout.Text>
+            </Callout.Root>
+
+            <Separator size="4" />
+
+            <Flex gap="3" justify="end">
+              <Button variant="soft" color="gray" onClick={() => setOffcanvasNested(false)}>
+                Volver
+              </Button>
+              <Button color="purple">Aplicar</Button>
+            </Flex>
+          </Flex>
+        </Offcanvas>
+      </Offcanvas>
     </>
   )
 }
