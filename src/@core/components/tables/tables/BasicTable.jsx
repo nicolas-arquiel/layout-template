@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import DataTable from "react-data-table-component";
-import ReactPaginate from "react-paginate";
+import { Pagination } from '../components';
 import { ChevronDown } from "react-feather";
 
 const BasicTable = ({
@@ -63,25 +63,13 @@ const BasicTable = ({
     if (pageCount <= 1) return () => null;
 
     return () => (
-      <ReactPaginate
-        previousLabel=""
-        nextLabel=""
+      <Pagination
+        pageCount={pageCount}
         forcePage={safePage}
         onPageChange={handlePagination}
-        pageCount={pageCount}
-        breakLabel="..."
         pageRangeDisplayed={2}
         marginPagesDisplayed={2}
-        activeClassName="active"
-        pageClassName="page-item"
-        breakClassName="page-item"
-        nextLinkClassName="page-link"
-        pageLinkClassName="page-link"
-        breakLinkClassName="page-link"
-        previousLinkClassName="page-link"
-        nextClassName="page-item next-item"
-        previousClassName="page-item prev-item"
-        containerClassName="pagination react-paginate separated-pagination pagination-sm justify-content-end pe-1 mt-1"
+        className="pagination react-paginate separated-pagination pagination-sm justify-content-end pe-1 mt-1"
       />
     );
   }, [

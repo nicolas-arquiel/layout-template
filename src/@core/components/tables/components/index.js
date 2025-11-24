@@ -9,3 +9,4 @@ export { default as BigDataSearchInput } from './BigDataSearchInput';
 export { default as CheckboxFilter } from './CheckboxFilter';
 export { default as ExportarBtn } from './ExportarBtn';
 export { default as AdvancedFilter } from './AdvancedFilter';
+export { default as Pagination } from './Pagination';
