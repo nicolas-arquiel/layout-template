@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom'
 import MainLayout from '../layouts/MainLayout'
 import AuthLayout from '../layouts/AuthLayout'
 import Dashboard from '../pages/Dashboard'
+import DashboardCompleto from '../pages/DashboardCompleto'
 import Login from '../pages/Login'
 import Personas from '../pages/Personas'
 import InscripcionAspirante from '../pages/Inscripciones/InscripcionAspirante'
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       },
       {
         path: 'inicio',
+        element: <DashboardCompleto />,
+      },
+      {
+        path: 'dashboard-simple',
         element: <Dashboard />,
       },
       {
