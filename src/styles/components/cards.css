@@ -1,0 +1,82 @@
+/* ========================================
+   CARD STYLES
+   ======================================== */
+
+/* Card Utility */
+.card {
+  background-color: var(--card-bg-light);
+  border-radius: var(--radius-3);
+  box-shadow: 0 4px 24px 0 rgba(34, 41, 47, 0.1);
+  border: none; /* No border as requested */
+  transition: all 0.3s ease;
+}
+
+.dark .card {
+  background-color: var(--card-bg-dark);
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.24);
+}
+
+/* ========== MODERN LAYOUT UTILITIES ========== */
+
+/* Card utilities */
+.card-modern {
+  background-color: var(--bg-secondary);
+  border-radius: 0.75rem; /* 12px */
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 200ms ease;
+}
+
+.card-modern:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* ========================================
+   RADIX CARD OVERRIDES - VUEXY STYLE
+   Box-shadow sin border (como Bootstrap/Vuexy)
+   ======================================== */
+
+/* Sobrescribir todos los variants de Card de Radix */
+.rt-Card,
+.rt-CardInner {
+  /* Eliminar border de Radix */
+  border: none !important;
+  box-shadow: 0 4px 24px 0 rgba(34, 41, 47, 0.1) !important;
+  border-radius: 0.428rem !important; /* Bootstrap border-radius */
+  background-color: #FFFFFF;
+  margin-bottom: 2rem; /* Bootstrap mb-2 */
+  transition: all 0.3s ease-in-out !important;
+}
+
+/* Dark mode Card */
+.dark .rt-Card,
+.dark .rt-CardInner {
+  background-color: #283046;
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.24) !important;
+}
+
+/* Padding interno del Card (Vuexy: 1.5rem) */
+.rt-Card {
+  padding: 1.5rem;
+}
+
+/* Si el Card tiene variant="classic" o "surface", aplicar mismo estilo */
+.rt-Card[data-variant="classic"],
+.rt-Card[data-variant="surface"] {
+  border: none !important;
+  box-shadow: 0 4px 24px 0 rgba(34, 41, 47, 0.1) !important;
+}
+
+.dark .rt-Card[data-variant="classic"],
+.dark .rt-Card[data-variant="surface"] {
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.24) !important;
+}
+
+/* Hover effect para Cards (opcional) */
+.rt-Card:hover {
+  box-shadow: 0 6px 30px 0 rgba(34, 41, 47, 0.14) !important;
+}
+
+.dark .rt-Card:hover {
+  box-shadow: 0 6px 30px 0 rgba(0, 0, 0, 0.32) !important;
+}

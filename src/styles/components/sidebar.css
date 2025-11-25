@@ -1,0 +1,122 @@
+/* ========================================
+   SIDEBAR STYLES
+   ======================================== */
+
+/* ========== VUEXY SIDEBAR STYLES ========== */
+
+/* Shadow Bottom - Divider debajo del header */
+.shadow-bottom {
+  position: relative;
+  height: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.06) 0%,
+    rgba(0, 0, 0, 0.04) 44%,
+    rgba(0, 0, 0, 0.02) 73%,
+    transparent 100%
+  );
+  height: 8px;
+  width: 100%;
+}
+
+.dark .shadow-bottom {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(0, 0, 0, 0.2) 44%,
+    rgba(0, 0, 0, 0.1) 73%,
+    transparent 100%
+  );
+}
+
+/* Scrollbar Container - Custom scrollbar para sidebar */
+.scrollbar-container {
+  position: relative;
+}
+
+.scrollbar-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+}
+
+.scrollbar-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.dark .scrollbar-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dark .scrollbar-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ========== NAVIGATION SPACING (Vuexy style) ========== */
+
+/* Navigation Main List */
+.navigation-main {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+/* Navigation Items Spacing */
+.navigation-main > li:not(.navigation-header) {
+  margin-bottom: 0.25rem; /* 4px between items */
+}
+
+/* Navigation Header Spacing */
+.navigation-header {
+  margin-top: 1.5rem; /* 24px */
+  margin-bottom: 0.5rem; /* 8px */
+}
+
+/* First header without top margin */
+.navigation-header:first-child {
+  margin-top: 0;
+}
+
+/* menu-shadow - Sidebar */
+.menu-shadow {
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* ========== SIDEBAR SCROLL PERSONALIZADO ========== */
+/* Ocultar scrollbar por defecto, mostrar solo en hover */
+.sidebar-scroll [data-radix-scroll-area-viewport] {
+  overflow-x: hidden !important; /* Eliminar scroll horizontal */
+}
+
+/* Scrollbar thumb - solo visible en hover */
+.sidebar-scroll:not(:hover) [data-radix-scroll-area-scrollbar] {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar-scroll:hover [data-radix-scroll-area-scrollbar] {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+/* Personalizar scrollbar para que sea más delgado y sutil */
+.sidebar-scroll [data-radix-scroll-area-scrollbar][data-orientation="vertical"] {
+  width: 6px;
+  padding: 2px;
+}
+
+.sidebar-scroll [data-radix-scroll-area-thumb] {
+  background-color: var(--gray-a6);
+  border-radius: 4px;
+}
+
+.sidebar-scroll [data-radix-scroll-area-thumb]:hover {
+  background-color: var(--gray-a8);
+}

@@ -1,0 +1,36 @@
+/* ========================================
+   CANVAS STYLES
+   ======================================== */
+
+/* Canvas base styles */
+.canvas-container,
+.canvas-form-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  height: 100vh;
+  margin: 0;
+  border-radius: 0;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+/* Animación de entrada para canvas */
+.canvas-container[data-state="open"],
+.canvas-form-container[data-state="open"] {
+  animation: slideInRight 300ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Animación de salida para canvas */
+.canvas-container[data-state="closed"],
+.canvas-form-container[data-state="closed"] {
+  animation: slideOutRight 250ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Overlay para canvas */
+.rt-DialogOverlay:has(+ .canvas-container),
+.rt-DialogOverlay:has(+ .canvas-form-container) {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  z-index: 999 !important;
+}

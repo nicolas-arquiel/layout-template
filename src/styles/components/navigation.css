@@ -1,0 +1,85 @@
+/* ========================================
+   RADIX UI NAVIGATION MENU STYLES
+   ======================================== */
+
+/* ViewportPosition - Wrapper para posicionar el Viewport a la derecha del sidebar */
+.ViewportPosition {
+  position: absolute;
+  left: 100%; /* A la derecha del sidebar */
+  top: 0;
+  z-index: 9999 !important; /* Muy alto para aparecer sobre todo */
+}
+
+/* NavigationMenu Viewport - Contenedor del Content flotante */
+.NavigationMenuViewport {
+  position: relative;
+  margin-left: 12px; /* Separación del sidebar */
+  transform-origin: top left;
+  width: var(--radix-navigation-menu-viewport-width);
+  height: var(--radix-navigation-menu-viewport-height);
+  min-width: 240px; /* Ancho mínimo - Vuexy */
+  background-color: var(--color-panel-solid);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 32px 0 rgba(34, 41, 47, 0.12);
+  overflow: visible !important; /* Permitir que el contenido sea visible */
+  transition: width 300ms ease, height 300ms ease, opacity 300ms ease;
+}
+
+/* Viewport - Estado de animación */
+.NavigationMenuViewport[data-state="open"] {
+  display: block;
+  opacity: 1;
+  animation: viewportFadeIn 200ms ease-out;
+}
+
+.NavigationMenuViewport[data-state="closed"] {
+  opacity: 0;
+  pointer-events: none; /* No permitir interacción cuando está cerrado */
+  /* NO usar display: none para que las transiciones funcionen */
+}
+
+/* Dark mode shadow */
+.dark .NavigationMenuViewport {
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* NavigationMenu Content - Se renderiza DENTRO del Viewport */
+.NavigationMenuContent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-width: 240px; /* Match con Viewport */
+  animation-duration: 250ms;
+  animation-timing-function: ease-out;
+}
+
+/* Mostrar Content cuando está abierto */
+.NavigationMenuContent[data-state="open"] {
+  display: block !important;
+  opacity: 1;
+}
+
+/* Ocultar Content cuando está cerrado (con forceMount está siempre en DOM) */
+.NavigationMenuContent[data-state="closed"] {
+  display: none !important;
+  opacity: 0;
+}
+
+/* Content - Animaciones con data-motion (Radix automático) */
+.NavigationMenuContent[data-motion="from-start"] {
+  animation-name: contentEnterFromStart;
+}
+
+.NavigationMenuContent[data-motion="from-end"] {
+  animation-name: contentEnterFromEnd;
+}
+
+.NavigationMenuContent[data-motion="to-start"] {
+  animation-name: contentExitToStart;
+}
+
+.NavigationMenuContent[data-motion="to-end"] {
+  animation-name: contentExitToEnd;
+}

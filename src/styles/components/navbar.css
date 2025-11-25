@@ -1,0 +1,27 @@
+/* ========================================
+   NAVBAR STYLES
+   ======================================== */
+
+/* Navbar Header */
+.navbar-header {
+  position: relative;
+  z-index: 10;
+}
+
+/* Floating navbar effect */
+.navbar-floating {
+  backdrop-filter: blur(8px);
+  background-color: color-mix(in srgb, var(--navbar-bg), transparent 5%);
+}
+
+/* ========== VUEXY EXACT SHADOWS ========== */
+
+/* navbar-shadow - Navbar floating */
+.navbar-shadow {
+  box-shadow: 0 4px 24px 0 rgba(34, 41, 47, 0.1);
+}
+
+/* footer-shadow (opcional) */
+.footer-shadow {
+  box-shadow: 0 -4px 24px 0 rgba(34, 41, 47, 0.05);
+}
