@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Flex, Text, TextField, Box, ScrollArea } from '@radix-ui/themes';
+import { Flex, Text, TextField, Box, ScrollArea, Popover } from '@radix-ui/themes';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
-import * as Popover from '@radix-ui/react-popover';
 
 /**
  * Select con búsqueda nativo con Radix UI
