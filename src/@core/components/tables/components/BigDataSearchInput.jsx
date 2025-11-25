@@ -1,40 +1,7 @@
 import React from 'react';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
-import Select from 'react-select';
 import { Flex, TextField, IconButton } from '@radix-ui/themes';
-import { selectThemeColors } from '../../../../utils';
-
-const customStyles = {
-  control: (provided, state) => ({
-    ...provided,
-    minHeight: "30px",
-    height: "30px",
-    marginRight: "-1px",
-    borderRadius: 'var(--radius-2) 0 0 var(--radius-2)',
-    borderColor: 'var(--gray-7)',
-  }),
-  container: (provided, state) => ({
-    ...provided,
-    width: '150px'
-  }),
-  valueContainer: (provided, state) => ({
-    ...provided,
-    height: "30px",
-    padding: "0 6px",
-    fontSize: "14px",
-  }),
-  input: (provided, state) => ({
-    ...provided,
-    margin: "0px",
-  }),
-  indicatorSeparator: (state) => ({
-    display: "none",
-  }),
-  indicatorsContainer: (provided, state) => ({
-    ...provided,
-    height: "30px",
-  }),
-};
+import SearchableSelect from './SearchableSelect';
 
 const BigDataSearchInput = ({
   bigDataSearchKey,
@@ -57,24 +24,23 @@ const BigDataSearchInput = ({
     label: column.filterOptions.label,
   }));
 
-  // Encontrar la opción seleccionada
-  const selectedOption = selectorOptions.find(
-    (option) => option.value === valueOptions
-  );
-
   return (
     <Flex style={{ flexWrap: 'nowrap' }} align="center">
-      <Select
-        theme={selectThemeColors}
-        classNamePrefix="select"
+      <SearchableSelect
         options={selectorOptions}
-        value={selectedOption}
-        onChange={handleOptionChange}
-        className="react-select"
-        isClearable={false}
-        placeholder={selectedOption ? selectedOption.label : "Filtrar por..."}
-        isSearchable={false}
-        styles={customStyles}
+        value={valueOptions}
+        onChange={(newValue) => {
+          const selectedOpt = selectorOptions.find(opt => opt.value === newValue);
+          handleOptionChange(selectedOpt);
+        }}
+        placeholder="Filtrar por..."
+        searchable={false}
+        style={{
+          width: '150px',
+          minHeight: '30px',
+          borderRadius: 'var(--radius-2) 0 0 var(--radius-2)',
+          marginRight: '-1px'
+        }}
       />
       <TextField.Root
         size="2"

@@ -1,31 +1,6 @@
 import React from 'react';
-import Select from 'react-select';
-import { selectThemeColors } from '../../../../utils';
-
-const customStyles = {
-  control: (provided, state) => ({
-    ...provided,
-    minHeight: "30px",
-  }),
-  container: (provided, state) => ({
-    ...provided,
-    width: '100%'
-  }),
-  valueContainer: (provided, state) => ({
-    ...provided,
-    height: "30px",
-    padding: "0 6px",
-    fontSize: "1rem",
-  }),
-  input: (provided, state) => ({
-    ...provided,
-    margin: "0px",
-  }),
-  indicatorsContainer: (provided, state) => ({
-    ...provided,
-    height: "30px",
-  }),
-};
+import { Box } from '@radix-ui/themes';
+import SearchableSelect from './SearchableSelect';
 
 const SelectFilterInput = ({
   handleSelectOption,
@@ -35,21 +10,20 @@ const SelectFilterInput = ({
   resetSignal
 }) => {
   return (
-    <div key={resetSignal} className="d-flex align-items-center mx-2 mb-50 w-100">
-      <Select
-        theme={selectThemeColors}
-        classNamePrefix="select"
+    <Box key={resetSignal} style={{ width: '100%', marginBottom: '12px' }}>
+      <SearchableSelect
         options={options}
         value={selectorOptions.value}
-        onChange={handleSelectOption}
-        className="react-select"
-        isClearable={false}
+        onChange={(newValue) => {
+          const selectedOpt = options.find(opt => opt.value === newValue);
+          handleSelectOption(selectedOpt);
+        }}
         placeholder={selectorOptions.fields ? selectorOptions.fields : placeHolder ?? "Filtrar por..."}
-        isSearchable={true}
-        noOptionsMessage={() => 'No se encontraron datos'}
-        styles={customStyles}
+        searchable={true}
+        noOptionsMessage="No se encontraron datos"
+        style={{ width: '100%', minHeight: '30px' }}
       />
-    </div>
+    </Box>
   );
 };
 

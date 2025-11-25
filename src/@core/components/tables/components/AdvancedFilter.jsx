@@ -1,100 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useFieldArray, useForm, Controller } from 'react-hook-form';
 import { MixerHorizontalIcon, Cross2Icon, PlusIcon } from '@radix-ui/react-icons';
-import Select from 'react-select';
 import {
   Button,
   Dialog,
   Flex,
-  Text,
   Box,
-  IconButton
+  IconButton,
+  TextField
 } from '@radix-ui/themes';
-import { selectThemeColors } from '../../../../utils';
+import SearchableSelect from './SearchableSelect';
+import MultiSelect from './MultiSelect';
 import { useFilterOperators } from '../hooks/useFilterOperators';
-
-const customStyles = {
-  control: (provided) => ({
-    ...provided,
-    minHeight: '30px',
-    height: '30px',
-    borderRadius: 'var(--radius-2)',
-  }),
-  container: (provided) => ({
-    ...provided,
-    width: '150px',
-  }),
-  valueContainer: (provided) => ({
-    ...provided,
-    height: '30px',
-    padding: '0 6px',
-    fontSize: '14px',
-  }),
-  input: (provided) => ({
-    ...provided,
-    margin: '0px',
-  }),
-  indicatorSeparator: () => ({
-    display: 'none',
-  }),
-  indicatorsContainer: (provided) => ({
-    ...provided,
-    height: '30px',
-  }),
-  menu: (provided) => ({
-    ...provided,
-    zIndex: 9999,
-  }),
-};
-
-const operatorStyles = {
-  ...customStyles,
-  container: (provided) => ({
-    ...provided,
-    width: '180px',
-  }),
-};
-
-const valueSelectStyles = {
-  ...customStyles,
-  container: (provided) => ({
-    ...provided,
-    flex: 1,
-  }),
-};
-
-const valueMultiSelectStyles = {
-  ...valueSelectStyles,
-  container: (provided) => ({
-    ...provided,
-    width: '300px',
-    flex: '0 0 300px',
-  }),
-  control: (provided, state) => ({
-    ...provided,
-    minHeight: '30px',
-    height: state.hasValue ? 'auto' : '30px',
-    borderRadius: 'var(--radius-2)',
-  }),
-  valueContainer: (provided, state) => ({
-    ...provided,
-    height: state.hasValue ? 'auto' : '30px',
-    minHeight: '30px',
-    padding: '2px 6px',
-    flexWrap: 'wrap',
-  }),
-  multiValue: (provided) => ({
-    ...provided,
-    maxWidth: '100%',
-  }),
-  multiValueLabel: (provided) => ({
-    ...provided,
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    maxWidth: '200px'
-  }),
-};
 
 const AdvancedFilter = ({ columns, onFilter, isAsync, setAsyncParams, resetPagination = () => {}, resetSignal }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -111,26 +28,20 @@ const AdvancedFilter = ({ columns, onFilter, isAsync, setAsyncParams, resetPagin
     name: 'filters',
   });
 
-  const toggle = () => setIsOpen(!isOpen);
-
   const onSubmit = (data) => {
     const filters = data.filters.filter((f) => {
-      // Para campos booleanos, solo necesitamos field y operator
       const column = columns.find(col => col.filterOptions?.value === f.field);
       if (column?.filterOptions?.type === 'boolean') {
         return f.field && f.operator;
       }
-      // Para el resto de campos, necesitamos los tres valores
       return f.field && f.operator && f.value;
     });
 
-    // Procesamiento de filtros con manejo especial para fechas
     const processedFilters = filters.map(f => {
       const column = columns.find(col => col.filterOptions?.value === f.field);
       const type = column?.filterOptions?.type || 'text';
 
       if (type === 'date' && f.value) {
-        // Asegurarse de que la fecha esté en formato ISO para el backend
         try {
           const date = new Date(f.value);
           if (!isNaN(date.getTime())) {
@@ -151,21 +62,20 @@ const AdvancedFilter = ({ columns, onFilter, isAsync, setAsyncParams, resetPagin
       const type = column?.filterOptions?.type || 'text';
       const isMulti = column?.filterOptions?.isMulti;
 
-      // Para campos booleanos, el operador ya contiene el valor (true/false)
       if (type === 'boolean') {
         return [{
           field: f.field,
           operator: f.operator,
-          value: f.operator, // Usamos el operador como valor
+          value: f.operator,
           type
         }];
       }
 
-      if (isMulti && f.value && f.value.includes(',')) {
-        return f.value.split(',').map(value => ({
+      if (isMulti && Array.isArray(f.value)) {
+        return f.value.map(value => ({
           field: f.field,
           operator: f.operator,
-          value: value.trim(),
+          value: value,
           type
         }));
       }
@@ -177,22 +87,20 @@ const AdvancedFilter = ({ columns, onFilter, isAsync, setAsyncParams, resetPagin
     });
 
     if (isAsync && setAsyncParams) {
-      // Para modo asíncrono, actualizar asyncParams con advancedFilter
       setAsyncParams((prevState) => ({
         ...prevState,
         advancedFilter: filtersWithType,
         pagination: {
           ...prevState.pagination,
-          page: 1, // Resetear a la primera página cuando se aplica un filtro
+          page: 1,
         }
       }));
     } else {
-      // Para modo síncrono, usar el callback onFilter
       onFilter(filtersWithType);
     }
 
     resetPagination();
-    setIsOpen(false); // Cerrar el dropdown después de aplicar el filtro
+    setIsOpen(false);
   };
 
   const filterOptions = columns
@@ -208,27 +116,18 @@ const AdvancedFilter = ({ columns, onFilter, isAsync, setAsyncParams, resetPagin
     const options = column?.filterOptions?.options;
     const isMulti = column?.filterOptions?.isMulti;
 
-    // Si es booleano, no mostramos campo de valor
     if (type === 'boolean') {
       return null;
     }
 
     if (type === 'date') {
       return (
-        <input
+        <TextField.Root
           {...field}
           type="date"
           placeholder="Seleccionar fecha"
-          style={{
-            height: '30px',
-            padding: '0 8px',
-            fontSize: '14px',
-            border: '1px solid var(--gray-7)',
-            borderRadius: 'var(--radius-2)',
-            outline: 'none',
-            flex: 1
-          }}
-          autoComplete='off'
+          size="2"
+          style={{ flex: 1 }}
         />
       );
     }
@@ -236,69 +135,38 @@ const AdvancedFilter = ({ columns, onFilter, isAsync, setAsyncParams, resetPagin
     if (options) {
       if (isMulti) {
         return (
-          <div style={{
-            display: 'flex',
-            width: '300px',
-            flex: '0 0 300px'
-          }}>
-            <Select
-              theme={selectThemeColors}
-              styles={valueMultiSelectStyles}
-              className="react-select"
-              classNamePrefix="select"
-              options={options}
-              isMulti={true}
-              value={field.value ? field.value.split(',').map(val =>
-                options.find(opt => opt.value === val)
-              ).filter(Boolean) : []}
-              onChange={(selectedOptions) => {
-                const values = selectedOptions ? selectedOptions.map(opt => opt.value).join(',') : '';
-                field.onChange(values);
-              }}
-              placeholder="Seleccionar múltiples..."
-              isClearable={true}
-              menuPlacement="auto"
-              maxMenuHeight={200}
-            />
-          </div>
+          <MultiSelect
+            options={options}
+            value={field.value || []}
+            onChange={(newValue) => field.onChange(newValue)}
+            placeholder="Seleccionar múltiples..."
+            style={{ flex: 1, minWidth: '250px' }}
+          />
         );
       }
 
       return (
-        <Select
-          theme={selectThemeColors}
-          styles={valueSelectStyles}
-          className="react-select"
-          classNamePrefix="select"
+        <SearchableSelect
           options={options}
-          value={options.find(opt => opt.value === field.value) || null}
-          onChange={(option) => field.onChange(option ? option.value : '')}
+          value={field.value || ''}
+          onChange={(newValue) => field.onChange(newValue)}
           placeholder="Seleccionar..."
-          isClearable={false}
+          style={{ flex: 1 }}
         />
       );
     }
 
     return (
-      <input
+      <TextField.Root
         {...field}
         type={type}
         placeholder="Valor"
-        style={{
-          height: '30px',
-          padding: '0 8px',
-          fontSize: '14px',
-          border: '1px solid var(--gray-7)',
-          borderRadius: 'var(--radius-2)',
-          outline: 'none',
-          flex: 1
-        }}
-        autoComplete='off'
+        size="2"
+        style={{ flex: 1 }}
       />
     );
   };
 
-  // Efecto para establecer automáticamente el valor cuando se selecciona un operador booleano
   useEffect(() => {
     fields.forEach((f, index) => {
       const selectedField = watch(`filters.${index}.field`);
@@ -306,7 +174,6 @@ const AdvancedFilter = ({ columns, onFilter, isAsync, setAsyncParams, resetPagin
       const column = columns.find(col => col.filterOptions?.value === selectedField);
 
       if (column?.filterOptions?.type === 'boolean' && selectedOperator) {
-        // Para boolean, el valor es el mismo que el operador (true/false)
         setValue(`filters.${index}.value`, selectedOperator);
       }
     });
@@ -353,8 +220,6 @@ const AdvancedFilter = ({ columns, onFilter, isAsync, setAsyncParams, resetPagin
                 const column = columns.find(col => col.filterOptions?.value === selectedField);
                 const fieldType = column?.filterOptions?.type || 'text';
                 const operatorOptions = getOperatorsByType(fieldType);
-
-                // Determinar si el campo de valor debe ser visible
                 const showValueField = fieldType !== 'boolean';
 
                 return (
@@ -363,21 +228,17 @@ const AdvancedFilter = ({ columns, onFilter, isAsync, setAsyncParams, resetPagin
                       name={`filters.${index}.field`}
                       control={control}
                       render={({ field: { onChange, value } }) => (
-                        <Select
-                          theme={selectThemeColors}
-                          styles={customStyles}
-                          className="react-select"
-                          classNamePrefix="select"
+                        <SearchableSelect
                           options={filterOptions}
-                          value={filterOptions.find(option => option.value === value) || null}
-                          onChange={(option) => {
-                            onChange(option ? option.value : '');
+                          value={value || ''}
+                          onChange={(newValue) => {
+                            onChange(newValue);
                             setValue(`filters.${index}.operator`, '');
                             setValue(`filters.${index}.value`, '');
                           }}
                           placeholder="Filtrar por..."
-                          isClearable={false}
-                          isSearchable={false}
+                          searchable={false}
+                          style={{ minWidth: '150px' }}
                         />
                       )}
                     />
@@ -385,30 +246,19 @@ const AdvancedFilter = ({ columns, onFilter, isAsync, setAsyncParams, resetPagin
                       name={`filters.${index}.operator`}
                       control={control}
                       render={({ field: { onChange, value } }) => (
-                        <Select
-                          theme={selectThemeColors}
-                          styles={{
-                            ...operatorStyles,
-                            container: (provided) => ({
-                              ...provided,
-                              width: showValueField ? '180px' : '300px'
-                            }),
-                          }}
-                          className="react-select"
-                          classNamePrefix="select"
+                        <SearchableSelect
                           options={operatorOptions}
-                          value={operatorOptions.find(option => option.value === value) || null}
-                          onChange={(option) => {
-                            onChange(option ? option.value : '');
-                            // Para boolean, establecer el valor automáticamente
-                            if (fieldType === 'boolean' && option) {
-                              setValue(`filters.${index}.value`, option.value);
+                          value={value || ''}
+                          onChange={(newValue) => {
+                            onChange(newValue);
+                            if (fieldType === 'boolean' && newValue) {
+                              setValue(`filters.${index}.value`, newValue);
                             }
                           }}
                           placeholder={fieldType === 'boolean' ? "Seleccionar..." : "Operador..."}
-                          isClearable={false}
-                          isSearchable={false}
-                          isDisabled={!selectedField}
+                          searchable={false}
+                          disabled={!selectedField}
+                          style={{ minWidth: showValueField ? '180px' : '250px' }}
                         />
                       )}
                     />

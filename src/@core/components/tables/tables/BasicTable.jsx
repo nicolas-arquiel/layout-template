@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import DataTable from "react-data-table-component";
-import { Pagination } from '../components';
-import { ChevronDown } from "react-feather";
+import { Box } from '@radix-ui/themes';
+import { Pagination, EnhancedDataTable } from '../components';
 
 const BasicTable = ({
   data = [],
@@ -52,7 +51,19 @@ const BasicTable = ({
     }
   }, [onSort]);
 
+  // Calcular datos paginados para paginación local
+  const paginatedData = React.useMemo(() => {
+    if (useExternalPagination || !pagination) {
+      return data;
+    }
+    const start = currentPage * paginationPerPage;
+    const end = start + paginationPerPage;
+    return data.slice(start, end);
+  }, [data, currentPage, paginationPerPage, useExternalPagination, pagination]);
+
   const CustomPagination = React.useMemo(() => {
+    if (!pagination) return () => null;
+
     const totalItems = useExternalPagination && allCountData !== undefined
       ? allCountData
       : data.length;
@@ -73,6 +84,7 @@ const BasicTable = ({
       />
     );
   }, [
+    pagination,
     useExternalPagination,
     allCountData,
     data.length,
@@ -82,26 +94,18 @@ const BasicTable = ({
   ]);
 
   return (
-    <div className={`react-dataTable react-dataTable-selectable-rows ${className}`}>
-      <DataTable
-        noHeader
+    <Box className={className}>
+      <EnhancedDataTable
         columns={columns}
-        className="react-dataTable"
-        sortIcon={<ChevronDown size={10} />}
-        data={data}
-        paginationComponent={CustomPagination}
-        paginationDefaultPage={currentPage + 1}
-        paginationPerPage={paginationPerPage}
-        pagination={pagination}
-        fixedHeader={fixedHeader}
-        fixedHeaderScrollHeight={fixedHeaderScrollHeight}
+        data={paginatedData}
         defaultSortFieldId={defaultSortFieldId}
         defaultSortAsc={defaultSortAsc}
         onSort={handleSort}
-        customStyles={customStyles}
+        highlightOnHover={true}
         {...props}
       />
-    </div>
+      {pagination && <CustomPagination />}
+    </Box>
   );
 };
 
