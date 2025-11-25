@@ -1,5 +1,5 @@
 import { BarChartIcon, SymbolIcon, ArrowUpIcon, BackpackIcon } from '@radix-ui/react-icons'
-import PageTemplate from '../../components/PageTemplate'
+import { PageTemplate } from '@components'
 import { Card, Grid, Heading, Text, Flex, Box } from '@radix-ui/themes'
 
 export default function ReportesVentas() {

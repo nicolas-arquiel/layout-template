@@ -1,0 +1,185 @@
+/**
+ * Estilos para el sistema de tablas
+ * Compatible con ThemeProvider y Tailwind CSS
+ */
+
+/* ========== TABLE HEADER STYLES ========== */
+.table-header {
+  background-color: #F3F2F7;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+}
+
+/* Dark mode - usar variable de tema si existe */
+.dark .table-header {
+  background-color: rgba(243, 242, 247, 0.1);
+}
+
+/* ========== TABLE CONTAINER ========== */
+.table-container {
+  border: none;
+  overflow: visible;
+}
+
+/* Eliminar bordes de la tabla */
+.table-container table,
+.table-container .rt-TableRoot {
+  border: none !important;
+}
+
+.table-container thead tr {
+  border: none !important;
+}
+
+/* Líneas divisorias solo entre filas del body */
+.table-container tbody tr {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  transition: background-color 0.2s ease;
+}
+
+.dark .table-container tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Sin borde en la última fila */
+.table-container tbody tr:last-child {
+  border-bottom: none;
+}
+
+/* ========== TABLE ROW HOVER ========== */
+.table-row-hover:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.dark .table-row-hover:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* ========== ENHANCED DATA TABLE ========== */
+.enhanced-data-table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.enhanced-data-table table {
+  border: none !important;
+}
+
+.enhanced-data-table thead tr {
+  border: none !important;
+}
+
+.enhanced-data-table tbody tr {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.dark .enhanced-data-table tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.enhanced-data-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+/* Hover effect para filas */
+.enhanced-data-table .highlight-on-hover:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.dark .enhanced-data-table .highlight-on-hover:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* ========== TABLA VIRTUALIZADA ========== */
+.tabla-virtualizada-container {
+  background-color: var(--color-background, #FFFFFF);
+  border: none;
+  border-radius: 0.428rem;
+  overflow: hidden;
+}
+
+.dark .tabla-virtualizada-container {
+  background-color: var(--color-panel-solid, #283046);
+}
+
+.tabla-virtualizada-header {
+  display: flex;
+  background-color: #F3F2F7;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+}
+
+.dark .tabla-virtualizada-header {
+  background-color: rgba(243, 242, 247, 0.1);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ========== TABLA VIRTUALIZADA - HEADER CELLS ========== */
+.tabla-virtualizada-header-cell {
+  text-align: start;
+  flex: 1;
+  min-width: 100px;
+  padding: 0.6rem;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tabla-virtualizada-header-cell.center {
+  text-align: center;
+}
+
+/* Border derecho para separar columnas (excepto última) */
+.tabla-virtualizada-header-cell:not(:last-child) {
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.dark .tabla-virtualizada-header-cell:not(:last-child) {
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ========== TABLA VIRTUALIZADA - BODY CELLS ========== */
+.tabla-virtualizada-cell {
+  text-align: start;
+  flex: 1;
+  min-width: 100px;
+  padding: 0.4rem 0.6rem;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tabla-virtualizada-cell.center {
+  text-align: center;
+}
+
+/* ========== TABLA VIRTUALIZADA - ROWS ========== */
+.tabla-virtualizada-row {
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.dark .tabla-virtualizada-row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.tabla-virtualizada-row.clickable {
+  cursor: pointer;
+}
+
+.tabla-virtualizada-row.clickable:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.dark .tabla-virtualizada-row.clickable:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}

@@ -1,5 +1,5 @@
 import { LockClosedIcon } from '@radix-ui/react-icons'
-import PageTemplate from '../../../components/PageTemplate'
+import { PageTemplate } from '@components'
 
 export default function ConfigRolesUsuarios() {
   return (

@@ -38,9 +38,8 @@ import { PersonIcon,
   MixerHorizontalIcon,
 } from '@radix-ui/react-icons'
 import { Controller } from 'react-hook-form'
-import FormDialog from '../components/FormDialog'
-import DataTable from '../components/DataTable'
-import { Canvas, CanvasForm } from '../components/Canvas'
+import { FormDialog, Canvas, CanvasForm } from '@components'
+import { DataTableExample as DataTable } from '../components/examples'
 
 /**
  * Dashboard Completo - Explorando TODO Radix Themes al máximo

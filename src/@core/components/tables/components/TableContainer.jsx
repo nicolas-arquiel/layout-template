@@ -9,7 +9,7 @@ const TableContainer = ({
   table
 }) => {
   return (
-    <Card className={customClassCard} style={{ overflow: 'visible' }}>
+    <Card className={`table-container ${customClassCard}`}>
       {header}
 
       <Flex direction="column" gap="3" className={customClassCardBody} p="4">

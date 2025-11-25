@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import TablaVirtualizada from '../../../../components/TablaVirtualizada/TablaVirtualizada.jsx';
+import VirtualizedDataTable from '../components/VirtualizedDataTable';
 import { useTable } from '../context/TableContext';
 import { TableContainer, TableHeader, DataCounter, ResetButton } from '../components';
 
@@ -77,12 +77,12 @@ const VirtualizedTableWithFilters = ({
       customClassCard={customClassCard}
       customClassCardBody={customClassCardBody}
       table={
-        <TablaVirtualizada
+        <VirtualizedDataTable
           key={resetSignal}
           data={data}
           columns={columns}
-          rowHeight={rowHeight}
-          overscanRowCount={overscanRowCount}
+          height={rowHeight}
+          rowHeight={overscanRowCount}
         />
       }
     />

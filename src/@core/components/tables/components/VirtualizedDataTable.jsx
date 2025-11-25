@@ -1,28 +1,28 @@
 import { FixedSizeList as List } from 'react-window'
 import { Box, Flex, Text, Spinner } from '@radix-ui/themes'
-import './TablaVirtualizada.css'
 
 /**
- * TablaVirtualizada - Componente de tabla con virtualización usando react-window
+ * VirtualizedDataTable - Tabla virtualizada con react-window
  *
  * Renderiza solo las filas visibles para mejor performance con grandes datasets.
- * Migrado a Radix UI.
+ * Integrado en el sistema de tablas de @core con estilos consistentes.
  *
  * @param {Array} data - Array de datos a mostrar
- * @param {Array} columns - Array de configuración de columnas
+ * @param {Array} columns - Array de configuración de columnas (mismo formato que EnhancedDataTable)
  * @param {number} height - Altura de la tabla en px (default: 350)
  * @param {number} rowHeight - Altura de cada fila en px (default: 50)
  * @param {boolean} showHeader - Mostrar header (default: true)
  * @param {object} headerStyle - Estilos custom para header
  * @param {object} rowStyle - Estilos custom para filas
  * @param {object} containerStyle - Estilos custom para contenedor
- * @param {boolean} isLoading - Estado de carga
+ * @param {boolean} progressPending - Estado de carga (compatible con EnhancedDataTable)
  * @param {string} noDataMessage - Mensaje cuando no hay datos
  * @param {React.Component} loadingComponent - Componente custom de loading
- * @param {React.Component} emptyComponent - Componente custom de empty state
+ * @param {React.Component} noDataComponent - Componente custom de empty state
  * @param {function} onRowClick - Callback al hacer click en fila
+ * @param {string} className - Clases CSS adicionales
  */
-const TablaVirtualizada = ({
+const VirtualizedDataTable = ({
   // Datos básicos
   data = [],
   columns = [],
@@ -37,18 +37,20 @@ const TablaVirtualizada = ({
   rowStyle = {},
   containerStyle = {},
 
-  // Estados y mensajes
-  isLoading = false,
+  // Estados y mensajes (compatible con EnhancedDataTable)
+  progressPending = false,
   noDataMessage = 'No hay resultados para mostrar',
   loadingComponent = null,
-  emptyComponent = null,
+  noDataComponent = null,
 
   // Interacciones
   onRowClick = null,
+  
+  // Otros
+  className = '',
 }) => {
   const visibleColumns = columns.filter((col) => !col.omit)
 
-  // Componente de fila
   const RenderRow = ({ index, style }) => {
     const row = data[index]
     const isClickable = !!onRowClick
@@ -58,35 +60,40 @@ const TablaVirtualizada = ({
         className={`tabla-virtualizada-row ${isClickable ? 'clickable' : ''}`}
         style={{
           ...style,
-          ...rowStyle,
-          display: 'flex',
-          alignItems: 'center',
-          borderBottom: '1px solid var(--gray-5)',
+          ...rowStyle
         }}
         onClick={isClickable ? () => onRowClick(row, index) : undefined}
       >
-        {visibleColumns.map((col, colIndex) => (
-          <div
-            key={colIndex}
-            className={`tabla-virtualizada-cell ${
-              col.center ? 'center' : 'start'
-            }`}
-            style={{
-              flex: col.flex || '1',
-              minWidth: col.minWidth || '100px',
-              maxWidth: col.maxWidth || 'none',
-              width: col.width || 'auto',
-              padding: '0.4rem 0.6rem',
-              lineHeight: '1.2',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-            title={col.cell ? '' : (col.selector?.(row) || '').toString()}
-          >
-            {col.cell ? col.cell(row, index) : col.selector?.(row)}
-          </div>
-        ))}
+        {visibleColumns.map((col, colIndex) => {
+          // Soportar tanto selector como cell (compatible con EnhancedDataTable)
+          const cellValue = col.selector
+            ? (typeof col.selector === 'function'
+                ? col.selector(row)
+                : row[col.selector])
+            : null
+
+          const cellContent = col.cell
+            ? col.cell(row, index, col, colIndex)
+            : cellValue
+
+          return (
+            <div
+              key={colIndex}
+              className={`tabla-virtualizada-cell ${
+                col.center ? 'center' : ''
+              }`}
+              style={{
+                flex: col.flex,
+                minWidth: col.minWidth,
+                maxWidth: col.maxWidth,
+                width: col.width
+              }}
+              title={col.cell ? '' : (cellValue || '').toString()}
+            >
+              {cellContent}
+            </div>
+          )
+        })}
       </div>
     )
   }
@@ -98,33 +105,19 @@ const TablaVirtualizada = ({
     return (
       <Flex
         className="tabla-virtualizada-header"
-        style={{
-          backgroundColor: 'var(--gray-3)',
-          borderBottom: '2px solid var(--gray-6)',
-          fontWeight: 600,
-          ...headerStyle,
-        }}
+        style={headerStyle}
       >
         {visibleColumns.map((col, index) => (
           <div
             key={index}
             className={`tabla-virtualizada-header-cell ${
-              col.center ? 'center' : 'start'
+              col.center ? 'center' : ''
             }`}
             style={{
-              flex: col.flex || '1',
-              minWidth: col.minWidth || '100px',
-              maxWidth: col.maxWidth || 'none',
-              width: col.width || 'auto',
-              padding: '0.6rem 0.6rem',
-              lineHeight: '1.2',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              borderRight:
-                index < visibleColumns.length - 1
-                  ? '1px solid var(--gray-5)'
-                  : 'none',
+              flex: col.flex,
+              minWidth: col.minWidth,
+              maxWidth: col.maxWidth,
+              width: col.width
             }}
             title={col.name}
           >
@@ -137,8 +130,8 @@ const TablaVirtualizada = ({
 
   // Componente para cuando no hay datos
   const NoDataComponent = () => {
-    if (emptyComponent) {
-      return emptyComponent
+    if (noDataComponent) {
+      return noDataComponent
     }
 
     // Si data es un array de skeletons (durante loading), no mostrar "No hay resultados"
@@ -180,20 +173,14 @@ const TablaVirtualizada = ({
 
   return (
     <Box
-      className="tabla-virtualizada-container"
-      style={{
-        width: '100%',
-        border: '1px solid var(--gray-5)',
-        borderRadius: 'var(--radius-3)',
-        overflow: 'hidden',
-        ...containerStyle,
-      }}
+      className={`tabla-virtualizada-container ${className}`}
+      style={containerStyle}
     >
       {/* Header */}
       {renderHeader()}
 
       {/* Contenido */}
-      {isLoading ? (
+      {progressPending ? (
         <LoadingComponent />
       ) : data.length === 0 ? (
         <NoDataComponent />
@@ -213,4 +200,4 @@ const TablaVirtualizada = ({
   )
 }
 
-export default TablaVirtualizada
+export default VirtualizedDataTable

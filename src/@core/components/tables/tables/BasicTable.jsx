@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box } from '@radix-ui/themes';
-import { Pagination, EnhancedDataTable } from '../components';
+import { Pagination, EnhancedDataTable, VirtualizedDataTable } from '../components';
 
 const BasicTable = ({
   data = [],
@@ -18,6 +18,10 @@ const BasicTable = ({
   onSort,
   customStyles,
   className = "",
+  // Virtualization props
+  virtualized = false,
+  virtualizedHeight = 350,
+  virtualizedRowHeight = 50,
   ...props
 }) => {
   const [localCurrentPage, setLocalCurrentPage] = useState(0);
@@ -95,15 +99,26 @@ const BasicTable = ({
 
   return (
     <Box className={className}>
-      <EnhancedDataTable
-        columns={columns}
-        data={paginatedData}
-        defaultSortFieldId={defaultSortFieldId}
-        defaultSortAsc={defaultSortAsc}
-        onSort={handleSort}
-        highlightOnHover={true}
-        {...props}
-      />
+      {virtualized ? (
+        <VirtualizedDataTable
+          columns={columns}
+          data={paginatedData}
+          height={virtualizedHeight}
+          rowHeight={virtualizedRowHeight}
+          onRowClick={props.onRowClick}
+          {...props}
+        />
+      ) : (
+        <EnhancedDataTable
+          columns={columns}
+          data={paginatedData}
+          defaultSortFieldId={defaultSortFieldId}
+          defaultSortAsc={defaultSortAsc}
+          onSort={handleSort}
+          highlightOnHover={true}
+          {...props}
+        />
+      )}
       {pagination && <CustomPagination />}
     </Box>
   );

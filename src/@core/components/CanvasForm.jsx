@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { Dialog, Flex, Heading, IconButton, ScrollArea, Button } from '@radix-ui/themes'
 import { Cross1Icon, ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons'
-import { transformData } from './Utils'
+import { transformData } from './CanvasUtils'
 
 /**
  * CanvasForm - Offcanvas con formulario integrado usando react-hook-form

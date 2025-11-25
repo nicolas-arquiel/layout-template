@@ -120,16 +120,17 @@ const EnhancedDataTable = ({
   }
 
   return (
-    <Box className={`radix-enhanced-data-table ${className}`} style={{ width: '100%', overflowX: 'auto' }}>
+    <div className="enhanced-data-table">
       <Table.Root
         variant="surface"
         size={dense ? "1" : "2"}
+        className="border-none"
         {...props}
       >
         <Table.Header>
-          <Table.Row>
+          <Table.Row className="table-header">
             {selectableRows && (
-              <Table.ColumnHeaderCell style={{ width: '40px' }}>
+              <Table.ColumnHeaderCell className="table-header w-10">
                 <Checkbox
                   checked={allSelected}
                   indeterminate={someSelected}
@@ -140,12 +141,11 @@ const EnhancedDataTable = ({
             {columns.map((column, index) => (
               <Table.ColumnHeaderCell
                 key={column.id || column.selector || index}
+                className={`table-header select-none ${column.sortable ? 'cursor-pointer' : ''}`}
                 style={{
                   width: column.width,
                   minWidth: column.minWidth,
                   maxWidth: column.maxWidth,
-                  cursor: column.sortable ? 'pointer' : 'default',
-                  userSelect: 'none',
                   ...column.style
                 }}
                 onClick={() => column.sortable && handleSort(column)}
@@ -153,7 +153,7 @@ const EnhancedDataTable = ({
                 <Flex align="center" gap="1">
                   {column.name}
                   {column.sortable && (
-                    <Box style={{ marginLeft: 'auto', display: 'flex', flexDirection: 'column' }}>
+                    <div className="ml-auto flex flex-col">
                       {sortField === (column.id || column.selector) ? (
                         sortDirection === 'asc' ? (
                           <ChevronUpIcon width="14" height="14" />
@@ -163,7 +163,7 @@ const EnhancedDataTable = ({
                       ) : (
                         <ChevronDownIcon width="14" height="14" opacity="0.3" />
                       )}
-                    </Box>
+                    </div>
                   )}
                 </Flex>
               </Table.ColumnHeaderCell>
@@ -180,14 +180,14 @@ const EnhancedDataTable = ({
               <Table.Row
                 key={rowId}
                 onClick={() => onRowClick && onRowClick(row)}
-                style={{
-                  cursor: onRowClick || pointerOnHover ? 'pointer' : 'default',
-                  backgroundColor: isSelected ? 'var(--accent-2)' : undefined
-                }}
                 className={`
                   ${highlightOnHover ? 'highlight-on-hover' : ''}
                   ${isSelected ? 'selected' : ''}
+                  ${onRowClick || pointerOnHover ? 'cursor-pointer' : ''}
                 `}
+                style={{
+                  backgroundColor: isSelected ? 'var(--accent-2)' : undefined
+                }}
               >
                 {selectableRows && (
                   <Table.Cell>
@@ -228,13 +228,7 @@ const EnhancedDataTable = ({
           })}
         </Table.Body>
       </Table.Root>
-
-      <style>{`
-        .radix-enhanced-data-table .highlight-on-hover:hover {
-          background-color: var(--gray-a3);
-        }
-      `}</style>
-    </Box>
+    </div>
   );
 };
 

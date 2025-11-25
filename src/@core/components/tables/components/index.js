@@ -13,3 +13,4 @@ export { default as Pagination } from './Pagination';
 export { default as MultiSelect } from './MultiSelect';
 export { default as SearchableSelect } from './SearchableSelect';
 export { default as EnhancedDataTable } from './EnhancedDataTable';
+export { default as VirtualizedDataTable } from './VirtualizedDataTable';

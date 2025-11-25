@@ -1,5 +1,5 @@
 import { FileTextIcon } from '@radix-ui/react-icons'
-import PageTemplate from '../components/PageTemplate'
+import { PageTemplate } from '@components'
 
 export default function Documentos() {
   return (

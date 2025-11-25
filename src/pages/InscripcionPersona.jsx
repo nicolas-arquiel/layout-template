@@ -21,7 +21,7 @@ import {
   CheckCircledIcon,
   InfoCircledIcon,
 } from '@radix-ui/react-icons'
-import { Wizard } from '../components/Wizard'
+import { Wizard } from '@components'
 
 /**
  * InscripcionPersona - Formulario de inscripción con Wizard
