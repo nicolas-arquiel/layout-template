@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { Container, Heading, Flex, Tabs, Box, Text, Code } from '@radix-ui/themes';
+import { Container, Heading, Flex, Tabs, Box, Text, Code, Badge } from '@radix-ui/themes';
 import {
   TableProvider,
   TableWithClientSideData,
   VirtualizedTableWithFilters,
+  TanStackTableWithClientData,
   SearchFilter,
   BigDataSearchFilter,
   DateRangeFilter,
@@ -14,6 +15,7 @@ import {
 } from '../@core/components/tables';
 import { Users, Database, Zap } from 'react-feather';
 import BreadCrumbs from '../@core/components/breadcrumbs/BreadCrumbs';
+import { createColumnHelper } from '@tanstack/react-table';
 
 // ===== DATOS DE EJEMPLO =====
 const generateMockUsers = (count) => {
@@ -42,6 +44,51 @@ const generateMockUsers = (count) => {
 const EjemploTablas = () => {
   const [data] = useState(() => generateMockUsers(100));
   const [largeData] = useState(() => generateMockUsers(10000));
+
+  // TanStack Table column definitions
+  const columnHelper = createColumnHelper();
+
+  const tanstackColumns = useMemo(() => [
+    columnHelper.accessor('id', {
+      header: 'ID',
+      cell: info => info.getValue(),
+      size: 80
+    }),
+    columnHelper.accessor(row => `${row.nombre} ${row.apellido}`, {
+      id: 'nombreCompleto',
+      header: 'Nombre Completo',
+      cell: info => info.getValue(),
+    }),
+    columnHelper.accessor('email', {
+      header: 'Email',
+      cell: info => info.getValue(),
+    }),
+    columnHelper.accessor('edad', {
+      header: 'Edad',
+      cell: info => info.getValue(),
+      size: 100
+    }),
+    columnHelper.accessor('ciudad', {
+      header: 'Ciudad',
+      cell: info => info.getValue(),
+    }),
+    columnHelper.accessor('estado', {
+      header: 'Estado',
+      cell: info => {
+        const estado = info.getValue();
+        const color = estado === 'activo' ? 'green' : estado === 'inactivo' ? 'red' : 'yellow';
+        return <Badge color={color}>{estado}</Badge>;
+      },
+    }),
+    columnHelper.accessor('rol', {
+      header: 'Rol',
+      cell: info => info.getValue(),
+    }),
+    columnHelper.accessor('salario', {
+      header: 'Salario',
+      cell: info => `${info.getValue()}€`,
+    }),
+  ], [columnHelper]);
 
   // Columnas básicas
   const basicColumns = useMemo(() => [
@@ -303,7 +350,7 @@ const EjemploTablas = () => {
         ]}
         dropDown={true}
       />
-      
+
       <Flex direction="column" gap="4" mb="6" mt="4">
         <Heading size="8">Sistema de Tablas - Ejemplos</Heading>
         <Text size="3" color="gray">
@@ -319,6 +366,7 @@ const EjemploTablas = () => {
           <Tabs.Trigger value="advanced">Filtro Avanzado</Tabs.Trigger>
           <Tabs.Trigger value="multiple">Múltiples Filtros</Tabs.Trigger>
           <Tabs.Trigger value="virtualized">Tabla Virtualizada</Tabs.Trigger>
+          <Tabs.Trigger value="tanstack">TanStack Table</Tabs.Trigger>
         </Tabs.List>
 
         <Box pt="4">
@@ -331,7 +379,7 @@ const EjemploTablas = () => {
                   Tabla básica con datos en cliente, sin filtros.
                 </Text>
                 <Code size="2" style={{ display: 'block', padding: '10px', marginBottom: '20px' }}>
-{`<TableProvider tableType="client">
+                  {`<TableProvider tableType="client">
   <TableWithClientSideData
     data={data}
     columns={columns}
@@ -365,7 +413,7 @@ const EjemploTablas = () => {
                   SearchFilter busca en múltiples campos simultáneamente.
                 </Text>
                 <Code size="2" style={{ display: 'block', padding: '10px', marginBottom: '20px' }}>
-{`<TableProvider tableType="client">
+                  {`<TableProvider tableType="client">
   <SearchFilter fields={['nombre', 'apellido', 'email', 'ciudad']} />
   <TableWithClientSideData data={data} columns={columns} />
 </TableProvider>`}
@@ -396,7 +444,7 @@ const EjemploTablas = () => {
                   Búsqueda por campo específico (selector + input + botón).
                 </Text>
                 <Code size="2" style={{ display: 'block', padding: '10px', marginBottom: '20px' }}>
-{`<TableProvider tableType="client">
+                  {`<TableProvider tableType="client">
   <BigDataSearchFilter columns={columns} />
   <TableWithClientSideData data={data} columns={columns} />
 </TableProvider>`}
@@ -430,7 +478,7 @@ const EjemploTablas = () => {
                   Filtros con múltiples condiciones, operadores por tipo, select, multi-select, fechas, booleanos.
                 </Text>
                 <Code size="2" style={{ display: 'block', padding: '10px', marginBottom: '20px' }}>
-{`<TableProvider tableType="client">
+                  {`<TableProvider tableType="client">
   <AdvancedFilter columns={advancedColumns} />
   <TableWithClientSideData data={data} columns={advancedColumns} />
 </TableProvider>`}
@@ -516,7 +564,7 @@ const EjemploTablas = () => {
                   Para grandes volúmenes de datos (10,000+ registros). Usa react-window para renderizado eficiente.
                 </Text>
                 <Code size="2" style={{ display: 'block', padding: '10px', marginBottom: '20px' }}>
-{`<TableProvider tableType="client">
+                  {`<TableProvider tableType="client">
   <SearchFilter fields={['nombre', 'email']} />
   <AdvancedFilter columns={columns} />
   <VirtualizedTableWithFilters
@@ -552,6 +600,65 @@ const EjemploTablas = () => {
                   Esta tabla renderiza 10,000 registros sin problemas de performance gracias a la virtualización.
                   Solo renderiza las filas visibles en pantalla.
                 </Text>
+              </Box>
+            </Flex>
+          </Tabs.Content>
+
+          {/* EJEMPLO 7: TanStack Table */}
+          <Tabs.Content value="tanstack">
+            <Flex direction="column" gap="4">
+              <Box>
+                <Heading size="5" mb="2">TanStack Table (React Table v8)</Heading>
+                <Text size="2" color="gray" mb="4">
+                  Ejemplo usando @tanstack/react-table con componentes reutilizables para ordenamiento, paginación y filtrado.
+                </Text>
+                <Code size="2" style={{ display: 'block', padding: '10px', marginBottom: '20px', whiteSpace: 'pre-wrap' }}>
+                  {`import { TanStackTableWithClientData } from '@core/components/tables';
+import { createColumnHelper } from '@tanstack/react-table';
+
+const columnHelper = createColumnHelper();
+const columns = [
+  columnHelper.accessor('id', {
+    header: 'ID',
+    cell: info => info.getValue(),
+  }),
+  // ... más columnas
+];
+
+<TanStackTableWithClientData
+  data={data}
+  columns={columns}
+  title="Usuarios"
+  titleIcon={Users}
+  showSearch={true}
+  showPagination={true}
+/>`}
+                </Code>
+              </Box>
+
+              {/* Usar el componente TanStackTableWithClientData */}
+              <TanStackTableWithClientData
+                data={data}
+                columns={tanstackColumns}
+                title="Usuarios - TanStack Table"
+                titleIcon={Users}
+                iconThemeClass="bg-primary"
+                showSearch={true}
+                showPagination={true}
+                initialPageSize={10}
+                pageSizeOptions={[10, 20, 50, 100]}
+              />
+
+              {/* Features Info */}
+              <Box mt="4" p="4" style={{ backgroundColor: 'var(--accent-3)', borderRadius: 'var(--radius-3)' }}>
+                <Heading size="4" mb="2">✨ Características TanStack Table</Heading>
+                <Flex direction="column" gap="2">
+                  <Text size="2">• <strong>Ordenamiento:</strong> Click en los encabezados para ordenar ascendente/descendente</Text>
+                  <Text size="2">• <strong>Paginación:</strong> Navega entre páginas y cambia el tamaño de página</Text>
+                  <Text size="2">• <strong>Filtrado Global:</strong> Busca en todos los campos simultáneamente</Text>
+                  <Text size="2">• <strong>Componentes Reutilizables:</strong> Usa TableContainer, TableHeader y componentes TanStack</Text>
+                  <Text size="2">• <strong>Headless UI:</strong> Totalmente personalizable con Radix UI</Text>
+                </Flex>
               </Box>
             </Flex>
           </Tabs.Content>

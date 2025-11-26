@@ -14,3 +14,6 @@ export { default as MultiSelect } from './MultiSelect';
 export { default as SearchableSelect } from './SearchableSelect';
 export { default as EnhancedDataTable } from './EnhancedDataTable';
 export { default as VirtualizedDataTable } from './VirtualizedDataTable';
+
+// TanStack Table components
+export * from './tanstack';
