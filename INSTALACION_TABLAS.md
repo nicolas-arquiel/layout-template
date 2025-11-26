@@ -10,19 +10,8 @@ TablaVirtualizada requiere: `react-window`
 
 La dependencia ya está agregada en `package.json`. Solo necesitas instalar:
 
-### Con npm:
-```bash
-npm install
-```
-
-### Con pnpm:
 ```bash
 pnpm install
-```
-
-### Con yarn:
-```bash
-yarn install
 ```
 
 ## Dependencia Agregada
@@ -41,7 +30,7 @@ En `package.json`:
 Después de instalar, ejecuta:
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 Si no hay errores, la tabla está lista para usar.

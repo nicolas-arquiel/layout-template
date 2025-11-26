@@ -13,6 +13,7 @@ import {
   ExportFilter
 } from '../@core/components/tables';
 import { Users, Database, Zap } from 'react-feather';
+import BreadCrumbs from '../@core/components/breadcrumbs/BreadCrumbs';
 
 // ===== DATOS DE EJEMPLO =====
 const generateMockUsers = (count) => {
@@ -294,7 +295,16 @@ const EjemploTablas = () => {
 
   return (
     <Container size="4" style={{ padding: '20px' }}>
-      <Flex direction="column" gap="4" mb="6">
+      <BreadCrumbs
+        title="Sistema de Tablas"
+        data={[
+          { title: 'Componentes', link: '/componentes' },
+          { title: 'Tablas' },
+        ]}
+        dropDown={true}
+      />
+      
+      <Flex direction="column" gap="4" mb="6" mt="4">
         <Heading size="8">Sistema de Tablas - Ejemplos</Heading>
         <Text size="3" color="gray">
           Ejemplos completos del sistema de tablas con filtros avanzados migrado a Radix UI
