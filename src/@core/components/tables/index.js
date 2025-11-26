@@ -8,6 +8,7 @@ export { default as BasicTable } from './tables/BasicTable';
 export { default as TableWithAsyncData } from './tables/TableWithAsyncData';
 export { default as TableWithClientSideData } from './tables/TableWithClientSideData';
 export { default as VirtualizedTableWithFilters } from './tables/VirtualizedTableWithFilters';
+export { default as TanStackTableWithClientData } from './tables/TanStackTableWithClientData';
 
 // Filtros autónomos
 export { default as BigDataSearchFilter } from './filters/BigDataSearchFilter';

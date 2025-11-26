@@ -28,7 +28,7 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isCollapsed, ...
     <button
       ref={ref}
       className={cn(
-        'flex items-center rounded-md transition-all duration-300 ease-in-out',
+        'flex items-center rounded-md transition-transform duration-300 ease-in-out',
         'min-h-[48px] cursor-pointer border-none outline-none',
         isCollapsed
           ? 'justify-center w-[48px] h-[48px] mx-auto my-1' // Centered square in collapsed
