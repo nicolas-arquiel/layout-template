@@ -2,6 +2,18 @@
    NAVBAR STYLES
    ======================================== */
 
+/* Container Styles - Handles background and glass effect */
+.navbar-container {
+  background-color: var(--color-panel-solid);
+  transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
+}
+
+.theme-translucent .navbar-container {
+  background-color: var(--glass-bg);
+  backdrop-filter: var(--glass-backdrop);
+  border: 1px solid var(--glass-border);
+}
+
 /* Navbar Header */
 .navbar-header {
   position: relative;

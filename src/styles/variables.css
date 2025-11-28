@@ -37,6 +37,11 @@
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  
+  /* Glass Effect Variables */
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-backdrop: blur(12px);
 }
 
 /* Modo Oscuro */
@@ -50,6 +55,11 @@
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+
+  /* Glass Effect Variables */
+  --glass-bg: rgba(40, 48, 70, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-backdrop: blur(12px);
 }
 
 /* ========== VUEXY EXACT VARIABLES ========== */

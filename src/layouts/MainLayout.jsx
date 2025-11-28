@@ -45,13 +45,16 @@ const MainLayout = () => {
         </aside>
 
         {/* ========== CONTENT AREA ========== */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          {/* NAVBAR - floating-nav con margin exacto */}
-          <div style={{ paddingTop: 'var(--floating-nav-margin)' }}>
-            <div className="container-xxl mx-auto">
+        <div className="flex-1 relative overflow-hidden">
+          {/* NAVBAR - Absolute positioning for glass effect */}
+          <div 
+            className="absolute top-0 left-0 w-full z-10 pointer-events-none"
+            style={{ paddingTop: 'var(--floating-nav-margin)' }}
+          >
+            <div className="container-xxl mx-auto pointer-events-auto">
               <nav
                 className={cn(
-                  'bg-[var(--color-panel-solid)]',
+                  'navbar-container',
                   'rounded-lg',
                   'navbar-shadow',
                   'transition-all duration-300'
@@ -63,10 +66,12 @@ const MainLayout = () => {
             </div>
           </div>
 
-          {/* CONTENT WRAPPER - content-padding exacto */}
+          {/* CONTENT WRAPPER - Full height scrollable */}
           <main 
-            className="flex-1 overflow-auto" 
-            style={{ paddingTop: 'var(--content-padding)' }}
+            className="h-full w-full overflow-y-auto overflow-x-hidden" 
+            style={{ 
+              paddingTop: 'calc(var(--floating-nav-margin) + var(--navbar-height) + var(--content-padding))' 
+            }}
           >
             <div className="container-xxl mx-auto">
               {/* content-body - Outlet directo */}
@@ -74,16 +79,16 @@ const MainLayout = () => {
                 <Outlet />
               </div>
             </div>
-          </main>
 
-          {/* FOOTER - footer-height exacto */}
-          <footer style={{ height: 'var(--footer-height)' }}>
-            <div className="container-xxl mx-auto h-full flex items-center">
-              <span className="text-xs text-[var(--gray-11)]">
-                Sistema de gestión (UCU), Universidad de Concepción del Uruguay
-              </span>
-            </div>
-          </footer>
+            {/* FOOTER - footer-height exacto */}
+            <footer style={{ height: 'var(--footer-height)' }}>
+              <div className="container-xxl mx-auto h-full flex items-center">
+                <span className="text-xs text-[var(--gray-11)]">
+                  Sistema de gestión (UCU), Universidad de Concepción del Uruguay
+                </span>
+              </div>
+            </footer>
+          </main>
         </div>
 
         {/* Mobile Overlay con fade-in */}

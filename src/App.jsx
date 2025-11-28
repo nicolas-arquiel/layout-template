@@ -43,6 +43,7 @@ const App = () => {
         panelBackground={themeSettings.panelBackground}
         radius={themeSettings.radius}
         scaling={themeSettings.scaling}
+        className={themeSettings.panelBackground === 'translucent' ? 'theme-translucent' : ''}
       >
         <CustomThemePanel settings={themeSettings} onUpdate={updateTheme} />
         <RouterProvider router={router} />
