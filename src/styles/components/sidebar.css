@@ -10,7 +10,7 @@
   transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
 }
 
-.theme-translucent .sidebar-container {
+.radix-themes[data-panel-background="translucent"] .sidebar-container {
   background-color: var(--glass-bg);
   backdrop-filter: var(--glass-backdrop);
   border-right: 1px solid var(--glass-border);

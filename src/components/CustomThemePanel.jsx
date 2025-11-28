@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Card, Flex, Text, Select, Separator, IconButton, Tooltip, Grid, Button, ScrollArea, Switch } from '@radix-ui/themes'
+import { Card, Flex, Text, Select, Separator, IconButton, Tooltip, Grid, Button, ScrollArea, Switch, Slider } from '@radix-ui/themes'
 import { GearIcon, Cross2Icon, MoonIcon, SunIcon, DesktopIcon } from '@radix-ui/react-icons'
 
 // Opciones de configuración de Radix
@@ -16,12 +16,13 @@ const CustomThemePanel = ({ settings, onUpdate }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [navFontWeight, setNavFontWeight] = useState('500')
 
-  // Cargar valor de navegación guardado
+  // Cargar valores guardados al montar
   useEffect(() => {
-    const saved = localStorage.getItem('nav-font-weight')
-    if (saved) {
-      setNavFontWeight(saved)
-      document.documentElement.style.setProperty('--nav-item-font-weight', saved)
+    // Peso de fuente
+    const savedWeight = localStorage.getItem('nav-font-weight')
+    if (savedWeight) {
+      setNavFontWeight(savedWeight)
+      document.documentElement.style.setProperty('--nav-item-font-weight', savedWeight)
     }
   }, [])
 
@@ -187,10 +188,12 @@ const CustomThemePanel = ({ settings, onUpdate }) => {
           <Separator size="4" />
 
           {/* 6. Personalización de Navegación (TU AGREGADO) */}
-          <Flex direction="column" gap="2">
-            <Text size="1" weight="bold" color="indigo">NAVEGACIÓN (Personalizado)</Text>
+          <Flex direction="column" gap="4">
+            <Text size="1" weight="bold" color="indigo">PERSONALIZACIÓN AVANZADA</Text>
+            
+            {/* Peso de Fuente */}
             <Flex justify="between" align="center">
-              <Text size="2">Peso de Fuente</Text>
+              <Text size="2">Peso de Fuente (Nav)</Text>
               <Select.Root value={navFontWeight} onValueChange={handleNavFontWeightChange}>
                 <Select.Trigger variant="soft" color="indigo" />
                 <Select.Content>
@@ -201,6 +204,23 @@ const CustomThemePanel = ({ settings, onUpdate }) => {
                 </Select.Content>
               </Select.Root>
             </Flex>
+
+            {/* Nivel de Traslucidez - Solo si está activo */}
+            {settings.panelBackground === 'translucent' && (
+              <Flex direction="column" gap="2">
+                <Flex justify="between" align="center">
+                  <Text size="2">Nivel de Traslucidez</Text>
+                  <Text size="1" color="gray">{Math.round((settings.glassOpacity || 0.75) * 100)}%</Text>
+                </Flex>
+                <Slider 
+                  defaultValue={[settings.glassOpacity || 0.75]} 
+                  min={0.1} 
+                  max={0.95} 
+                  step={0.05} 
+                  onValueChange={(val) => onUpdate('glassOpacity', val[0])} 
+                />
+              </Flex>
+            )}
           </Flex>
 
         </Flex>

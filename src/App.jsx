@@ -22,6 +22,7 @@ const App = () => {
       panelBackground: 'translucent',
       radius: 'medium',
       scaling: '100%',
+      glassOpacity: 0.75, // Default opacity
     }
   })
 
@@ -43,7 +44,7 @@ const App = () => {
         panelBackground={themeSettings.panelBackground}
         radius={themeSettings.radius}
         scaling={themeSettings.scaling}
-        className={themeSettings.panelBackground === 'translucent' ? 'theme-translucent' : ''}
+        style={{ '--glass-opacity': themeSettings.glassOpacity }}
       >
         <CustomThemePanel settings={themeSettings} onUpdate={updateTheme} />
         <RouterProvider router={router} />
