@@ -83,6 +83,7 @@ const navigation = [
     id: 'reportes',
     title: 'Reportes',
     icon: BarChartIcon,
+    badge: 'Nuevo', // Ejemplo de badge en grupo
     // SIN permiso - para testear dropdown
     children: [
       {

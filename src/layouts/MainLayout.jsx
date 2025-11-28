@@ -31,6 +31,7 @@ const MainLayout = () => {
             'flex-shrink-0',
             'relative',
             'h-screen',
+            'animate-in fade-in duration-200', // Animación de entrada suave
             // Desktop width
             menuCollapsed ? 'w-[80px]' : 'w-[260px]',
             // Mobile

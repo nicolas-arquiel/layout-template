@@ -41,7 +41,7 @@ const Sidebar = () => {
   const effectiveCollapsed = isMobile ? false : menuCollapsed
 
   return (
-    <div className="h-full flex flex-col bg-[var(--color-panel-solid)] overflow-hidden">
+    <div className="h-full flex flex-col bg-[var(--color-panel-solid)] overflow-hidden animate-in fade-in duration-300">
       {/* ========== HEADER ========== */}
       <div className={cn(
         "flex-shrink-0 h-[80px] !px-4 py-4 flex items-center border-b border-[var(--gray-4)]",
@@ -49,7 +49,7 @@ const Sidebar = () => {
       )}>
         {/* Logo / App Name - Solo mostrar cuando NO está colapsado */}
         {!effectiveCollapsed && (
-          <div className="flex items-center gap-3 flex-1 overflow-hidden">
+          <div className="flex items-center gap-3 flex-1 overflow-hidden animate-in fade-in slide-in-from-left duration-200">
             <Heading
               size="5"
               className="text-[var(--accent-9)] font-extrabold truncate tracking-tight whitespace-nowrap"
@@ -82,13 +82,13 @@ const Sidebar = () => {
       </div>
 
       {/* ========== NAVIGATION ========== */}
-      <div className="flex-1 overflow-hidden !px-4">
+      <div className="flex-1 overflow-hidden !px-2">
         <ScrollArea
           className="h-full w-full sidebar-scroll"
           type="hover"
           scrollbars="vertical"
         >
-          <div className="py-4">
+          <div className="py-4 px-2">
             <nav>
               <NavigationItems items={navigation} forceExpanded={isMobile} />
             </nav>

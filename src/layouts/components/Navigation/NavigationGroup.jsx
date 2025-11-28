@@ -40,16 +40,43 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isCollapsed, ...
       )}
       {...props}
     >
-      {Icon && <Icon size={20} className={cn("flex-shrink-0", !isCollapsed && "!mr-4")} />}
+      {/* Icon - ALWAYS VISIBLE - Mismo estilo que NavigationItem */}
+      {Icon && (
+        <span className={cn(
+          "flex items-center justify-center transition-all duration-300 flex-shrink-0",
+          "w-[24px] h-[24px]"
+        )}>
+          <Icon size={20} />
+        </span>
+      )}
       
+      {/* Text Container - Mismo estilo que NavigationItem */}
       {!isCollapsed && (
-        <>
-          <span className="flex-1 truncate font-[Montserrat] text-[15px] font-medium">
-            {item.title}
-          </span>
-          {item.badge && <Badge size="1" variant="soft" className="ml-2 mr-2">{item.badge}</Badge>}
-          <ChevronDownIcon width="16" height="16" className={cn("transition-transform duration-300", isOpen && "rotate-180")} />
-        </>
+        <div className={cn(
+          "flex items-center whitespace-nowrap overflow-hidden transition-all duration-300 ease-in-out",
+          "w-auto opacity-100 flex-1 !ml-4"
+        )}>
+          <div className="flex items-center justify-between gap-2 w-full">
+            <span className="flex-1 truncate font-[Montserrat] text-[15px]" style={{ fontWeight: 'var(--nav-item-font-weight)' }}>
+              {item.title}
+            </span>
+            {/* Badge - Mismo estilo que NavigationItem */}
+            {item.badge && (
+              <Badge size="1" variant="soft" className="flex-shrink-0">
+                {item.badge}
+              </Badge>
+            )}
+            {/* Chevron - Siempre presente para mantener alineación */}
+            <ChevronDownIcon 
+              width="16" 
+              height="16" 
+              className={cn(
+                "transition-transform duration-300 flex-shrink-0",
+                isOpen && "rotate-180"
+              )} 
+            />
+          </div>
+        </div>
       )}
     </button>
   )
@@ -58,8 +85,10 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isCollapsed, ...
 /**
  * NavigationGroup - Grupos de menú con children
  * Behavior:
- * - Expanded: Standard Accordion (solo un grupo abierto a la vez)
+ * - Expanded: Permite múltiples grupos abiertos, solo cierra al cambiar de item activo
  * - Collapsed: Vertical Accordion (Icons only)
+ * - Permite cerrar un grupo aunque tenga un hijo activo
+ * - Soporta anidamiento recursivo con la misma lógica
  */
 const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle }) => {
   const location = useLocation()
@@ -67,17 +96,40 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle }) => {
 
   const isActive = hasActiveChild(item.children, location.pathname)
 
-  // Estado para accordion de children - solo un child group abierto a la vez
-  const [openChildGroupId, setOpenChildGroupId] = useState(null)
+  // Estado para múltiples child groups abiertos (Set de IDs) - igual que NavigationItems
+  const [openChildGroupIds, setOpenChildGroupIds] = useState(new Set())
 
-  // Abrir automáticamente si contiene la ruta activa
+  // Abrir automáticamente si contiene la ruta activa (solo la primera vez)
   useEffect(() => {
     if (isActive && !isOpen && onToggle) {
       onToggle()
     }
-  }, [isActive, isOpen, onToggle])
+  }, [isActive])
+
+  // Cerrar child groups que no contengan la ruta activa cuando cambia la ubicación
+  useEffect(() => {
+    setOpenChildGroupIds((prevIds) => {
+      const newIds = new Set(prevIds)
+      // Filtrar solo los child groups que contienen la ruta activa
+      item.children.forEach((child) => {
+        if (child.children && newIds.has(child.id)) {
+          if (!hasActiveChild(child.children, location.pathname)) {
+            newIds.delete(child.id)
+          }
+        }
+      })
+      return newIds
+    })
+  }, [location.pathname])
 
   const isCollapsed = menuCollapsed && !forceExpanded
+
+  // Handler personalizado para el toggle que permite cerrar aunque tenga hijo activo
+  const handleToggle = () => {
+    if (onToggle) {
+      onToggle()
+    }
+  }
 
   const triggerButton = (
     <Collapsible.Trigger asChild>
@@ -94,7 +146,7 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle }) => {
     <li className={cn("list-none", isCollapsed ? "w-full flex flex-col items-center" : "w-full")}>
       <Collapsible.Root
         open={isOpen}
-        onOpenChange={onToggle}
+        onOpenChange={handleToggle}
         className={cn("w-full", isCollapsed && "flex flex-col items-center")}
       >
         {isCollapsed ? (
@@ -125,8 +177,18 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle }) => {
                     key={child.id}
                     item={child}
                     forceExpanded={forceExpanded}
-                    isOpen={openChildGroupId === child.id}
-                    onToggle={() => setOpenChildGroupId(openChildGroupId === child.id ? null : child.id)}
+                    isOpen={openChildGroupIds.has(child.id)}
+                    onToggle={() => {
+                      setOpenChildGroupIds((prevIds) => {
+                        const newIds = new Set(prevIds)
+                        if (newIds.has(child.id)) {
+                          newIds.delete(child.id)
+                        } else {
+                          newIds.add(child.id)
+                        }
+                        return newIds
+                      })
+                    }}
                   />
                 )
               }

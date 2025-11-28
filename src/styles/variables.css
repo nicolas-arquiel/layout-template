@@ -79,4 +79,9 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* ========== NAVEGACIÓN - TIPOGRAFÍA ========== */
+  /* Peso de fuente para items de navegación (configurable desde ThemePanel) */
+  /* Valores posibles: 400 (normal), 500 (medium), 600 (semibold), 700 (bold) */
+  --nav-item-font-weight: 500;  /* Por defecto: medium */
 }

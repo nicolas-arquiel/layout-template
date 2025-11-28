@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 
 import NavigationHeader from './NavigationHeader'
 import NavigationLink from './NavigationLink'
@@ -20,9 +21,36 @@ import { cn } from '../../../lib/utils'
 const NavigationItems = ({ items = [], className, forceExpanded = false }) => {
   const permisos = useSelector((state) => state.auth.permisos)
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
+  const location = useLocation()
 
-  // Estado para accordion - solo un grupo abierto a la vez
-  const [openGroupId, setOpenGroupId] = useState(null)
+  // Estado para múltiples grupos abiertos (Set de IDs)
+  const [openGroupIds, setOpenGroupIds] = useState(new Set())
+
+  // Función helper para verificar si un grupo contiene la ruta activa
+  const hasActiveChild = (children, currentPath) => {
+    return children.some((child) => {
+      if (child.children) {
+        return hasActiveChild(child.children, currentPath)
+      }
+      return child.navLink === currentPath
+    })
+  }
+
+  // Cerrar grupos que no contengan la ruta activa cuando cambia la ubicación
+  useEffect(() => {
+    setOpenGroupIds((prevIds) => {
+      const newIds = new Set(prevIds)
+      // Filtrar solo los grupos que contienen la ruta activa
+      items.forEach((item) => {
+        if (item.children && newIds.has(item.id)) {
+          if (!hasActiveChild(item.children, location.pathname)) {
+            newIds.delete(item.id)
+          }
+        }
+      })
+      return newIds
+    })
+  }, [location.pathname])
 
   /**
    * Renderiza un item individual según su tipo
@@ -47,8 +75,18 @@ const NavigationItems = ({ items = [], className, forceExpanded = false }) => {
           key={item.id}
           item={item}
           forceExpanded={forceExpanded}
-          isOpen={openGroupId === item.id}
-          onToggle={() => setOpenGroupId(openGroupId === item.id ? null : item.id)}
+          isOpen={openGroupIds.has(item.id)}
+          onToggle={() => {
+            setOpenGroupIds((prevIds) => {
+              const newIds = new Set(prevIds)
+              if (newIds.has(item.id)) {
+                newIds.delete(item.id)
+              } else {
+                newIds.add(item.id)
+              }
+              return newIds
+            })
+          }}
         />
       )
     }

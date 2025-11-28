@@ -1,21 +1,50 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Provider } from 'react-redux'
 import { RouterProvider } from 'react-router-dom'
-import { Theme, ThemePanel } from '@radix-ui/themes'
+import { Theme } from '@radix-ui/themes'
 import store from './store'
 import router from './router'
+import CustomThemePanel from './components/CustomThemePanel'
 
 /**
  * Componente raíz de la aplicación
  * Configura Redux Provider, Radix Theme Provider y React Router
- *
- * @returns {JSX.Element}
+ * Gestiona el estado global del tema y su persistencia
  */
 const App = () => {
+  // Estado inicial cargado desde localStorage o valores por defecto
+  const [themeSettings, setThemeSettings] = useState(() => {
+    const saved = localStorage.getItem('app-theme-settings')
+    return saved ? JSON.parse(saved) : {
+      appearance: 'inherit',
+      accentColor: 'indigo',
+      grayColor: 'slate',
+      panelBackground: 'translucent',
+      radius: 'medium',
+      scaling: '100%',
+    }
+  })
+
+  // Guardar en localStorage cada vez que cambia
+  useEffect(() => {
+    localStorage.setItem('app-theme-settings', JSON.stringify(themeSettings))
+  }, [themeSettings])
+
+  const updateTheme = (key, value) => {
+    setThemeSettings(prev => ({ ...prev, [key]: value }))
+  }
+
   return (
     <Provider store={store}>
-      <Theme panelBackground="translucent">
-        <ThemePanel />
+      <Theme 
+        appearance={themeSettings.appearance}
+        accentColor={themeSettings.accentColor}
+        grayColor={themeSettings.grayColor}
+        panelBackground={themeSettings.panelBackground}
+        radius={themeSettings.radius}
+        scaling={themeSettings.scaling}
+      >
+        <CustomThemePanel settings={themeSettings} onUpdate={updateTheme} />
         <RouterProvider router={router} />
       </Theme>
     </Provider>

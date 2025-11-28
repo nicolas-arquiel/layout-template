@@ -95,26 +95,27 @@
   overflow-x: hidden !important; /* Eliminar scroll horizontal */
 }
 
-/* Scrollbar thumb - solo visible en hover */
+/* Scrollbar thumb - solo visible en hover con animación rápida */
 .sidebar-scroll:not(:hover) [data-radix-scroll-area-scrollbar] {
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 200ms ease-out;
 }
 
 .sidebar-scroll:hover [data-radix-scroll-area-scrollbar] {
   opacity: 1;
-  transition: opacity 0.3s ease;
+  transition: opacity 200ms ease-in;
 }
 
 /* Personalizar scrollbar para que sea más delgado y sutil */
 .sidebar-scroll [data-radix-scroll-area-scrollbar][data-orientation="vertical"] {
-  width: 6px;
-  padding: 2px;
+  width: 4px; /* Más delgado - 4px en lugar de 6px */
+  padding: 1px;
 }
 
 .sidebar-scroll [data-radix-scroll-area-thumb] {
   background-color: var(--gray-a6);
-  border-radius: 4px;
+  border-radius: 3px;
+  transition: background-color 150ms ease;
 }
 
 .sidebar-scroll [data-radix-scroll-area-thumb]:hover {

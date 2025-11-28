@@ -33,14 +33,24 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
   const linkContent = (
     <NavLink
       to={item.navLink}
-      onClick={item.onClick}
+      onClick={(e) => {
+        // Prevenir navegación si ya estamos en esta ruta
+        const currentPath = window.location.pathname
+        if (currentPath === item.navLink) {
+          e.preventDefault()
+          return
+        }
+        // Ejecutar el onClick original si existe
+        if (item.onClick) {
+          item.onClick(e)
+        }
+      }}
       className={({ isActive }) =>
         cn(
           // Layout base
           'flex items-center rounded-md transition-transform  duration-300 ease-in-out',
           'min-h-[48px]',
-          'cursor-pointer',
-
+          
           // Spacing & Sizing
           isCollapsed
             ? 'justify-center w-[48px] h-[48px] mx-auto my-1 px-0' // Centered square with vertical margin
@@ -49,10 +59,10 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
           // Typography
           'font-[Montserrat] text-[15px] tracking-[0.14px] font-semibold',
 
-          // Active State
+          // Active State - cambiar cursor si está activo
           isActive
-            ? 'text-white shadow-lg' // Background handled via style
-            : 'text-[rgb(110,107,123)] hover:bg-[rgba(0,0,0,0.05)] hover:translate-x-[5px]',
+            ? 'text-white shadow-lg cursor-default' // cursor-default para indicar que no se puede clickear
+            : 'text-[rgb(110,107,123)] hover:bg-[rgba(0,0,0,0.05)] hover:translate-x-[5px] cursor-pointer',
 
           // Nested indentation (only when expanded)
           !isCollapsed && nested && 'pl-10',
@@ -84,14 +94,16 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
         )}
       >
         <div className="flex items-center justify-between gap-2 w-full">
-          <Text size="2" weight="medium" className="truncate">
+          <Text size="2" className="truncate flex-1 font-[Montserrat]" style={{ fontWeight: 'var(--nav-item-font-weight)' }}>
             {item.title}
           </Text>
           {item.badge && (
-            <Badge color={getBadgeColor(item.badgeColor)} variant="soft" size="1">
+            <Badge color={getBadgeColor(item.badgeColor)} variant="soft" size="1" className="flex-shrink-0">
               {item.badge}
             </Badge>
           )}
+          {/* Chevron invisible para mantener alineación con grupos */}
+          <span className="w-[16px] h-[16px] flex-shrink-0 opacity-0 pointer-events-none" aria-hidden="true" />
         </div>
       </div>
     </NavLink>
