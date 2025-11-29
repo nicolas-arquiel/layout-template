@@ -44,20 +44,21 @@ const Sidebar = () => {
     <div className="sidebar-container h-full flex flex-col overflow-hidden animate-in fade-in duration-300">
       {/* ========== HEADER ========== */}
       <div className={cn(
-        "flex-shrink-0 h-[80px] !px-4 py-4 flex items-center border-b border-[var(--gray-4)]",
-        effectiveCollapsed ? "justify-center" : "justify-between"
+        "flex-shrink-0 h-[80px] !px-4 py-4 flex items-center justify-between border-b border-[var(--gray-4)]"
       )}>
         {/* Logo / App Name - Solo mostrar cuando NO está colapsado */}
-        {!effectiveCollapsed && (
-          <div className="flex items-center gap-3 flex-1 overflow-hidden animate-in fade-in slide-in-from-left duration-200">
-            <Heading
-              size="5"
-              className="text-[var(--accent-9)] font-extrabold truncate tracking-tight whitespace-nowrap"
-            >
-              {import.meta.env.VITE_APP_NAME}
-            </Heading>
-          </div>
-        )}
+        {/* Logo / App Name - Animated visibility */}
+        <div className={cn(
+          "flex items-center gap-3 overflow-hidden transition-all duration-300 ease-in-out",
+          effectiveCollapsed ? "w-0 opacity-0" : "flex-1 opacity-100"
+        )}>
+          <Heading
+            size="5"
+            className="text-[var(--accent-9)] font-extrabold truncate tracking-tight whitespace-nowrap"
+          >
+            {import.meta.env.VITE_APP_NAME}
+          </Heading>
+        </div>
 
         {/* Toggle Button (Desktop) */}
         <div className="hidden md:flex">
