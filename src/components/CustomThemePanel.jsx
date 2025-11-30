@@ -8,29 +8,19 @@ const grayColors = ['auto', 'gray', 'mauve', 'slate', 'sage', 'olive', 'sand']
 const radii = ['none', 'small', 'medium', 'large', 'full']
 const scalings = ['90%', '95%', '100%', '105%', '110%']
 
+// Colores disponibles para semánticos
+const successColors = ['green', 'teal', 'jade', 'grass', 'mint']
+const dangerColors = ['red', 'tomato', 'ruby', 'crimson']
+const warningColors = ['amber', 'yellow', 'orange', 'gold']
+const infoColors = ['cyan', 'blue', 'sky', 'iris']
+
 /**
  * CustomThemePanel - Panel de configuración unificado
  * Reemplaza al ThemePanel de Radix y agrega configuraciones personalizadas
  */
 const CustomThemePanel = ({ settings, onUpdate }) => {
   const [isOpen, setIsOpen] = useState(false)
-  const [navFontWeight, setNavFontWeight] = useState('500')
-
-  // Cargar valores guardados al montar
-  useEffect(() => {
-    // Peso de fuente
-    const savedWeight = localStorage.getItem('nav-font-weight')
-    if (savedWeight) {
-      setNavFontWeight(savedWeight)
-      document.documentElement.style.setProperty('--nav-item-font-weight', savedWeight)
-    }
-  }, [])
-
-  const handleNavFontWeightChange = (value) => {
-    setNavFontWeight(value)
-    document.documentElement.style.setProperty('--nav-item-font-weight', value)
-    localStorage.setItem('nav-font-weight', value)
-  }
+  const [isOpen, setIsOpen] = useState(false)
 
   if (!isOpen) {
     return (
@@ -178,24 +168,7 @@ const CustomThemePanel = ({ settings, onUpdate }) => {
 
           <Separator size="4" />
 
-          {/* 5. Personalización de Navegación (TU AGREGADO) */}
-          <Flex direction="column" gap="4">
-            <Text size="1" weight="bold" color="indigo">PERSONALIZACIÓN AVANZADA</Text>
-            
-            {/* Peso de Fuente */}
-            <Flex justify="between" align="center">
-              <Text size="2">Peso de Fuente (Nav)</Text>
-              <Select.Root value={navFontWeight} onValueChange={handleNavFontWeightChange}>
-                <Select.Trigger variant="soft" color="indigo" />
-                <Select.Content>
-                  <Select.Item value="400">Normal (400)</Select.Item>
-                  <Select.Item value="500">Medium (500)</Select.Item>
-                  <Select.Item value="600">Semibold (600)</Select.Item>
-                  <Select.Item value="700">Bold (700)</Select.Item>
-                </Select.Content>
-              </Select.Root>
-            </Flex>
-          </Flex>
+
 
         </Flex>
       </ScrollArea>

@@ -57,7 +57,7 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isCollapsed, ...
           "w-auto opacity-100 flex-1 !ml-4"
         )}>
           <div className="flex items-center justify-between gap-2 w-full">
-            <span className="flex-1 truncate font-[Montserrat] text-[15px]" style={{ fontWeight: 'var(--nav-item-font-weight)' }}>
+            <span className="flex-1 truncate font-[Montserrat] text-[15px] font-medium">
               {item.title}
             </span>
             {/* Badge - Mismo estilo que NavigationItem */}

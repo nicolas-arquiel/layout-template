@@ -63,6 +63,10 @@ import { DataTableExample as DataTable } from '../components/examples'
  * ✅ Code, Kbd - Código y atajos de teclado
  * ✅ Link, Quote, Em, Strong - Elementos de texto
  */
+
+/**
+ * Dashboard Completo - Explorando TODO Radix Themes al máximo
+ */
 export default function DashboardCompleto() {
   const [formDialogOpen, setFormDialogOpen] = useState(false)
   const [canvasOpen, setCanvasOpen] = useState(false)

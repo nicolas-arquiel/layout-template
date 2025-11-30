@@ -1,12 +1,9 @@
-import { HomeIcon, PersonIcon, PlusCircledIcon, ArrowUpIcon } from '@radix-ui/react-icons'
-import { Grid, Box, Card, Flex, Text, Heading } from '@radix-ui/themes'
+import { HomeIcon, PersonIcon, PlusCircledIcon, ArrowUpIcon, CheckCircledIcon, CrossCircledIcon, InfoCircledIcon, ExclamationTriangleIcon } from '@radix-ui/react-icons'
+import { Grid, Box, Card, Flex, Text, Heading, Button, Badge, Callout, Separator } from '@radix-ui/themes'
 
 /**
- * Dashboard - Página de inicio con Radix Themes
- * Grid responsive + Cards con box-shadow estilo Vuexy
- * NOTA: NO usar Container de Radix, el MainLayout ya maneja el ancho con container-xxl
- *
- * @returns {JSX.Element}
+ * Dashboard - Página de inicio con ejemplos de colores semánticos
+ * Demuestra el uso de colores personalizables desde CustomThemePanel
  */
 export default function Dashboard() {
   const stats = [
@@ -38,7 +35,7 @@ export default function Dashboard() {
 
   return (
     <>
-      {/* Stats Grid - Responsive: 1 col mobile, 2 tablet, 4 desktop */}
+      {/* Stats Grid */}
       <Grid columns={{ initial: '1', sm: '2', lg: '4' }} gap="4" mb="6">
         {stats.map((stat, index) => {
           const Icon = stat.icon
@@ -76,7 +73,7 @@ export default function Dashboard() {
       </Grid>
 
       {/* Main Content Card */}
-      <Card>
+      <Card mb="6">
         <Flex align="center" gap="3" mb="4">
           <HomeIcon width="28" height="28" color="var(--accent-9)" />
           <Heading size="5" weight="medium">
@@ -88,6 +85,238 @@ export default function Dashboard() {
           Este sistema te permite administrar estudiantes, inscripciones y toda la información
           académica de manera centralizada y eficiente.
         </Text>
+      </Card>
+
+      {/* ========== DEMOSTRACIÓN DE COLORES SEMÁNTICOS ========== */}
+      <Card mb="6">
+        <Heading size="5" mb="4">🎨 Colores Semánticos Personalizables</Heading>
+        <Text size="2" color="gray" mb="4">
+          Estos colores se pueden cambiar desde el panel de configuración (⚙️ abajo a la derecha).
+          Los cambios se guardan automáticamente en localStorage.
+        </Text>
+
+        <Separator size="4" mb="4" />
+
+        {/* Botones con Radix UI */}
+        <Box mb="5">
+          <Text size="2" weight="bold" mb="3">1. Botones con Radix UI (usando accentColor)</Text>
+          <Flex gap="3" wrap="wrap">
+            <Button>Primary (Accent)</Button>
+            <Button variant="soft"  color="green">Success</Button>
+            <Button variant="soft"  color="red">Danger</Button>
+            <Button variant="soft"  color="amber">Warning</Button>
+            <Button variant="soft"  color="cyan">Info</Button>
+            <Button  variant="soft">Secondary</Button>
+          </Flex>
+        </Box>
+
+        <Separator size="4" mb="4" />
+
+        {/* Botones con CSS Variables */}
+        <Box mb="5">
+          <Text size="2" weight="bold" mb="3">2. Botones con CSS Variables (personalizables)</Text>
+          <Flex gap="3" wrap="wrap">
+            <button 
+              className="px-4 py-2 rounded-md text-white font-medium transition-colors"
+              style={{ 
+                backgroundColor: 'var(--color-primary)',
+              }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--color-primary-hover)'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = 'var(--color-primary)'}
+            >
+              Primary
+            </button>
+            <button 
+              className="px-4 py-2 rounded-md text-white font-medium transition-colors"
+              style={{ 
+                backgroundColor: 'var(--color-success)',
+              }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--color-success-hover)'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = 'var(--color-success)'}
+            >
+              Success
+            </button>
+            <button 
+              className="px-4 py-2 rounded-md text-white font-medium transition-colors"
+              style={{ 
+                backgroundColor: 'var(--color-danger)',
+              }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--color-danger-hover)'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = 'var(--color-danger)'}
+            >
+              Danger
+            </button>
+            <button 
+              className="px-4 py-2 rounded-md text-white font-medium transition-colors"
+              style={{ 
+                backgroundColor: 'var(--color-warning)',
+              }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--color-warning-hover)'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = 'var(--color-warning)'}
+            >
+              Warning
+            </button>
+            <button 
+              className="px-4 py-2 rounded-md text-white font-medium transition-colors"
+              style={{ 
+                backgroundColor: 'var(--color-info)',
+              }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--color-info-hover)'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = 'var(--color-info)'}
+            >
+              Info
+            </button>
+          </Flex>
+        </Box>
+
+        <Separator size="4" mb="4" />
+
+        {/* Badges */}
+        <Box mb="5">
+          <Text size="2" weight="bold" mb="3">3. Badges</Text>
+          <Flex gap="3" wrap="wrap">
+            <Badge color="indigo">Primary</Badge>
+            <Badge color="green">Success</Badge>
+            <Badge color="red">Danger</Badge>
+            <Badge color="amber">Warning</Badge>
+            <Badge color="cyan">Info</Badge>
+            <Badge variant="soft">Secondary</Badge>
+          </Flex>
+        </Box>
+
+        <Separator size="4" mb="4" />
+
+        {/* Callouts */}
+        <Box mb="5">
+          <Text size="2" weight="bold" mb="3">4. Callouts / Alertas</Text>
+          <Flex direction="column" gap="3">
+            <Callout.Root color="green">
+              <Callout.Icon>
+                <CheckCircledIcon />
+              </Callout.Icon>
+              <Callout.Text>
+                ¡Operación exitosa! Los datos se guardaron correctamente.
+              </Callout.Text>
+            </Callout.Root>
+
+            <Callout.Root color="red">
+              <Callout.Icon>
+                <CrossCircledIcon />
+              </Callout.Icon>
+              <Callout.Text>
+                Error: No se pudo completar la operación. Intenta nuevamente.
+              </Callout.Text>
+            </Callout.Root>
+
+            <Callout.Root color="amber">
+              <Callout.Icon>
+                <ExclamationTriangleIcon />
+              </Callout.Icon>
+              <Callout.Text>
+                Advertencia: Esta acción no se puede deshacer.
+              </Callout.Text>
+            </Callout.Root>
+
+            <Callout.Root color="cyan">
+              <Callout.Icon>
+                <InfoCircledIcon />
+              </Callout.Icon>
+              <Callout.Text>
+                Información: Los cambios se aplicarán en 24 horas.
+              </Callout.Text>
+            </Callout.Root>
+          </Flex>
+        </Box>
+
+        <Separator size="4" mb="4" />
+
+        {/* Fondos con colores semánticos */}
+        <Box>
+          <Text size="2" weight="bold" mb="3">5. Fondos con colores semánticos</Text>
+          <Grid columns={{ initial: '1', sm: '2', lg: '5' }} gap="3">
+            <Box 
+              p="4" 
+              style={{ 
+                backgroundColor: 'var(--color-primary-light)',
+                borderLeft: '4px solid var(--color-primary)',
+                borderRadius: 'var(--radius-3)'
+              }}
+            >
+              <Text size="2" weight="bold" style={{ color: 'var(--color-primary)' }}>Primary</Text>
+              <Text size="1" color="gray">Acción principal</Text>
+            </Box>
+
+            <Box 
+              p="4" 
+              style={{ 
+                backgroundColor: 'var(--color-success-light)',
+                borderLeft: '4px solid var(--color-success)',
+                borderRadius: 'var(--radius-3)'
+              }}
+            >
+              <Text size="2" weight="bold" style={{ color: 'var(--color-success)' }}>Success</Text>
+              <Text size="1" color="gray">Operación exitosa</Text>
+            </Box>
+
+            <Box 
+              p="4" 
+              style={{ 
+                backgroundColor: 'var(--color-danger-light)',
+                borderLeft: '4px solid var(--color-danger)',
+                borderRadius: 'var(--radius-3)'
+              }}
+            >
+              <Text size="2" weight="bold" style={{ color: 'var(--color-danger)' }}>Danger</Text>
+              <Text size="1" color="gray">Error o peligro</Text>
+            </Box>
+
+            <Box 
+              p="4" 
+              style={{ 
+                backgroundColor: 'var(--color-warning-light)',
+                borderLeft: '4px solid var(--color-warning)',
+                borderRadius: 'var(--radius-3)'
+              }}
+            >
+              <Text size="2" weight="bold" style={{ color: 'var(--color-warning)' }}>Warning</Text>
+              <Text size="1" color="gray">Advertencia</Text>
+            </Box>
+
+            <Box 
+              p="4" 
+              style={{ 
+                backgroundColor: 'var(--color-info-light)',
+                borderLeft: '4px solid var(--color-info)',
+                borderRadius: 'var(--radius-3)'
+              }}
+            >
+              <Text size="2" weight="bold" style={{ color: 'var(--color-info)' }}>Info</Text>
+              <Text size="1" color="gray">Información</Text>
+            </Box>
+          </Grid>
+        </Box>
+      </Card>
+
+      {/* Instrucciones */}
+      <Card>
+        <Heading size="4" mb="3">📝 Cómo usar</Heading>
+        <Flex direction="column" gap="2">
+          <Text size="2">
+            1. Haz clic en el botón de configuración (⚙️) en la esquina inferior derecha
+          </Text>
+          <Text size="2">
+            2. Ve a la sección "COLORES SEMÁNTICOS"
+          </Text>
+          <Text size="2">
+            3. Cambia los colores de Success, Danger, Warning o Info
+          </Text>
+          <Text size="2">
+            4. Los cambios se aplican inmediatamente y se guardan en localStorage
+          </Text>
+          <Text size="2">
+            5. El color Primary usa el "Accent Color" del tema
+          </Text>
+        </Flex>
       </Card>
     </>
   )

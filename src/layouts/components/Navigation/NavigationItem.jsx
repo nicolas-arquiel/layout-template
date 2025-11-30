@@ -57,7 +57,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
             : 'mb-1 !px-3 py-3 w-full', // Full width with internal padding (forced)
 
           // Typography
-          'font-[Montserrat] text-[15px] tracking-[0.14px] font-semibold',
+          'font-[Montserrat] text-[15px] tracking-[0.14px] font-medium',
 
           // Active State - cambiar cursor si está activo
           isActive
@@ -94,7 +94,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
         )}
       >
         <div className="flex items-center justify-between gap-2 w-full">
-          <Text size="2" className="truncate flex-1 font-[Montserrat]" style={{ fontWeight: 'var(--nav-item-font-weight)' }}>
+          <Text size="2" className="truncate flex-1 font-[Montserrat] font-medium">
             {item.title}
           </Text>
           {item.badge && (
