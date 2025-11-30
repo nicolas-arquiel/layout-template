@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Card, Flex, Text, Select, Separator, IconButton, Tooltip, Grid, Button, ScrollArea, Switch, Slider } from '@radix-ui/themes'
+import { Card, Flex, Text, Select, Separator, IconButton, Tooltip, Grid, Button, ScrollArea } from '@radix-ui/themes'
 import { GearIcon, Cross2Icon, MoonIcon, SunIcon, DesktopIcon } from '@radix-ui/react-icons'
 
 // Opciones de configuración de Radix
@@ -176,18 +176,9 @@ const CustomThemePanel = ({ settings, onUpdate }) => {
             </Flex>
           </Grid>
 
-          {/* 5. Panel Background */}
-          <Flex justify="between" align="center">
-            <Text size="1" weight="bold" color="gray">PANEL TRANSLÚCIDO</Text>
-            <Switch 
-              checked={settings.panelBackground === 'translucent'} 
-              onCheckedChange={(checked) => onUpdate('panelBackground', checked ? 'translucent' : 'solid')} 
-            />
-          </Flex>
-
           <Separator size="4" />
 
-          {/* 6. Personalización de Navegación (TU AGREGADO) */}
+          {/* 5. Personalización de Navegación (TU AGREGADO) */}
           <Flex direction="column" gap="4">
             <Text size="1" weight="bold" color="indigo">PERSONALIZACIÓN AVANZADA</Text>
             
@@ -204,23 +195,6 @@ const CustomThemePanel = ({ settings, onUpdate }) => {
                 </Select.Content>
               </Select.Root>
             </Flex>
-
-            {/* Nivel de Traslucidez - Solo si está activo */}
-            {settings.panelBackground === 'translucent' && (
-              <Flex direction="column" gap="2">
-                <Flex justify="between" align="center">
-                  <Text size="2">Nivel de Traslucidez</Text>
-                  <Text size="1" color="gray">{Math.round((settings.glassOpacity || 0.75) * 100)}%</Text>
-                </Flex>
-                <Slider 
-                  defaultValue={[settings.glassOpacity || 0.75]} 
-                  min={0.1} 
-                  max={0.95} 
-                  step={0.05} 
-                  onValueChange={(val) => onUpdate('glassOpacity', val[0])} 
-                />
-              </Flex>
-            )}
           </Flex>
 
         </Flex>

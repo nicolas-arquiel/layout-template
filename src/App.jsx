@@ -19,10 +19,8 @@ const App = () => {
       appearance: 'inherit',
       accentColor: 'indigo',
       grayColor: 'slate',
-      panelBackground: 'translucent',
       radius: 'medium',
       scaling: '100%',
-      glassOpacity: 0.75, // Default opacity
     }
   })
 
@@ -41,10 +39,8 @@ const App = () => {
         appearance={themeSettings.appearance}
         accentColor={themeSettings.accentColor}
         grayColor={themeSettings.grayColor}
-        panelBackground={themeSettings.panelBackground}
         radius={themeSettings.radius}
         scaling={themeSettings.scaling}
-        style={{ '--glass-opacity': themeSettings.glassOpacity }}
       >
         <CustomThemePanel settings={themeSettings} onUpdate={updateTheme} />
         <RouterProvider router={router} />

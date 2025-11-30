@@ -4,16 +4,10 @@
 
 /* ========== VUEXY SIDEBAR STYLES ========== */
 
-/* Container Styles - Handles background and glass effect */
+/* Container Styles - Solid background only */
 .sidebar-container {
   background-color: var(--color-panel-solid);
-  transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
-}
-
-.radix-themes[data-panel-background="translucent"] .sidebar-container {
-  background-color: var(--glass-bg);
-  backdrop-filter: var(--glass-backdrop);
-  border-right: 1px solid var(--glass-border);
+  transition: background-color 0.3s ease;
 }
 
 /* Shadow Bottom - Divider debajo del header */

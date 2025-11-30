@@ -2,28 +2,16 @@
    NAVBAR STYLES
    ======================================== */
 
-/* Container Styles - Handles background and glass effect */
+/* Container Styles - Solid background only */
 .navbar-container {
   background-color: var(--color-panel-solid);
-  transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
-}
-
-.radix-themes[data-panel-background="translucent"] .navbar-container {
-  background-color: var(--glass-bg);
-  backdrop-filter: var(--glass-backdrop);
-  border: 1px solid var(--glass-border);
+  transition: background-color 0.3s ease;
 }
 
 /* Navbar Header */
 .navbar-header {
   position: relative;
   z-index: 10;
-}
-
-/* Floating navbar effect */
-.navbar-floating {
-  backdrop-filter: blur(8px);
-  background-color: color-mix(in srgb, var(--navbar-bg), transparent 5%);
 }
 
 /* ========== VUEXY EXACT SHADOWS ========== */

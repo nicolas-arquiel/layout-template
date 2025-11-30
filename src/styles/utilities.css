@@ -60,10 +60,3 @@
     max-width: 1440px;
   }
 }
-
-/* Glassmorphism effect (optional) */
-.glass-effect {
-  backdrop-filter: blur(12px) saturate(180%);
-  background-color: color-mix(in srgb, var(--bg-secondary), transparent 20%);
-  border: 1px solid color-mix(in srgb, var(--border-color), transparent 50%);
-}
