@@ -18,6 +18,14 @@ const layoutSlice = createSlice({
      * Estado del overlay en mobile (sidebar visible u oculto)
      */
     mobileMenuOpen: false,
+
+    /**
+     * @type {'vertical' | 'horizontal'}
+     * Layout del menú (sidebar vertical o navbar horizontal)
+     */
+    menuLayout: typeof window !== 'undefined' 
+      ? (localStorage.getItem('menu-layout') || 'vertical')
+      : 'vertical',
   },
   reducers: {
     /**
@@ -44,6 +52,18 @@ const layoutSlice = createSlice({
     closeMobileMenu: (state) => {
       state.mobileMenuOpen = false
     },
+
+    /**
+     * Cambia el layout del menú (vertical/horizontal)
+     * @param {Object} state - Estado actual
+     * @param {Object} action - Action con payload 'vertical' | 'horizontal'
+     */
+    setMenuLayout: (state, action) => {
+      state.menuLayout = action.payload
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('menu-layout', action.payload)
+      }
+    },
   },
 })
 
@@ -51,6 +71,7 @@ export const {
   handleMenuCollapsed,
   toggleMobileMenu,
   closeMobileMenu,
+  setMenuLayout,
 } = layoutSlice.actions
 
 export default layoutSlice.reducer

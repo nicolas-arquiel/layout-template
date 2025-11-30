@@ -5,6 +5,7 @@ import { PersonIcon, GearIcon, ExitIcon, HamburgerMenuIcon } from '@radix-ui/rea
 import { Flex, Text, Avatar, DropdownMenu, Separator, IconButton } from '@radix-ui/themes'
 import { clearAuth } from '../../store/authSlice'
 import { toggleMobileMenu } from '../../store/layoutSlice'
+import HorizontalNav from './HorizontalNav'
 
 /**
  * Navbar - SOLO TAILWIND CLASSES
@@ -16,6 +17,7 @@ const Navbar = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const user = useSelector((state) => state.auth.user)
+  const menuLayout = useSelector((state) => state.layout.menuLayout)
 
   const handleLogout = () => {
     dispatch(clearAuth())
@@ -38,9 +40,9 @@ const Navbar = () => {
 
   return (
     <Flex align="center" justify="between" px="6" className="h-full" >
-      {/* Left side - Hamburger menu (mobile) + Title */}
-      <Flex align="center" gap="3">
-        {/* Hamburger button - Solo en mobile */}
+      {/* Left side - Hamburger menu (mobile) + Title + Horizontal Nav */}
+      <Flex align="center" gap="3" className="flex-1">
+        {/* Hamburger button - Siempre visible en mobile */}
         <div className="block md:hidden">
           <IconButton
             variant="ghost"
@@ -55,6 +57,13 @@ const Navbar = () => {
         <Text size="3" weight="medium" className="text-[var(--gray-12)]">
           {import.meta.env.VITE_APP_NAME}
         </Text>
+
+        {/* Horizontal Navigation - Solo cuando menuLayout es horizontal */}
+        {menuLayout === 'horizontal' && (
+          <div className="hidden md:block flex-1 ml-8">
+            <HorizontalNav />
+          </div>
+        )}
       </Flex>
 
       {/* Right side - User menu */}

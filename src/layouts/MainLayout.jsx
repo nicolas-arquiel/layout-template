@@ -20,22 +20,23 @@ const MainLayout = () => {
   const dispatch = useDispatch()
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
   const mobileMenuOpen = useSelector((state) => state.layout.mobileMenuOpen)
+  const menuLayout = useSelector((state) => state.layout.menuLayout)
 
   return (
     <div className="min-h-screen bg-[var(--bg-primary)]">
       <div className="flex h-screen overflow-hidden">
-        {/* ========== SIDEBAR ========== */}
+        {/* ========== SIDEBAR - Siempre renderizado, controlado por CSS ========== */}
         <aside
           className={cn(
             'transition-all duration-300 ease-in-out',
             'flex-shrink-0',
             'relative',
             'h-screen',
-            'animate-in fade-in duration-200', // Animación de entrada suave
-            // Desktop width
-            menuCollapsed ? 'w-[80px]' : 'w-[260px]',
-            // Mobile
-            'max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:z-40',
+            'animate-in fade-in duration-200',
+            // Desktop width - Oculto si es horizontal
+            menuLayout === 'horizontal' ? 'hidden md:hidden' : (menuCollapsed ? 'w-[80px]' : 'w-[260px]'),
+            // Mobile - Siempre disponible como drawer
+            'max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:z-40 max-md:block',
             'max-md:w-[260px]',
             'max-md:transform max-md:transition-transform max-md:duration-300',
             mobileMenuOpen ? 'max-md:translate-x-0' : 'max-md:-translate-x-full'
@@ -51,7 +52,10 @@ const MainLayout = () => {
             className="absolute top-0 left-0 w-full z-10 pointer-events-none"
             style={{ paddingTop: 'var(--floating-nav-margin)' }}
           >
-            <div className="container-xxl mx-auto pointer-events-auto">
+            <div className={cn(
+              'mx-auto pointer-events-auto',
+              menuLayout === 'horizontal' ? 'container-xxl-horizontal' : 'container-xxl'
+            )}>
               <nav
                 className={cn(
                   'navbar-container',
@@ -73,7 +77,10 @@ const MainLayout = () => {
               paddingTop: 'calc(var(--floating-nav-margin) + var(--navbar-height) + var(--content-padding))' 
             }}
           >
-            <div className="container-xxl mx-auto">
+            <div className={cn(
+              'mx-auto',
+              menuLayout === 'horizontal' ? 'container-xxl-horizontal' : 'container-xxl'
+            )}>
               {/* content-body - Outlet directo */}
               <div style={{ paddingBottom: 'var(--content-padding)' }}>
                 <Outlet />
@@ -82,7 +89,10 @@ const MainLayout = () => {
 
             {/* FOOTER - footer-height exacto */}
             <footer style={{ height: 'var(--footer-height)' }}>
-              <div className="container-xxl mx-auto h-full flex items-center">
+              <div className={cn(
+                'mx-auto h-full flex items-center',
+                menuLayout === 'horizontal' ? 'container-xxl-horizontal' : 'container-xxl'
+              )}>
                 <span className="text-xs text-[var(--gray-11)]">
                   Sistema de gestión (UCU), Universidad de Concepción del Uruguay
                 </span>
@@ -91,7 +101,7 @@ const MainLayout = () => {
           </main>
         </div>
 
-        {/* Mobile Overlay con fade-in */}
+        {/* Mobile Overlay con fade-in - Siempre disponible en mobile si está abierto */}
         {mobileMenuOpen && (
           <div
             className="fixed inset-0 bg-black/50 z-30 md:hidden animate-in fade-in duration-300"

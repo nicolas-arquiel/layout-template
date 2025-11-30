@@ -60,3 +60,88 @@
     max-width: 1440px;
   }
 }
+
+/* Container XXL con padding reducido para layout horizontal */
+.container-xxl-horizontal {
+  width: 100%;
+  padding-left: 1rem;     /* Mobile: 16px (estándar) */
+  padding-right: 1rem;    /* Mobile: 16px (estándar) */
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100%;        /* Fluid width */
+}
+
+/* Tablet / Desktop pequeño */
+@media (min-width: 768px) {
+  .container-xxl-horizontal {
+    padding-left: 4rem;   /* Desktop: 64px */
+    padding-right: 4rem;
+  }
+}
+
+/* Eliminamos las restricciones de ancho fijo para el layout horizontal */
+@media (min-width: 1200px) {
+  .container-xxl-horizontal {
+    max-width: 100%;
+    padding-left: 8rem;   /* Large Desktop: 128px */
+    padding-right: 8rem;
+  }
+}
+
+@media (min-width: 1400px) {
+  .container-xxl-horizontal {
+    max-width: 100%;
+  }
+}
+
+/* ========================================
+   ACCESIBILIDAD FUNCIONAL
+   ======================================== */
+
+/* Reducción de Movimiento */
+.reduce-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Alto Contraste (Refinado) */
+.high-contrast {
+  filter: contrast(120%) brightness(95%);
+}
+
+/* Modo Lectura (Sepia) */
+.sepia-mode {
+  filter: sepia(20%) brightness(95%);
+}
+
+/* Modo Enfoque (Escala de Grises) */
+.grayscale-mode {
+  filter: grayscale(100%);
+}
+
+/* Espaciado para Dislexia */
+.dyslexic-spacing * {
+  line-height: 1.5 !important;
+  letter-spacing: 0.12em !important;
+  word-spacing: 0.16em !important;
+}
+
+/* Cursor Grande */
+.big-cursor, .big-cursor * {
+  cursor: default !important; /* Fallback */
+}
+/* Forzamos cursor pointer grande en elementos interactivos */
+.big-cursor a, .big-cursor button, .big-cursor [role="button"], .big-cursor input, .big-cursor select, .big-cursor textarea {
+  cursor: pointer !important;
+}
+
+/* Enlaces Subrayados */
+.underline-links a,
+.underline-links .rt-Link,
+.underline-links button[class*="rt-Link"] {
+  text-decoration: underline !important;
+  text-underline-offset: 3px;
+}
+

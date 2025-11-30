@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Card, Flex, Text, Select, Separator, IconButton, Tooltip, Grid, Button, ScrollArea } from '@radix-ui/themes'
+import { useSelector, useDispatch } from 'react-redux'
+import { Card, Flex, Text, Select, Separator, IconButton, Tooltip, Grid, Button, ScrollArea, Switch } from '@radix-ui/themes'
 import { GearIcon, Cross2Icon, MoonIcon, SunIcon, DesktopIcon } from '@radix-ui/react-icons'
+import { setMenuLayout } from '../store/layoutSlice'
 
 // Opciones de configuración de Radix
 const accentColors = ['tomato', 'red', 'ruby', 'crimson', 'pink', 'plum', 'purple', 'violet', 'iris', 'indigo', 'blue', 'cyan', 'teal', 'jade', 'green', 'grass', 'brown', 'orange', 'sky', 'mint', 'lime', 'yellow', 'amber', 'gold', 'bronze', 'gray']
@@ -19,8 +21,135 @@ const infoColors = ['cyan', 'blue', 'sky', 'iris']
  * Reemplaza al ThemePanel de Radix y agrega configuraciones personalizadas
  */
 const CustomThemePanel = ({ settings, onUpdate }) => {
+  const dispatch = useDispatch()
+  const menuLayout = useSelector((state) => state.layout.menuLayout)
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+  
   const [isOpen, setIsOpen] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
+  const [reducedMotion, setReducedMotion] = useState(false)
+  const [highContrast, setHighContrast] = useState(false)
+  const [sepiaMode, setSepiaMode] = useState(false)
+  const [grayscaleMode, setGrayscaleMode] = useState(false)
+  const [textSpacing, setTextSpacing] = useState(false)
+  const [bigCursor, setBigCursor] = useState(false)
+  const [underlineLinks, setUnderlineLinks] = useState(false)
+
+  // Detectar cambios de tamaño de pantalla
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 768
+      setIsMobile(mobile)
+      
+      // Si es mobile y está en horizontal, forzar vertical
+      if (mobile && menuLayout === 'horizontal') {
+        dispatch(setMenuLayout('vertical'))
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    
+    // Check inicial
+    handleResize()
+
+    return () => window.removeEventListener('resize', handleResize)
+  }, [menuLayout, dispatch])
+
+  // Cargar valores guardados al montar
+  useEffect(() => {
+    const savedMotion = localStorage.getItem('reduced-motion') === 'true'
+    const savedContrast = localStorage.getItem('high-contrast') === 'true'
+    const savedSepia = localStorage.getItem('sepia-mode') === 'true'
+    const savedGrayscale = localStorage.getItem('grayscale-mode') === 'true'
+    const savedSpacing = localStorage.getItem('dyslexic-spacing') === 'true'
+    const savedCursor = localStorage.getItem('big-cursor') === 'true'
+    const savedLinks = localStorage.getItem('underline-links') === 'true'
+    
+    setReducedMotion(savedMotion)
+    setHighContrast(savedContrast)
+    setSepiaMode(savedSepia)
+    setGrayscaleMode(savedGrayscale)
+    setTextSpacing(savedSpacing)
+    setBigCursor(savedCursor)
+    setUnderlineLinks(savedLinks)
+    
+    if (savedMotion) document.documentElement.classList.add('reduce-motion')
+    if (savedContrast) document.documentElement.classList.add('high-contrast')
+    if (savedSepia) document.documentElement.classList.add('sepia-mode')
+    if (savedGrayscale) document.documentElement.classList.add('grayscale-mode')
+    if (savedSpacing) document.documentElement.classList.add('dyslexic-spacing')
+    if (savedCursor) document.documentElement.classList.add('big-cursor')
+    if (savedLinks) document.documentElement.classList.add('underline-links')
+  }, [])
+
+  const toggleMotion = (checked) => {
+    setReducedMotion(checked)
+    localStorage.setItem('reduced-motion', checked)
+    if (checked) {
+      document.documentElement.classList.add('reduce-motion')
+    } else {
+      document.documentElement.classList.remove('reduce-motion')
+    }
+  }
+
+  const toggleContrast = (checked) => {
+    setHighContrast(checked)
+    localStorage.setItem('high-contrast', checked)
+    if (checked) {
+      document.documentElement.classList.add('high-contrast')
+    } else {
+      document.documentElement.classList.remove('high-contrast')
+    }
+  }
+
+  const toggleSepia = (checked) => {
+    setSepiaMode(checked)
+    localStorage.setItem('sepia-mode', checked)
+    if (checked) {
+      document.documentElement.classList.add('sepia-mode')
+    } else {
+      document.documentElement.classList.remove('sepia-mode')
+    }
+  }
+
+  const toggleGrayscale = (checked) => {
+    setGrayscaleMode(checked)
+    localStorage.setItem('grayscale-mode', checked)
+    if (checked) {
+      document.documentElement.classList.add('grayscale-mode')
+    } else {
+      document.documentElement.classList.remove('grayscale-mode')
+    }
+  }
+
+  const toggleSpacing = (checked) => {
+    setTextSpacing(checked)
+    localStorage.setItem('dyslexic-spacing', checked)
+    if (checked) {
+      document.documentElement.classList.add('dyslexic-spacing')
+    } else {
+      document.documentElement.classList.remove('dyslexic-spacing')
+    }
+  }
+
+  const toggleCursor = (checked) => {
+    setBigCursor(checked)
+    localStorage.setItem('big-cursor', checked)
+    if (checked) {
+      document.documentElement.classList.add('big-cursor')
+    } else {
+      document.documentElement.classList.remove('big-cursor')
+    }
+  }
+
+  const toggleLinks = (checked) => {
+    setUnderlineLinks(checked)
+    localStorage.setItem('underline-links', checked)
+    if (checked) {
+      document.documentElement.classList.add('underline-links')
+    } else {
+      document.documentElement.classList.remove('underline-links')
+    }
+  }
 
   if (!isOpen) {
     return (
@@ -102,7 +231,38 @@ const CustomThemePanel = ({ settings, onUpdate }) => {
 
           <Separator size="4" />
 
-          {/* 2. Color de Acento */}
+          {/* 2. Layout del Menú */}
+          <Flex direction="column" gap="2">
+            <Text size="1" weight="bold" color="gray">LAYOUT DEL MENÚ</Text>
+            <Grid columns="2" gap="2">
+              <Button 
+                variant={menuLayout === 'vertical' ? 'solid' : 'soft'} 
+                onClick={() => dispatch(setMenuLayout('vertical'))}
+                style={{ justifyContent: 'center' }}
+              >
+                Vertical (Sidebar)
+              </Button>
+              
+              <Tooltip content={isMobile ? "No disponible en móviles" : "Barra de navegación superior"}>
+                <Button 
+                  variant={menuLayout === 'horizontal' ? 'solid' : 'soft'} 
+                  onClick={() => !isMobile && dispatch(setMenuLayout('horizontal'))}
+                  disabled={isMobile}
+                  style={{ 
+                    justifyContent: 'center',
+                    opacity: isMobile ? 0.5 : 1,
+                    cursor: isMobile ? 'not-allowed' : 'pointer'
+                  }}
+                >
+                  Horizontal (Navbar)
+                </Button>
+              </Tooltip>
+            </Grid>
+          </Flex>
+
+          <Separator size="4" />
+
+          {/* 3. Color de Acento */}
           <Flex direction="column" gap="2">
             <Text size="1" weight="bold" color="gray">COLOR DE ACENTO</Text>
             <Grid columns="6" gap="1">
@@ -168,7 +328,73 @@ const CustomThemePanel = ({ settings, onUpdate }) => {
 
           <Separator size="4" />
 
+          {/* 5. Accesibilidad Funcional */}
+          <Flex direction="column" gap="4">
+            <Text size="1" weight="bold" color="indigo">ACCESIBILIDAD</Text>
+            
+            {/* Reducción de Movimiento */}
+            <Flex justify="between" align="center">
+              <Flex direction="column">
+                <Text size="2">Reducir Movimiento</Text>
+                <Text size="1" color="gray">Desactiva animaciones</Text>
+              </Flex>
+              <Switch checked={reducedMotion} onCheckedChange={toggleMotion} />
+            </Flex>
 
+            {/* Alto Contraste */}
+            <Flex justify="between" align="center">
+              <Flex direction="column">
+                <Text size="2">Alto Contraste</Text>
+                <Text size="1" color="gray">Aumenta legibilidad</Text>
+              </Flex>
+              <Switch checked={highContrast} onCheckedChange={toggleContrast} />
+            </Flex>
+
+            {/* Modo Lectura (Sepia) */}
+            <Flex justify="between" align="center">
+              <Flex direction="column">
+                <Text size="2">Modo Lectura</Text>
+                <Text size="1" color="gray">Filtro cálido (Sepia)</Text>
+              </Flex>
+              <Switch checked={sepiaMode} onCheckedChange={toggleSepia} />
+            </Flex>
+
+            {/* Modo Enfoque (Grayscale) */}
+            <Flex justify="between" align="center">
+              <Flex direction="column">
+                <Text size="2">Modo Enfoque</Text>
+                <Text size="1" color="gray">Escala de grises</Text>
+              </Flex>
+              <Switch checked={grayscaleMode} onCheckedChange={toggleGrayscale} />
+            </Flex>
+
+            {/* Espaciado Texto */}
+            <Flex justify="between" align="center">
+              <Flex direction="column">
+                <Text size="2">Espaciado Texto</Text>
+                <Text size="1" color="gray">Mejora lectura (Dislexia)</Text>
+              </Flex>
+              <Switch checked={textSpacing} onCheckedChange={toggleSpacing} />
+            </Flex>
+
+            {/* Cursor Grande */}
+            <Flex justify="between" align="center">
+              <Flex direction="column">
+                <Text size="2">Cursor Grande</Text>
+                <Text size="1" color="gray">Puntero más visible</Text>
+              </Flex>
+              <Switch checked={bigCursor} onCheckedChange={toggleCursor} />
+            </Flex>
+
+            {/* Enlaces Subrayados */}
+            <Flex justify="between" align="center">
+              <Flex direction="column">
+                <Text size="2">Subrayar Enlaces</Text>
+                <Text size="1" color="gray">Identificar links</Text>
+              </Flex>
+              <Switch checked={underlineLinks} onCheckedChange={toggleLinks} />
+            </Flex>
+          </Flex>
 
         </Flex>
       </ScrollArea>
