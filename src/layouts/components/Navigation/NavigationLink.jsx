@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { closeMobileMenu } from '../../../store/layoutSlice'
+import { closeMobileMenu } from '@/store/layoutSlice'
 import NavigationItem from './NavigationItem'
 
 /**

@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
 import { DropdownMenu, Button, Flex, Text, Badge } from '@radix-ui/themes'
 import { ChevronDownIcon, ChevronRightIcon } from '@radix-ui/react-icons'
-import { canViewMenuItem, canViewMenuGroup } from '../../utils/permissions'
-import navigation from '../../navigation/vertical'
-import { cn } from '../../lib/utils'
+import { canViewMenuItem, canViewMenuGroup } from '@utils/permissions'
+import navigation from '@/navigation/vertical'
+import { cn } from '@lib/utils'
 
 /**
  * HorizontalNav - Navegación horizontal estilo "Popover" en cascada

@@ -5,8 +5,8 @@ import { useLocation } from 'react-router-dom'
 import NavigationHeader from './NavigationHeader'
 import NavigationLink from './NavigationLink'
 import NavigationGroup from './NavigationGroup'
-import { canViewMenuItem, canViewMenuGroup } from '../../../utils/permissions'
-import { cn } from '../../../lib/utils'
+import { canViewMenuItem, canViewMenuGroup } from '@utils/permissions'
+import { cn } from '@lib/utils'
 
 /**
  * Componente principal que renderiza todos los items de navegación

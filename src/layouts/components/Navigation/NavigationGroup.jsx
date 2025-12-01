@@ -5,7 +5,7 @@ import * as Collapsible from '@radix-ui/react-collapsible'
 import { useSelector } from 'react-redux'
 import { Badge, Tooltip } from '@radix-ui/themes'
 import NavigationLink from './NavigationLink'
-import { cn } from '../../../lib/utils'
+import { cn } from '@lib/utils'
 
 /**
  * Check if any child route is active

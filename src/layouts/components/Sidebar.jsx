@@ -2,10 +2,10 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Cross1Icon, ChevronRightIcon, ChevronLeftIcon } from '@radix-ui/react-icons'
 import { Heading, IconButton, ScrollArea } from '@radix-ui/themes'
-import { closeMobileMenu, handleMenuCollapsed } from '../../store/layoutSlice'
+import { closeMobileMenu, handleMenuCollapsed } from '@/store/layoutSlice'
 import NavigationItems from './Navigation/NavigationItems'
-import navigation from '../../navigation/vertical'
-import { cn } from '../../lib/utils'
+import navigation from '@/navigation/vertical'
+import { cn } from '@lib/utils'
 
 /**
  * Sidebar - Navegación lateral completamente rediseñado

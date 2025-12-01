@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { PersonIcon, GearIcon, ExitIcon, HamburgerMenuIcon } from '@radix-ui/react-icons'
 import { Flex, Text, Avatar, DropdownMenu, Separator, IconButton } from '@radix-ui/themes'
-import { clearAuth } from '../../store/authSlice'
-import { toggleMobileMenu } from '../../store/layoutSlice'
+import { clearAuth } from '@/store/authSlice'
+import { toggleMobileMenu } from '@/store/layoutSlice'
 import HorizontalNav from './HorizontalNav'
 
 /**

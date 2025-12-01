@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { Text, Badge, Tooltip } from '@radix-ui/themes'
-import { cn } from '../../../lib/utils'
+import { cn } from '@lib/utils'
 import { useSelector } from 'react-redux'
 
 /**
