@@ -39,7 +39,7 @@ const Navbar = () => {
   }
 
   return (
-    <Flex align="center" justify="between" px="6" className="h-full" >
+    <Flex align="center" justify="between" px="6" className="w-full h-full">
       {/* Left side - Hamburger menu (mobile) + Title + Horizontal Nav */}
       <Flex align="center" gap="3" className="flex-1">
         {/* Hamburger button - Siempre visible en mobile */}
@@ -66,68 +66,68 @@ const Navbar = () => {
         )}
       </Flex>
 
-          {/* Right side - User menu */}
-          <Flex align="center" gap="3">
-            {/* User Dropdown */}
-            <DropdownMenu.Root>
-              <DropdownMenu.Trigger>
-                <button className="border-none bg-transparent p-0 flex items-center gap-2 cursor-pointer">
-                  <Avatar size="2" fallback={getUserInitials()} color="blue" />
-                  {user && (
-                    <div className="hidden md:block">
-                      <Text size="2" weight="medium">
-                        {user.nombre || 'Usuario'}
-                      </Text>
-                    </div>
+      {/* Right side - User menu */}
+      <Flex align="center" gap="3">
+        {/* User Dropdown */}
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <button className="border-none bg-transparent p-0 flex items-center gap-2 cursor-pointer">
+              <Avatar size="2" fallback={getUserInitials()} color="blue" />
+              {user && (
+                <div className="hidden md:block">
+                  <Text size="2" weight="medium">
+                    {user.nombre || 'Usuario'}
+                  </Text>
+                </div>
+              )}
+            </button>
+          </DropdownMenu.Trigger>
+
+          <DropdownMenu.Content align="end">
+            {/* User Info */}
+            {user && (
+              <>
+                <Flex direction="column" p="2" gap="1">
+                  <Text size="2" weight="medium">
+                    {user.nombre || 'Usuario'}
+                  </Text>
+                  {user.email && (
+                    <Text size="1" color="gray">
+                      {user.email}
+                    </Text>
                   )}
-                </button>
-              </DropdownMenu.Trigger>
-
-              <DropdownMenu.Content align="end">
-                {/* User Info */}
-                {user && (
-                  <>
-                    <Flex direction="column" p="2" gap="1">
-                      <Text size="2" weight="medium">
-                        {user.nombre || 'Usuario'}
-                      </Text>
-                      {user.email && (
-                        <Text size="1" color="gray">
-                          {user.email}
-                        </Text>
-                      )}
-                    </Flex>
-                    <Separator size="4" />
-                  </>
-                )}
-
-                {/* Menu Items */}
-                <DropdownMenu.Item onSelect={() => navigate('/perfil')}>
-                  <Flex align="center" gap="2">
-                    <PersonIcon width="16" height="16" />
-                    <Text>Mi Perfil</Text>
-                  </Flex>
-                </DropdownMenu.Item>
-
-                <DropdownMenu.Item onSelect={() => navigate('/configuracion')}>
-                  <Flex align="center" gap="2">
-                    <GearIcon width="16" height="16" />
-                    <Text>Configuración</Text>
-                  </Flex>
-                </DropdownMenu.Item>
-
+                </Flex>
                 <Separator size="4" />
+              </>
+            )}
 
-                <DropdownMenu.Item onSelect={handleLogout} color="red">
-                  <Flex align="center" gap="2">
-                    <ExitIcon width="16" height="16" />
-                    <Text>Cerrar Sesión</Text>
-                  </Flex>
-                </DropdownMenu.Item>
-              </DropdownMenu.Content>
-            </DropdownMenu.Root>
-          </Flex>
-        </Flex>
+            {/* Menu Items */}
+            <DropdownMenu.Item onSelect={() => navigate('/perfil')}>
+              <Flex align="center" gap="2">
+                <PersonIcon width="16" height="16" />
+                <Text>Mi Perfil</Text>
+              </Flex>
+            </DropdownMenu.Item>
+
+            <DropdownMenu.Item onSelect={() => navigate('/configuracion')}>
+              <Flex align="center" gap="2">
+                <GearIcon width="16" height="16" />
+                <Text>Configuración</Text>
+              </Flex>
+            </DropdownMenu.Item>
+
+            <Separator size="4" />
+
+            <DropdownMenu.Item onSelect={handleLogout} color="red">
+              <Flex align="center" gap="2">
+                <ExitIcon width="16" height="16" />
+                <Text>Cerrar Sesión</Text>
+              </Flex>
+            </DropdownMenu.Item>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
+      </Flex>
+    </Flex>
   )
 }
 
