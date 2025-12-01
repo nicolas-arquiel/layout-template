@@ -39,7 +39,7 @@ const Navbar = () => {
   }
 
   return (
-    <Flex align="center" justify="between" px="6" className="h-full" >
+    <Flex align="center" justify="between" px="6" className="w-full h-full">
       {/* Left side - Hamburger menu (mobile) + Title + Horizontal Nav */}
       <Flex align="center" gap="3" className="flex-1">
         {/* Hamburger button - Siempre visible en mobile */}
