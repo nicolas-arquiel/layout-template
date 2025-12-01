@@ -2,12 +2,15 @@ import React from 'react';
 import { Box, Table } from '@radix-ui/themes';
 import { flexRender } from '@tanstack/react-table';
 import TanStackSortHeader from './TanStackSortHeader';
+import TanStackSelectCheckbox from './TanStackSelectCheckbox';
+import TanStackSelectAllCheckbox from './TanStackSelectAllCheckbox';
 
 /**
  * Componente de tabla principal para TanStack Table
  * Renderiza la tabla con encabezados ordenables y cuerpo de datos
+ * Soporta selección de filas mediante checkbox cuando enableRowSelection=true
  */
-const TanStackTable = ({ table, customStyles = {} }) => {
+const TanStackTable = ({ table, enableRowSelection = false, customStyles = {} }) => {
     return (
         <Box
             style={{
@@ -21,6 +24,12 @@ const TanStackTable = ({ table, customStyles = {} }) => {
                 <Table.Header>
                     {table.getHeaderGroups().map(headerGroup => (
                         <Table.Row key={headerGroup.id}>
+                            {/* Columna de selección en el header */}
+                            {enableRowSelection && (
+                                <Table.ColumnHeaderCell style={{ width: '50px' }}>
+                                    <TanStackSelectAllCheckbox table={table} />
+                                </Table.ColumnHeaderCell>
+                            )}
                             {headerGroup.headers.map(header => (
                                 <Table.ColumnHeaderCell
                                     key={header.id}
@@ -40,7 +49,7 @@ const TanStackTable = ({ table, customStyles = {} }) => {
                     {table.getRowModel().rows.length === 0 ? (
                         <Table.Row>
                             <Table.Cell
-                                colSpan={table.getAllColumns().length}
+                                colSpan={table.getAllColumns().length + (enableRowSelection ? 1 : 0)}
                                 style={{ textAlign: 'center', padding: '2rem' }}
                             >
                                 No se encontraron resultados
@@ -49,6 +58,12 @@ const TanStackTable = ({ table, customStyles = {} }) => {
                     ) : (
                         table.getRowModel().rows.map(row => (
                             <Table.Row key={row.id}>
+                                {/* Columna de selección en cada fila */}
+                                {enableRowSelection && (
+                                    <Table.Cell>
+                                        <TanStackSelectCheckbox row={row} />
+                                    </Table.Cell>
+                                )}
                                 {row.getVisibleCells().map(cell => (
                                     <Table.Cell key={cell.id}>
                                         {flexRender(

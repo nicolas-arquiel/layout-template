@@ -632,6 +632,20 @@ const columns = [
   titleIcon={Users}
   showSearch={true}
   showPagination={true}
+/>
+
+// Con selección de filas
+const [selectedRows, setSelectedRows] = useState([]);
+
+<TanStackTableWithClientData
+  data={data}
+  columns={columns}
+  title="Usuarios"
+  enableRowSelection={true}
+  onRowSelectionChange={(rows) => {
+    setSelectedRows(rows);
+    console.log('Filas seleccionadas:', rows);
+  }}
 />`}
                 </Code>
               </Box>
@@ -656,6 +670,8 @@ const columns = [
                   <Text size="2">• <strong>Ordenamiento:</strong> Click en los encabezados para ordenar ascendente/descendente</Text>
                   <Text size="2">• <strong>Paginación:</strong> Navega entre páginas y cambia el tamaño de página</Text>
                   <Text size="2">• <strong>Filtrado Global:</strong> Busca en todos los campos simultáneamente</Text>
+                  <Text size="2">• <strong>Selección de Filas:</strong> Checkboxes para seleccionar filas individuales o todas a la vez</Text>
+                  <Text size="2">• <strong>Visibilidad de Columnas:</strong> Muestra/oculta columnas dinámicamente</Text>
                   <Text size="2">• <strong>Componentes Reutilizables:</strong> Usa TableContainer, TableHeader y componentes TanStack</Text>
                   <Text size="2">• <strong>Headless UI:</strong> Totalmente personalizable con Radix UI</Text>
                 </Flex>

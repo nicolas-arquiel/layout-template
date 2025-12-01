@@ -44,7 +44,8 @@ const Sidebar = () => {
     <div className="sidebar-container h-full flex flex-col overflow-hidden animate-in fade-in duration-300">
       {/* ========== HEADER ========== */}
       <div className={cn(
-        "flex-shrink-0 h-[80px] !px-4 py-4 flex items-center justify-between border-b border-[var(--gray-4)]"
+        "flex-shrink-0 h-[80px] !px-4 py-4 flex items-center border-b border-[var(--gray-4)]",
+        effectiveCollapsed ? "justify-center" : "justify-between"
       )}>
         {/* Logo / App Name - Solo mostrar cuando NO está colapsado */}
         {/* Logo / App Name - Animated visibility */}
