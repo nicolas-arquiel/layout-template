@@ -25,7 +25,7 @@ export const layoutSlice = createSlice({
   initialState: {
     skin: initialSkin(),
     isRTL: initialDirection(),
-    layout: 'vertical',
+    menuLayout: 'vertical',
     lastLayout: 'vertical',
     menuCollapsed: initialMenuCollapsed(),
     footerType: 'static',
@@ -50,7 +50,7 @@ export const layoutSlice = createSlice({
       window.localStorage.setItem('skin', JSON.stringify(action.payload))
     },
     handleLayout: (state, action) => {
-      state.layout = action.payload
+      state.menuLayout = action.payload
     },
     handleFooterType: (state, action) => {
       state.footerType = action.payload
@@ -97,7 +97,7 @@ export const layoutSlice = createSlice({
      * @param {Object} action - Action con payload 'vertical' | 'horizontal'
      */
     setMenuLayout: (state, action) => {
-      state.layout = action.payload
+      state.menuLayout = action.payload
       if (typeof window !== 'undefined') {
         localStorage.setItem('menu-layout', action.payload)
       }
