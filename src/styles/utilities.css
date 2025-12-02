@@ -31,8 +31,11 @@
   background: rgb(71 85 105);
 }
 
-/* Focus visible para accesibilidad */
-*:focus-visible {
+/* Focus visible para accesibilidad - Solo para elementos que NO son de Radix UI */
+/* Radix UI maneja sus propios estilos de focus, no debemos sobrescribirlos */
+button:not([class*="rt-"]):focus-visible,
+a:not([class*="rt-"]):focus-visible,
+[role="button"]:not([class*="rt-"]):focus-visible {
   outline: 2px solid rgb(59 130 246);
   outline-offset: 2px;
 }
