@@ -1,6 +1,6 @@
 import React from 'react';
 import { Flex, Text, TextField } from '@radix-ui/themes';
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import { Search } from 'lucide-react';
 
 /**
  * Componente de búsqueda global para TanStack Table
@@ -21,7 +21,7 @@ const TanStackSearchInput = ({
                 style={{ flex: 1, minWidth: '200px' }}
             >
                 <TextField.Slot>
-                    <MagnifyingGlassIcon width="16" height="16" />
+                    <Search size={16} />
                 </TextField.Slot>
             </TextField.Root>
             {resultCount !== undefined && (

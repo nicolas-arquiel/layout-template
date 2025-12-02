@@ -14,7 +14,7 @@ import {
   Heading,
   Callout,
 } from '@radix-ui/themes'
-import { ExclamationTriangleIcon, CheckCircledIcon } from '@radix-ui/react-icons'
+import { AlertTriangle, CheckCircle2 } from 'lucide-react'
 
 /**
  * FormDialog - Modal con formulario completo usando React Hook Form + Radix
@@ -93,7 +93,7 @@ export default function FormDialog({ open, onOpenChange, onSubmit, title = 'Nuev
             {showSuccess && (
               <Callout.Root color="green">
                 <Callout.Icon>
-                  <CheckCircledIcon />
+                  <CheckCircle2 size={16} />
                 </Callout.Icon>
                 <Callout.Text>¡Formulario enviado exitosamente!</Callout.Text>
               </Callout.Root>
@@ -103,7 +103,7 @@ export default function FormDialog({ open, onOpenChange, onSubmit, title = 'Nuev
             {showError && (
               <Callout.Root color="red">
                 <Callout.Icon>
-                  <ExclamationTriangleIcon />
+                  <AlertTriangle size={16} />
                 </Callout.Icon>
                 <Callout.Text>Ocurrió un error al enviar el formulario</Callout.Text>
               </Callout.Root>

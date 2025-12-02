@@ -14,13 +14,13 @@ import {
   Callout,
 } from '@radix-ui/themes'
 import {
-  PersonIcon,
-  EnvelopeClosedIcon,
-  MobileIcon,
-  HomeIcon,
-  CheckCircledIcon,
-  InfoCircledIcon,
-} from '@radix-ui/react-icons'
+  User,
+  Mail,
+  Smartphone,
+  Home,
+  CheckCircle2,
+  Info,
+} from 'lucide-react'
 import { Wizard } from '@components'
 
 /**
@@ -283,7 +283,7 @@ export default function InscripcionPersona() {
 
         <Callout.Root color="blue" size="1">
           <Callout.Icon>
-            <InfoCircledIcon />
+            <Info />
           </Callout.Icon>
           <Callout.Text>
             Complete los datos personales básicos de la persona a inscribir.
@@ -320,7 +320,7 @@ export default function InscripcionPersona() {
                   size="3"
                 >
                   <TextField.Slot>
-                    <EnvelopeClosedIcon width="16" height="16" />
+                    <Mail size={16} />
                   </TextField.Slot>
                 </TextField.Root>
                 {error && (
@@ -350,7 +350,7 @@ export default function InscripcionPersona() {
                     size="3"
                   >
                     <TextField.Slot>
-                      <MobileIcon width="16" height="16" />
+                      <Smartphone size={16} />
                     </TextField.Slot>
                   </TextField.Root>
                   {error && (
@@ -377,7 +377,7 @@ export default function InscripcionPersona() {
                   size="3"
                 >
                   <TextField.Slot>
-                    <MobileIcon width="16" height="16" />
+                    <Smartphone size={16} />
                   </TextField.Slot>
                 </TextField.Root>
               )}
@@ -401,7 +401,7 @@ export default function InscripcionPersona() {
                   size="3"
                 >
                   <TextField.Slot>
-                    <HomeIcon width="16" height="16" />
+                    <Home size={16} />
                   </TextField.Slot>
                 </TextField.Root>
                 {error && (
@@ -460,7 +460,7 @@ export default function InscripcionPersona() {
 
         <Callout.Root color="blue" size="1">
           <Callout.Icon>
-            <InfoCircledIcon />
+            <Info />
           </Callout.Icon>
           <Callout.Text>
             Proporcione la información de contacto para comunicarse con la persona.
@@ -567,7 +567,7 @@ export default function InscripcionPersona() {
 
         <Callout.Root color="green" size="1">
           <Callout.Icon>
-            <CheckCircledIcon />
+            <CheckCircle2 />
           </Callout.Icon>
           <Callout.Text>
             Complete los datos adicionales y presione "Inscribir Persona" para finalizar.
@@ -582,21 +582,21 @@ export default function InscripcionPersona() {
       id: 'step-datos-personales',
       title: 'Datos Personales',
       subtitle: 'Información básica',
-      icon: <PersonIcon width="18" height="18" />,
+      icon: <User size={18} />,
       content: renderDatosPersonales(),
     },
     {
       id: 'step-contacto',
       title: 'Contacto',
       subtitle: 'Email y teléfono',
-      icon: <EnvelopeClosedIcon width="18" height="18" />,
+      icon: <Mail size={18} />,
       content: renderContacto(),
     },
     {
       id: 'step-info-adicional',
       title: 'Información Adicional',
       subtitle: 'Datos complementarios',
-      icon: <InfoCircledIcon width="18" height="18" />,
+      icon: <Info size={18} />,
       content: renderInformacionAdicional(),
     },
   ]
@@ -647,7 +647,7 @@ export default function InscripcionPersona() {
                   </Button>
                 ) : (
                   <Button type="submit" color="green">
-                    <CheckCircledIcon width="16" height="16" />
+                    <CheckCircle2 size={16} />
                     Inscribir Persona
                   </Button>
                 )}

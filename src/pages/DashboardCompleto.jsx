@@ -24,19 +24,19 @@ import {
   TextField,
   Select,
 } from '@radix-ui/themes'
-import { PersonIcon,
-  PlusCircledIcon,
-  ArrowUpIcon,
-  SymbolIcon,
-  ExclamationTriangleIcon,
-  CheckCircledIcon,
-  InfoCircledIcon,
-  PlusIcon,
-  GearIcon,
+import { User,
+  PlusCircle,
+  ArrowUp,
+  Circle,
+  AlertTriangle,
+  CheckCircle2,
+  Info,
+  Plus,
+  Settings,
   BellIcon,
-  MagnifyingGlassIcon,
-  MixerHorizontalIcon,
-} from '@radix-ui/react-icons'
+  Search,
+  SlidersHorizontal,
+} from 'lucide-react'
 import { Controller } from 'react-hook-form'
 import { FormDialog, Canvas, CanvasForm } from '@components'
 import { DataTableExample as DataTable } from '../components/examples'
@@ -82,10 +82,10 @@ export default function DashboardCompleto() {
   ]
 
   const stats = [
-    { title: 'Total Usuarios', value: '2,543', change: '+12.5%', icon: PersonIcon, color: 'blue' },
-    { title: 'Nuevos Hoy', value: '234', change: '+5.2%', icon: PlusCircledIcon, color: 'green' },
-    { title: 'Crecimiento', value: '23.5%', change: '+2.1%', icon: ArrowUpIcon, color: 'orange' },
-    { title: 'Ingresos', value: '$45,678', change: '+8.3%', icon: SymbolIcon, color: 'purple' },
+    { title: 'Total Usuarios', value: '2,543', change: '+12.5%', icon: User, color: 'blue' },
+    { title: 'Nuevos Hoy', value: '234', change: '+5.2%', icon: PlusCircle, color: 'green' },
+    { title: 'Crecimiento', value: '23.5%', change: '+2.1%', icon: ArrowUp, color: 'orange' },
+    { title: 'Ingresos', value: '$45,678', change: '+8.3%', icon: Circle, color: 'purple' },
   ]
 
   const recentUsers = [
@@ -100,7 +100,7 @@ export default function DashboardCompleto() {
       <Grid columns={{ initial: '1', md: '2' }} gap="4" mb="6">
         <Callout.Root color="blue">
           <Callout.Icon>
-            <InfoCircledIcon />
+            <Info />
           </Callout.Icon>
           <Callout.Text>
             Bienvenido al Dashboard completo con <Strong>Radix Themes</Strong>
@@ -109,7 +109,7 @@ export default function DashboardCompleto() {
 
         <Callout.Root color="green">
           <Callout.Icon>
-            <CheckCircledIcon />
+            <CheckCircle2 />
           </Callout.Icon>
           <Callout.Text>Sistema funcionando correctamente</Callout.Text>
         </Callout.Root>
@@ -202,7 +202,7 @@ export default function DashboardCompleto() {
               <Flex direction="column" gap="3">
                 <Callout.Root color="orange">
                   <Callout.Icon>
-                    <ExclamationTriangleIcon />
+                    <AlertTriangle />
                   </Callout.Icon>
                   <Callout.Text>Tienes 3 notificaciones pendientes</Callout.Text>
                 </Callout.Root>
@@ -221,15 +221,15 @@ export default function DashboardCompleto() {
               <Heading size="5">Usuarios del Sistema</Heading>
               <Flex gap="2">
                 <Button variant="soft" size="2">
-                  <MixerHorizontalIcon width="16" height="16" />
+                  <SlidersHorizontal size={16} />
                   Filtrar
                 </Button>
                 <Button variant="soft" size="2">
-                  <MagnifyingGlassIcon width="16" height="16" />
+                  <Search size={16} />
                   Buscar
                 </Button>
                 <Button size="2" onClick={() => setFormDialogOpen(true)}>
-                  <PlusIcon width="16" height="16" />
+                  <Plus size={16} />
                   Nuevo Usuario
                 </Button>
               </Flex>
@@ -276,20 +276,20 @@ export default function DashboardCompleto() {
               </Heading>
               <Flex direction="column" gap="2">
                 <Button variant="soft" onClick={() => setCanvasFormOpen(true)}>
-                  <PlusCircledIcon width="16" height="16" />
+                  <PlusCircle size={16} />
                   Crear Usuario
                 </Button>
                 <Button variant="soft" onClick={() => setCanvasOpen(true)}>
-                  <GearIcon width="16" height="16" />
+                  <Settings size={16} />
                   Configuración
                 </Button>
                 <Button variant="soft">
-                  <BellIcon width="16" height="16" />
+                  <BellIcon size={16} />
                   Notificaciones
                 </Button>
                 <Link href="https://www.radix-ui.com/themes/docs" target="_blank">
                   <Button variant="soft" style={{ width: '100%' }}>
-                    <InfoCircledIcon width="16" height="16" />
+                    <Info size={16} />
                     Ver Docs de Radix
                   </Button>
                 </Link>
@@ -343,7 +343,7 @@ export default function DashboardCompleto() {
         <Flex direction="column" gap="4">
           <Callout.Root color="blue">
             <Callout.Icon>
-              <InfoCircledIcon />
+              <Info />
             </Callout.Icon>
             <Callout.Text>
               Canvas simple sin complejidad de nested/niveles
@@ -485,7 +485,7 @@ export default function DashboardCompleto() {
 
             <Callout.Root color="blue">
               <Callout.Icon>
-                <InfoCircledIcon />
+                <Info />
               </Callout.Icon>
               <Callout.Text>
                 El nuevo usuario recibirá un email de confirmación con instrucciones para activar su cuenta.

@@ -1,10 +1,10 @@
-import { GearIcon } from '@radix-ui/react-icons'
+import { Settings } from 'lucide-react'
 import { PageTemplate } from '@components'
 
 export default function ConfigGeneral() {
   return (
     <PageTemplate
-      icon={GearIcon}
+      icon={Settings}
       title="Configuración General"
       description="Parámetros generales del sistema"
     />

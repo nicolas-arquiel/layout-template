@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Table, Box, Text, Checkbox, Flex } from '@radix-ui/themes';
-import { ChevronUpIcon, ChevronDownIcon } from '@radix-ui/react-icons';
+import { ChevronUp, ChevronDown } from 'lucide-react';
 
 /**
  * DataTable mejorado con Radix UI
@@ -156,12 +156,12 @@ const EnhancedDataTable = ({
                     <div className="ml-auto flex flex-col">
                       {sortField === (column.id || column.selector) ? (
                         sortDirection === 'asc' ? (
-                          <ChevronUpIcon width="14" height="14" />
+                          <ChevronUp size={14} />
                         ) : (
-                          <ChevronDownIcon width="14" height="14" />
+                          <ChevronDown size={14} />
                         )
                       ) : (
-                        <ChevronDownIcon width="14" height="14" opacity="0.3" />
+                        <ChevronDown size={14} opacity="0.3" />
                       )}
                     </div>
                   )}

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Flex, Text, TextField, Box, ScrollArea, Popover } from '@radix-ui/themes';
-import { ChevronDownIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import { ChevronDown, Search } from 'lucide-react';
 
 /**
  * Select con búsqueda nativo con Radix UI
@@ -71,7 +71,7 @@ const SearchableSelect = ({
             {selectedOption?.label || placeholder}
           </Text>
 
-          <ChevronDownIcon
+          <ChevronDown
             width="14"
             height="14"
             style={{
@@ -110,7 +110,7 @@ const SearchableSelect = ({
                 onClick={(e) => e.stopPropagation()}
               >
                 <TextField.Slot>
-                  <MagnifyingGlassIcon width="14" height="14" />
+                  <Search size={14} />
                 </TextField.Slot>
               </TextField.Root>
             </Box>

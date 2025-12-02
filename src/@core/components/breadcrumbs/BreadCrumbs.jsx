@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Grid, CheckSquare, MessageSquare, Mail, Calendar } from 'react-feather';
+import { Grid, CheckSquare, MessageSquare, Mail, Calendar } from 'lucide-react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
 const BreadCrumbs = ({ data, title, dropDown }) => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useFieldArray, useForm, Controller } from 'react-hook-form';
-import { MixerHorizontalIcon, Cross2Icon, PlusIcon } from '@radix-ui/react-icons';
+import { SlidersHorizontal, X, Plus } from 'lucide-react';
 import {
   Button,
   Dialog,
@@ -202,7 +202,7 @@ const AdvancedFilter = ({ columns, onFilter, isAsync, setAsyncParams, resetPagin
       <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
         <Dialog.Trigger>
           <Button variant="soft" size="2">
-            <MixerHorizontalIcon width="16" height="16" />
+            <SlidersHorizontal size={16} />
             Filtro Avanzado
           </Button>
         </Dialog.Trigger>
@@ -281,7 +281,7 @@ const AdvancedFilter = ({ columns, onFilter, isAsync, setAsyncParams, resetPagin
                         remove(index);
                       }}
                     >
-                      <Cross2Icon width="14" height="14" />
+                      <X size={14} />
                     </IconButton>
                   </Flex>
                 );
@@ -295,7 +295,7 @@ const AdvancedFilter = ({ columns, onFilter, isAsync, setAsyncParams, resetPagin
                 size="2"
                 onClick={() => append({ field: '', operator: '', value: '' })}
               >
-                <PlusIcon width="16" height="16" />
+                <Plus size={16} />
                 Añadir filtro
               </Button>
             </Flex>

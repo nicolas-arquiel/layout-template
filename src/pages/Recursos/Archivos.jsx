@@ -1,10 +1,10 @@
-import { FileIcon } from '@radix-ui/react-icons'
+import { File } from 'lucide-react'
 import { PageTemplate } from '@components'
 
 export default function RecursosArchivos() {
   return (
     <PageTemplate
-      icon={FileIcon}
+      icon={File}
       title="Archivos"
       description="Gestión de archivos y recursos del sistema"
     />

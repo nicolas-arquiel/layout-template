@@ -1,6 +1,6 @@
 import React from 'react';
 import { Flex, Button, Text, Select } from '@radix-ui/themes';
-import { ChevronLeftIcon, ChevronRightIcon, DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons';
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 
 /**
  * Componente de paginación para TanStack Table
@@ -108,7 +108,7 @@ const TanStackPagination = ({
                         disabled={!table.getCanPreviousPage()}
                         style={{ minWidth: '32px' }}
                     >
-                        <DoubleArrowLeftIcon />
+                        <ChevronsLeft />
                     </Button>
 
                     {/* Previous Page Button */}
@@ -119,7 +119,7 @@ const TanStackPagination = ({
                         disabled={!table.getCanPreviousPage()}
                         style={{ minWidth: '32px' }}
                     >
-                        <ChevronLeftIcon />
+                        <ChevronLeft />
                     </Button>
 
                     {/* Page Numbers */}
@@ -147,7 +147,7 @@ const TanStackPagination = ({
                         disabled={!table.getCanNextPage()}
                         style={{ minWidth: '32px' }}
                     >
-                        <ChevronRightIcon />
+                        <ChevronRight />
                     </Button>
 
                     {/* Last Page Button */}
@@ -158,7 +158,7 @@ const TanStackPagination = ({
                         disabled={!table.getCanNextPage()}
                         style={{ minWidth: '32px' }}
                     >
-                        <DoubleArrowRightIcon />
+                        <ChevronsRight />
                     </Button>
                 </Flex>
             </Flex>

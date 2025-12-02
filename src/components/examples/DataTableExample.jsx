@@ -11,7 +11,7 @@ import {
   Button,
   Callout,
 } from '@radix-ui/themes'
-import { DotsVerticalIcon, EyeOpenIcon, Pencil1Icon, TrashIcon, ExternalLinkIcon, InfoCircledIcon } from '@radix-ui/react-icons'
+import { MoreVertical, Eye, Pencil, Trash2, ExternalLink, Info } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 /**
@@ -98,7 +98,7 @@ export default function DataTable({ data = [] }) {
                 <DropdownMenu.Root>
                   <DropdownMenu.Trigger>
                     <IconButton variant="ghost" size="1">
-                      <DotsVerticalIcon width="16" height="16" />
+                      <MoreVertical size={16} />
                     </IconButton>
                   </DropdownMenu.Trigger>
 
@@ -106,7 +106,7 @@ export default function DataTable({ data = [] }) {
                     {/* Ver Detalles - Abre Modal */}
                     <DropdownMenu.Item onSelect={() => handleViewDetails(item)}>
                       <Flex gap="2" align="center">
-                        <EyeOpenIcon width="14" height="14" />
+                        <Eye size={14} />
                         <Text>Ver Detalles</Text>
                       </Flex>
                     </DropdownMenu.Item>
@@ -114,7 +114,7 @@ export default function DataTable({ data = [] }) {
                     {/* Editar */}
                     <DropdownMenu.Item onSelect={() => handleEdit(item)}>
                       <Flex gap="2" align="center">
-                        <Pencil1Icon width="14" height="14" />
+                        <Pencil size={14} />
                         <Text>Editar</Text>
                       </Flex>
                     </DropdownMenu.Item>
@@ -124,7 +124,7 @@ export default function DataTable({ data = [] }) {
                     {/* Navegar a otra página */}
                     <DropdownMenu.Item onSelect={() => handleNavigate(item)}>
                       <Flex gap="2" align="center">
-                        <ExternalLinkIcon width="14" height="14" />
+                        <ExternalLink size={14} />
                         <Text>Ir a Perfil</Text>
                       </Flex>
                     </DropdownMenu.Item>
@@ -134,7 +134,7 @@ export default function DataTable({ data = [] }) {
                     {/* Eliminar */}
                     <DropdownMenu.Item color="red" onSelect={() => handleDeleteConfirm(item)}>
                       <Flex gap="2" align="center">
-                        <TrashIcon width="14" height="14" />
+                        <Trash2 size={14} />
                         <Text>Eliminar</Text>
                       </Flex>
                     </DropdownMenu.Item>
@@ -158,7 +158,7 @@ export default function DataTable({ data = [] }) {
             <Flex direction="column" gap="3">
               <Callout.Root color="blue">
                 <Callout.Icon>
-                  <InfoCircledIcon />
+                  <Info />
                 </Callout.Icon>
                 <Callout.Text>
                   ID: {selectedItem.id} - {selectedItem.nombre}

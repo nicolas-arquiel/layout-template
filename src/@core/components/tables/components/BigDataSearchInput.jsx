@@ -1,5 +1,5 @@
 import React from 'react';
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import { Search } from 'lucide-react';
 import { Flex, TextField, IconButton } from '@radix-ui/themes';
 import SearchableSelect from './SearchableSelect';
 
@@ -68,7 +68,7 @@ const BigDataSearchInput = ({
           height: '30px'
         }}
       >
-        <MagnifyingGlassIcon width="16" height="16" />
+        <Search size={16} />
       </IconButton>
     </Flex>
   );

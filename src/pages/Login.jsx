@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { EnterIcon, EnvelopeClosedIcon, LockClosedIcon } from '@radix-ui/react-icons'
+import { LogIn, Mail, Lock } from 'lucide-react'
 import { Box, Card, Heading, Text, TextField, Button, Flex, Checkbox } from '@radix-ui/themes'
-import { setAuth } from '../store/authSlice'
+import { setAuth } from '@src/store/authSlice'
 
 /**
  * Login - Página de inicio de sesión simple
@@ -71,7 +71,7 @@ export default function Login() {
                 backgroundColor: 'var(--accent-9)',
               }}
             >
-              <EnterIcon width="32" height="32" color="white" />
+              <LogIn size={32} color="white" />
             </Flex>
             <Heading size="6" mb="2" align="center">
               Bienvenido
@@ -98,7 +98,7 @@ export default function Login() {
                   required
                 >
                   <TextField.Slot>
-                    <EnvelopeClosedIcon width="16" height="16" />
+                    <Mail size={16} />
                   </TextField.Slot>
                 </TextField.Root>
               </Box>
@@ -117,7 +117,7 @@ export default function Login() {
                   required
                 >
                   <TextField.Slot>
-                    <LockClosedIcon width="16" height="16" />
+                    <Lock size={16} />
                   </TextField.Slot>
                 </TextField.Root>
               </Box>
@@ -155,7 +155,7 @@ export default function Login() {
                   </>
                 ) : (
                   <>
-                    <EnterIcon width="20" height="20" />
+                    <LogIn size={20} />
                     Iniciar Sesión
                   </>
                 )}

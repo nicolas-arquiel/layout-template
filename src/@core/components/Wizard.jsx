@@ -1,6 +1,6 @@
 import { useState, forwardRef, useImperativeHandle, Fragment } from 'react'
 import { Flex, Box, Text, Button } from '@radix-ui/themes'
-import { ChevronRightIcon } from '@radix-ui/react-icons'
+import { ChevronRight } from 'lucide-react'
 import { clsx } from 'clsx'
 import './Wizard.css'
 
@@ -14,7 +14,7 @@ const Wizard = forwardRef((props, ref) => {
   const {
     type = 'horizontal',
     steps,
-    separator = <ChevronRightIcon width="17" height="17" />,
+    separator = <ChevronRight size={17} />,
     className,
     headerClassName,
     contentClassName,

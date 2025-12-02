@@ -1,6 +1,6 @@
 import React from 'react';
 import { Flex, Text, TextField } from '@radix-ui/themes';
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import { Search } from 'lucide-react';
 
 const SearchInput = ({
   searchKey,
@@ -26,7 +26,7 @@ const SearchInput = ({
         style={{ minWidth: '200px' }}
       >
         <TextField.Slot>
-          <MagnifyingGlassIcon width="16" height="16" />
+          <Search size={16} />
         </TextField.Slot>
       </TextField.Root>
     </Flex>

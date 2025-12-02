@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { ChevronDownIcon } from '@radix-ui/react-icons'
+import { ChevronDown } from 'lucide-react'
 import * as Collapsible from '@radix-ui/react-collapsible'
 import { useSelector } from 'react-redux'
 import { Badge, Tooltip } from '@radix-ui/themes'
@@ -67,7 +67,7 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isCollapsed, ...
               </Badge>
             )}
             {/* Chevron - Siempre presente para mantener alineación */}
-            <ChevronDownIcon 
+            <ChevronDown 
               width="16" 
               height="16" 
               className={cn(

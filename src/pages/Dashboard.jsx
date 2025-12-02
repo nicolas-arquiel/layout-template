@@ -1,4 +1,4 @@
-import { HomeIcon, PersonIcon, PlusCircledIcon, ArrowUpIcon, CheckCircledIcon, CrossCircledIcon, InfoCircledIcon, ExclamationTriangleIcon } from '@radix-ui/react-icons'
+import { Home, User, PlusCircle, ArrowUp, CheckCircle2, XCircle, Info, AlertTriangle } from 'lucide-react'
 import { Grid, Box, Card, Flex, Text, Heading, Button, Badge, Callout, Separator } from '@radix-ui/themes'
 
 /**
@@ -7,10 +7,10 @@ import { Grid, Box, Card, Flex, Text, Heading, Button, Badge, Callout, Separator
  */
 export default function Dashboard() {
   const stats = [
-    { title: 'Total Usuarios', value: '2,543', icon: PersonIcon, color: 'blue' },
-    { title: 'Inscripciones', value: '1,234', icon: PlusCircledIcon, color: 'green' },
-    { title: 'Personas', value: '856', icon: PersonIcon, color: 'purple' },
-    { title: 'Crecimiento', value: '23.5%', icon: ArrowUpIcon, color: 'orange' },
+    { title: 'Total Usuarios', value: '2,543', icon: User, color: 'blue' },
+    { title: 'Inscripciones', value: '1,234', icon: PlusCircle, color: 'green' },
+    { title: 'Personas', value: '856', icon: User, color: 'purple' },
+    { title: 'Crecimiento', value: '23.5%', icon: ArrowUp, color: 'orange' },
   ]
 
   const getIconColor = (color) => {
@@ -75,7 +75,7 @@ export default function Dashboard() {
       {/* Main Content Card */}
       <Card mb="6">
         <Flex align="center" gap="3" mb="4">
-          <HomeIcon width="28" height="28" color="var(--accent-9)" />
+          <Home size={28} color="var(--accent-9)" />
           <Heading size="5" weight="medium">
             Sistema de Gestión Universitaria
           </Heading>
@@ -192,7 +192,7 @@ export default function Dashboard() {
           <Flex direction="column" gap="3">
             <Callout.Root color="green">
               <Callout.Icon>
-                <CheckCircledIcon />
+                <CheckCircle2 />
               </Callout.Icon>
               <Callout.Text>
                 ¡Operación exitosa! Los datos se guardaron correctamente.
@@ -201,7 +201,7 @@ export default function Dashboard() {
 
             <Callout.Root color="red">
               <Callout.Icon>
-                <CrossCircledIcon />
+                <XCircle />
               </Callout.Icon>
               <Callout.Text>
                 Error: No se pudo completar la operación. Intenta nuevamente.
@@ -210,7 +210,7 @@ export default function Dashboard() {
 
             <Callout.Root color="amber">
               <Callout.Icon>
-                <ExclamationTriangleIcon />
+                <AlertTriangle />
               </Callout.Icon>
               <Callout.Text>
                 Advertencia: Esta acción no se puede deshacer.
@@ -219,7 +219,7 @@ export default function Dashboard() {
 
             <Callout.Root color="cyan">
               <Callout.Icon>
-                <InfoCircledIcon />
+                <Info />
               </Callout.Icon>
               <Callout.Text>
                 Información: Los cambios se aplicarán en 24 horas.

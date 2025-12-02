@@ -1,10 +1,10 @@
-import { StackIcon } from '@radix-ui/react-icons'
+import { Layers } from 'lucide-react'
 import { PageTemplate } from '@components'
 
 export default function RecursosPlantillas() {
   return (
     <PageTemplate
-      icon={StackIcon}
+      icon={Layers}
       title="Plantillas"
       description="Administración de plantillas y documentos predefinidos"
     />

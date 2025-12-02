@@ -1,10 +1,11 @@
-import React from 'react'
-import { Outlet } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Outlet, useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
+import HorizontalNav from './components/HorizontalNav'
 import { cn } from '../lib/utils'
-import { closeMobileMenu, handleMenuCollapsed } from '../store/layoutSlice'
+import { closeMobileMenu, handleMenuCollapsed } from '@src/store/layoutSlice'
 
 /**
  * Layout principal - VUEXY EXACT REPLICATION

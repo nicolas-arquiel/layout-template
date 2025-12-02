@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, DropdownMenu } from '@radix-ui/themes';
-import { DownloadIcon } from '@radix-ui/react-icons';
+import { Download } from 'lucide-react';
 
 const ExportarBtn = ({
   onExportExcel,
@@ -15,7 +15,7 @@ const ExportarBtn = ({
     <DropdownMenu.Root>
       <DropdownMenu.Trigger disabled={disabled}>
         <Button variant="soft" size="2" disabled={disabled}>
-          <DownloadIcon width="16" height="16" />
+          <Download size={16} />
           Exportar
         </Button>
       </DropdownMenu.Trigger>

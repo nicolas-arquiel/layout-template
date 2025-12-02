@@ -1,6 +1,6 @@
 import React from 'react';
 import { DropdownMenu, IconButton, Flex, Checkbox, Text } from '@radix-ui/themes';
-import { DotsVerticalIcon } from '@radix-ui/react-icons';
+import { MoreVertical } from 'lucide-react';
 
 /**
  * Componente de configuración de visibilidad de columnas para TanStack Table
@@ -11,7 +11,7 @@ const TanStackColumnVisibility = ({ table }) => {
         <DropdownMenu.Root>
             <DropdownMenu.Trigger>
                 <IconButton variant="ghost" size="2">
-                    <DotsVerticalIcon width="16" height="16" />
+                    <MoreVertical size={16} />
                 </IconButton>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content align="end">

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Flex, Text, Badge, IconButton, TextField, Checkbox, Box, ScrollArea, Popover } from '@radix-ui/themes';
-import { Cross2Icon, ChevronDownIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import { X, ChevronDown, Search } from 'lucide-react';
 
 /**
  * MultiSelect nativo con Radix UI
@@ -100,7 +100,7 @@ const MultiSelect = ({
                         minWidth: '14px'
                       }}
                     >
-                      <Cross2Icon width="10" height="10" />
+                      <X size={10} />
                     </IconButton>
                   </Flex>
                 </Badge>
@@ -116,10 +116,10 @@ const MultiSelect = ({
                 onClick={handleClear}
                 style={{ width: '16px', height: '16px' }}
               >
-                <Cross2Icon width="12" height="12" />
+                <X size={12} />
               </IconButton>
             )}
-            <ChevronDownIcon
+            <ChevronDown
               width="14"
               height="14"
               style={{
@@ -158,7 +158,7 @@ const MultiSelect = ({
                 onClick={(e) => e.stopPropagation()}
               >
                 <TextField.Slot>
-                  <MagnifyingGlassIcon width="14" height="14" />
+                  <Search size={14} />
                 </TextField.Slot>
               </TextField.Root>
             </Box>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { Dialog, Flex, Heading, IconButton, ScrollArea, Button } from '@radix-ui/themes'
-import { Cross1Icon, ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons'
+import { X, ArrowLeft, ArrowRight } from 'lucide-react'
 import { transformData } from './CanvasUtils'
 
 /**
@@ -160,7 +160,7 @@ export default function CanvasForm({
             {!forceCloseButton && (
               <Dialog.Close>
                 <IconButton variant="ghost" size="2" color="gray">
-                  <Cross1Icon width="16" height="16" />
+                  <X size={18} />
                 </IconButton>
               </Dialog.Close>
             )}
@@ -212,9 +212,9 @@ export default function CanvasForm({
                     onClick={toggleCanvas}
                   >
                     {IconBack ? (
-                      <IconBack width="14" height="14" />
+                      <IconBack size={14} />
                     ) : (
-                      <ArrowLeftIcon width="14" height="14" />
+                      <ArrowLeft size={14} />
                     )}
                     {textBack}
                   </Button>
@@ -228,9 +228,9 @@ export default function CanvasForm({
                   >
                     {textSend}
                     {IconSend ? (
-                      <IconSend width="14" height="14" />
+                      <IconSend size={14} />
                     ) : (
-                      <ArrowRightIcon width="14" height="14" />
+                      <ArrowRight size={14} />
                     )}
                   </Button>
                 )}

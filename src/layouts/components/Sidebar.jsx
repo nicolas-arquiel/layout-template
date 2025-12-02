@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Cross1Icon, ChevronRightIcon, ChevronLeftIcon } from '@radix-ui/react-icons'
+import { X, ChevronRight, ChevronLeft } from 'lucide-react'
 import { Heading, IconButton, ScrollArea } from '@radix-ui/themes'
 import { closeMobileMenu, handleMenuCollapsed } from '@/store/layoutSlice'
 import NavigationItems from './Navigation/NavigationItems'
@@ -69,7 +69,7 @@ const Sidebar = () => {
             size="2"
             className="text-[var(--gray-11)] hover:text-[var(--accent-9)] hover:bg-[var(--accent-3)] transition-colors"
           >
-            {effectiveCollapsed ? <ChevronRightIcon width="20" height="20" /> : <ChevronLeftIcon width="20" height="20" />}
+            {effectiveCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
           </IconButton>
         </div>
 
@@ -77,7 +77,7 @@ const Sidebar = () => {
         {!effectiveCollapsed && (
           <div className="block md:hidden">
             <IconButton variant="ghost" onClick={handleCloseMobile} size="2">
-              <Cross1Icon width="20" height="20" />
+              <X size={20} />
             </IconButton>
           </div>
         )}

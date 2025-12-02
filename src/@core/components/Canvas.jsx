@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Dialog, Flex, Heading, IconButton, ScrollArea } from '@radix-ui/themes'
-import { Cross1Icon } from '@radix-ui/react-icons'
+import { X } from 'lucide-react'
 
 /**
  * Canvas - Offcanvas simple sin formulario
@@ -80,7 +80,7 @@ export default function Canvas({
             {!forceCloseButton && (
               <Dialog.Close>
                 <IconButton variant="ghost" size="2" color="gray">
-                  <Cross1Icon width="16" height="16" />
+                  <X size={18} />
                 </IconButton>
               </Dialog.Close>
             )}

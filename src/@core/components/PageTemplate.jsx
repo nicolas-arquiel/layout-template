@@ -5,7 +5,7 @@ import { Card, Flex, Heading, Text, Grid, Box, Badge } from '@radix-ui/themes'
  * NO usar Container de Radix, el MainLayout ya maneja el ancho
  *
  * @param {Object} props
- * @param {React.ReactNode} props.icon - Icono de react-feather
+ * @param {React.ReactNode} props.icon - Icono de lucide-react
  * @param {string} props.title - Título de la página
  * @param {string} props.description - Descripción
  * @param {React.ReactNode} [props.children] - Contenido adicional

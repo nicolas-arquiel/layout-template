@@ -1,17 +1,17 @@
-import { BarChartIcon, SymbolIcon, ArrowUpIcon, BackpackIcon } from '@radix-ui/react-icons'
+import { BarChart3, Circle, ArrowUp, Backpack } from 'lucide-react'
 import { PageTemplate } from '@components'
 import { Card, Grid, Heading, Text, Flex, Box } from '@radix-ui/themes'
 
 export default function ReportesVentas() {
   const stats = [
-    { title: 'Ventas Totales', value: '$45,678', icon: SymbolIcon, color: 'green' },
-    { title: 'Órdenes', value: '234', icon: BackpackIcon, color: 'blue' },
-    { title: 'Crecimiento', value: '+23.5%', icon: ArrowUpIcon, color: 'orange' },
+    { title: 'Ventas Totales', value: '$45,678', icon: Circle, color: 'green' },
+    { title: 'Órdenes', value: '234', icon: Backpack, color: 'blue' },
+    { title: 'Crecimiento', value: '+23.5%', icon: ArrowUp, color: 'orange' },
   ]
 
   return (
     <PageTemplate
-      icon={BarChartIcon}
+      icon={BarChart3}
       title="Reporte de Ventas"
       description="Análisis detallado de ventas y transacciones"
       badge="Dashboard"

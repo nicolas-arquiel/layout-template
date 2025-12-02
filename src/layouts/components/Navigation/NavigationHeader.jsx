@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Text } from '@radix-ui/themes'
-import { DotsHorizontalIcon } from '@radix-ui/react-icons'
+import { MoreHorizontal } from 'lucide-react'
 
 /**
  * NavigationHeader - SOLO TAILWIND CLASSES

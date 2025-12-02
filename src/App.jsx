@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Provider } from 'react-redux'
 import { RouterProvider } from 'react-router-dom'
 import { Theme } from '@radix-ui/themes'
-import store from './store'
+import { store } from '@src/store/store'
 import router from './router'
 import CustomThemePanel from './components/CustomThemePanel'
 

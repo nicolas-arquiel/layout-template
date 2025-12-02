@@ -1,10 +1,10 @@
-import { StackIcon } from '@radix-ui/react-icons'
+import { Layers } from 'lucide-react'
 import { PageTemplate } from '@components'
 
 export default function ConfigSistemaApi() {
   return (
     <PageTemplate
-      icon={StackIcon}
+      icon={Layers}
       title="API"
       description="Configuración de endpoints y servicios API"
     />

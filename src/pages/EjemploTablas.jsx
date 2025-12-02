@@ -13,7 +13,7 @@ import {
   AdvancedFilter,
   ExportFilter
 } from '../@core/components/tables';
-import { Users, Database, Zap } from 'react-feather';
+import { Users, Database, Zap } from 'lucide-react';
 import BreadCrumbs from '../@core/components/breadcrumbs/BreadCrumbs';
 import { createColumnHelper } from '@tanstack/react-table';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Flex, Button, Text } from '@radix-ui/themes';
-import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 /**
  * Componente de paginación usando Radix UI
@@ -81,7 +81,7 @@ const Pagination = ({
         disabled={forcePage === 0}
         style={{ minWidth: '32px' }}
       >
-        <ChevronLeftIcon />
+        <ChevronLeft />
       </Button>
 
       {getPageNumbers().map((page, index) => (
@@ -108,7 +108,7 @@ const Pagination = ({
         disabled={forcePage === pageCount - 1}
         style={{ minWidth: '32px' }}
       >
-        <ChevronRightIcon />
+        <ChevronRight />
       </Button>
     </Flex>
   );

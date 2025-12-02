@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Flex, Text, IconButton } from '@radix-ui/themes';
-import { Cross2Icon } from '@radix-ui/react-icons';
+import { X } from 'lucide-react';
 
 const DateRangeInput = ({
   value,
@@ -110,7 +110,7 @@ const DateRangeInput = ({
             marginLeft: 'var(--space-1)',
           }}
         >
-          <Cross2Icon width="14" height="14" />
+          <X size={14} />
         </IconButton>
       </Flex>
     </Flex>

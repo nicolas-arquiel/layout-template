@@ -1,6 +1,6 @@
 import React from 'react';
 import { Flex } from '@radix-ui/themes';
-import { ChevronUpIcon, ChevronDownIcon } from '@radix-ui/react-icons';
+import { ChevronUp, ChevronDown } from 'lucide-react';
 import { flexRender } from '@tanstack/react-table';
 
 /**
@@ -29,12 +29,12 @@ const TanStackSortHeader = ({ header }) => {
                 <div className="ml-auto flex flex-col">
                     {isSorted ? (
                         isSorted === 'asc' ? (
-                            <ChevronUpIcon width="14" height="14" />
+                            <ChevronUp size={14} />
                         ) : (
-                            <ChevronDownIcon width="14" height="14" />
+                            <ChevronDown size={14} />
                         )
                     ) : (
-                        <ChevronDownIcon width="14" height="14" opacity="0.3" />
+                        <ChevronDown size={14} opacity="0.3" />
                     )}
                 </div>
             )}

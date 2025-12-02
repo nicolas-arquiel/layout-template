@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
 import { DropdownMenu, Button, Flex, Text, Badge } from '@radix-ui/themes'
-import { ChevronDownIcon, ChevronRightIcon } from '@radix-ui/react-icons'
+import { ChevronDown, ChevronRight } from 'lucide-react'
 import { canViewMenuItem, canViewMenuGroup } from '@utils/permissions'
 import navigation from '@/navigation/vertical'
 import { cn } from '@lib/utils'
@@ -55,7 +55,7 @@ const HorizontalNav = () => {
               active ? "bg-[var(--accent-3)] text-[var(--accent-9)]" : "text-[var(--gray-11)] hover:text-[var(--gray-12)] hover:bg-[var(--gray-3)]"
             )}
           >
-            {item.icon && <item.icon width="16" height="16" />}
+            {item.icon && <item.icon size={16} />}
             {item.title}
             {item.badge && (
               <Badge color={getBadgeColor(item.badgeColor)} variant="solid" radius="full">
@@ -77,7 +77,7 @@ const HorizontalNav = () => {
           active && "bg-[var(--accent-3)] text-[var(--accent-9)]"
         )}
       >
-        {item.icon && <item.icon width="16" height="16" />}
+        {item.icon && <item.icon size={16} />}
         <Text size="2">{item.title}</Text>
         {item.badge && (
           <Badge color={getBadgeColor(item.badgeColor)} variant="soft" radius="full" className="ml-auto">
@@ -97,14 +97,14 @@ const HorizontalNav = () => {
     // Contenido del Trigger (Botón o Item)
     const triggerContent = (
       <>
-        {item.icon && <item.icon width="16" height="16" />}
+        {item.icon && <item.icon size={16} />}
         <Text size="2" weight="medium">{item.title}</Text>
         {item.badge && (
           <Badge color={getBadgeColor(item.badgeColor)} variant="soft" radius="full">
             {item.badge}
           </Badge>
         )}
-        {isSubItem ? <ChevronRightIcon width="16" height="16" className="ml-auto text-[var(--gray-9)]" /> : <ChevronDownIcon width="16" height="16" className="text-[var(--gray-9)]" />}
+        {isSubItem ? <ChevronRight size={16} className="ml-auto text-[var(--gray-9)]" /> : <ChevronDown size={16} className="text-[var(--gray-9)]" />}
       </>
     )
 
@@ -148,7 +148,7 @@ const HorizontalNav = () => {
             active && "text-[var(--accent-9)]"
           )}
         >
-          {item.icon && <item.icon width="16" height="16" />}
+          {item.icon && <item.icon size={16} />}
           <Text size="2">{item.title}</Text>
         </DropdownMenu.SubTrigger>
         <DropdownMenu.SubContent className="min-w-[200px]">

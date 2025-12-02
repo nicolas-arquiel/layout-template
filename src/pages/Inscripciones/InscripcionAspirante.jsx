@@ -1,4 +1,4 @@
-import { PlusCircledIcon, PersonIcon, EnvelopeClosedIcon, MobileIcon, CalendarIcon } from '@radix-ui/react-icons'
+import { PlusCircle, User, Mail, Smartphone, Calendar } from 'lucide-react'
 import { Box, Flex, Heading, Text, Card, TextField, Select, TextArea, Button, Grid } from '@radix-ui/themes'
 
 /**
@@ -23,7 +23,7 @@ export default function InscripcionAspirante() {
           </Heading>
           <Text color="gray">Registra un nuevo aspirante en el sistema</Text>
         </Box>
-        <PlusCircledIcon width="32" height="32" color="var(--gray-9)" />
+        <PlusCircle size={32} color="var(--gray-9)" />
       </Flex>
 
       {/* Form Card */}
@@ -43,7 +43,7 @@ export default function InscripcionAspirante() {
                   </Text>
                   <TextField.Root placeholder="Juan Pérez" size="3" required>
                     <TextField.Slot>
-                      <PersonIcon width="16" height="16" />
+                      <User size={16} />
                     </TextField.Slot>
                   </TextField.Root>
                 </Box>
@@ -55,7 +55,7 @@ export default function InscripcionAspirante() {
                   </Text>
                   <TextField.Root type="email" placeholder="juan@email.com" size="3" required>
                     <TextField.Slot>
-                      <EnvelopeClosedIcon width="16" height="16" />
+                      <Mail size={16} />
                     </TextField.Slot>
                   </TextField.Root>
                 </Box>
@@ -67,7 +67,7 @@ export default function InscripcionAspirante() {
                   </Text>
                   <TextField.Root type="tel" placeholder="123-456-7890" size="3" required>
                     <TextField.Slot>
-                      <MobileIcon width="16" height="16" />
+                      <Smartphone size={16} />
                     </TextField.Slot>
                   </TextField.Root>
                 </Box>
@@ -79,7 +79,7 @@ export default function InscripcionAspirante() {
                   </Text>
                   <TextField.Root type="date" size="3" required>
                     <TextField.Slot>
-                      <CalendarIcon width="16" height="16" />
+                      <Calendar size={16} />
                     </TextField.Slot>
                   </TextField.Root>
                 </Box>
@@ -132,7 +132,7 @@ export default function InscripcionAspirante() {
                 Cancelar
               </Button>
               <Button type="submit" size="3">
-                <PlusCircledIcon width="20" height="20" />
+                <PlusCircle size={20} />
                 Registrar Aspirante
               </Button>
             </Flex>

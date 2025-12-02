@@ -1,17 +1,17 @@
 import {
-  HomeIcon,
-  PlusCircledIcon,
+  Home,
+  PlusCircle,
   CircleIcon,
-  PersonIcon,
-  GearIcon,
-  FileTextIcon,
-  BarChartIcon,
-  FileIcon,
-  CubeIcon,
-  LockClosedIcon,
-  StackIcon,
+  User,
+  Settings,
+  FileText,
+  BarChart3,
+  File,
+  Box,
+  Lock,
+  Layers,
   TableIcon
-} from '@radix-ui/react-icons'
+} from 'lucide-react'
 
 /**
  * Configuración de navegación vertical
@@ -35,14 +35,14 @@ const navigation = [
   {
     id: 'inicio',
     title: 'Inicio',
-    icon: HomeIcon,
+    icon: Home,
     navLink: '/inicio',
     // SIN permiso - accesible para todos
   },
   {
     id: 'inscripciones',
     title: 'Inscripciones',
-    icon: PlusCircledIcon,
+    icon: PlusCircle,
     permiso: 'inscripcion',
     children: [
       {
@@ -71,7 +71,7 @@ const navigation = [
   {
     id: 'personas',
     title: 'Personas',
-    icon: PersonIcon,
+    icon: User,
     navLink: '/personas',
     permiso: 'personas',
   },
@@ -82,7 +82,7 @@ const navigation = [
   {
     id: 'reportes',
     title: 'Reportes',
-    icon: BarChartIcon,
+    icon: BarChart3,
     badge: 'Nuevo', // Ejemplo de badge en grupo
     // SIN permiso - para testear dropdown
     children: [
@@ -109,7 +109,7 @@ const navigation = [
   {
     id: 'documentos',
     title: 'Documentos',
-    icon: FileTextIcon,
+    icon: FileText,
     navLink: '/documentos',
     // SIN permiso
   },
@@ -127,7 +127,7 @@ const navigation = [
   {
     id: 'configuracion',
     title: 'Configuración',
-    icon: GearIcon,
+    icon: Settings,
     // SIN permiso - con children ANIDADOS (recursivo) para testear
     children: [
       {
@@ -139,7 +139,7 @@ const navigation = [
       {
         id: 'config_usuarios',
         title: 'Usuarios',
-        icon: PersonIcon,
+        icon: User,
         // NIVEL 2 - Children con más children (RECURSIVO)
         children: [
           {
@@ -151,7 +151,7 @@ const navigation = [
           {
             id: 'config_usuarios_roles',
             title: 'Roles y Permisos',
-            icon: LockClosedIcon,
+            icon: Lock,
             // NIVEL 3 - Más anidamiento (RECURSIVO)
             children: [
               {
@@ -179,7 +179,7 @@ const navigation = [
       {
         id: 'config_sistema',
         title: 'Sistema',
-        icon: CubeIcon,
+        icon: Box,
         children: [
           {
             id: 'config_sistema_database',
@@ -200,19 +200,19 @@ const navigation = [
   {
     id: 'recursos',
     title: 'Recursos',
-    icon: CubeIcon,
+    icon: Box,
     // SIN permiso - con children simples
     children: [
       {
         id: 'recursos_archivos',
         title: 'Archivos',
-        icon: FileIcon,
+        icon: File,
         navLink: '/recursos/archivos',
       },
       {
         id: 'recursos_plantillas',
         title: 'Plantillas',
-        icon: StackIcon,
+        icon: Layers,
         navLink: '/recursos/plantillas',
       },
     ],

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Card, Flex, Text, Select, Separator, IconButton, Tooltip, Grid, Button, ScrollArea, Switch } from '@radix-ui/themes'
-import { GearIcon, Cross2Icon, MoonIcon, SunIcon, DesktopIcon } from '@radix-ui/react-icons'
-import { setMenuLayout } from '../store/layoutSlice'
+import { Settings, X, Moon, Sun, Monitor } from 'lucide-react'
+import { setMenuLayout } from '@src/store/layoutSlice'
 
 // Opciones de configuración de Radix
 const accentColors = ['tomato', 'red', 'ruby', 'crimson', 'pink', 'plum', 'purple', 'violet', 'iris', 'indigo', 'blue', 'cyan', 'teal', 'jade', 'green', 'grass', 'brown', 'orange', 'sky', 'mint', 'lime', 'yellow', 'amber', 'gold', 'bronze', 'gray']
@@ -166,7 +166,7 @@ const CustomThemePanel = ({ settings, onUpdate }) => {
             boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
           }}
         >
-          <GearIcon width="20" height="20" />
+          <Settings size={20} />
         </IconButton>
       </Tooltip>
     )
@@ -193,7 +193,7 @@ const CustomThemePanel = ({ settings, onUpdate }) => {
       <Flex justify="between" align="center" p="3" style={{ borderBottom: '1px solid var(--gray-5)' }}>
         <Text size="2" weight="bold">Configuración del Tema</Text>
         <IconButton size="1" variant="ghost" onClick={() => setIsOpen(false)}>
-          <Cross2Icon />
+          <X />
         </IconButton>
       </Flex>
 
@@ -210,21 +210,21 @@ const CustomThemePanel = ({ settings, onUpdate }) => {
                 onClick={() => onUpdate('appearance', 'light')}
                 style={{ justifyContent: 'center' }}
               >
-                <SunIcon /> Light
+                <Sun /> Light
               </Button>
               <Button 
                 variant={settings.appearance === 'dark' ? 'solid' : 'soft'} 
                 onClick={() => onUpdate('appearance', 'dark')}
                 style={{ justifyContent: 'center' }}
               >
-                <MoonIcon /> Dark
+                <Moon /> Dark
               </Button>
               <Button 
                 variant={settings.appearance === 'inherit' ? 'solid' : 'soft'} 
                 onClick={() => onUpdate('appearance', 'inherit')}
                 style={{ justifyContent: 'center' }}
               >
-                <DesktopIcon /> Auto
+                <Monitor /> Auto
               </Button>
             </Grid>
           </Flex>

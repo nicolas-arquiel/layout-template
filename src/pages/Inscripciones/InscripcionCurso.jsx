@@ -1,4 +1,4 @@
-import { ReaderIcon, PersonIcon, CalendarIcon, SymbolIcon } from '@radix-ui/react-icons'
+import { BookOpen, User, Calendar, Circle } from 'lucide-react'
 import { Box, Flex, Heading, Text, Card, TextField, Select, TextArea, Button, Grid } from '@radix-ui/themes'
 
 /**
@@ -35,7 +35,7 @@ export default function InscripcionCurso() {
           </Heading>
           <Text color="gray">Inscribe estudiantes en los cursos disponibles</Text>
         </Box>
-        <ReaderIcon width="32" height="32" color="var(--gray-9)" />
+        <BookOpen size={32} color="var(--gray-9)" />
       </Flex>
 
       {/* Form Card */}
@@ -97,7 +97,7 @@ export default function InscripcionCurso() {
                   </Text>
                   <TextField.Root type="date" size="3" required>
                     <TextField.Slot>
-                      <CalendarIcon width="16" height="16" />
+                      <Calendar size={16} />
                     </TextField.Slot>
                   </TextField.Root>
                 </Box>
@@ -109,7 +109,7 @@ export default function InscripcionCurso() {
                   </Text>
                   <TextField.Root type="date" size="3" required>
                     <TextField.Slot>
-                      <CalendarIcon width="16" height="16" />
+                      <Calendar size={16} />
                     </TextField.Slot>
                   </TextField.Root>
                 </Box>
@@ -159,7 +159,7 @@ export default function InscripcionCurso() {
                   </Text>
                   <TextField.Root type="number" placeholder="0.00" size="3" required min="0" step="0.01">
                     <TextField.Slot>
-                      <SymbolIcon width="16" height="16" />
+                      <Circle size={16} />
                     </TextField.Slot>
                   </TextField.Root>
                 </Box>
@@ -196,7 +196,7 @@ export default function InscripcionCurso() {
                 Cancelar
               </Button>
               <Button type="submit" size="3">
-                <ReaderIcon width="20" height="20" />
+                <BookOpen size={20} />
                 Confirmar Inscripción
               </Button>
             </Flex>
