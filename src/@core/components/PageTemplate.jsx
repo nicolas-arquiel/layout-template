@@ -1,13 +1,14 @@
-import { Card, Flex, Heading, Text, Grid, Box, Badge } from '@radix-ui/themes'
+import { Text, Grid, Card, Heading } from '@radix-ui/themes'
+import BreadCrumbs from './breadcrumbs/BreadCrumbs'
 
 /**
  * PageTemplate - Template reutilizable para páginas de ejemplo
  * NO usar Container de Radix, el MainLayout ya maneja el ancho
  *
  * @param {Object} props
- * @param {React.ReactNode} props.icon - Icono de lucide-react
+ * @param {React.ReactNode} props.icon - Icono de lucide-react (Deprecated in new design)
  * @param {string} props.title - Título de la página
- * @param {string} props.description - Descripción
+ * @param {string} props.description - Descripción (Optional, rendered below breadcrumbs if needed)
  * @param {React.ReactNode} [props.children] - Contenido adicional
  * @param {string} [props.badge] - Badge opcional (ej: "En desarrollo")
  * @returns {JSX.Element}
@@ -15,29 +16,17 @@ import { Card, Flex, Heading, Text, Grid, Box, Badge } from '@radix-ui/themes'
 export default function PageTemplate({ icon: Icon, title, description, children, badge }) {
   return (
     <>
-      {/* Header Card */}
-      <Card mb="6">
-        <Flex align="center" justify="between">
-          <Flex align="center" gap="3">
-            {Icon && <Icon size={32} color="var(--accent-9)" />}
-            <Box>
-              <Flex align="center" gap="3" mb="2">
-                <Heading size="6" weight="medium">
-                  {title}
-                </Heading>
-                {badge && (
-                  <Badge color="blue" variant="soft">
-                    {badge}
-                  </Badge>
-                )}
-              </Flex>
-              <Text size="3" color="gray">
-                {description}
-              </Text>
-            </Box>
-          </Flex>
-        </Flex>
-      </Card>
+      <BreadCrumbs 
+        title={title} 
+        data={[{ title: 'Inicio', link: '/inicio' }, { title: title }]} 
+      />
+      
+      {/* Optional: Show description if provided, maybe in a Callout or just Text */}
+      {description && (
+        <Text size="2" color="gray" mb="4" style={{ display: 'block' }}>
+          {description}
+        </Text>
+      )}
 
       {/* Content */}
       {children || (

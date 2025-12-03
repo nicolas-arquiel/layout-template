@@ -1,12 +1,22 @@
+import { lazy } from 'react'
 import { Navigate } from 'react-router-dom'
-import Dashboard from '@/pages/Dashboard'
-import DashboardCompleto from '@/pages/DashboardCompleto'
-import Personas from '@/pages/Personas'
-import InscripcionPersona from '@/pages/InscripcionPersona'
-import InscripcionAspirante from '@/pages/Inscripciones/InscripcionAspirante'
-import InscripcionCurso from '@/pages/Inscripciones/InscripcionCurso'
-import EjemploTablas from '@/pages/EjemploTablas'
-import Documentos from '@/pages/Documentos'
+
+// Lazy load pages
+const Dashboard = lazy(() => import('@/views/Dashboard'))
+const DashboardCompleto = lazy(() => import('@/views/DashboardCompleto'))
+const Personas = lazy(() => import('@/views/Personas'))
+const InscripcionPersona = lazy(() => import('@/views/InscripcionPersona'))
+const InscripcionAspirante = lazy(() => import('@/views/Inscripciones/InscripcionAspirante'))
+const InscripcionCurso = lazy(() => import('@/views/Inscripciones/InscripcionCurso'))
+const EjemploTablas = lazy(() => import('@/views/EjemploTablas'))
+const Documentos = lazy(() => import('@/views/Documentos'))
+
+// Skeletons
+import DashboardSkeleton from '@/views/DashboardSkeleton'
+import PersonasSkeleton from '@/views/Personas/PersonasSkeleton'
+import InscripcionSkeleton from '@/views/Inscripciones/InscripcionSkeleton'
+import DocumentosSkeleton from '@/views/DocumentosSkeleton'
+import GenericSkeleton from '@/@core/components/skeletons/GenericSkeleton'
 
 const dashboardRoutes = [
   {
@@ -16,34 +26,70 @@ const dashboardRoutes = [
   {
     path: 'inicio',
     element: <DashboardCompleto />,
+    meta: {
+      publicRoute: true,
+      restricted: true,
+      skeleton: <DashboardSkeleton />,
+    },
   },
   {
     path: 'dashboard-simple',
     element: <Dashboard />,
+    meta: {
+      publicRoute: true,
+      restricted: true,
+      skeleton: <DashboardSkeleton />,
+    },
   },
   {
     path: 'personas',
     element: <Personas />,
+    meta: {
+      permiso: 'personas',
+      skeleton: <PersonasSkeleton />,
+    },
   },
   {
     path: 'inscripcion-persona',
     element: <InscripcionPersona />,
+    meta: {
+      permiso: 'inscripcion',
+      skeleton: <InscripcionSkeleton />,
+    },
   },
   {
     path: 'inscripcion-aspirante',
     element: <InscripcionAspirante />,
+    meta: {
+      permiso: 'inscripcion',
+      skeleton: <InscripcionSkeleton />,
+    },
   },
   {
     path: 'inscripcion-curso',
     element: <InscripcionCurso />,
+    meta: {
+      permiso: 'inscripcion',
+      skeleton: <InscripcionSkeleton />,
+    },
   },
   {
     path: 'ejemplo-tablas',
     element: <EjemploTablas />,
+    meta: {
+      publicRoute: true,
+      restricted: true,
+      skeleton: <GenericSkeleton />,
+    },
   },
   {
     path: 'documentos',
     element: <Documentos />,
+    meta: {
+      publicRoute: true,
+      restricted: true,
+      skeleton: <DocumentosSkeleton />,
+    },
   },
 ]
 

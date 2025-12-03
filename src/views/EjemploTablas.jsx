@@ -341,14 +341,13 @@ const EjemploTablas = () => {
   ];
 
   return (
-    <Container size="4" style={{ padding: '20px' }}>
+    <>
       <BreadCrumbs
         title="Sistema de Tablas"
         data={[
           { title: 'Componentes', link: '/componentes' },
           { title: 'Tablas' },
         ]}
-        dropDown={true}
       />
 
       <Flex direction="column" gap="4" mb="6" mt="4">
@@ -689,7 +688,7 @@ const [selectedRows, setSelectedRows] = useState([]);
         </Text>
         <Code size="2">src/@core/components/tables/README.md</Code>
       </Box>
-    </Container>
+    </>
   );
 };
 

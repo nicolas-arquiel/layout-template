@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { Text, Badge, Tooltip } from '@radix-ui/themes'
+import { Badge, Tooltip } from '@radix-ui/themes'
 import { cn } from '@lib/utils'
 import { useSelector } from 'react-redux'
 
@@ -94,9 +94,9 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
         )}
       >
         <div className="flex items-center justify-between gap-2 w-full">
-          <Text size="2" className="truncate flex-1 font-[Montserrat] font-medium">
+          <span className="truncate flex-1 font-[Montserrat] text-[15px] font-medium">
             {item.title}
-          </Text>
+          </span>
           {item.badge && (
             <Badge color={getBadgeColor(item.badgeColor)} variant="soft" size="1" className="flex-shrink-0">
               {item.badge}

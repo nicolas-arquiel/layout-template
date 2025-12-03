@@ -1,5 +1,9 @@
+import { lazy } from 'react'
 import { Navigate } from 'react-router-dom'
-import Login from '@/pages/Login'
+
+// Lazy load pages
+const Login = lazy(() => import('@/pages/Login'))
+const Auth = lazy(() => import('@/pages/misc/Auth'))
 
 const authRoutes = [
   {
@@ -9,6 +13,17 @@ const authRoutes = [
   {
     path: 'login',
     element: <Login />,
+    meta: {
+      publicRoute: true,
+    },
+  },
+  {
+    path: 'auth',
+    element: <Auth />,
+    meta: {
+      publicRoute: true,
+      restricted: true, // Requiere estar logueado
+    },
   },
 ]
 

@@ -1,5 +1,4 @@
-import { BookOpen, User, Calendar, Circle } from 'lucide-react'
-import { Box, Flex, Heading, Text, Card, TextField, Select, TextArea, Button, Grid } from '@radix-ui/themes'
+import BreadCrumbs from '@components/breadcrumbs/BreadCrumbs'
 
 /**
  * Componente de página Inscripción Curso con Radix UI
@@ -27,16 +26,14 @@ export default function InscripcionCurso() {
 
   return (
     <Box>
-      {/* Header */}
-      <Flex align="center" justify="between" mb="6">
-        <Box>
-          <Heading size="8" mb="2">
-            Inscripción a Curso
-          </Heading>
-          <Text color="gray">Inscribe estudiantes en los cursos disponibles</Text>
-        </Box>
-        <BookOpen size={32} color="var(--gray-9)" />
-      </Flex>
+      <BreadCrumbs 
+        title="Inscripción a Curso" 
+        data={[
+          { title: 'Inicio', link: '/inicio' }, 
+          { title: 'Inscripciones' },
+          { title: 'Curso' }
+        ]} 
+      />
 
       {/* Form Card */}
       <Card>

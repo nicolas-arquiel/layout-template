@@ -1,5 +1,6 @@
 import { Home, User, PlusCircle, ArrowUp, CheckCircle2, XCircle, Info, AlertTriangle } from 'lucide-react'
 import { Grid, Box, Card, Flex, Text, Heading, Button, Badge, Callout, Separator } from '@radix-ui/themes'
+import BreadCrumbs from '@components/breadcrumbs/BreadCrumbs'
 
 /**
  * Dashboard - Página de inicio con ejemplos de colores semánticos
@@ -35,6 +36,11 @@ export default function Dashboard() {
 
   return (
     <>
+      <BreadCrumbs 
+        title="Dashboard" 
+        data={[{ title: 'Inicio' }]} 
+      />
+
       {/* Stats Grid */}
       <Grid columns={{ initial: '1', sm: '2', lg: '4' }} gap="4" mb="6">
         {stats.map((stat, index) => {

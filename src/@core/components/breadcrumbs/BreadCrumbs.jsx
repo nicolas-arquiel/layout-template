@@ -1,125 +1,89 @@
-import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { Grid, CheckSquare, MessageSquare, Mail, Calendar } from 'lucide-react';
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import React, { Fragment } from 'react'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import { ChevronRight } from 'lucide-react'
+import { Heading, Text } from '@radix-ui/themes'
 
-const BreadCrumbs = ({ data, title, dropDown }) => {
-  const VITE_APP_ABR_BASENAME = import.meta.env.VITE_APP_ABR_BASENAME || 'Mi Proyecto';
-
+/**
+ * BreadCrumbs - Componente de navegación simple y limpio
+ * 
+ * Layout: [Title] | [Item1 > Item2 > Item3]
+ * 
+ * @param {string} title - Título principal (izquierda)
+ * @param {Array} data - Array de items del breadcrumb trail
+ * @param {string} data[].title - Texto del item
+ * @param {string} data[].link - Link opcional del item
+ */
+const BreadCrumbs = ({ data, title }) => {
   const renderBreadCrumbs = () => {
     return data.map((item, index) => {
-      const Wrapper = item.link ? Link : Fragment;
-      const isLastItem = data.length - 1 === index;
+      const Wrapper = item.link ? Link : Fragment
+      const isLastItem = data.length - 1 === index
       
       return (
-        <li key={index} className="inline-flex items-center">
+        <Fragment key={index}>
           <Wrapper {...(item.link ? { to: item.link } : {})}>
-            <span className={isLastItem ? 'breadcrumbs-current' : 'breadcrumbs-link'}>
+            <Text 
+              size="3"
+              className="transition-colors cursor-pointer"
+              style={!isLastItem ? { color: 'var(--accent-9)' } : { color: 'var(--gray-11)' }}
+            >
               {item.title}
-            </span>
+            </Text>
           </Wrapper>
           {!isLastItem && (
-            <span className="mx-1 text-gray-400 text-sm font-light opacity-60 select-none">/</span>
+            <ChevronRight 
+              size={16} 
+              className="flex-shrink-0" 
+              style={{ color: 'var(--gray-9)' }}
+            />
           )}
-        </li>
-      );
-    });
-  };
+        </Fragment>
+      )
+    })
+  }
 
   return (
-    <div className="w-full mb-7 py-5 border-b border-gray-100">
-      <div className="grid grid-cols-12 gap-6 items-center">
-        {/* Left side - Breadcrumbs */}
-        <div className="col-span-12 md:col-span-9">
-          {title && (
-            <h2 className="breadcrumbs-title">
-              {title}
-            </h2>
-          )}
-          <nav className="hidden sm:block" aria-label="Breadcrumb">
-            <ol className="breadcrumbs-list">
-              <li className="inline-flex items-center">
-                <Link to="/inicio" className="breadcrumbs-link">
-                  {VITE_APP_ABR_BASENAME}
-                </Link>
-                <span className="mx-1 text-gray-400 text-sm font-light opacity-60 select-none">/</span>
-              </li>
-              {renderBreadCrumbs()}
-            </ol>
-          </nav>
-        </div>
+    <div className="w-full mb-6">
+      <div className="flex items-center gap-4 flex-wrap">
+        {/* Title */}
+        {title && (
+          <Heading size="7" weight="regular">
+            {title}
+          </Heading>
+        )}
         
-        {/* Right side - Dropdown */}
-        {dropDown && (
-          <div className="col-span-12 md:col-span-3 flex justify-start md:justify-end items-center mt-3 md:mt-0">
-            <DropdownMenu.Root>
-              <DropdownMenu.Trigger asChild>
-                <button
-                  className="breadcrumbs-dropdown-trigger"
-                  aria-label="Open menu"
-                >
-                  <Grid size={16} />
-                </button>
-              </DropdownMenu.Trigger>
-
-              <DropdownMenu.Portal>
-                <DropdownMenu.Content
-                  className="breadcrumbs-dropdown-content"
-                  sideOffset={5}
-                  align="end"
-                >
-                  <DropdownMenu.Item asChild>
-                    <Link to="/apps/todo" className="breadcrumbs-dropdown-item">
-                      <CheckSquare size={16} />
-                      <span>Todo</span>
-                    </Link>
-                  </DropdownMenu.Item>
-
-                  <DropdownMenu.Item asChild>
-                    <Link to="/apps/chat" className="breadcrumbs-dropdown-item">
-                      <MessageSquare size={16} />
-                      <span>Chat</span>
-                    </Link>
-                  </DropdownMenu.Item>
-
-                  <DropdownMenu.Item asChild>
-                    <Link to="/apps/email" className="breadcrumbs-dropdown-item">
-                      <Mail size={16} />
-                      <span>Email</span>
-                    </Link>
-                  </DropdownMenu.Item>
-
-                  <DropdownMenu.Item asChild>
-                    <Link to="/apps/calendar" className="breadcrumbs-dropdown-item">
-                      <Calendar size={16} />
-                      <span>Calendar</span>
-                    </Link>
-                  </DropdownMenu.Item>
-                </DropdownMenu.Content>
-              </DropdownMenu.Portal>
-            </DropdownMenu.Root>
-          </div>
+        {/* Separator */}
+        {data && data.length > 0 && (
+          <>
+            <div 
+              className="h-6 w-px flex-shrink-0 mx-2" 
+              style={{ backgroundColor: 'var(--gray-6)' }}
+            />
+            
+            {/* Breadcrumb Trail */}
+            <nav className="flex items-center gap-2" aria-label="Breadcrumb">
+              {renderBreadCrumbs()}
+            </nav>
+          </>
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
 BreadCrumbs.propTypes = {
   title: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      link: PropTypes.string,
+      link: PropTypes.string, // Opcional
       title: PropTypes.string.isRequired
     })
-  ),
-  dropDown: PropTypes.bool
-};
+  )
+}
 
 BreadCrumbs.defaultProps = {
-  data: [],
-  dropDown: false
-};
+  data: []
+}
 
-export default BreadCrumbs;
+export default BreadCrumbs

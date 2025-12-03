@@ -31,6 +31,7 @@
   --content-bg: #FFFFFF;        /* Content cards (blanco) */
   --navbar-bg: #FFFFFF;
   --sidebar-bg: #FFFFFF;
+  --text-color: #8C8996;        /* Color de texto general */
   --border-color: rgba(0, 0, 0, 0.04);
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
@@ -44,6 +45,7 @@
   --content-bg: #283046;        /* Content cards */
   --navbar-bg: #283046;
   --sidebar-bg: #283046;
+  --text-color: #B0B3BA;        /* Color de texto general */
   --border-color: rgba(255, 255, 255, 0.04);
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);

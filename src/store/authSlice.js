@@ -13,11 +13,12 @@ const authSlice = createSlice({
     user: null,
 
     /**
-     * @type {Array<string>}
-     * Permisos del usuario
+     * @type {string}
+     * Permisos del usuario en formato string separado por comas
      * Formato: "modulo:submodulo:accion" o "modulo:*" para wildcards
+     * Ejemplo: "personas:ver,personas:editar,academica:*"
      */
-    permisos: [],
+    permisos: '',
 
     /**
      * @type {boolean}
@@ -39,7 +40,7 @@ const authSlice = createSlice({
      */
     setAuth: (state, action) => {
       state.user = action.payload.user
-      state.permisos = action.payload.permisos || []
+      state.permisos = action.payload.permisos || ''
       state.token = action.payload.token
       state.isAuthenticated = true
     },
@@ -50,7 +51,7 @@ const authSlice = createSlice({
      */
     clearAuth: (state) => {
       state.user = null
-      state.permisos = []
+      state.permisos = ''
       state.token = null
       state.isAuthenticated = false
     },
@@ -58,7 +59,7 @@ const authSlice = createSlice({
     /**
      * Actualiza los permisos del usuario
      * @param {Object} state - Estado actual
-     * @param {Object} action - Action con payload de array de permisos
+     * @param {Object} action - Action con payload de string de permisos
      */
     updatePermisos: (state, action) => {
       state.permisos = action.payload
@@ -72,9 +73,27 @@ const authSlice = createSlice({
     updateUser: (state, action) => {
       state.user = { ...state.user, ...action.payload }
     },
+
+    /**
+     * Refresca los datos del usuario (para validación de token)
+     * @param {Object} state - Estado actual
+     * @param {Object} action - Action con payload {currentData}
+     */
+    refreshUserData: (state, action) => {
+      if (action.payload.currentData) {
+        state.user = { ...state.user, ...action.payload.currentData.user }
+        state.permisos = action.payload.currentData.permisos || state.permisos
+      }
+    },
   },
 })
 
-export const { setAuth, clearAuth, updatePermisos, updateUser } = authSlice.actions
+export const { setAuth, clearAuth, updatePermisos, updateUser, refreshUserData } = authSlice.actions
+
+// Selectores
+export const selectCurrentUser = (state) => state.auth.user
+export const selectPermisos = (state) => state.auth.permisos
+export const selectIsAuthenticated = (state) => state.auth.isAuthenticated
+export const selectToken = (state) => state.auth.token
 
 export default authSlice.reducer

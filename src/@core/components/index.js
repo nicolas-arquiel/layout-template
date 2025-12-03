@@ -10,3 +10,6 @@ export { default as PageTemplate } from './PageTemplate'
 
 // Table System
 export * from './tables'
+
+// Utils
+export { default as ErrorBoundary } from './ErrorBoundary'

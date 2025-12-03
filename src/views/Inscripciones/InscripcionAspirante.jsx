@@ -1,5 +1,4 @@
-import { PlusCircle, User, Mail, Smartphone, Calendar } from 'lucide-react'
-import { Box, Flex, Heading, Text, Card, TextField, Select, TextArea, Button, Grid } from '@radix-ui/themes'
+import BreadCrumbs from '@components/breadcrumbs/BreadCrumbs'
 
 /**
  * Componente de página Inscripción Aspirante con Radix UI
@@ -15,16 +14,14 @@ export default function InscripcionAspirante() {
 
   return (
     <Box>
-      {/* Header */}
-      <Flex align="center" justify="between" mb="6">
-        <Box>
-          <Heading size="8" mb="2">
-            Inscripción Aspirante
-          </Heading>
-          <Text color="gray">Registra un nuevo aspirante en el sistema</Text>
-        </Box>
-        <PlusCircle size={32} color="var(--gray-9)" />
-      </Flex>
+      <BreadCrumbs 
+        title="Inscripción Aspirante" 
+        data={[
+          { title: 'Inicio', link: '/inicio' }, 
+          { title: 'Inscripciones' },
+          { title: 'Aspirante' }
+        ]} 
+      />
 
       {/* Form Card */}
       <Card>

@@ -1,5 +1,6 @@
 import { User, Search, Plus, Pencil, Trash2 } from 'lucide-react'
 import { Box, Flex, Heading, Text, Button, TextField, Select, Card, Table, Badge, IconButton } from '@radix-ui/themes'
+import BreadCrumbs from '@components/breadcrumbs/BreadCrumbs'
 
 /**
  * Componente de página Personas con Radix UI
@@ -16,14 +17,12 @@ export default function Personas() {
 
   return (
     <Box>
-      {/* Header */}
-      <Flex align="center" justify="between" mb="6" direction={{ initial: 'column', sm: 'row' }} gap="4">
-        <Box>
-          <Heading size="8" mb="2">
-            Personas
-          </Heading>
-          <Text color="gray">Gestiona el registro de personas</Text>
-        </Box>
+      <BreadCrumbs 
+        title="Personas" 
+        data={[{ title: 'Inicio', link: '/inicio' }, { title: 'Personas' }]} 
+      />
+
+      <Flex justify="end" mb="4">
         <Button size="3">
           <Plus size={20} />
           Nueva Persona

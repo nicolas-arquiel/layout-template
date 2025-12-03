@@ -23,6 +23,8 @@ import {
 } from 'lucide-react'
 import { Wizard } from '@components'
 
+import BreadCrumbs from '@components/breadcrumbs/BreadCrumbs'
+
 /**
  * InscripcionPersona - Formulario de inscripción con Wizard
  *
@@ -604,16 +606,16 @@ export default function InscripcionPersona() {
   return (
     <Box p="5">
       <Flex direction="column" gap="5">
-        {/* Header */}
-        <Flex align="center" justify="between">
-          <Box>
-            <Heading size="7" mb="2">
-              Inscripción de Persona
-            </Heading>
-            <Text size="3" color="gray">
-              Complete el formulario en 3 pasos para inscribir una nueva persona
-            </Text>
-          </Box>
+        <BreadCrumbs 
+          title="Inscripción de Persona" 
+          data={[
+            { title: 'Inicio', link: '/inicio' }, 
+            { title: 'Inscripciones' },
+            { title: 'Nueva Inscripción' }
+          ]} 
+        />
+
+        <Flex justify="end" mb="2">
           <Badge size="3" color="blue">
             Paso {currentStep + 1} de {steps.length}
           </Badge>

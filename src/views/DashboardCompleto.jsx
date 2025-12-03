@@ -39,6 +39,7 @@ import { User,
 } from 'lucide-react'
 import { Controller } from 'react-hook-form'
 import { FormDialog, Canvas, CanvasForm } from '@components'
+import BreadCrumbs from '@components/breadcrumbs/BreadCrumbs'
 import { DataTableExample as DataTable } from '../components/examples'
 
 /**
@@ -96,6 +97,11 @@ export default function DashboardCompleto() {
 
   return (
     <>
+      <BreadCrumbs 
+        title="Dashboard Completo" 
+        data={[{ title: 'Inicio' }, { title: 'Dashboard Completo' }]} 
+      />
+
       {/* Alert/Callouts Section */}
       <Grid columns={{ initial: '1', md: '2' }} gap="4" mb="6">
         <Callout.Root color="blue">
