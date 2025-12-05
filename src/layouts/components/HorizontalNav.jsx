@@ -1,15 +1,15 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { useLocation, useNavigate, Link } from 'react-router-dom'
-import { DropdownMenu, Button, Flex, Text, Badge } from '@radix-ui/themes'
-import { ChevronDown, ChevronRight } from 'lucide-react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { DropdownMenu, Button, Flex, Text, Badge, IconButton } from '@radix-ui/themes'
+import { Menu, ChevronRight } from 'lucide-react'
 import { canViewMenuItem, canViewMenuGroup } from '@utils/permissions'
 import navigation from '@/navigation/vertical'
 import { cn } from '@lib/utils'
 
 /**
- * HorizontalNav - Navegación horizontal estilo "Popover" en cascada
- * Usa DropdownMenu para permitir submenús infinitos hacia el costado.
+ * HorizontalNav - Navegación horizontal compacta
+ * Muestra un dropdown con todo el menú + el item activo actual
  */
 const HorizontalNav = () => {
   const permisos = useSelector((state) => state.auth.permisos)
@@ -28,49 +28,55 @@ const HorizontalNav = () => {
 
   const isActiveLink = (path) => location.pathname === path
   
-  // Verifica si un grupo tiene algún hijo activo (recursivo)
-  const hasActiveChild = (item) => {
-    if (item.navLink && isActiveLink(item.navLink)) return true
-    if (item.children) {
-      return item.children.some(child => hasActiveChild(child))
+  // Encuentra el item activo actual (recursivo)
+  const findActiveItem = (items) => {
+    for (const item of items) {
+      if (item.navLink && isActiveLink(item.navLink)) {
+        return item
+      }
+      if (item.children) {
+        const found = findActiveItem(item.children)
+        if (found) return found
+      }
     }
-    return false
+    return null
   }
 
-  // Renderiza un item final (sin hijos)
-  const renderLeafItem = (item, isSubItem = false) => {
-    if (!canViewMenuItem(item, permisos)) return null
-    
-    const active = isActiveLink(item.navLink)
-    
-    // Si es un item de primer nivel (en la barra)
-    if (!isSubItem) {
+  const activeItem = findActiveItem(navigation)
+
+  // Renderiza un item del menú (recursivo)
+  const renderMenuItem = (item, level = 0) => {
+    // Skip headers
+    if (item.header) return null
+
+    // Check permissions
+    if (item.children) {
+      if (!canViewMenuGroup(item, permisos)) return null
+    } else {
+      if (!canViewMenuItem(item, permisos)) return null
+    }
+
+    const active = item.navLink && isActiveLink(item.navLink)
+
+    // Si tiene hijos, usar SubMenu
+    if (item.children && item.children.length > 0) {
       return (
-        <Link key={item.id} to={item.navLink}>
-          <Button 
-            variant={active ? "soft" : "ghost"} 
-            color={active ? "indigo" : "gray"}
-            className={cn(
-              "cursor-pointer font-medium transition-all",
-              active ? "bg-[var(--accent-3)] text-[var(--accent-9)]" : "text-[var(--gray-11)] hover:text-[var(--gray-12)] hover:bg-[var(--gray-3)]"
-            )}
-          >
+        <DropdownMenu.Sub key={item.id}>
+          <DropdownMenu.SubTrigger className="gap-2">
             {item.icon && <item.icon size={16} />}
-            {item.title}
-            {item.badge && (
-              <Badge color={getBadgeColor(item.badgeColor)} variant="solid" radius="full">
-                {item.badge}
-              </Badge>
-            )}
-          </Button>
-        </Link>
+            <Text size="2">{item.title}</Text>
+          </DropdownMenu.SubTrigger>
+          <DropdownMenu.SubContent className="min-w-[200px]">
+            {item.children.map(child => renderMenuItem(child, level + 1))}
+          </DropdownMenu.SubContent>
+        </DropdownMenu.Sub>
       )
     }
 
-    // Si es un item dentro de un dropdown
+    // Item simple
     return (
-      <DropdownMenu.Item 
-        key={item.id} 
+      <DropdownMenu.Item
+        key={item.id}
         onClick={() => navigate(item.navLink)}
         className={cn(
           "gap-2 cursor-pointer",
@@ -88,90 +94,46 @@ const HorizontalNav = () => {
     )
   }
 
-  // Renderiza un grupo con submenús (recursivo)
-  const renderGroup = (item, isSubItem = false) => {
-    if (!canViewMenuGroup(item, permisos)) return null
-    
-    const active = hasActiveChild(item)
-
-    // Contenido del Trigger (Botón o Item)
-    const triggerContent = (
-      <>
-        {item.icon && <item.icon size={16} />}
-        <Text size="2" weight="medium">{item.title}</Text>
-        {item.badge && (
-          <Badge color={getBadgeColor(item.badgeColor)} variant="soft" radius="full">
-            {item.badge}
-          </Badge>
-        )}
-        {isSubItem ? <ChevronRight size={16} className="ml-auto text-[var(--gray-9)]" /> : <ChevronDown size={16} className="text-[var(--gray-9)]" />}
-      </>
-    )
-
-    // Renderizado de los hijos
-    const childrenContent = item.children.map(child => {
-      if (child.children && child.children.length > 0) {
-        return renderGroup(child, true) // Recursión para sub-niveles
-      }
-      return renderLeafItem(child, true)
-    })
-
-    // Si es nivel superior (Barra de navegación)
-    if (!isSubItem) {
-      return (
-        <DropdownMenu.Root key={item.id}>
-          <DropdownMenu.Trigger>
-            <Button 
-              variant={active ? "soft" : "ghost"} 
-              color={active ? "indigo" : "gray"}
-              className={cn(
-                "cursor-pointer font-medium gap-2 transition-all",
-                active ? "bg-[var(--accent-3)] text-[var(--accent-9)]" : "text-[var(--gray-11)] hover:text-[var(--gray-12)] hover:bg-[var(--gray-3)]"
-              )}
-            >
-              {triggerContent}
-            </Button>
-          </DropdownMenu.Trigger>
-          <DropdownMenu.Content variant="soft" color="indigo" className="min-w-[200px]">
-            {childrenContent}
-          </DropdownMenu.Content>
-        </DropdownMenu.Root>
-      )
-    }
-
-    // Si es sub-nivel (dentro del dropdown) -> SubMenu
-    return (
-      <DropdownMenu.Sub key={item.id}>
-        <DropdownMenu.SubTrigger 
-          className={cn(
-            "gap-2 cursor-pointer",
-            active && "text-[var(--accent-9)]"
-          )}
-        >
-          {item.icon && <item.icon size={16} />}
-          <Text size="2">{item.title}</Text>
-        </DropdownMenu.SubTrigger>
-        <DropdownMenu.SubContent className="min-w-[200px]">
-          {childrenContent}
-        </DropdownMenu.SubContent>
-      </DropdownMenu.Sub>
-    )
-  }
-
   return (
-    <Flex align="center" gap="1" wrap="wrap">
-      {navigation.map(item => {
-        // Skip headers
-        if (item.header) return null
-        
-        // Groups
-        if (item.children && item.children.length > 0) {
-          return renderGroup(item)
-        }
-        
-        // Single items
-        return renderLeafItem(item)
-      })}
+    <Flex align="center" gap="3">
+      {/* Dropdown con todo el menú */}
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+          <IconButton
+            variant="ghost"
+            size="2"
+            className="text-[var(--gray-11)] hover:text-[var(--accent-9)] hover:bg-[var(--accent-3)] transition-colors"
+          >
+            <Menu size={20} />
+          </IconButton>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content className="min-w-[220px]">
+          {navigation.map(item => renderMenuItem(item))}
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+
+      {/* Separador */}
+      {activeItem && (
+        <>
+          <div 
+            className="h-6 w-px flex-shrink-0" 
+            style={{ backgroundColor: 'var(--gray-6)' }}
+          />
+          
+          {/* Item activo */}
+          <Flex align="center" gap="2">
+            {activeItem.icon && <activeItem.icon size={18} className="text-[var(--accent-9)]" />}
+            <Text size="3" weight="medium" className="text-[var(--gray-12)]">
+              {activeItem.title}
+            </Text>
+            {activeItem.badge && (
+              <Badge color={getBadgeColor(activeItem.badgeColor)} variant="soft" radius="full">
+                {activeItem.badge}
+              </Badge>
+            )}
+          </Flex>
+        </>
+      )}
     </Flex>
   )
 }

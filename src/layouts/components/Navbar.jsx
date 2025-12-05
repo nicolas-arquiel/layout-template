@@ -6,6 +6,7 @@ import { Flex, Text, Avatar, DropdownMenu, Separator, IconButton } from '@radix-
 import { clearAuth } from '@/store/authSlice'
 import { toggleMobileMenu } from '@/store/layoutSlice'
 import HorizontalNav from './HorizontalNav'
+import { cn } from '@lib/utils'
 
 /**
  * Navbar - SOLO TAILWIND CLASSES
@@ -40,7 +41,7 @@ const Navbar = () => {
 
   return (
     <Flex align="center" justify="between" px="6" className="w-full h-full">
-      {/* Left side - Hamburger menu (mobile) + Title + Horizontal Nav */}
+      {/* Left side - Menu dropdown (horizontal mode) or Hamburger (vertical mode) + Active item */}
       <Flex align="center" gap="3" className="flex-1">
         {/* Hamburger button - Solo visible en mobile cuando menuLayout es vertical */}
         {menuLayout !== 'horizontal' && (
@@ -56,15 +57,15 @@ const Navbar = () => {
           </div>
         )}
 
-        <Text size="3" weight="medium" className="text-[var(--gray-12)]">
-          {import.meta.env.VITE_APP_NAME}
-        </Text>
-
-        {/* Horizontal Navigation - Solo cuando menuLayout es horizontal */}
-        {menuLayout === 'horizontal' && (
-          <div className="hidden md:block flex-1 ml-8">
+        {/* Horizontal mode: Menu dropdown + Active item */}
+        {menuLayout === 'horizontal' ? (
+          <>
             <HorizontalNav />
-          </div>
+          </>
+        ) : (
+          <Text size="3" weight="medium" className="text-[var(--gray-12)]">
+            {import.meta.env.VITE_APP_NAME}
+          </Text>
         )}
       </Flex>
 
