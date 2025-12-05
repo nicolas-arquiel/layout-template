@@ -48,7 +48,7 @@ const BreadCrumbs = ({ data, title }) => {
       <div className="flex items-center gap-4 flex-wrap">
         {/* Title */}
         {title && (
-          <Heading size="7" weight="regular">
+          <Heading size="7" weight="light">
             {title}
           </Heading>
         )}

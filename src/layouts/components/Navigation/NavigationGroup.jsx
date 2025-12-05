@@ -22,7 +22,7 @@ function hasActiveChild(children, currentPath) {
 /**
  * Shared Button Component for consistency
  */
-const GroupButton = React.forwardRef(({ item, isActive, isOpen, isCollapsed, ...props }, ref) => {
+const GroupButton = React.forwardRef(({ item, isActive, isOpen, isCollapsed, nested, ...props }, ref) => {
   const Icon = item.icon
   return (
     <button
@@ -36,7 +36,9 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isCollapsed, ...
         isActive
           ? 'text-[var(--accent-9)] bg-[color-mix(in_srgb,var(--accent-9),transparent_88%)]'
           : 'text-[var(--gray-11)] bg-transparent hover:bg-[var(--gray-3)]',
-        !isCollapsed && !isActive && 'hover:translate-x-[5px]'
+        !isCollapsed && !isActive && 'hover:translate-x-[5px]',
+        // Nested indentation (only when expanded)
+        !isCollapsed && nested && 'pl-10'
       )}
       {...props}
     >
@@ -46,7 +48,7 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isCollapsed, ...
           "flex items-center justify-center transition-all duration-300 flex-shrink-0",
           "w-[24px] h-[24px]"
         )}>
-          <Icon size={20} />
+          <Icon size={nested ? 14 : 20} />
         </span>
       )}
       
@@ -57,7 +59,7 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isCollapsed, ...
           "w-auto opacity-100 flex-1 !ml-4"
         )}>
           <div className="flex items-center justify-between gap-2 w-full">
-            <span className="flex-1 truncate font-[Montserrat] text-[15px] font-medium">
+            <span className="flex-1 truncate font-[Montserrat] text-[14px] font-medium">
               {item.title}
             </span>
             {/* Badge - Mismo estilo que NavigationItem */}
@@ -90,7 +92,7 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isCollapsed, ...
  * - Permite cerrar un grupo aunque tenga un hijo activo
  * - Soporta anidamiento recursivo con la misma lógica
  */
-const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle }) => {
+const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle, nested = false }) => {
   const location = useLocation()
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
 
@@ -138,6 +140,7 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle }) => {
         isActive={isActive}
         isOpen={isOpen}
         isCollapsed={isCollapsed}
+        nested={nested}
       />
     </Collapsible.Trigger>
   )
@@ -178,6 +181,7 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle }) => {
                     item={child}
                     forceExpanded={forceExpanded}
                     isOpen={openChildGroupIds.has(child.id)}
+                    nested={true}
                     onToggle={() => {
                       setOpenChildGroupIds((prevIds) => {
                         const newIds = new Set(prevIds)

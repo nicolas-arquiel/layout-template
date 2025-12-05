@@ -28,34 +28,7 @@ const MainLayout = () => {
   // Ref to track previous window width to detect threshold crossing
   const prevWidthRef = React.useRef(window.innerWidth)
 
-  // Handle responsive sidebar behavior
-  React.useEffect(() => {
-    const handleResize = () => {
-      const currWidth = window.innerWidth
-      const prevWidth = prevWidthRef.current
-
-      // Check if we crossed the 1200px threshold
-      if (currWidth < 1200 && prevWidth >= 1200) {
-        // Crossing down: Auto-collapse
-        dispatch(handleMenuCollapsed(true))
-      } else if (currWidth >= 1200 && prevWidth < 1200) {
-        // Crossing up: Auto-expand
-        dispatch(handleMenuCollapsed(false))
-      }
-
-      prevWidthRef.current = currWidth
-    }
-
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [dispatch])
-
-  // Initial check on mount
-  React.useEffect(() => {
-    if (window.innerWidth < 1200 && window.innerWidth >= 768) {
-      dispatch(handleMenuCollapsed(true))
-    }
-  }, [dispatch])
+  // Handle responsive sidebar behavior - REMOVED auto-collapse logic
 
   return (
     <div className="min-h-screen bg-[var(--bg-primary)]">
@@ -68,11 +41,11 @@ const MainLayout = () => {
             'relative',
             'h-screen',
             'animate-in fade-in duration-200',
-            menuLayout === 'horizontal' ? 'hidden md:hidden' : (menuCollapsed ? 'w-[80px]' : 'w-[260px]'),
-            'max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:z-40 max-md:block',
-            'max-md:w-[260px]',
-            'max-md:transform max-md:transition-transform max-md:duration-300',
-            mobileMenuOpen ? 'max-md:translate-x-0' : 'max-md:-translate-x-full'
+            menuLayout === 'horizontal' ? 'hidden xl:hidden' : (menuCollapsed ? 'w-[80px]' : 'w-[260px]'),
+            'max-xl:fixed max-xl:inset-y-0 max-xl:left-0 max-xl:z-40 max-xl:block',
+            'max-xl:w-[260px]',
+            'max-xl:transform max-xl:transition-transform max-xl:duration-300',
+            mobileMenuOpen ? 'max-xl:translate-x-0' : 'max-xl:-translate-x-full'
           )}
         >
           <Sidebar />
@@ -85,7 +58,6 @@ const MainLayout = () => {
             className="absolute top-0 left-0 w-full z-10 pointer-events-none"
             style={{
               paddingTop: 'var(--floating-nav-margin)',
-              paddingRight: '12px' // Fixed padding for scrollbar space
             }}
           >
             <div className={cn(
@@ -137,7 +109,7 @@ const MainLayout = () => {
         {/* Mobile Overlay */}
         {mobileMenuOpen && (
           <div
-            className="fixed inset-0 bg-black/50 z-30 md:hidden animate-in fade-in duration-300"
+            className="fixed inset-0 bg-black/50 z-30 xl:hidden animate-in fade-in duration-300"
             onClick={() => dispatch(closeMobileMenu())}
           />
         )}

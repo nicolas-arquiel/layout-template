@@ -42,17 +42,19 @@ const Navbar = () => {
     <Flex align="center" justify="between" px="6" className="w-full h-full">
       {/* Left side - Hamburger menu (mobile) + Title + Horizontal Nav */}
       <Flex align="center" gap="3" className="flex-1">
-        {/* Hamburger button - Siempre visible en mobile */}
-        <div className="block md:hidden">
-          <IconButton
-            variant="ghost"
-            onClick={handleToggleMobile}
-            size="2"
-            className="text-[var(--gray-11)] hover:text-[var(--accent-9)] hover:bg-[var(--accent-3)] transition-colors"
-          >
-            <Menu size={20} />
-          </IconButton>
-        </div>
+        {/* Hamburger button - Solo visible en mobile cuando menuLayout es vertical */}
+        {menuLayout !== 'horizontal' && (
+          <div className="block xl:hidden">
+            <IconButton
+              variant="ghost"
+              onClick={handleToggleMobile}
+              size="2"
+              className="text-[var(--gray-11)] hover:text-[var(--accent-9)] hover:bg-[var(--accent-3)] transition-colors"
+            >
+              <Menu size={20} />
+            </IconButton>
+          </div>
+        )}
 
         <Text size="3" weight="medium" className="text-[var(--gray-12)]">
           {import.meta.env.VITE_APP_NAME}

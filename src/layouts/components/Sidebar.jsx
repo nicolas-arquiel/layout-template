@@ -27,7 +27,7 @@ const Sidebar = () => {
   // Cerrar menú mobile al cambiar tamaño de ventana
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768 && mobileMenuOpen) {
+      if (window.innerWidth >= 1280 && mobileMenuOpen) {
         handleCloseMobile()
       }
     }
@@ -37,14 +37,14 @@ const Sidebar = () => {
   }, [mobileMenuOpen])
 
   // En mobile, SIEMPRE mostrar expandido
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 1280
   const effectiveCollapsed = isMobile ? false : menuCollapsed
 
   return (
     <div className="sidebar-container h-full flex flex-col overflow-hidden animate-in fade-in duration-300">
       {/* ========== HEADER ========== */}
       <div className={cn(
-        "flex-shrink-0 h-[80px] !px-4 py-4 flex items-center border-b border-[var(--gray-4)]",
+        "flex-shrink-0 h-[80px] !px-4 py-4 flex items-center",
         effectiveCollapsed ? "justify-center" : "justify-between"
       )}>
         {/* Logo / App Name - Solo mostrar cuando NO está colapsado */}
@@ -62,7 +62,7 @@ const Sidebar = () => {
         </div>
 
         {/* Toggle Button (Desktop) */}
-        <div className="hidden md:flex">
+        <div className="hidden xl:flex">
           <IconButton
             variant="ghost"
             onClick={handleToggleCollapse}
@@ -75,7 +75,7 @@ const Sidebar = () => {
 
         {/* Close Button (Mobile) */}
         {!effectiveCollapsed && (
-          <div className="block md:hidden">
+          <div className="block xl:hidden">
             <IconButton variant="ghost" onClick={handleCloseMobile} size="2">
               <X size={20} />
             </IconButton>

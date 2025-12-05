@@ -54,10 +54,10 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
           // Spacing & Sizing
           isCollapsed
             ? 'justify-center w-[48px] h-[48px] mx-auto my-1 px-0' // Centered square with vertical margin
-            : 'mb-1 !px-3 py-3 w-full', // Full width with internal padding (forced)
+            : '!px-3 py-3 w-full', // Full width with internal padding (forced)
 
           // Typography
-          'font-[Montserrat] text-[15px] tracking-[0.14px] font-medium',
+          'font-[Montserrat] text-[14px] tracking-[0.14px] font-medium',
 
           // Active State - cambiar cursor si está activo
           isActive
@@ -82,7 +82,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
           "flex items-center justify-center transition-all duration-300 flex-shrink-0",
           "w-[24px] h-[24px]"
         )}>
-          <Icon size={20} />
+          <Icon size={nested ? 14 : 20} />
         </span>
       )}
 
@@ -94,7 +94,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
         )}
       >
         <div className="flex items-center justify-between gap-2 w-full">
-          <span className="truncate flex-1 font-[Montserrat] text-[15px] font-medium">
+          <span className="truncate flex-1 font-[Montserrat] text-[14px] font-medium">
             {item.title}
           </span>
           {item.badge && (
@@ -123,7 +123,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
     )
   }
 
-  return <li className="list-none my-0.5">{linkContent}</li>
+  return <li className="list-none">{linkContent}</li>
 }
 
 export default NavigationItem
