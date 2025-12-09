@@ -172,8 +172,8 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle, nested
           )}
         >
           <ul className={cn(
-            "py-1 space-y-1 w-full", 
-            isLayoutCollapsed && "flex flex-col items-center gap-1" // Ensure gap between icons
+            "w-full", 
+            isLayoutCollapsed && "flex flex-col items-center" // Ensure proper alignment when collapsed
           )}>
             {item.children.map((child) => {
               // Recursive check: if child has children, render NavigationGroup

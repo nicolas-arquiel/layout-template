@@ -118,7 +118,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
   )
 
   return (
-    <li className={cn("list-none", isLayoutCollapsed ? "w-full my-1" : "")}>
+    <li className="list-none w-full">
       {isLayoutCollapsed && showTooltip ? (
         <Tooltip content={item.title} side="right">
           {content}
