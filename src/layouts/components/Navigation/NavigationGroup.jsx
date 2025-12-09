@@ -22,7 +22,7 @@ function hasActiveChild(children, currentPath) {
 /**
  * Shared Button Component for consistency
  */
-const GroupButton = React.forwardRef(({ item, isActive, isOpen, isCollapsed, nested, ...props }, ref) => {
+const GroupButton = React.forwardRef(({ item, isActive, isOpen, isLayoutCollapsed, isContentCollapsed, nested, ...props }, ref) => {
   const Icon = item.icon
   return (
     <button
@@ -30,15 +30,13 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isCollapsed, nes
       className={cn(
         'flex items-center rounded-md transition-transform duration-300 ease-in-out',
         'min-h-[48px] cursor-pointer border-none outline-none',
-        isCollapsed
-          ? 'justify-center w-[48px] h-[48px] mx-auto my-1' // Centered square in collapsed
-          : 'w-full !px-3 py-3 text-left', // Full width with internal padding in expanded (forced)
+        'w-full !px-4 py-3 text-left', // Always full width with internal padding
         isActive
           ? 'text-[var(--accent-9)] bg-[color-mix(in_srgb,var(--accent-9),transparent_88%)]'
           : 'text-[var(--gray-11)] bg-transparent hover:bg-[var(--gray-3)]',
-        !isCollapsed && !isActive && 'hover:translate-x-[5px]',
+        !isLayoutCollapsed && !isActive && 'hover:translate-x-[5px]',
         // Nested indentation (only when expanded)
-        !isCollapsed && nested && 'pl-10'
+        !isLayoutCollapsed && nested && 'pl-10'
       )}
       {...props}
     >
@@ -53,11 +51,10 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isCollapsed, nes
       )}
       
       {/* Text Container - Mismo estilo que NavigationItem */}
-      {!isCollapsed && (
-        <div className={cn(
-          "flex items-center whitespace-nowrap overflow-hidden transition-[width,opacity,margin] duration-300 ease-in-out",
-          "w-auto opacity-100 flex-1 !ml-4"
-        )}>
+      <div className={cn(
+        "flex items-center whitespace-nowrap overflow-hidden transition-[width,opacity,margin] duration-300 ease-in-out",
+        isLayoutCollapsed ? "w-0 opacity-0 ml-0 border-none" : "w-auto opacity-100 flex-1 !ml-4"
+      )}>
           <div className="flex items-center justify-between gap-2 w-full">
             <span className="flex-1 truncate font-[Montserrat] text-[14px] font-medium">
               {item.title}
@@ -79,7 +76,6 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isCollapsed, nes
             />
           </div>
         </div>
-      )}
     </button>
   )
 })
@@ -92,7 +88,7 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isCollapsed, nes
  * - Permite cerrar un grupo aunque tenga un hijo activo
  * - Soporta anidamiento recursivo con la misma lógica
  */
-const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle, nested = false }) => {
+const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle, nested = false, collapsed }) => {
   const location = useLocation()
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
 
@@ -124,7 +120,11 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle, nested
     })
   }, [location.pathname])
 
-  const isCollapsed = menuCollapsed && !forceExpanded
+  // Layout collapsed state (delayed) - controls padding, centering, etc.
+  const isLayoutCollapsed = (typeof collapsed !== 'undefined' ? collapsed : menuCollapsed) && !forceExpanded
+
+  // Content collapsed state (immediate) - controls text visibility
+  const isContentCollapsed = menuCollapsed && !forceExpanded
 
   // Handler personalizado para el toggle que permite cerrar aunque tenga hijo activo
   const handleToggle = () => {
@@ -139,38 +139,41 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle, nested
         item={item}
         isActive={isActive}
         isOpen={isOpen}
-        isCollapsed={isCollapsed}
+        isLayoutCollapsed={isLayoutCollapsed}
+        isContentCollapsed={isContentCollapsed}
         nested={nested}
       />
     </Collapsible.Trigger>
   )
 
   return (
-    <li className={cn("list-none", isCollapsed ? "w-full flex flex-col items-center" : "w-full")}>
+    <li className="list-none w-full">
       <Collapsible.Root
         open={isOpen}
         onOpenChange={handleToggle}
-        className={cn("w-full", isCollapsed && "flex flex-col items-center")}
+        className={cn("w-full", isLayoutCollapsed && "flex flex-col items-center")}
       >
-        {isCollapsed ? (
+        {isLayoutCollapsed ? (
           <Tooltip content={item.title} side="right">
-            <div className="outline-none w-full flex justify-center">
+            <div className="outline-none w-full">
               {triggerButton}
             </div>
           </Tooltip>
         ) : (
-          triggerButton
+          <div className="outline-none w-full">
+            {triggerButton}
+          </div>
         )}
 
         <Collapsible.Content
           className={cn(
             "overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up",
-            isCollapsed ? "w-full flex flex-col items-center" : "w-full"
+            isLayoutCollapsed ? "w-full flex flex-col items-center" : "w-full"
           )}
         >
           <ul className={cn(
             "py-1 space-y-1 w-full", 
-            isCollapsed && "flex flex-col items-center gap-1" // Ensure gap between icons
+            isLayoutCollapsed && "flex flex-col items-center gap-1" // Ensure gap between icons
           )}>
             {item.children.map((child) => {
               // Recursive check: if child has children, render NavigationGroup
@@ -180,6 +183,7 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle, nested
                     key={child.id}
                     item={child}
                     forceExpanded={forceExpanded}
+                    collapsed={collapsed}
                     isOpen={openChildGroupIds.has(child.id)}
                     nested={true}
                     onToggle={() => {
@@ -203,6 +207,7 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle, nested
                   item={child}
                   nested
                   forceExpanded={forceExpanded}
+                  collapsed={collapsed}
                 />
               )
             })}

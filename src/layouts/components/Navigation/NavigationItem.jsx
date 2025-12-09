@@ -8,12 +8,15 @@ import { useSelector } from 'react-redux'
  * NavigationItem - Reactstrap/Bootstrap style
  * Clean, well-spaced navigation items with proper active states
  */
-const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpanded = false, className, ...props }) => {
+const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpanded = false, className, collapsed, ...props }) => {
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
   const Icon = item.icon
 
-  // Considerar forceExpanded para determinar si está colapsado
-  const isCollapsed = menuCollapsed && !forceExpanded
+  // Layout collapsed state (delayed) - controls padding, centering, etc.
+  const isLayoutCollapsed = (typeof collapsed !== 'undefined' ? collapsed : menuCollapsed) && !forceExpanded
+
+  // Content collapsed state (immediate) - controls text visibility
+  const isContentCollapsed = menuCollapsed && !forceExpanded
 
   const getBadgeColor = (color) => {
     switch (color) {
@@ -48,13 +51,11 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
       className={({ isActive }) =>
         cn(
           // Layout base
-          'flex items-center rounded-md transition-transform  duration-300 ease-in-out',
+          'flex items-center rounded-md transition-transform duration-300 ease-in-out',
           'min-h-[48px]',
           
           // Spacing & Sizing
-          isCollapsed
-            ? 'justify-center w-[48px] h-[48px] mx-auto my-1 px-0' // Centered square with vertical margin
-            : '!px-3 py-3 w-full', // Full width with internal padding (forced)
+          '!px-4 py-3 w-full', // Always full width with internal padding
 
           // Typography
           'font-[Montserrat] text-[14px] tracking-[0.14px] font-medium',
@@ -65,7 +66,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
             : 'text-[rgb(110,107,123)] hover:bg-[rgba(0,0,0,0.05)] hover:translate-x-[5px] cursor-pointer',
 
           // Nested indentation (only when expanded)
-          !isCollapsed && nested && 'pl-10',
+          !isLayoutCollapsed && nested && 'pl-10',
 
           className
         )
@@ -90,7 +91,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
       <div
         className={cn(
           "flex items-center whitespace-nowrap overflow-hidden transition-[width,opacity,margin] duration-300 ease-in-out",
-          isCollapsed ? "w-0 opacity-0 ml-0 border-none" : "w-auto opacity-100 flex-1 !ml-4"
+          isLayoutCollapsed ? "w-0 opacity-0 ml-0 border-none" : "w-auto opacity-100 flex-1 !ml-4"
         )}
       >
         <div className="flex items-center justify-between gap-2 w-full">
@@ -109,21 +110,24 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
     </NavLink>
   )
 
-  // Tooltip when collapsed (solo si realmente está colapsado, no en hover)
-  if (isCollapsed && showTooltip) {
-    return (
-      <li className="list-none flex justify-center w-full my-1">
-        <Tooltip content={item.title} side="right">
-          {/* Wrapper div to ensure Tooltip trigger behaves correctly */}
-          <div className="outline-none">
-            {linkContent}
-          </div>
-        </Tooltip>
-      </li>
-    )
-  }
+  // Renderizar condicionalmente el Tooltip para evitar tooltips vacíos
+  const content = (
+    <div className="outline-none w-full">
+      {linkContent}
+    </div>
+  )
 
-  return <li className="list-none">{linkContent}</li>
+  return (
+    <li className={cn("list-none", isLayoutCollapsed ? "w-full my-1" : "")}>
+      {isLayoutCollapsed && showTooltip ? (
+        <Tooltip content={item.title} side="right">
+          {content}
+        </Tooltip>
+      ) : (
+        content
+      )}
+    </li>
+  )
 }
 
 export default NavigationItem

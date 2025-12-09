@@ -41,7 +41,7 @@ const MainLayout = () => {
             'relative',
             'h-screen',
             'animate-in fade-in duration-200',
-            menuLayout === 'horizontal' ? 'hidden xl:hidden' : (menuCollapsed ? 'w-[80px]' : 'w-[260px]'),
+            menuLayout === 'horizontal' ? 'hidden xl:hidden' : (menuCollapsed ? 'w-[72px]' : 'w-[260px]'),
             'max-xl:fixed max-xl:inset-y-0 max-xl:left-0 max-xl:z-40 max-xl:block',
             'max-xl:w-[260px]',
             'max-xl:transform max-xl:transition-transform max-xl:duration-300',

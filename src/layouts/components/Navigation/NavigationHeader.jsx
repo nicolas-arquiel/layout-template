@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { Text } from '@radix-ui/themes'
 import { MoreHorizontal } from 'lucide-react'
+import { cn } from '@lib/utils'
 
 /**
  * NavigationHeader - SOLO TAILWIND CLASSES
@@ -13,14 +14,17 @@ import { MoreHorizontal } from 'lucide-react'
  * @param {boolean} [props.forceExpanded] - Fuerza visualización expandida
  * @returns {JSX.Element|null}
  */
-const NavigationHeader = ({ title, forceExpanded = false }) => {
+const NavigationHeader = ({ title, forceExpanded = false, collapsed }) => {
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
 
-  // Considerar forceExpanded para determinar si está colapsado
-  const isCollapsed = menuCollapsed && !forceExpanded
+  // Layout collapsed state (delayed) - controls switching to "..." view
+  const isLayoutCollapsed = (typeof collapsed !== 'undefined' ? collapsed : menuCollapsed) && !forceExpanded
 
-  // Cuando está colapsado, mostrar solo "..."
-  if (isCollapsed) {
+  // Content collapsed state (immediate) - controls text opacity
+  const isContentCollapsed = menuCollapsed && !forceExpanded
+
+  // Cuando está colapsado (layout), mostrar solo "..."
+  if (isLayoutCollapsed) {
     return (
       <li className="navigation-header list-none">
         <div className="flex items-center justify-center pt-6 pb-2">
@@ -42,7 +46,10 @@ const NavigationHeader = ({ title, forceExpanded = false }) => {
         <Text
           size="1"
           weight="bold"
-          className="uppercase tracking-wide text-[var(--gray-9)]"
+          className={cn(
+            "uppercase tracking-wide text-[var(--gray-9)] transition-opacity duration-300",
+            isContentCollapsed ? "opacity-0" : "opacity-100"
+          )}
         >
           {title}
         </Text>

@@ -40,6 +40,23 @@ const Sidebar = () => {
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 1280
   const effectiveCollapsed = isMobile ? false : menuCollapsed
 
+  // Estado para retrasar el cambio de contenido (texto/iconos)
+  // Esto permite que la sidebar se encoja visualmente antes de cambiar a modo iconos
+  const [delayedCollapsed, setDelayedCollapsed] = React.useState(effectiveCollapsed)
+
+  useEffect(() => {
+    if (effectiveCollapsed) {
+      // Esperar a que termine la animación de ancho (300ms)
+      const timer = setTimeout(() => {
+        setDelayedCollapsed(true)
+      }, 300)
+      return () => clearTimeout(timer)
+    } else {
+      // Mostrar contenido inmediatamente al expandir
+      setDelayedCollapsed(false)
+    }
+  }, [effectiveCollapsed])
+
   return (
     <div className="sidebar-container h-full flex flex-col overflow-hidden animate-in fade-in duration-300">
       {/* ========== HEADER ========== */}
@@ -92,7 +109,7 @@ const Sidebar = () => {
         >
           <div className="py-4 px-2">
             <nav>
-              <NavigationItems items={navigation} forceExpanded={isMobile} />
+              <NavigationItems items={navigation} forceExpanded={isMobile} collapsed={delayedCollapsed} />
             </nav>
           </div>
         </ScrollArea>

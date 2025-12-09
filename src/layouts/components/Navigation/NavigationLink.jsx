@@ -13,7 +13,7 @@ import NavigationItem from './NavigationItem'
  * @param {boolean} [props.forceExpanded] - Fuerza visualización expandida
  * @returns {JSX.Element}
  */
-const NavigationLink = ({ item, nested = false, forceExpanded = false }) => {
+const NavigationLink = ({ item, nested = false, forceExpanded = false, collapsed }) => {
   const dispatch = useDispatch()
 
   const handleClick = () => {
@@ -27,7 +27,7 @@ const NavigationLink = ({ item, nested = false, forceExpanded = false }) => {
     onClick: handleClick,
   }
 
-  return <NavigationItem item={itemWithHandler} nested={nested} showTooltip forceExpanded={forceExpanded} />
+  return <NavigationItem item={itemWithHandler} nested={nested} showTooltip forceExpanded={forceExpanded} collapsed={collapsed} />
 }
 
 export default NavigationLink

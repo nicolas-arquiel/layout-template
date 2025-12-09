@@ -18,7 +18,7 @@ import { cn } from '@lib/utils'
  * @param {boolean} [props.forceExpanded] - Fuerza la visualización expandida
  * @returns {JSX.Element}
  */
-const NavigationItems = ({ items = [], className, forceExpanded = false }) => {
+const NavigationItems = ({ items = [], className, forceExpanded = false, collapsed }) => {
   const permisos = useSelector((state) => state.auth.permisos)
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
   const location = useLocation()
@@ -60,7 +60,7 @@ const NavigationItems = ({ items = [], className, forceExpanded = false }) => {
   const renderItem = (item) => {
     // Headers de sección
     if (item.header) {
-      return <NavigationHeader key={item.header} title={item.header} forceExpanded={forceExpanded} />
+      return <NavigationHeader key={item.header} title={item.header} forceExpanded={forceExpanded} collapsed={collapsed} />
     }
 
     // Grupos con children
@@ -75,6 +75,7 @@ const NavigationItems = ({ items = [], className, forceExpanded = false }) => {
           key={item.id}
           item={item}
           forceExpanded={forceExpanded}
+          collapsed={collapsed}
           isOpen={openGroupIds.has(item.id)}
           onToggle={() => {
             setOpenGroupIds((prevIds) => {
@@ -97,7 +98,7 @@ const NavigationItems = ({ items = [], className, forceExpanded = false }) => {
       return null
     }
 
-    return <NavigationLink key={item.id} item={item} forceExpanded={forceExpanded} />
+    return <NavigationLink key={item.id} item={item} forceExpanded={forceExpanded} collapsed={collapsed} />
   }
 
   return (
