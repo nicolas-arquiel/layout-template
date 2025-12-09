@@ -6,6 +6,7 @@ import { ChevronRight, ChevronDown } from 'lucide-react';
 import TanStackSortHeader from './TanStackSortHeader';
 import TanStackSelectCheckbox from './TanStackSelectCheckbox';
 import TanStackSelectAllCheckbox from './TanStackSelectAllCheckbox';
+import TanStackRowActions from './TanStackRowActions';
 
 /**
  * Componente de tabla principal para TanStack Table
@@ -17,6 +18,8 @@ const TanStackTable = ({
     table,
     enableRowSelection = false,
     enableExpanding = false,
+    enableRowActions = false,
+    actions = [],
     customStyles = {}
 }) => {
     return (
@@ -54,6 +57,10 @@ const TanStackTable = ({
                                     )}
                                 </Table.ColumnHeaderCell>
                             ))}
+                            {/* Columna de acciones en el header */}
+                            {enableRowActions && (
+                                <Table.ColumnHeaderCell style={{ width: '50px' }} />
+                            )}
                         </Table.Row>
                     ))}
                 </Table.Header>
@@ -62,9 +69,10 @@ const TanStackTable = ({
                         <Table.Row>
                             <Table.Cell
                                 colSpan={
-                                    table.getAllColumns().length +
+                                    table.getVisibleFlatColumns().length +
                                     (enableRowSelection ? 1 : 0) +
-                                    (enableExpanding ? 1 : 0)
+                                    (enableExpanding ? 1 : 0) +
+                                    (enableRowActions ? 1 : 0)
                                 }
                                 style={{ textAlign: 'center', padding: '2rem' }}
                             >
@@ -106,6 +114,12 @@ const TanStackTable = ({
                                             )}
                                         </Table.Cell>
                                     ))}
+                                    {/* Columna de acciones en cada fila */}
+                                    {enableRowActions && (
+                                        <Table.Cell>
+                                            <TanStackRowActions row={row} actions={actions} />
+                                        </Table.Cell>
+                                    )}
                                 </Table.Row>
                                 {/* Fila de detalles expandible - Renderizada siempre si enableExpanding es true para permitir animación de cierre */}
                                 {enableExpanding && (
@@ -114,7 +128,8 @@ const TanStackTable = ({
                                             colSpan={
                                                 row.getVisibleCells().length +
                                                 (enableRowSelection ? 1 : 0) +
-                                                (enableExpanding ? 1 : 0)
+                                                (enableExpanding ? 1 : 0) +
+                                                (enableRowActions ? 1 : 0)
                                             }
                                             style={{ padding: 0, borderBottom: 'none' }}
                                         >

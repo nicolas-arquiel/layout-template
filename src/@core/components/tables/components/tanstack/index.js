@@ -7,5 +7,6 @@ export { default as TanStackSelectCheckbox } from './TanStackSelectCheckbox';
 export { default as TanStackSelectAllCheckbox } from './TanStackSelectAllCheckbox';
 export { default as TanStackFooter } from './TanStackFooter';
 export { default as TanStackToolbar } from './TanStackToolbar';
+export { default as TanStackRowActions } from './TanStackRowActions';
 
 

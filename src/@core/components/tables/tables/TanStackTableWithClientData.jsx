@@ -199,6 +199,8 @@ const TanStackTableWithClientData = ({
                         table={table}
                         enableRowSelection={enableRowSelection}
                         enableExpanding={enableExpanding}
+                        enableRowActions={props.enableRowActions}
+                        actions={props.actions}
                     />
                     <TanStackFooter
                         table={table}
