@@ -45,7 +45,7 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isCollapsed, nes
       {/* Icon - ALWAYS VISIBLE - Mismo estilo que NavigationItem */}
       {Icon && (
         <span className={cn(
-          "flex items-center justify-center transition-all duration-300 flex-shrink-0",
+          "flex items-center justify-center transition-transform duration-300 flex-shrink-0",
           "w-[24px] h-[24px]"
         )}>
           <Icon size={nested ? 14 : 20} />
@@ -55,7 +55,7 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isCollapsed, nes
       {/* Text Container - Mismo estilo que NavigationItem */}
       {!isCollapsed && (
         <div className={cn(
-          "flex items-center whitespace-nowrap overflow-hidden transition-all duration-300 ease-in-out",
+          "flex items-center whitespace-nowrap overflow-hidden transition-[width,opacity,margin] duration-300 ease-in-out",
           "w-auto opacity-100 flex-1 !ml-4"
         )}>
           <div className="flex items-center justify-between gap-2 w-full">

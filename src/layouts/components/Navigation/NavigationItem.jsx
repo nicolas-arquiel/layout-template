@@ -79,7 +79,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
       {/* Icon - ALWAYS VISIBLE */}
       {Icon && (
         <span className={cn(
-          "flex items-center justify-center transition-all duration-300 flex-shrink-0",
+          "flex items-center justify-center transition-transform duration-300 flex-shrink-0",
           "w-[24px] h-[24px]"
         )}>
           <Icon size={nested ? 14 : 20} />
@@ -89,7 +89,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
       {/* Text Container - Collapses smoothly */}
       <div
         className={cn(
-          "flex items-center whitespace-nowrap overflow-hidden transition-all duration-300 ease-in-out",
+          "flex items-center whitespace-nowrap overflow-hidden transition-[width,opacity,margin] duration-300 ease-in-out",
           isCollapsed ? "w-0 opacity-0 ml-0 border-none" : "w-auto opacity-100 flex-1 !ml-4"
         )}
       >
