@@ -10,7 +10,8 @@ import {
     Popover,
     Badge
 } from '@radix-ui/themes';
-import { Filter, Plus, Trash2, X, Calendar as CalendarIcon } from 'lucide-react';
+import { Filter, Plus, Trash2, X, Calendar as CalendarIcon, Columns } from 'lucide-react';
+import TanStackInputSelect from './TanStackInputSelect';
 
 /**
  * Tipos de operadores disponibles según el tipo de columna
@@ -209,19 +210,14 @@ const FilterRow = ({
                     <Text as="label" size="1" color="gray" weight="medium" mb="1" style={{ display: 'block' }}>
                         Columna
                     </Text>
-                    <Select.Root
+                    <TanStackInputSelect
+                        placeholder="Seleccionar columna..."
+                        options={availableColumns.map(col => ({ label: col.name, value: col.id }))}
                         value={filter.columnId}
-                        onValueChange={(val) => onUpdate(filter.id, 'columnId', val)}
-                    >
-                        <Select.Trigger style={{ width: '100%' }} />
-                        <Select.Content>
-                            {availableColumns.map((col) => (
-                                <Select.Item key={col.id} value={col.id}>
-                                    {col.name}
-                                </Select.Item>
-                            ))}
-                        </Select.Content>
-                    </Select.Root>
+                        onChange={(val) => onUpdate(filter.id, 'columnId', val)}
+                        multiple={false}
+                        style={{ width: '100%' }}
+                    />
                 </Box>
 
                 {/* Selector de Operador */}
@@ -581,7 +577,7 @@ const TanStackAdvanceFilter = ({
 }) => {
     // Si no se pasan las funciones del hook, usar estado interno
     const internalState = useAdvancedFilters({ data, table });
-    
+
     const state = addFilter ? {
         draftFilters,
         availableColumns,

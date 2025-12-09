@@ -1,8 +1,9 @@
 import React from 'react';
 import { Flex, TextField, Select, IconButton, Button, Badge } from '@radix-ui/themes';
-import { Search, X, Filter } from 'lucide-react';
+import { Search, X, Filter, Columns } from 'lucide-react';
 import TanStackColumnVisibility from './TanStackColumnVisibility';
 import TanStackAdvanceFilter, { useAdvancedFilters } from './TanStackAdvanceFilter';
+import TanStackInputSelect from './TanStackInputSelect';
 
 /**
  * Barra de herramientas para la tabla TanStack

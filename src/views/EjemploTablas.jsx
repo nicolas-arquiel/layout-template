@@ -13,7 +13,7 @@ import {
   AdvancedFilter,
   ExportFilter
 } from '../@core/components/tables';
-import { Users, Database, Zap, LayoutGrid } from 'lucide-react';
+import { Users, Database, Zap, LayoutGrid, Edit, Trash, Eye, Copy, Star, Tags } from 'lucide-react';
 import BreadCrumbs from '../@core/components/breadcrumbs/BreadCrumbs';
 import { createColumnHelper } from '@tanstack/react-table';
 
@@ -663,6 +663,60 @@ const [selectedRows, setSelectedRows] = useState([]);
                 initialPageSize={10}
                 filterDisplayMode="popover"
                 pageSizeOptions={[10, 20, 50, 100]}
+                enableRowActions={true}
+                actions={[
+                  {
+                    type: "item",
+                    label: "Ver Detalles",
+                    icon: Eye,
+                    onClick: (row) => console.log("Ver:", row),
+                  },
+                  {
+                    type: "item",
+                    label: "Editar",
+                    icon: Edit,
+                    onClick: (row) => console.log("Editar:", row),
+                    shortcut: "⌘E",
+                  },
+                  {
+                    type: "item",
+                    label: "Duplicar",
+                    icon: Copy,
+                    onClick: (row) => console.log("Duplicar:", row),
+                  },
+                  {
+                    type: "separator",
+                  },
+                  {
+                    type: "item",
+                    label: "Marcar como Favorita",
+                    icon: Star,
+                    onClick: (row) => console.log("Toggle favorito:", row),
+                  },
+                  {
+                    type: "submenu",
+                    label: "Etiqueta",
+                    icon: Tags,
+                    value: "normal",
+                    items: [
+                      { value: "importante", label: "Importante" },
+                      { value: "normal", label: "Normal" },
+                      { value: "archivo", label: "Archivo" },
+                    ],
+                    onValueChange: (value, row) => console.log("Cambiar etiqueta:", row, value),
+                  },
+                  {
+                    type: "separator",
+                  },
+                  {
+                    type: "item",
+                    label: "Eliminar",
+                    icon: Trash,
+                    onClick: (row) => console.log("Eliminar:", row),
+                    shortcut: "⌘⌫",
+                    color: "red",
+                  },
+                ]}
               />
 
               {/* Features Info */}
