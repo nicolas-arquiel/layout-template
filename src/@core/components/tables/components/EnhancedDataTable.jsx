@@ -11,6 +11,7 @@ const EnhancedDataTable = ({
   data = [],
   onRowClick,
   progressPending = false,
+  progressComponent,
   noDataComponent,
   highlightOnHover = true,
   pointerOnHover = false,
@@ -106,7 +107,7 @@ const EnhancedDataTable = ({
   if (progressPending) {
     return (
       <Box p="5" style={{ textAlign: 'center' }}>
-        <Text>Cargando...</Text>
+        {progressComponent || <Text>Cargando...</Text>}
       </Box>
     );
   }
@@ -201,8 +202,8 @@ const EnhancedDataTable = ({
                 {columns.map((column, colIndex) => {
                   const cellValue = column.selector
                     ? (typeof column.selector === 'function'
-                        ? column.selector(row)
-                        : row[column.selector])
+                      ? column.selector(row)
+                      : row[column.selector])
                     : null;
 
                   const cellContent = column.cell

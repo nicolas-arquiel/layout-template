@@ -23,10 +23,11 @@
   overflow: visible;
 }
 
-/* Eliminar bordes de la tabla */
+/* Eliminar bordes de la tabla y forzar layout fijo */
 .table-container table,
 .table-container .rt-TableRoot {
   border: none !important;
+  table-layout: fixed !important;
 }
 
 .table-container thead tr {
@@ -35,7 +36,6 @@
 
 /* Líneas divisorias solo entre filas del body */
 .table-container tbody tr {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   transition: background-color 0.2s ease;
 }
 
@@ -182,4 +182,134 @@
 
 .dark .tabla-virtualizada-row.clickable:hover {
   background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* ========== FILA EXPANDIDA (Corrección para quitar espacio blanco) ========== */
+
+/* 1. Quitamos el borde a la fila (TR) contenedora.
+   Si no haces esto, verás una línea de 1px vacía cuando esté cerrado. */
+.expanded-row {
+  border: none !important;
+  border-bottom: none !important;
+}
+
+/* 2. Reseteo agresivo de la celda (TD) */
+.expanded-row td,
+.expanded-row .rt-TableCell {
+  /* Eliminar padding es vital */
+  padding: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  
+  /* Eliminar bordes de la celda */
+  border-bottom: none !important;
+  border-top: none !important;
+  
+  /* IMPORTANTE: Radix a veces pone altura mínima. Forzamos 0 si está vacío o auto */
+  height: auto !important;
+  line-height: 0; /* Evita que espacios en blanco generen altura */
+}
+
+/* 3. Asegurar que el contenido interno recupere el line-height normal */
+.expandable-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%; /* Asegura ancho completo */
+  line-height: 1.5; /* Restauramos line-height para el texto real */
+}
+
+.expandable-content[data-state='open'] {
+  grid-template-rows: 1fr;
+}
+
+.expandable-content-inner {
+  overflow: hidden;
+  /* Visibility hidden es el truco de MUI para que no sea "tabeable" cuando está cerrado */
+  visibility: hidden; 
+  transition: visibility 0ms 300ms; /* Delay para esperar a que cierre */
+}
+
+.expandable-content[data-state='open'] .expandable-content-inner {
+  visibility: visible;
+  transition: visibility 0ms 0ms; /* Aparece inmediatamente al abrir */
+}
+/* ========================================
+   ANIMACIONES DE COLAPSO (Desde elegant-admin-dashboard)
+   ======================================== */
+
+/* Animaciones para tablas */
+@keyframes accordion-down {
+  from {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    max-height: 1000px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    max-height: 1000px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.animate-accordion-down {
+  animation: accordion-down 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.animate-accordion-up {
+  animation: accordion-up 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+/* Animaciones para Radix Collapsible */
+@keyframes collapsible-down {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+
+  to {
+    height: var(--radix-collapsible-content-height);
+    opacity: 1;
+  }
+}
+
+@keyframes collapsible-up {
+  from {
+    height: var(--radix-collapsible-content-height);
+    opacity: 1;
+  }
+
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+.collapsible-content {
+  overflow: hidden;
+}
+
+.collapsible-content[data-state='open'] {
+  animation: collapsible-down 0.3s ease-out;
+}
+
+.collapsible-content[data-state='closed'] {
+  animation: collapsible-up 0.3s ease-out;
 }

@@ -5,16 +5,17 @@ import {
     getCoreRowModel,
     getSortedRowModel,
     getPaginationRowModel,
-    getFilteredRowModel
+    getFilteredRowModel,
+    getExpandedRowModel
 } from '@tanstack/react-table';
 import TableContainer from '../components/TableContainer';
 import TableHeader from '../components/TableHeader';
 import {
     TanStackTable,
-    TanStackPagination,
-    TanStackSearchInput,
-    TanStackColumnVisibility
+    TanStackFooter,
+    TanStackToolbar
 } from '../components/tanstack';
+import { smartFilterFn } from '../components/tanstack/TanStackAdvanceFilter';
 
 /**
  * Componente de tabla con TanStack Table para datos del lado del cliente
@@ -45,6 +46,15 @@ import {
  * />
  * 
  * @example
+ * // Con filtros avanzados en modo popover
+ * <TanStackTableWithClientData
+ *   data={data}
+ *   columns={columns}
+ *   title="Usuarios"
+ *   filterDisplayMode="popover"
+ * />
+ * 
+ * @example
  * // Con selección de filas
  * const [selectedRows, setSelectedRows] = useState([]);
  * 
@@ -61,6 +71,9 @@ import {
  * 
  * @param {boolean} enableRowSelection - Habilita la selección de filas con checkboxes
  * @param {function} onRowSelectionChange - Callback que recibe las filas seleccionadas cuando cambia la selección
+ * @param {boolean} enableExpanding - Habilita la funcionalidad de filas colapsables
+ * @param {'inline' | 'popover'} filterDisplayMode - Modo de visualización de filtros avanzados
+ * @param {function} onFiltersChange - Callback cuando cambian los filtros avanzados aplicados
  */
 const TanStackTableWithClientData = ({
     data = [],
@@ -73,16 +86,23 @@ const TanStackTableWithClientData = ({
     showPagination = true,
     showColumnVisibility = true,
     enableRowSelection = true,
+    enableExpanding = false,
     onRowSelectionChange,
     initialPageSize = 10,
     pageSizeOptions = [10, 20, 50, 100],
     customClassCard = "",
     customClassCardBody = "",
     searchPlaceholder = "Buscar en todos los campos...",
+    filterDisplayMode = "inline",
+    onFiltersChange,
     ...props
 }) => {
     const [globalFilter, setGlobalFilter] = useState('');
     const [rowSelection, setRowSelection] = useState({});
+    const [expanded, setExpanded] = useState({});
+    const [searchColumn, setSearchColumn] = useState('all');
+    const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+    const [columnFilters, setColumnFilters] = useState([]);
 
     // Crear instancia de TanStack Table
     const table = useReactTable({
@@ -92,13 +112,27 @@ const TanStackTableWithClientData = ({
         getSortedRowModel: getSortedRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
+        getExpandedRowModel: getExpandedRowModel(),
+        // Configurar función de filtrado inteligente
+        filterFns: {
+            smart: smartFilterFn,
+        },
+        defaultColumn: {
+            filterFn: smartFilterFn,
+        },
         state: {
             globalFilter,
             rowSelection,
+            expanded,
+            columnFilters,
         },
         onGlobalFilterChange: setGlobalFilter,
         onRowSelectionChange: setRowSelection,
+        onExpandedChange: setExpanded,
+        onColumnFiltersChange: setColumnFilters,
         enableRowSelection: enableRowSelection,
+        enableExpanding: enableExpanding,
+        getRowCanExpand: () => true,
         initialState: {
             pagination: {
                 pageSize: initialPageSize,
@@ -119,21 +153,24 @@ const TanStackTableWithClientData = ({
 
     // Controles superiores (búsqueda, visibilidad de columnas y contador de selección)
     const controls = (
-        <Flex gap="2" align="center" style={{ width: '100%' }}>
-            {showSearch && (
-                <TanStackSearchInput
-                    value={globalFilter}
-                    onChange={setGlobalFilter}
-                    resultCount={table.getFilteredRowModel().rows.length}
-                    placeholder={searchPlaceholder}
-                />
-            )}
-            {showColumnVisibility && (
-                <TanStackColumnVisibility table={table} />
-            )}
+        <Flex direction="column" gap="2" style={{ width: '100%' }}>
+            <TanStackToolbar
+                table={table}
+                globalFilter={globalFilter}
+                setGlobalFilter={setGlobalFilter}
+                searchColumn={searchColumn}
+                setSearchColumn={setSearchColumn}
+                showAdvancedFilters={showAdvancedFilters}
+                setShowAdvancedFilters={setShowAdvancedFilters}
+                showColumnVisibility={showColumnVisibility}
+                searchPlaceholder={searchPlaceholder}
+                data={data}
+                filterDisplayMode={filterDisplayMode}
+                onFiltersChange={onFiltersChange}
+            />
             {/* Contador de registros seleccionados */}
             {enableRowSelection && selectedRowsCount > 0 && (
-                <Badge size="2" color="blue" variant="soft">
+                <Badge size="2" color="blue" variant="soft" style={{ alignSelf: 'flex-start' }}>
                     <Text size="2" weight="medium">
                         {selectedRowsCount} {selectedRowsCount === 1 ? 'registro seleccionado' : 'registros seleccionados'}
                     </Text>
@@ -141,6 +178,7 @@ const TanStackTableWithClientData = ({
             )}
         </Flex>
     );
+
 
     return (
         <TableContainer
@@ -160,13 +198,14 @@ const TanStackTableWithClientData = ({
                     <TanStackTable
                         table={table}
                         enableRowSelection={enableRowSelection}
+                        enableExpanding={enableExpanding}
                     />
-                    {showPagination && (
-                        <TanStackPagination
-                            table={table}
-                            pageSizeOptions={pageSizeOptions}
-                        />
-                    )}
+                    <TanStackFooter
+                        table={table}
+                        dataLength={data.length}
+                        rowsPerPageOptions={pageSizeOptions}
+                        enablePagination={showPagination}
+                    />
                 </Flex>
             }
         />

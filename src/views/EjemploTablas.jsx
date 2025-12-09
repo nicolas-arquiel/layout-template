@@ -13,7 +13,7 @@ import {
   AdvancedFilter,
   ExportFilter
 } from '../@core/components/tables';
-import { Users, Database, Zap } from 'lucide-react';
+import { Users, Database, Zap, LayoutGrid } from 'lucide-react';
 import BreadCrumbs from '../@core/components/breadcrumbs/BreadCrumbs';
 import { createColumnHelper } from '@tanstack/react-table';
 
@@ -658,7 +658,10 @@ const [selectedRows, setSelectedRows] = useState([]);
                 iconThemeClass="bg-primary"
                 showSearch={true}
                 showPagination={true}
+                enableRowSelection={true}
+                enableExpanding={true}
                 initialPageSize={10}
+                filterDisplayMode="popover"
                 pageSizeOptions={[10, 20, 50, 100]}
               />
 

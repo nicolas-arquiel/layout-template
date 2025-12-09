@@ -5,3 +5,7 @@ export { default as TanStackSortHeader } from './TanStackSortHeader';
 export { default as TanStackColumnVisibility } from './TanStackColumnVisibility';
 export { default as TanStackSelectCheckbox } from './TanStackSelectCheckbox';
 export { default as TanStackSelectAllCheckbox } from './TanStackSelectAllCheckbox';
+export { default as TanStackFooter } from './TanStackFooter';
+export { default as TanStackToolbar } from './TanStackToolbar';
+
+
