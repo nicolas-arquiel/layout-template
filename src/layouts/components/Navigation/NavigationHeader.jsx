@@ -45,10 +45,12 @@ const NavigationHeader = ({ title, forceExpanded = false, collapsed }) => {
         <Text
           size="1"
           weight="bold"
-          className={cn(
-            "uppercase tracking-wide text-[var(--gray-9)] transition-opacity duration-300 ease-in-out",
-            isContentCollapsed ? "opacity-0" : "opacity-100"
-          )}
+          className="uppercase tracking-wide text-[var(--gray-9)] transition-[clip-path] duration-150 ease-in-out"
+          style={{
+            clipPath: isContentCollapsed 
+              ? 'inset(0 100% 0 0)' // Hidden: clipped from right
+              : 'inset(0 0 0 0)'    // Visible: full reveal
+          }}
         >
           {title}
         </Text>

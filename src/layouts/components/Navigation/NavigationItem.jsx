@@ -102,10 +102,12 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
         )}
       >
         <div
-          className={cn(
-            "flex items-center justify-between gap-2 w-full transition-opacity duration-300 ease-in-out",
-            isContentCollapsed ? "opacity-0" : "opacity-100"
-          )}
+          className="flex items-center justify-between gap-2 w-full transition-[clip-path] duration-150 ease-in-out"
+          style={{
+            clipPath: isContentCollapsed 
+              ? 'inset(0 100% 0 0)' // Hidden: clipped from right
+              : 'inset(0 0 0 0)'    // Visible: full reveal
+          }}
         >
           <span className="truncate flex-1 font-[Montserrat] text-[14px] font-medium">
             {item.title}

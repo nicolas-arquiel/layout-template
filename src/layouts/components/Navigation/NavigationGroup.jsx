@@ -64,17 +64,18 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isLayoutCollapse
         </span>
       )}
       
-      {/* Text Container - Mismo estilo que NavigationItem */}
-      {/* Opacity uses isContentCollapsed (immediate) for instant fade, width uses isLayoutCollapsed (delayed) for smooth shrink */}
+      {/* Reveals from left to right */}
       <div className={cn(
         "flex items-center whitespace-nowrap overflow-hidden transition-[width,margin] duration-300 ease-in-out",
         isLayoutCollapsed ? "w-0 ml-0 border-none" : "w-auto flex-1 !ml-4"
       )}>
           <div
-            className={cn(
-              "flex items-center justify-between gap-2 w-full transition-opacity duration-300 ease-in-out",
-              isContentCollapsed ? "opacity-0" : "opacity-100"
-            )}
+            className="flex items-center justify-between gap-2 w-full transition-[clip-path] duration-150 ease-in-out"
+            style={{
+              clipPath: isContentCollapsed 
+                ? 'inset(0 100% 0 0)' // Hidden: clipped from right
+                : 'inset(0 0 0 0)'    // Visible: full reveal
+            }}
           >
             <span className="flex-1 truncate font-[Montserrat] text-[14px] font-medium">
               {item.title}
