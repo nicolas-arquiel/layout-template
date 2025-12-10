@@ -1,4 +1,4 @@
-import { usePermisos } from '@/utils/hooks/usePermisos'
+import { usePermisos } from '@hooks/usePermisos'
 
 /**
  * Componente guard para proteger contenido basado en permisos

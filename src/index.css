@@ -13,21 +13,21 @@
 @import "tailwindcss";
 
 /* Variables y Base */
-@import "./styles/variables.css";
-@import "./styles/base.css";
+@import "./@core/styles/variables.css";
+@import "./@core/styles/base.css";
 
 /* Animaciones y Utilidades */
-@import "./styles/animations.css";
-@import "./styles/utilities.css";
+@import "./@core/styles/animations.css";
+@import "./@core/styles/utilities.css";
 
 /* Componentes Generales */
-@import "./styles/components.css";
-@import "./styles/tables.css";
+@import "./@core/styles/components.css";
+@import "./@core/styles/tables.css";
 
 /* Componentes Específicos */
-@import "./styles/components/navbar.css";
-@import "./styles/components/sidebar.css";
-@import "./styles/components/cards.css";
-@import "./styles/components/canvas.css";
-@import "./styles/components/navigation.css";
-@import "./styles/components/breadcrumbs.css";
+@import "./@core/styles/components/navbar.css";
+@import "./@core/styles/components/sidebar.css";
+@import "./@core/styles/components/cards.css";
+@import "./@core/styles/components/canvas.css";
+@import "./@core/styles/components/navigation.css";
+@import "./@core/styles/components/breadcrumbs.css";
