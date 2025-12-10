@@ -12,9 +12,9 @@ import {
   CheckboxFilter,
   AdvancedFilter,
   ExportFilter
-} from '../@core/components/tables';
+} from '@components/tables';
 import { Users, Database, Zap, LayoutGrid, Edit, Trash, Eye, Copy, Star, Tags } from 'lucide-react';
-import BreadCrumbs from '../@core/components/breadcrumbs/BreadCrumbs';
+import { BreadCrumbs } from '@components';
 import { createColumnHelper } from '@tanstack/react-table';
 
 // ===== DATOS DE EJEMPLO =====

@@ -4,7 +4,7 @@ import { RouterProvider } from 'react-router-dom'
 import { Theme } from '@radix-ui/themes'
 import { store } from '@src/store/store'
 import router from './router'
-import CustomThemePanel from './components/CustomThemePanel'
+import { CustomThemePanel } from '@core/components'
 
 /**
  * Componente raíz de la aplicación

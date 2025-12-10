@@ -1,6 +1,7 @@
+import { createElement } from 'react'
 import { createBrowserRouter, Navigate } from 'react-router-dom'
-import MainLayout from '../layouts/MainLayout'
-import AuthLayout from '../layouts/AuthLayout'
+import MainLayout from '@/layouts/MainLayout'
+import AuthLayout from '@/layouts/AuthLayout'
 
 // Route Guards
 import PrivateRoute from '@/@core/components/routes/PrivateRoute'
@@ -34,7 +35,7 @@ const wrapRouteWithGuard = (route) => {
 
   return {
     ...route,
-    element: <RouteGuard route={route}>{route.element}</RouteGuard>,
+    element: createElement(RouteGuard, { route }, route.element),
   }
 }
 
@@ -51,8 +52,8 @@ const wrapRouteWithGuard = (route) => {
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <MainLayout />,
-    errorElement: <Error />,
+    element: createElement(MainLayout),
+    errorElement: createElement(Error),
     children: [
       ...dashboardRoutes.map(wrapRouteWithGuard),
       ...reportRoutes.map(wrapRouteWithGuard),
@@ -62,29 +63,29 @@ const router = createBrowserRouter([
   },
   {
     path: '/auth',
-    element: <AuthLayout />,
+    element: createElement(AuthLayout),
     children: authRoutes.map(wrapRouteWithGuard),
   },
   // Misc Pages
   {
     path: '/not-authorized',
-    element: <NotAuthorized />,
+    element: createElement(NotAuthorized),
   },
   {
     path: '/error',
-    element: <Error />,
+    element: createElement(Error),
   },
   {
     path: '/maintenance',
-    element: <Maintenance />,
+    element: createElement(Maintenance),
   },
   {
     path: '/coming-soon',
-    element: <ComingSoon />,
+    element: createElement(ComingSoon),
   },
   {
     path: '*',
-    element: <Navigate to="/inicio" replace />,
+    element: createElement(Navigate, { to: "/inicio", replace: true }),
   },
 ])
 

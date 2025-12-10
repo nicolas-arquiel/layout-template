@@ -6,7 +6,7 @@ import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
 import { Box, ScrollArea } from '@radix-ui/themes'
 import HorizontalNav from './components/HorizontalNav'
-import { cn } from '../lib/utils'
+import { cn } from '@lib/utils'
 import { closeMobileMenu, handleMenuCollapsed } from '@src/store/layoutSlice'
 
 /**

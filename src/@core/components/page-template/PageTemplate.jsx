@@ -1,5 +1,5 @@
 import { Text, Grid, Card, Heading } from '@radix-ui/themes'
-import BreadCrumbs from './breadcrumbs/BreadCrumbs'
+import { BreadCrumbs } from '@components'
 
 /**
  * PageTemplate - Template reutilizable para páginas de ejemplo

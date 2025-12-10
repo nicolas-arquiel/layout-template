@@ -40,7 +40,7 @@ import { User,
 import { Controller } from 'react-hook-form'
 import { FormDialog, Canvas, CanvasForm } from '@components'
 import BreadCrumbs from '@components/breadcrumbs/BreadCrumbs'
-import { DataTableExample as DataTable } from '../components/examples'
+import { DataTableExample as DataTable } from '@components/examples'
 
 /**
  * Dashboard Completo - Explorando TODO Radix Themes al máximo
