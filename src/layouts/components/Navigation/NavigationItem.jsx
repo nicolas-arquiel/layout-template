@@ -12,10 +12,9 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
   const Icon = item.icon
 
-  // Layout collapsed state (delayed) - controls padding, centering, etc.
-  const isLayoutCollapsed = (typeof collapsed !== 'undefined' ? collapsed : menuCollapsed) && !forceExpanded
-
-  // Content collapsed state (immediate) - controls text visibility
+  // Both states use menuCollapsed directly for IMMEDIATE response
+  // No delay - change to icons instantly when button is pressed
+  const isLayoutCollapsed = menuCollapsed && !forceExpanded
   const isContentCollapsed = menuCollapsed && !forceExpanded
 
   const getBadgeColor = (color) => {
@@ -51,11 +50,11 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
       className={({ isActive }) =>
         cn(
           // Layout base
-          'flex items-center rounded-md transition-transform duration-300 ease-in-out',
+          'flex items-center rounded-md',
           'min-h-[48px]',
           
-          // Spacing & Sizing
-          '!px-4 py-3 w-full', // Always full width with internal padding
+          // Smooth transitions for width (collapse) and hover effects (translate, background)
+          'transition-[width,translate,background-color] duration-200 ease-out',
 
           // Typography
           'font-[Montserrat] text-[14px] tracking-[0.14px] font-medium',
@@ -65,8 +64,15 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
             ? 'text-white shadow-lg cursor-default' // cursor-default para indicar que no se puede clickear
             : 'text-[rgb(110,107,123)] hover:bg-[rgba(0,0,0,0.05)] hover:translate-x-[5px] cursor-pointer',
 
-          // Nested indentation (only when expanded)
-          !isLayoutCollapsed && nested && 'pl-10',
+          // Collapsed vs Expanded spacing & sizing
+          // Same padding in both states - icon stays in place
+          '!px-4 py-3',
+          isLayoutCollapsed
+            ? 'w-[56px]' // Fixed width when collapsed (just enough for icon + padding)
+            : cn(
+                'w-full', // Full width when expanded
+                nested && 'pl-10' // Nested indentation only when expanded
+              ),
 
           className
         )
@@ -88,13 +94,19 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
       )}
 
       {/* Text Container - Collapses smoothly */}
+      {/* Opacity uses isContentCollapsed (immediate) for instant fade, width uses isLayoutCollapsed (delayed) for smooth shrink */}
       <div
         className={cn(
-          "flex items-center whitespace-nowrap overflow-hidden transition-[width,opacity,margin] duration-300 ease-in-out",
-          isLayoutCollapsed ? "w-0 opacity-0 ml-0 border-none" : "w-auto opacity-100 flex-1 !ml-4"
+          "flex items-center whitespace-nowrap overflow-hidden transition-[width,margin] duration-300 ease-in-out",
+          isLayoutCollapsed ? "w-0 ml-0 border-none" : "w-auto flex-1 !ml-4"
         )}
       >
-        <div className="flex items-center justify-between gap-2 w-full">
+        <div
+          className={cn(
+            "flex items-center justify-between gap-2 w-full transition-opacity duration-300 ease-in-out",
+            isContentCollapsed ? "opacity-0" : "opacity-100"
+          )}
+        >
           <span className="truncate flex-1 font-[Montserrat] text-[14px] font-medium">
             {item.title}
           </span>

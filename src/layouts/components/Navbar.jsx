@@ -40,7 +40,7 @@ const Navbar = () => {
   }
 
   return (
-    <Flex align="center" justify="between" px="6" className="w-full h-full">
+    <Flex align="center" justify="between" className="w-full h-full">
       {/* Left side - Menu dropdown (horizontal mode) or Hamburger (vertical mode) + Active item */}
       <Flex align="center" gap="3" className="flex-1">
         {/* Hamburger button - Solo visible en mobile cuando menuLayout es vertical */}

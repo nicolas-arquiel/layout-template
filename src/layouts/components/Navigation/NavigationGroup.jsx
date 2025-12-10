@@ -28,15 +28,29 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isLayoutCollapse
     <button
       ref={ref}
       className={cn(
-        'flex items-center rounded-md transition-transform duration-300 ease-in-out',
+        'flex items-center rounded-md',
         'min-h-[48px] cursor-pointer border-none outline-none',
-        'w-full !px-4 py-3 text-left', // Always full width with internal padding
+        
+        // Smooth transitions for width (collapse) and hover effects (translate, background)
+        'transition-[width,translate,background-color] duration-200 ease-out',
+        
+        // Colors based on active state
         isActive
           ? 'text-[var(--accent-9)] bg-[color-mix(in_srgb,var(--accent-9),transparent_88%)]'
           : 'text-[var(--gray-11)] bg-transparent hover:bg-[var(--gray-3)]',
+        
+        // Hover translate only when expanded and not active
         !isLayoutCollapsed && !isActive && 'hover:translate-x-[5px]',
-        // Nested indentation (only when expanded)
-        !isLayoutCollapsed && nested && 'pl-10'
+        
+        // Collapsed vs Expanded spacing & sizing
+        // Same padding in both states - icon stays in place
+        '!px-4 py-3',
+        isLayoutCollapsed
+          ? 'w-[56px]' // Fixed width when collapsed (just enough for icon + padding)
+          : cn(
+              'w-full text-left', // Full width when expanded
+              nested && 'pl-10' // Nested indentation only when expanded
+            )
       )}
       {...props}
     >
@@ -51,11 +65,17 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isLayoutCollapse
       )}
       
       {/* Text Container - Mismo estilo que NavigationItem */}
+      {/* Opacity uses isContentCollapsed (immediate) for instant fade, width uses isLayoutCollapsed (delayed) for smooth shrink */}
       <div className={cn(
-        "flex items-center whitespace-nowrap overflow-hidden transition-[width,opacity,margin] duration-300 ease-in-out",
-        isLayoutCollapsed ? "w-0 opacity-0 ml-0 border-none" : "w-auto opacity-100 flex-1 !ml-4"
+        "flex items-center whitespace-nowrap overflow-hidden transition-[width,margin] duration-300 ease-in-out",
+        isLayoutCollapsed ? "w-0 ml-0 border-none" : "w-auto flex-1 !ml-4"
       )}>
-          <div className="flex items-center justify-between gap-2 w-full">
+          <div
+            className={cn(
+              "flex items-center justify-between gap-2 w-full transition-opacity duration-300 ease-in-out",
+              isContentCollapsed ? "opacity-0" : "opacity-100"
+            )}
+          >
             <span className="flex-1 truncate font-[Montserrat] text-[14px] font-medium">
               {item.title}
             </span>
@@ -120,10 +140,9 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle, nested
     })
   }, [location.pathname])
 
-  // Layout collapsed state (delayed) - controls padding, centering, etc.
-  const isLayoutCollapsed = (typeof collapsed !== 'undefined' ? collapsed : menuCollapsed) && !forceExpanded
-
-  // Content collapsed state (immediate) - controls text visibility
+  // Both states use menuCollapsed directly for IMMEDIATE response
+  // No delay - change to icons instantly when button is pressed
+  const isLayoutCollapsed = menuCollapsed && !forceExpanded
   const isContentCollapsed = menuCollapsed && !forceExpanded
 
   // Handler personalizado para el toggle que permite cerrar aunque tenga hijo activo

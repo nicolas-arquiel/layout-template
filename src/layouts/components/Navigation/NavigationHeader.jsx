@@ -17,10 +17,9 @@ import { cn } from '@lib/utils'
 const NavigationHeader = ({ title, forceExpanded = false, collapsed }) => {
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
 
-  // Layout collapsed state (delayed) - controls switching to "..." view
-  const isLayoutCollapsed = (typeof collapsed !== 'undefined' ? collapsed : menuCollapsed) && !forceExpanded
-
-  // Content collapsed state (immediate) - controls text opacity
+  // Both states use menuCollapsed directly for IMMEDIATE response
+  // No delay - change to icons instantly when button is pressed
+  const isLayoutCollapsed = menuCollapsed && !forceExpanded
   const isContentCollapsed = menuCollapsed && !forceExpanded
 
   // Cuando está colapsado (layout), mostrar solo "..."
@@ -47,7 +46,7 @@ const NavigationHeader = ({ title, forceExpanded = false, collapsed }) => {
           size="1"
           weight="bold"
           className={cn(
-            "uppercase tracking-wide text-[var(--gray-9)] transition-opacity duration-300",
+            "uppercase tracking-wide text-[var(--gray-9)] transition-opacity duration-300 ease-in-out",
             isContentCollapsed ? "opacity-0" : "opacity-100"
           )}
         >
