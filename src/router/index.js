@@ -1,7 +1,7 @@
 import { createElement } from 'react'
 import { createBrowserRouter, Navigate } from 'react-router-dom'
-import MainLayout from '@/layouts/MainLayout'
-import AuthLayout from '@/layouts/AuthLayout'
+import MainLayout from '@/@core/layouts/MainLayout'
+import AuthLayout from '@/@core/layouts/AuthLayout'
 
 // Route Guards
 import PrivateRoute from '@/@core/components/routes/PrivateRoute'
