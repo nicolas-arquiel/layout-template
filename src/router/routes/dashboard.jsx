@@ -10,6 +10,7 @@ const InscripcionAspirante = lazy(() => import('@/views/Inscripciones/Inscripcio
 const InscripcionCurso = lazy(() => import('@/views/Inscripciones/InscripcionCurso'))
 const EjemploTablas = lazy(() => import('@/views/EjemploTablas'))
 const Documentos = lazy(() => import('@/views/Documentos'))
+const Alertas = lazy(() => import('@/views/Alertas'))
 
 // Skeletons
 import DashboardSkeleton from '@/views/DashboardSkeleton'
@@ -89,6 +90,15 @@ const dashboardRoutes = [
       publicRoute: true,
       restricted: true,
       skeleton: <DocumentosSkeleton />,
+    },
+  },
+  {
+    path: 'alertas',
+    element: <Alertas />,
+    meta: {
+      publicRoute: true,
+      restricted: true,
+      skeleton: <GenericSkeleton />,
     },
   },
 ]

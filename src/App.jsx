@@ -5,6 +5,7 @@ import { Theme } from '@radix-ui/themes'
 import { store } from '@src/store/store'
 import router from './router'
 import { CustomThemePanel } from '@core/components'
+import { AlertProvider } from '@src/context/AlertProvider'
 
 /**
  * Componente raíz de la aplicación
@@ -42,8 +43,10 @@ const App = () => {
         radius={themeSettings.radius}
         scaling={themeSettings.scaling}
       >
-        <CustomThemePanel settings={themeSettings} onUpdate={updateTheme} />
-        <RouterProvider router={router} />
+        <AlertProvider>
+          <CustomThemePanel settings={themeSettings} onUpdate={updateTheme} />
+          <RouterProvider router={router} />
+        </AlertProvider>
       </Theme>
     </Provider>
   )

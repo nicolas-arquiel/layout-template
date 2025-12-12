@@ -10,7 +10,8 @@ import {
   Box,
   Lock,
   Layers,
-  TableIcon
+  TableIcon,
+  Bell
 } from 'lucide-react'
 
 /**
@@ -119,6 +120,12 @@ const navigation = [
     icon: TableIcon,
     navLink: '/ejemplo-tablas',
     // SIN permiso - para testear sistema de tablas
+  },
+  {
+    id: 'alertas',
+    title: 'Alertas',
+    icon: Bell,
+    navLink: '/alertas',
   },
 
   {

@@ -8,6 +8,7 @@ import { Box, ScrollArea } from '@radix-ui/themes'
 import HorizontalNav from './components/HorizontalNav'
 import { cn } from '@lib/utils'
 import { closeMobileMenu, handleMenuCollapsed } from '@src/store/layoutSlice'
+import SessionControl from '@src/components/SessionControl'
 
 /**
  * Layout principal - VUEXY EXACT REPLICATION
@@ -31,7 +32,7 @@ const MainLayout = () => {
   // Handle responsive sidebar behavior - REMOVED auto-collapse logic
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)]">
+    <SessionControl className="min-h-screen bg-[var(--bg-primary)]">
       <div className="flex h-screen overflow-hidden">
         {/* ========== SIDEBAR ========== */}
         <aside
@@ -114,7 +115,7 @@ const MainLayout = () => {
           />
         )}
       </div>
-    </div>
+    </SessionControl>
   )
 }
 

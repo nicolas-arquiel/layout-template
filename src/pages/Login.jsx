@@ -5,6 +5,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { LogIn, Mail, Lock, AlertCircle } from 'lucide-react'
 import { Box, Card, Heading, Text, TextField, Button, Flex, Callout } from '@radix-ui/themes'
 import { setAuth } from '@src/store/authSlice'
+import { generateMockJwt } from '@src/utils/jwtUtils'
 
 /**
  * Login - Página de inicio de sesión profesional
@@ -29,14 +30,7 @@ export default function Login() {
     formState: { errors }
   } = useForm({ defaultValues })
 
-  /**
-   * Validación de email (opcional - adaptar según necesidad)
-   */
-  const validateEmail = (email) => {
-    // Aquí puedes agregar validaciones específicas de dominio si lo necesitas
-    // Por ahora acepta cualquier email válido
-    return true
-  }
+
 
   /**
    * Submit handler - Simula login y navega
@@ -56,16 +50,27 @@ export default function Login() {
       await new Promise(resolve => setTimeout(resolve, 1000))
 
       // Simular datos de usuario
+      const mockUser = {
+        id: 1,
+        nombre: 'Usuario',
+        apellido: 'Demo',
+        email: data.email,
+        isSuperAdmin: isDev ? 1 : 0, // Usar 1/0 como en el snippet original
+        persona: {
+            es_empleado: 1,
+            empleado_activo: 1
+        }
+      };
+
+      const token = generateMockJwt({
+        user: mockUser,
+        // Agregamos exp extra si se necesita, aunque generateMockJwt ya lo pone
+      });
+
       const userData = {
-        user: {
-          id: 1,
-          nombre: 'Usuario',
-          apellido: 'Demo',
-          email: data.email,
-          isSuperAdmin: isDev, // En dev es admin, en prod depende del backend
-        },
+        user: mockUser,
         permisos: 'personas:*,inscripcion:*,reportes:*,configuracion:*,recursos:*',
-        token: 'mock-jwt-token',
+        token: token,
       }
 
       dispatch(setAuth(userData))
