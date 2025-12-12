@@ -12,6 +12,9 @@
 /* Tailwind CSS */
 @import "tailwindcss";
 
+/* Configuración de escaneo de archivos para Tailwind v4 */
+@source "src/**/*.{js,jsx,ts,tsx,html}";
+
 /* Variables y Base */
 @import "./@core/styles/variables.css";
 @import "./@core/styles/base.css";
