@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
  * NavigationItem - Reactstrap/Bootstrap style
  * Clean, well-spaced navigation items with proper active states
  */
-const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpanded = false, className, collapsed, ...props }) => {
+const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpanded = false, className, ...props }) => {
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
   const Icon = item.icon
 
@@ -62,7 +62,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
           // Active State - cambiar cursor si está activo
           isActive
             ? 'text-white shadow-lg cursor-default' // cursor-default para indicar que no se puede clickear
-            : 'text-[rgb(110,107,123)] hover:bg-[rgba(0,0,0,0.05)] hover:translate-x-[5px] cursor-pointer',
+            : 'text-[var(--gray-11)] hover:bg-[var(--gray-3)] hover:translate-x-[5px] cursor-pointer',
 
           // Collapsed vs Expanded spacing & sizing
           // Same padding in both states - icon stays in place
