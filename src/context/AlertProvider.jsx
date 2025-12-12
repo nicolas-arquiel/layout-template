@@ -3,14 +3,33 @@ import { Dialog, Button, Flex, Text, Box } from '@radix-ui/themes';
 import { AlertContext } from './AlertContext';
 import { CheckCircle, AlertTriangle, Info, XCircle, Loader } from 'lucide-react';
 
-const ICONS = {
-  success: <CheckCircle size={24} color="var(--grass-9)" />,
-  error: <XCircle size={24} color="var(--red-9)" />,
-  warning: <AlertTriangle size={24} color="var(--orange-9)" />,
-  info: <Info size={24} color="var(--blue-9)" />,
-};
+import { THEME } from '@src/config/theme';
 
-export const AlertProvider = ({ children }) => {
+
+
+export const AlertProvider = ({ children, semanticColors }) => {
+  // Fallback to THEME if semanticColors not provided (though App provides it)
+  const colors = semanticColors || {
+    success: THEME.success,
+    error: THEME.danger,
+    warning: THEME.warning,
+    info: THEME.info
+  };
+
+  const COLORS = {
+    success: { main: `var(--${colors.success}-9)`, bg: `var(--${colors.success}-3)` },
+    error: { main: `var(--${colors.error}-9)`, bg: `var(--${colors.error}-3)` },
+    warning: { main: `var(--${colors.warning}-9)`, bg: `var(--${colors.warning}-3)` },
+    info: { main: `var(--${colors.info}-9)`, bg: `var(--${colors.info}-3)` },
+  };
+
+  const ICONS = {
+    success: <CheckCircle size={24} color={COLORS.success.main} />,
+    error: <XCircle size={24} color={COLORS.error.main} />,
+    warning: <AlertTriangle size={24} color={COLORS.warning.main} />,
+    info: <Info size={24} color={COLORS.info.main} />,
+  };
+
   const [alertState, setAlertState] = useState({
     isOpen: false,
     title: '',
@@ -216,18 +235,8 @@ export const AlertProvider = ({ children }) => {
                             style={{
                                 padding: '8px',
                                 borderRadius: '50%',
-                                backgroundColor: `var(--${
-                                    alertState.icon === 'success' ? 'grass' :
-                                    alertState.icon === 'error' ? 'red' :
-                                    alertState.icon === 'warning' ? 'orange' :
-                                    'blue'
-                                }-3)`,
-                                color: `var(--${
-                                    alertState.icon === 'success' ? 'grass' :
-                                    alertState.icon === 'error' ? 'red' :
-                                    alertState.icon === 'warning' ? 'orange' :
-                                    'blue'
-                                }-9)`,
+                                backgroundColor: COLORS[alertState.icon]?.bg || 'var(--gray-3)',
+                                color: COLORS[alertState.icon]?.main || 'var(--gray-9)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',

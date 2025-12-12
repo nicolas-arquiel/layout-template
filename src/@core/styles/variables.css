@@ -52,6 +52,26 @@
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
+/* ========================================
+   THEME OVERRIDES - Custom Colors
+   ======================================== */
+
+/* Override Jade to MediumSeaGreen (#3CB371) for Success */
+:root, .radix-themes {
+  /* Solid Backgrounds */
+  --jade-9: #3CB371;
+  --jade-9-alpha: rgba(60, 179, 113, 1);
+  --jade-10: #35a065; /* Hover state */
+  
+  /* Text Colors */
+  --jade-11: #2E8B57; /* Darker for text */
+  
+  /* Backgrounds (Surface/Soft) */
+  --jade-3: rgba(60, 179, 113, 0.15);
+  --jade-4: rgba(60, 179, 113, 0.25);
+  --jade-5: rgba(60, 179, 113, 0.35);
+}
+
 /* ========== VUEXY EXACT VARIABLES ========== */
 :root {
   --content-padding: 2rem;        /* 32px - Vuexy $content-padding */

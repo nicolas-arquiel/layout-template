@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Card, Flex, Text, Select, Separator, IconButton, Tooltip, Grid, Button, ScrollArea, Switch } from '@radix-ui/themes'
 import { Settings, X, Moon, Sun, Monitor } from 'lucide-react'
 import { setMenuLayout } from '@src/store/layoutSlice'
+import { useTheme } from '@src/hooks/useTheme'
 
 // Opciones de configuración de Radix
 const accentColors = ['tomato', 'red', 'ruby', 'crimson', 'pink', 'plum', 'purple', 'violet', 'iris', 'indigo', 'blue', 'cyan', 'teal', 'jade', 'green', 'grass', 'brown', 'orange', 'sky', 'mint', 'lime', 'yellow', 'amber', 'gold', 'bronze', 'gray']
@@ -16,23 +17,27 @@ const dangerColors = ['red', 'tomato', 'ruby', 'crimson']
 const warningColors = ['amber', 'yellow', 'orange', 'gold']
 const infoColors = ['cyan', 'blue', 'sky', 'iris']
 
+
+
 /**
  * CustomThemePanel - Panel de configuración unificado
  * Reemplaza al ThemePanel de Radix y agrega configuraciones personalizadas
  */
-const CustomThemePanel = ({ settings, onUpdate }) => {
+const CustomThemePanel = () => {
+  const { themeSettings: settings, updateTheme: onUpdate } = useTheme()
   const dispatch = useDispatch()
   const menuLayout = useSelector((state) => state.layout.menuLayout)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
   
   const [isOpen, setIsOpen] = useState(false)
-  const [reducedMotion, setReducedMotion] = useState(false)
-  const [highContrast, setHighContrast] = useState(false)
-  const [sepiaMode, setSepiaMode] = useState(false)
-  const [grayscaleMode, setGrayscaleMode] = useState(false)
-  const [textSpacing, setTextSpacing] = useState(false)
-  const [bigCursor, setBigCursor] = useState(false)
-  const [underlineLinks, setUnderlineLinks] = useState(false)
+  
+  const [reducedMotion, setReducedMotion] = useState(() => localStorage.getItem('reduced-motion') === 'true')
+  const [highContrast, setHighContrast] = useState(() => localStorage.getItem('high-contrast') === 'true')
+  const [sepiaMode, setSepiaMode] = useState(() => localStorage.getItem('sepia-mode') === 'true')
+  const [grayscaleMode, setGrayscaleMode] = useState(() => localStorage.getItem('grayscale-mode') === 'true')
+  const [textSpacing, setTextSpacing] = useState(() => localStorage.getItem('dyslexic-spacing') === 'true')
+  const [bigCursor, setBigCursor] = useState(() => localStorage.getItem('big-cursor') === 'true')
+  const [underlineLinks, setUnderlineLinks] = useState(() => localStorage.getItem('underline-links') === 'true')
 
   // Detectar cambios de tamaño de pantalla
   useEffect(() => {
@@ -54,32 +59,29 @@ const CustomThemePanel = ({ settings, onUpdate }) => {
     return () => window.removeEventListener('resize', handleResize)
   }, [menuLayout, dispatch])
 
-  // Cargar valores guardados al montar
+  // Aplicar clases al montar y cuando cambien
   useEffect(() => {
-    const savedMotion = localStorage.getItem('reduced-motion') === 'true'
-    const savedContrast = localStorage.getItem('high-contrast') === 'true'
-    const savedSepia = localStorage.getItem('sepia-mode') === 'true'
-    const savedGrayscale = localStorage.getItem('grayscale-mode') === 'true'
-    const savedSpacing = localStorage.getItem('dyslexic-spacing') === 'true'
-    const savedCursor = localStorage.getItem('big-cursor') === 'true'
-    const savedLinks = localStorage.getItem('underline-links') === 'true'
-    
-    setReducedMotion(savedMotion)
-    setHighContrast(savedContrast)
-    setSepiaMode(savedSepia)
-    setGrayscaleMode(savedGrayscale)
-    setTextSpacing(savedSpacing)
-    setBigCursor(savedCursor)
-    setUnderlineLinks(savedLinks)
-    
-    if (savedMotion) document.documentElement.classList.add('reduce-motion')
-    if (savedContrast) document.documentElement.classList.add('high-contrast')
-    if (savedSepia) document.documentElement.classList.add('sepia-mode')
-    if (savedGrayscale) document.documentElement.classList.add('grayscale-mode')
-    if (savedSpacing) document.documentElement.classList.add('dyslexic-spacing')
-    if (savedCursor) document.documentElement.classList.add('big-cursor')
-    if (savedLinks) document.documentElement.classList.add('underline-links')
-  }, [])
+    if (reducedMotion) document.documentElement.classList.add('reduce-motion')
+    else document.documentElement.classList.remove('reduce-motion')
+
+    if (highContrast) document.documentElement.classList.add('high-contrast')
+    else document.documentElement.classList.remove('high-contrast')
+
+    if (sepiaMode) document.documentElement.classList.add('sepia-mode')
+    else document.documentElement.classList.remove('sepia-mode')
+
+    if (grayscaleMode) document.documentElement.classList.add('grayscale-mode')
+    else document.documentElement.classList.remove('grayscale-mode')
+
+    if (textSpacing) document.documentElement.classList.add('dyslexic-spacing')
+    else document.documentElement.classList.remove('dyslexic-spacing')
+
+    if (bigCursor) document.documentElement.classList.add('big-cursor')
+    else document.documentElement.classList.remove('big-cursor')
+
+    if (underlineLinks) document.documentElement.classList.add('underline-links')
+    else document.documentElement.classList.remove('underline-links')
+  }, [reducedMotion, highContrast, sepiaMode, grayscaleMode, textSpacing, bigCursor, underlineLinks])
 
   const toggleMotion = (checked) => {
     setReducedMotion(checked)
@@ -264,7 +266,7 @@ const CustomThemePanel = ({ settings, onUpdate }) => {
 
           {/* 3. Color de Acento */}
           <Flex direction="column" gap="2">
-            <Text size="1" weight="bold" color="gray">COLOR DE ACENTO</Text>
+            <Text size="1" weight="bold" color="gray">COLOR DE ACENTO (PRIMARY)</Text>
             <Grid columns="6" gap="1">
               {accentColors.map(color => (
                 <Tooltip content={color} key={color}>
@@ -283,6 +285,101 @@ const CustomThemePanel = ({ settings, onUpdate }) => {
                 </Tooltip>
               ))}
             </Grid>
+          </Flex>
+
+          <Separator size="4" />
+
+          {/* 3.5 Colores Semánticos */}
+          <Flex direction="column" gap="3">
+            <Text size="1" weight="bold" color="gray">COLORES SEMÁNTICOS</Text>
+            
+            {/* Success */}
+            <Flex direction="column" gap="1">
+               <Text size="1">Success</Text>
+               <Grid columns="5" gap="1">
+                  {successColors.map(color => (
+                    <Tooltip content={color} key={color}>
+                      <button
+                        onClick={() => onUpdate('successColor', color)}
+                        style={{
+                          width: '100%',
+                          height: '24px',
+                          borderRadius: 'var(--radius-1)',
+                          backgroundColor: `var(--${color}-9)`,
+                          border: settings.successColor === color ? '2px solid var(--color-text)' : 'none',
+                          cursor: 'pointer'
+                        }}
+                      />
+                    </Tooltip>
+                  ))}
+               </Grid>
+            </Flex>
+
+            {/* Danger */}
+            <Flex direction="column" gap="1">
+               <Text size="1">Danger</Text>
+               <Grid columns="5" gap="1">
+                  {dangerColors.map(color => (
+                    <Tooltip content={color} key={color}>
+                      <button
+                        onClick={() => onUpdate('dangerColor', color)}
+                        style={{
+                          width: '100%',
+                          height: '24px',
+                          borderRadius: 'var(--radius-1)',
+                          backgroundColor: `var(--${color}-9)`,
+                          border: settings.dangerColor === color ? '2px solid var(--color-text)' : 'none',
+                          cursor: 'pointer'
+                        }}
+                      />
+                    </Tooltip>
+                  ))}
+               </Grid>
+            </Flex>
+
+            {/* Warning */}
+            <Flex direction="column" gap="1">
+               <Text size="1">Warning</Text>
+               <Grid columns="5" gap="1">
+                  {warningColors.map(color => (
+                    <Tooltip content={color} key={color}>
+                      <button
+                        onClick={() => onUpdate('warningColor', color)}
+                        style={{
+                          width: '100%',
+                          height: '24px',
+                          borderRadius: 'var(--radius-1)',
+                          backgroundColor: `var(--${color}-9)`,
+                          border: settings.warningColor === color ? '2px solid var(--color-text)' : 'none',
+                          cursor: 'pointer'
+                        }}
+                      />
+                    </Tooltip>
+                  ))}
+               </Grid>
+            </Flex>
+
+            {/* Info */}
+            <Flex direction="column" gap="1">
+               <Text size="1">Info</Text>
+               <Grid columns="5" gap="1">
+                  {infoColors.map(color => (
+                    <Tooltip content={color} key={color}>
+                      <button
+                        onClick={() => onUpdate('infoColor', color)}
+                        style={{
+                          width: '100%',
+                          height: '24px',
+                          borderRadius: 'var(--radius-1)',
+                          backgroundColor: `var(--${color}-9)`,
+                          border: settings.infoColor === color ? '2px solid var(--color-text)' : 'none',
+                          cursor: 'pointer'
+                        }}
+                      />
+                    </Tooltip>
+                  ))}
+               </Grid>
+            </Flex>
           </Flex>
 
           {/* 3. Color Gris */}

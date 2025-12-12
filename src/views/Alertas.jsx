@@ -3,6 +3,7 @@ import { Box, Button, Card, Flex, Heading, Text, Grid, Separator } from '@radix-
 import { Bell, CheckCircle, AlertTriangle, Info, XCircle, Clock, Loader } from 'lucide-react';
 import useCustomAlert from '@src/hooks/useCustomAlert';
 import { BreadCrumbs } from '@core/components';
+import { useTheme } from '@src/hooks/useTheme';
 
 const Alertas = () => {
   const { 
@@ -14,6 +15,8 @@ const Alertas = () => {
     simpleAlertNoButtons,
     closeAllAlerts 
   } = useCustomAlert();
+  
+  const { colors } = useTheme();
 
   const handleSimpleSuccess = async () => {
     await simpleAlert({
@@ -120,16 +123,16 @@ const Alertas = () => {
             <Heading size="4">Alertas Simples</Heading>
             <Separator size="4" />
             <Flex gap="3" wrap="wrap">
-              <Button color="green" onClick={handleSimpleSuccess}>
+              <Button color={colors.success} onClick={handleSimpleSuccess}>
                 <CheckCircle size={16} /> Success
               </Button>
-              <Button color="red" onClick={handleSimpleError}>
+              <Button color={colors.danger} onClick={handleSimpleError}>
                 <XCircle size={16} /> Error
               </Button>
-              <Button color="blue" onClick={handleSimpleInfo}>
+              <Button color={colors.info} onClick={handleSimpleInfo}>
                 <Info size={16} /> Info
               </Button>
-              <Button color="orange" onClick={handleSimpleWarning}>
+              <Button color={colors.warning} onClick={handleSimpleWarning}>
                 <AlertTriangle size={16} /> Warning
               </Button>
             </Flex>
