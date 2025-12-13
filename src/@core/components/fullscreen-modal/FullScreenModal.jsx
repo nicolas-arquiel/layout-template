@@ -47,10 +47,10 @@ const FullScreenModal = ({
 
   const defaultHeader = (
     <div
-      className={`p-3 text-white flex justify-between items-center ${colorClasses.header}`}
+      className={`px-4 py-3 text-white flex justify-between items-center ${colorClasses.header}`}
       style={colorClasses.headerStyle}
     >
-      <h4 className="mb-0 text-white font-bold text-lg">{title}</h4>
+      <h4 className="m-0 text-white font-bold text-xl">{title}</h4>
 
       {/* Contenido personalizado del header entre el título y el botón de cerrar */}
       <div className="flex items-center gap-2">
@@ -93,18 +93,20 @@ const FullScreenModal = ({
           {customHeader || defaultHeader}
 
           {/* Body */}
-          <div className={`flex-1 overflow-auto px-4 py-2 ${bodyClassName}`}>
-            <FullScreenContext.Provider value={{ setFooterContent }}>
-              <FullScreenHeaderContext.Provider value={{ setHeaderContent }}>
-                {children}
-              </FullScreenHeaderContext.Provider>
-            </FullScreenContext.Provider>
+          <div className={`flex-1 overflow-auto ${bodyClassName}`}>
+            <div className="px-6 py-4">
+              <FullScreenContext.Provider value={{ setFooterContent }}>
+                <FullScreenHeaderContext.Provider value={{ setHeaderContent }}>
+                  {children}
+                </FullScreenHeaderContext.Provider>
+              </FullScreenContext.Provider>
+            </div>
           </div>
 
           {/* Footer */}
           {footerContent && (
             <div
-              className={`px-3 py-2 text-white flex justify-end items-center ${colorClasses.footer}`}
+              className={`px-4 py-2 text-white flex justify-end items-center gap-2 ${colorClasses.footer}`}
               style={colorClasses.footerStyle}
             >
               {footerContent}

@@ -223,19 +223,17 @@ export default function FullScreenModalExamples() {
         title="Modal Básico"
         color="primary"
       >
-        <div className="p-6">
-          <Heading size="6" mb="4">
-            Contenido del Modal
-          </Heading>
-          <Text mb="4">
-            Este es un modal básico de pantalla completa. Ocupa todo el viewport y tiene scroll
-            automático cuando el contenido es largo.
-          </Text>
-          <Text color="gray">
-            Puedes cerrar este modal presionando <Code>ESC</Code>, haciendo clic en el botón de
-            cerrar, o haciendo clic fuera del contenido.
-          </Text>
-        </div>
+        <Heading size="6" mb="4">
+          Contenido del Modal
+        </Heading>
+        <Text mb="4">
+          Este es un modal básico de pantalla completa. Ocupa todo el viewport y tiene scroll
+          automático cuando el contenido es largo.
+        </Text>
+        <Text color="gray">
+          Puedes cerrar este modal presionando <Code>ESC</Code>, haciendo clic en el botón de
+          cerrar, o haciendo clic fuera del contenido.
+        </Text>
       </FullScreenModal>
 
       {/* Modal con Footer */}
@@ -245,20 +243,18 @@ export default function FullScreenModalExamples() {
         title="Editar Documento"
         color="success"
       >
-        <div className="p-6">
-          <Heading size="6" mb="4">
-            Documento #12345
-          </Heading>
-          <Text mb="4">
-            Aquí va el contenido del documento. El footer contiene los botones de acción.
-          </Text>
-          <Callout.Root color="green">
-            <Callout.Icon>
-              <CheckCircle2 size={16} />
-            </Callout.Icon>
-            <Callout.Text>Los cambios se guardarán al hacer clic en "Guardar"</Callout.Text>
-          </Callout.Root>
-        </div>
+        <Heading size="6" mb="4">
+          Documento #12345
+        </Heading>
+        <Text mb="4">
+          Aquí va el contenido del documento. El footer contiene los botones de acción.
+        </Text>
+        <Callout.Root color="green">
+          <Callout.Icon>
+            <CheckCircle2 size={16} />
+          </Callout.Icon>
+          <Callout.Text>Los cambios se guardarán al hacer clic en "Guardar"</Callout.Text>
+        </Callout.Root>
 
         <FullScreenFooter>
           <Flex gap="3">
@@ -295,7 +291,7 @@ export default function FullScreenModalExamples() {
           </Flex>
         </FullScreenHeader>
 
-        <div className="p-6 space-y-6">
+        <Flex direction="column" gap="6">
           <div>
             <Heading size="7" mb="4">
               Proyecto: Sistema de Gestión
@@ -326,7 +322,7 @@ export default function FullScreenModalExamples() {
               <Text>✅ Integración completa con el tema</Text>
             </Flex>
           </Card>
-        </div>
+        </Flex>
 
         <FullScreenFooter>
           <Flex gap="3">
@@ -346,17 +342,15 @@ export default function FullScreenModalExamples() {
         title="Modal Primary"
         color="primary"
       >
-        <div className="p-6">
-          <Callout.Root>
-            <Callout.Icon>
-              <Info size={16} />
-            </Callout.Icon>
-            <Callout.Text>
-              Este modal usa el color <strong>primary</strong> que se mapea al{' '}
-              <Code>accentColor</Code> configurado en el tema
-            </Callout.Text>
-          </Callout.Root>
-        </div>
+        <Callout.Root>
+          <Callout.Icon>
+            <Info size={16} />
+          </Callout.Icon>
+          <Callout.Text>
+            Este modal usa el color <strong>primary</strong> que se mapea al{' '}
+            <Code>accentColor</Code> configurado en el tema
+          </Callout.Text>
+        </Callout.Root>
       </FullScreenModal>
 
       {/* Modal Success */}
@@ -366,17 +360,15 @@ export default function FullScreenModalExamples() {
         title="Operación Exitosa"
         color="success"
       >
-        <div className="p-6">
-          <Callout.Root color="green">
-            <Callout.Icon>
-              <CheckCircle2 size={16} />
-            </Callout.Icon>
-            <Callout.Text>
-              Este modal usa el color <strong>success</strong> que se mapea al{' '}
-              <Code>successColor</Code> del tema (generalmente verde o jade)
-            </Callout.Text>
-          </Callout.Root>
-        </div>
+        <Callout.Root color="green">
+          <Callout.Icon>
+            <CheckCircle2 size={16} />
+          </Callout.Icon>
+          <Callout.Text>
+            Este modal usa el color <strong>success</strong> que se mapea al{' '}
+            <Code>successColor</Code> del tema (generalmente verde o jade)
+          </Callout.Text>
+        </Callout.Root>
       </FullScreenModal>
 
       {/* Modal Danger */}
@@ -386,17 +378,15 @@ export default function FullScreenModalExamples() {
         title="¡Atención! Acción Peligrosa"
         color="danger"
       >
-        <div className="p-6">
-          <Callout.Root color="red">
-            <Callout.Icon>
-              <AlertCircle size={16} />
-            </Callout.Icon>
-            <Callout.Text>
-              Este modal usa el color <strong>danger</strong> que se mapea al{' '}
-              <Code>dangerColor</Code> del tema (generalmente rojo o tomato)
-            </Callout.Text>
-          </Callout.Root>
-        </div>
+        <Callout.Root color="red">
+          <Callout.Icon>
+            <AlertCircle size={16} />
+          </Callout.Icon>
+          <Callout.Text>
+            Este modal usa el color <strong>danger</strong> que se mapea al{' '}
+            <Code>dangerColor</Code> del tema (generalmente rojo o tomato)
+          </Callout.Text>
+        </Callout.Root>
       </FullScreenModal>
 
       {/* Modal Warning */}
@@ -406,17 +396,15 @@ export default function FullScreenModalExamples() {
         title="Advertencia"
         color="warning"
       >
-        <div className="p-6">
-          <Callout.Root color="orange">
-            <Callout.Icon>
-              <AlertTriangle size={16} />
-            </Callout.Icon>
-            <Callout.Text>
-              Este modal usa el color <strong>warning</strong> que se mapea al{' '}
-              <Code>warningColor</Code> del tema (generalmente naranja o ámbar)
-            </Callout.Text>
-          </Callout.Root>
-        </div>
+        <Callout.Root color="orange">
+          <Callout.Icon>
+            <AlertTriangle size={16} />
+          </Callout.Icon>
+          <Callout.Text>
+            Este modal usa el color <strong>warning</strong> que se mapea al{' '}
+            <Code>warningColor</Code> del tema (generalmente naranja o ámbar)
+          </Callout.Text>
+        </Callout.Root>
       </FullScreenModal>
 
       {/* Modal Info */}
@@ -426,17 +414,15 @@ export default function FullScreenModalExamples() {
         title="Información"
         color="info"
       >
-        <div className="p-6">
-          <Callout.Root color="blue">
-            <Callout.Icon>
-              <Info size={16} />
-            </Callout.Icon>
-            <Callout.Text>
-              Este modal usa el color <strong>info</strong> que se mapea al <Code>infoColor</Code>{' '}
-              del tema (generalmente azul o cyan)
-            </Callout.Text>
-          </Callout.Root>
-        </div>
+        <Callout.Root color="blue">
+          <Callout.Icon>
+            <Info size={16} />
+          </Callout.Icon>
+          <Callout.Text>
+            Este modal usa el color <strong>info</strong> que se mapea al <Code>infoColor</Code>{' '}
+            del tema (generalmente azul o cyan)
+          </Callout.Text>
+        </Callout.Root>
       </FullScreenModal>
 
       {/* Modal Formulario */}
@@ -446,43 +432,41 @@ export default function FullScreenModalExamples() {
         title="Crear Nueva Tarea"
         color="primary"
       >
-        <div className="p-6">
-          <Flex direction="column" gap="4">
-            <div>
-              <Text size="2" weight="medium" mb="2" as="div">
-                Nombre de la tarea *
-              </Text>
-              <TextField.Root
-                placeholder="Ingresa el nombre"
-                value={formData.nombre}
-                onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-              />
-            </div>
+        <Flex direction="column" gap="4">
+          <div>
+            <Text size="2" weight="medium" mb="2" as="div">
+              Nombre de la tarea *
+            </Text>
+            <TextField.Root
+              placeholder="Ingresa el nombre"
+              value={formData.nombre}
+              onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+            />
+          </div>
 
-            <div>
-              <Text size="2" weight="medium" mb="2" as="div">
-                Descripción
-              </Text>
-              <TextArea
-                placeholder="Describe la tarea..."
-                value={formData.descripcion}
-                onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
-                style={{ minHeight: '200px' }}
-              />
-            </div>
+          <div>
+            <Text size="2" weight="medium" mb="2" as="div">
+              Descripción
+            </Text>
+            <TextArea
+              placeholder="Describe la tarea..."
+              value={formData.descripcion}
+              onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
+              style={{ minHeight: '200px' }}
+            />
+          </div>
 
-            <Separator size="4" />
+          <Separator size="4" />
 
-            <Callout.Root>
-              <Callout.Icon>
-                <Info size={16} />
-              </Callout.Icon>
-              <Callout.Text>
-                Los campos marcados con <strong>*</strong> son obligatorios
-              </Callout.Text>
-            </Callout.Root>
-          </Flex>
-        </div>
+          <Callout.Root>
+            <Callout.Icon>
+              <Info size={16} />
+            </Callout.Icon>
+            <Callout.Text>
+              Los campos marcados con <strong>*</strong> son obligatorios
+            </Callout.Text>
+          </Callout.Root>
+        </Flex>
 
         <FullScreenFooter>
           <Flex gap="3">
@@ -510,14 +494,14 @@ export default function FullScreenModalExamples() {
         open={modalCustomHeader}
         onOpenChange={setModalCustomHeader}
         customHeader={
-          <div className="p-4 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white flex justify-between items-center">
+          <div className="px-6 py-4 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white flex justify-between items-center">
             <Flex align="center" gap="3">
               <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
                 <Maximize2 size={24} />
               </div>
               <div>
                 <h4 className="font-bold text-xl mb-1">Header Personalizado</h4>
-                <p className="text-sm opacity-80">Con gradiente y diseño único</p>
+                <p className="text-sm opacity-80 m-0">Con gradiente y diseño único</p>
               </div>
             </Flex>
             <Button
@@ -531,23 +515,21 @@ export default function FullScreenModalExamples() {
           </div>
         }
       >
-        <div className="p-6">
-          <Heading size="6" mb="4">
-            Contenido con Header Personalizado
-          </Heading>
-          <Text mb="4">
-            Puedes reemplazar completamente el header por defecto usando la prop{' '}
-            <Code>customHeader</Code>. Esto te da control total sobre el diseño.
-          </Text>
-          <Callout.Root color="purple">
-            <Callout.Icon>
-              <Info size={16} />
-            </Callout.Icon>
-            <Callout.Text>
-              El header personalizado puede incluir cualquier contenido JSX
-            </Callout.Text>
-          </Callout.Root>
-        </div>
+        <Heading size="6" mb="4">
+          Contenido con Header Personalizado
+        </Heading>
+        <Text mb="4">
+          Puedes reemplazar completamente el header por defecto usando la prop{' '}
+          <Code>customHeader</Code>. Esto te da control total sobre el diseño.
+        </Text>
+        <Callout.Root color="purple">
+          <Callout.Icon>
+            <Info size={16} />
+          </Callout.Icon>
+          <Callout.Text>
+            El header personalizado puede incluir cualquier contenido JSX
+          </Callout.Text>
+        </Callout.Root>
 
         <FullScreenFooter>
           <Button onClick={() => setModalCustomHeader(false)}>Cerrar</Button>
