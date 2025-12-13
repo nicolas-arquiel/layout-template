@@ -12,6 +12,7 @@ import dashboardRoutes from './routes/dashboard'
 import reportRoutes from './routes/reports'
 import configRoutes from './routes/config'
 import resourceRoutes from './routes/resources'
+import componentRoutes from './routes/components'
 import authRoutes from './routes/auth'
 
 // Misc Pages
@@ -59,6 +60,7 @@ const router = createBrowserRouter([
       ...reportRoutes.map(wrapRouteWithGuard),
       ...configRoutes.map(wrapRouteWithGuard),
       ...resourceRoutes.map(wrapRouteWithGuard),
+      ...componentRoutes.map(wrapRouteWithGuard),
     ],
   },
   {

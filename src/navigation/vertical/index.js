@@ -11,7 +11,8 @@ import {
   Lock,
   Layers,
   TableIcon,
-  Bell
+  Bell,
+  Maximize2
 } from 'lucide-react'
 
 /**
@@ -126,6 +127,14 @@ const navigation = [
     title: 'Alertas',
     icon: Bell,
     navLink: '/alertas',
+  },
+  {
+    id: 'fullscreen_modal',
+    title: 'FullScreen Modal',
+    icon: Maximize2,
+    navLink: '/componentes/fullscreen-modal',
+    badge: 'Nuevo',
+    // SIN permiso - para testear componente FullScreenModal
   },
 
   {
