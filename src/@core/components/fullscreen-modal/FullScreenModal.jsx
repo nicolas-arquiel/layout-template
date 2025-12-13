@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { IconButton, Theme } from '@radix-ui/themes';
+import { IconButton, Theme, Heading } from '@radix-ui/themes';
 import { Minimize2 } from 'lucide-react';
 import { useTheme } from '@src/hooks/useTheme';
 import { getColorClasses } from './utils/Utils';
@@ -74,7 +74,7 @@ const FullScreenModal = ({
       )}
       style={colorClasses.headerStyle}
     >
-      <h4 className="m-0 text-white font-bold text-xl">{title}</h4>
+      <Heading size="6" trim="start" className="m-0 text-white font-bold">{title}</Heading>
 
       {/* Contenido personalizado del header entre el título y el botón de cerrar */}
       <div className="flex items-center gap-2">

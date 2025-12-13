@@ -85,7 +85,7 @@ const navigation = [
     id: 'reportes',
     title: 'Reportesssssssssss',
     icon: BarChart3,
-    // SIN permiso - para testear dropdown
+    // SIN permiso - para testear dro pdown
     children: [
       {
         id: 'reportes_ventas',
