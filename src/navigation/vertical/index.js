@@ -85,7 +85,6 @@ const navigation = [
     id: 'reportes',
     title: 'Reportes',
     icon: BarChart3,
-    badge: 'Nuevo', // Ejemplo de badge en grupo
     // SIN permiso - para testear dropdown
     children: [
       {
@@ -133,7 +132,6 @@ const navigation = [
     title: 'FullScreen Modal',
     icon: Maximize2,
     navLink: '/componentes/fullscreen-modal',
-    badge: 'Nuevo',
     // SIN permiso - para testear componente FullScreenModal
   },
 

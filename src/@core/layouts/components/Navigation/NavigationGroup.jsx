@@ -3,9 +3,9 @@ import { useLocation } from 'react-router-dom'
 import { ChevronDown } from 'lucide-react'
 import * as Collapsible from '@radix-ui/react-collapsible'
 import { useSelector } from 'react-redux'
-import { Badge, Tooltip } from '@radix-ui/themes'
+import { Tooltip } from '@radix-ui/themes'
 import NavigationLink from './NavigationLink'
-import { cn } from '@lib/utils'
+
 
 /**
  * Check if any child route is active
@@ -27,48 +27,28 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isLayoutCollapse
   return (
     <button
       ref={ref}
-      className={cn(
-        'flex items-center rounded-md',
-        'min-h-[48px] cursor-pointer border-none outline-none',
-        
-        // Smooth transitions for width (collapse) and hover effects (translate, background)
-        'transition-[width,translate,background-color] duration-200 ease-out',
-        
-        // Colors based on active state
+      className={`flex items-center rounded-md min-h-[48px] cursor-pointer border-none outline-none transition-[width,translate,background-color] duration-200 ease-out !px-4 py-3 ${
         isActive
           ? 'text-[var(--accent-9)] bg-[color-mix(in_srgb,var(--accent-9),transparent_88%)]'
-          : 'text-[var(--gray-11)] bg-transparent hover:bg-[var(--gray-3)]',
-        
-        // Hover translate only when expanded and not active
-        !isLayoutCollapsed && !isActive && 'hover:translate-x-[5px]',
-        
-        // Collapsed vs Expanded spacing & sizing
-        // Same padding in both states - icon stays in place
-        '!px-4 py-3',
+          : 'text-[var(--gray-11)] bg-transparent hover:bg-[var(--gray-3)]'
+      } ${
+        !isLayoutCollapsed && !isActive ? 'hover:translate-x-[5px]' : ''
+      } ${
         isLayoutCollapsed
-          ? 'w-[56px]' // Fixed width when collapsed (just enough for icon + padding)
-          : cn(
-              'w-full text-left', // Full width when expanded
-              nested && 'pl-10' // Nested indentation only when expanded
-            )
-      )}
+          ? 'w-[56px]'
+          : `w-full text-left ${nested ? 'pl-10' : ''}`
+      }`}
       {...props}
     >
       {/* Icon - ALWAYS VISIBLE - Mismo estilo que NavigationItem */}
       {Icon && (
-        <span className={cn(
-          "flex items-center justify-center transition-transform duration-300 flex-shrink-0",
-          "w-[24px] h-[24px]"
-        )}>
+        <span className="flex items-center justify-center transition-transform duration-300 flex-shrink-0 w-[24px] h-[24px]">
           <Icon size={nested ? 14 : 20} />
         </span>
       )}
       
       {/* Reveals from left to right */}
-      <div className={cn(
-        "flex items-center whitespace-nowrap overflow-hidden transition-[width,margin] duration-300 ease-in-out",
-        isLayoutCollapsed ? "w-0 ml-0 border-none" : "w-auto flex-1 !ml-4"
-      )}>
+      <div className={`flex items-center whitespace-nowrap overflow-hidden transition-[width,margin] duration-300 ease-in-out ${isLayoutCollapsed ? "w-0 ml-0 border-none" : "w-auto flex-1 !ml-4"}`}>
           <div
             className="flex items-center justify-between gap-2 w-full transition-[clip-path] duration-150 ease-in-out"
             style={{
@@ -77,23 +57,15 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isLayoutCollapse
                 : 'inset(0 0 0 0)'    // Visible: full reveal
             }}
           >
-            <span className="flex-1 truncate font-[Montserrat] text-[14px] font-medium">
+            <span className="flex-1 truncate text-[14px] font-medium">
               {item.title}
             </span>
-            {/* Badge - Mismo estilo que NavigationItem */}
-            {item.badge && (
-              <Badge size="1" variant="soft" className="flex-shrink-0">
-                {item.badge}
-              </Badge>
-            )}
+
             {/* Chevron - Siempre presente para mantener alineación */}
             <ChevronDown 
               width="16" 
               height="16" 
-              className={cn(
-                "transition-transform duration-300 flex-shrink-0",
-                isOpen && "rotate-180"
-              )} 
+              className={`transition-transform duration-300 flex-shrink-0 ${isOpen ? "rotate-180" : ""}`} 
             />
           </div>
         </div>
@@ -171,7 +143,7 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle, nested
       <Collapsible.Root
         open={isOpen}
         onOpenChange={handleToggle}
-        className={cn("w-full", isLayoutCollapsed && "flex flex-col items-center")}
+        className={`w-full ${isLayoutCollapsed ? "flex flex-col items-center" : ""}`}
       >
         {isLayoutCollapsed ? (
           <Tooltip content={item.title} side="right">
@@ -186,15 +158,9 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle, nested
         )}
 
         <Collapsible.Content
-          className={cn(
-            "overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up",
-            isLayoutCollapsed ? "w-full flex flex-col items-center" : "w-full"
-          )}
+          className={`overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up ${isLayoutCollapsed ? "w-full flex flex-col items-center" : "w-full"}`}
         >
-          <ul className={cn(
-            "w-full", 
-            isLayoutCollapsed && "flex flex-col items-center" // Ensure proper alignment when collapsed
-          )}>
+          <ul className={`w-full ${isLayoutCollapsed ? "flex flex-col items-center" : ""}`}>
             {item.children.map((child) => {
               // Recursive check: if child has children, render NavigationGroup
               if (child.children && child.children.length > 0) {

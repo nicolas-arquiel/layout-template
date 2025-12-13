@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { Badge, Tooltip } from '@radix-ui/themes'
-import { cn } from '@lib/utils'
+import { Tooltip } from '@radix-ui/themes'
+
 import { useSelector } from 'react-redux'
 
 /**
@@ -17,20 +17,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
   const isLayoutCollapsed = menuCollapsed && !forceExpanded
   const isContentCollapsed = menuCollapsed && !forceExpanded
 
-  const getBadgeColor = (color) => {
-    switch (color) {
-      case 'error':
-        return 'red'
-      case 'success':
-        return 'green'
-      case 'primary':
-        return 'blue'
-      case 'warning':
-        return 'amber'
-      default:
-        return 'red'
-    }
-  }
+
 
   const linkContent = (
     <NavLink
@@ -48,34 +35,15 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
         }
       }}
       className={({ isActive }) =>
-        cn(
-          // Layout base
-          'flex items-center rounded-md',
-          'min-h-[48px]',
-          
-          // Smooth transitions for width (collapse) and hover effects (translate, background)
-          'transition-[width,translate,background-color] duration-200 ease-out',
-
-          // Typography
-          'font-[Montserrat] text-[14px] tracking-[0.14px] font-medium',
-
-          // Active State - cambiar cursor si está activo
+        `flex items-center rounded-md min-h-[48px] transition-[width,translate,background-color] duration-200 ease-out text-[14px] tracking-[0.14px] font-medium !px-4 py-3 ${
           isActive
-            ? 'text-white shadow-lg cursor-default' // cursor-default para indicar que no se puede clickear
-            : 'text-[var(--gray-11)] hover:bg-[var(--gray-3)] hover:translate-x-[5px] cursor-pointer',
-
-          // Collapsed vs Expanded spacing & sizing
-          // Same padding in both states - icon stays in place
-          '!px-4 py-3',
+            ? 'text-white shadow-lg cursor-default'
+            : 'text-[var(--gray-11)] hover:bg-[var(--gray-3)] hover:translate-x-[5px] cursor-pointer'
+        } ${
           isLayoutCollapsed
-            ? 'w-[56px]' // Fixed width when collapsed (just enough for icon + padding)
-            : cn(
-                'w-full', // Full width when expanded
-                nested && 'pl-10' // Nested indentation only when expanded
-              ),
-
-          className
-        )
+            ? 'w-[56px]'
+            : `w-full ${nested ? 'pl-10' : ''}`
+        } ${className || ''}`
       }
       style={({ isActive }) => isActive ? {
         backgroundImage: 'linear-gradient(118deg, var(--accent-9), color-mix(in srgb, var(--accent-9), transparent 30%))',
@@ -85,10 +53,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
     >
       {/* Icon - ALWAYS VISIBLE */}
       {Icon && (
-        <span className={cn(
-          "flex items-center justify-center transition-transform duration-300 flex-shrink-0",
-          "w-[24px] h-[24px]"
-        )}>
+        <span className="flex items-center justify-center transition-transform duration-300 flex-shrink-0 w-[24px] h-[24px]">
           <Icon size={nested ? 14 : 20} />
         </span>
       )}
@@ -96,10 +61,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
       {/* Text Container - Collapses smoothly */}
       {/* Opacity uses isContentCollapsed (immediate) for instant fade, width uses isLayoutCollapsed (delayed) for smooth shrink */}
       <div
-        className={cn(
-          "flex items-center whitespace-nowrap overflow-hidden transition-[width,margin] duration-300 ease-in-out",
-          isLayoutCollapsed ? "w-0 ml-0 border-none" : "w-auto flex-1 !ml-4"
-        )}
+        className={`flex items-center whitespace-nowrap overflow-hidden transition-[width,margin] duration-300 ease-in-out ${isLayoutCollapsed ? "w-0 ml-0 border-none" : "w-auto flex-1 !ml-4"}`}
       >
         <div
           className="flex items-center justify-between gap-2 w-full transition-[clip-path] duration-150 ease-in-out"
@@ -109,14 +71,10 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
               : 'inset(0 0 0 0)'    // Visible: full reveal
           }}
         >
-          <span className="truncate flex-1 font-[Montserrat] text-[14px] font-medium">
+          <span className="truncate flex-1 text-[14px] font-medium">
             {item.title}
           </span>
-          {item.badge && (
-            <Badge color={getBadgeColor(item.badgeColor)} variant="soft" size="1" className="flex-shrink-0">
-              {item.badge}
-            </Badge>
-          )}
+
           {/* Chevron invisible para mantener alineación con grupos */}
           <span className="w-[16px] h-[16px] flex-shrink-0 opacity-0 pointer-events-none" aria-hidden="true" />
         </div>

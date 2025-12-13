@@ -6,7 +6,7 @@ import NavigationHeader from './NavigationHeader'
 import NavigationLink from './NavigationLink'
 import NavigationGroup from './NavigationGroup'
 import { canViewMenuItem, canViewMenuGroup } from '@utils/permissions'
-import { cn } from '@lib/utils'
+
 
 /**
  * Componente principal que renderiza todos los items de navegación
@@ -102,7 +102,7 @@ const NavigationItems = ({ items = [], className, forceExpanded = false, collaps
   }
 
   return (
-    <ul className={cn('flex flex-col gap-1 py-2', className)}>
+    <ul className={`flex flex-col gap-1 py-2 ${className || ''}`}>
       {items.map((item) => renderItem(item))}
     </ul>
   )
