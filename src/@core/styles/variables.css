@@ -84,7 +84,7 @@
 
 :root {
   /* Global Colors */
-  --body-bg-light: #F4F4F4;  /* Actualizado */
+  --body-bg-light: #f8f8f8;  /* Actualizado a Vuexy default */
   --body-bg-dark: #161D31;   /* Actualizado */
   --card-bg-light: #FFFFFF;
   --card-bg-dark: #283046;

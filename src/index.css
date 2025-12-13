@@ -9,17 +9,11 @@
    ======================================== */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
 
-/* Tailwind CSS */
-@import "tailwindcss";
-
-/* Configuración de escaneo de archivos para Tailwind v4 */
-@source "src/**/*.{js,jsx,ts,tsx,html}";
-
 /* Variables y Base */
 @import "./@core/styles/variables.css";
 @import "./@core/styles/base.css";
 
-/* Animaciones y Utilidades */
+/* Animaciones y Utilidades Globales Custom */
 @import "./@core/styles/animations.css";
 @import "./@core/styles/utilities.css";
 
@@ -34,4 +28,12 @@
 @import "./@core/styles/components/canvas.css";
 @import "./@core/styles/components/navigation.css";
 @import "./@core/styles/components/breadcrumbs.css";
-@import "./@core/styles/components/fullscreen-modal.css";
+
+/* ========================================
+   TAILWIND CSS
+   Importado al final para que las clases de utilidad
+   tengan prioridad sobre los estilos base
+   ======================================== */
+@import "tailwindcss";
+@source "src/**/*.{js,jsx,ts,tsx,html}";
+

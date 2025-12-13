@@ -1,25 +1,13 @@
-import React, { useState } from 'react';
-import { Dialog, IconButton } from '@radix-ui/themes';
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { IconButton, Theme } from '@radix-ui/themes';
 import { Minimize2 } from 'lucide-react';
 import { useTheme } from '@src/hooks/useTheme';
 import { getColorClasses } from './utils/Utils';
+import { cn } from '@src/lib/utils';
 import { FullScreenContext } from './FullScreenFooter';
 import { FullScreenHeaderContext } from './FullScreenHeader';
 
-/**
- * FullScreenModal - Modal de pantalla completa usando Radix Dialog + Tailwind
- *
- * @param {boolean} open - Estado de apertura del modal
- * @param {function} onOpenChange - Callback para cambiar el estado de apertura
- * @param {string} title - Título del modal
- * @param {string} color - Color del tema (primary, success, danger, warning, info, secondary)
- * @param {ReactNode} children - Contenido del modal
- * @param {ReactNode} customHeader - Header personalizado (reemplaza el header por defecto)
- * @param {boolean} showCloseButton - Mostrar botón de cerrar
- * @param {Component} closeIcon - Icono del botón de cerrar (por defecto Minimize2)
- * @param {string} className - Clase adicional para el contenedor
- * @param {string} bodyClassName - Clase adicional para el body
- */
 const FullScreenModal = ({
   open = false,
   onOpenChange,
@@ -31,6 +19,7 @@ const FullScreenModal = ({
   closeIcon: CloseIcon = Minimize2,
   className = "",
   bodyClassName = "",
+  zIndex = 1050
 }) => {
   const [footerContent, setFooterContent] = useState(null);
   const [headerContent, setHeaderContent] = useState(null);
@@ -45,9 +34,44 @@ const FullScreenModal = ({
     }
   };
 
+  // Bloquear scroll del body cuando el modal está abierto
+  useEffect(() => {
+    if (open) {
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      const originalStyles = {
+        overflow: document.body.style.overflow,
+        paddingRight: document.body.style.paddingRight
+      };
+      document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+      return () => {
+        document.body.style.overflow = originalStyles.overflow;
+        document.body.style.paddingRight = originalStyles.paddingRight;
+      };
+    }
+  }, [open]);
+
+  // Manejar ESC key para cerrar
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.keyCode === 27 && open && onOpenChange) {
+        onOpenChange(false);
+      }
+    };
+    if (open) {
+      document.addEventListener('keydown', handleEsc);
+      return () => document.removeEventListener('keydown', handleEsc);
+    }
+  }, [open, onOpenChange]);
+
+  if (!open) return null;
+
   const defaultHeader = (
     <div
-      className={`fullscreen-modal-header text-white flex justify-between items-center ${colorClasses.header}`}
+      className={cn(
+        "flex justify-between items-center px-12 py-8 text-white flex-shrink-0",
+        colorClasses.header
+      )}
       style={colorClasses.headerStyle}
     >
       <h4 className="m-0 text-white font-bold text-xl">{title}</h4>
@@ -62,53 +86,70 @@ const FullScreenModal = ({
 
         {showCloseButton && (
           <IconButton
-            variant="soft"
+            variant="surface"
             color="gray"
-            size="2"
+            size="3"
+            highContrast
             onClick={handleClose}
-            className="!bg-white/20 hover:!bg-white/30 !text-white cursor-pointer"
+            className="!h-10 !w-auto !px-5 rounded-xl shadow-md cursor-pointer bg-white"
           >
-            <CloseIcon size={16} />
+            <CloseIcon size={20} />
           </IconButton>
         )}
       </div>
     </div>
   );
 
-  return (
-    <Dialog.Root open={open} onOpenChange={onOpenChange}>
-      <Dialog.Content
-        className={`fullscreen-modal-content ${className}`}
+  const modalContent = (
+    <Theme
+      appearance={themeSettings.appearance}
+      accentColor={themeSettings.accentColor}
+      grayColor={themeSettings.grayColor}
+      radius={themeSettings.radius}
+      scaling={themeSettings.scaling}
+      className={cn(
+        "fixed inset-0 flex flex-col w-screen h-screen bg-[var(--color-background)] text-[var(--text-color)]",
+        className
+      )}
+      style={{
+        zIndex,
+        margin: 0,
+        padding: 0,
+        maxWidth: 'none',
+        borderRadius: 0
+      }}
+    >
+      {/* Header */}
+      {customHeader || defaultHeader}
+
+      {/* Body */}
+      <div
+        className={cn("flex-1 overflow-auto box-border p-12", bodyClassName)}
       >
-        {/* Card-like structure */}
-        <div className="h-full flex flex-col fullscreen-modal-bg">
-          {/* Header */}
-          {customHeader || defaultHeader}
+        <FullScreenContext.Provider value={{ setFooterContent }}>
+          <FullScreenHeaderContext.Provider value={{ setHeaderContent }}>
+            {children}
+          </FullScreenHeaderContext.Provider>
+        </FullScreenContext.Provider>
+      </div>
 
-          {/* Body */}
-          <div className={`flex-1 overflow-auto ${bodyClassName}`}>
-            <div className="fullscreen-modal-body">
-              <FullScreenContext.Provider value={{ setFooterContent }}>
-                <FullScreenHeaderContext.Provider value={{ setHeaderContent }}>
-                  {children}
-                </FullScreenHeaderContext.Provider>
-              </FullScreenContext.Provider>
-            </div>
-          </div>
-
-          {/* Footer */}
-          {footerContent && (
-            <div
-              className={`fullscreen-modal-footer text-white flex justify-end items-center gap-2 ${colorClasses.footer}`}
-              style={colorClasses.footerStyle}
-            >
-              {footerContent}
-            </div>
+      {/* Footer */}
+      {footerContent && (
+        <div
+          className={cn(
+            "flex justify-end items-center gap-2 px-8 py-6 text-white flex-shrink-0",
+            colorClasses.footer
           )}
+          style={{ ...colorClasses.footerStyle, borderRadius: 0 }}
+        >
+          {footerContent}
         </div>
-      </Dialog.Content>
-    </Dialog.Root>
+      )}
+    </Theme>
   );
+
+  // Renderizar en el body usando Portal
+  return createPortal(modalContent, document.body);
 };
 
 export default FullScreenModal;
