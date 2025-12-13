@@ -1,0 +1,44 @@
+/* ========================================
+   FULLSCREEN MODAL STYLES
+   Sobrescribe estilos de Radix Dialog para modal fullscreen
+   ======================================== */
+
+/* Dialog Content - Remover padding por defecto de Radix y forzar fullscreen */
+.fullscreen-modal-content {
+  padding: 0 !important;
+  max-width: none !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+}
+
+/* Header del modal */
+.fullscreen-modal-header {
+  padding: 0.75rem 1rem !important;
+}
+
+/* Body del modal */
+.fullscreen-modal-body {
+  padding: 1rem 1.5rem !important;
+}
+
+/* Footer del modal */
+.fullscreen-modal-footer {
+  padding: 0.5rem 1rem !important;
+}
+
+/* Fondo blanco forzado */
+.fullscreen-modal-bg {
+  background-color: white !important;
+}
+
+/* Overlay de Radix Dialog para fullscreen modal */
+.rt-DialogOverlay:has(+ * .fullscreen-modal-content) {
+  display: none;
+}

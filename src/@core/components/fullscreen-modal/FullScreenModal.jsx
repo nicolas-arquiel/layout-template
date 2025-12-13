@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Dialog, IconButton, Flex } from '@radix-ui/themes';
-import { X, Minimize2 } from 'lucide-react';
+import { Dialog, IconButton } from '@radix-ui/themes';
+import { Minimize2 } from 'lucide-react';
 import { useTheme } from '@src/hooks/useTheme';
 import { getColorClasses } from './utils/Utils';
 import { FullScreenContext } from './FullScreenFooter';
@@ -47,13 +47,10 @@ const FullScreenModal = ({
 
   const defaultHeader = (
     <div
-      className={`!px-4 !py-3 text-white flex justify-between items-center ${colorClasses.header}`}
-      style={{
-        ...colorClasses.headerStyle,
-        padding: '0.75rem 1rem',
-      }}
+      className={`fullscreen-modal-header text-white flex justify-between items-center ${colorClasses.header}`}
+      style={colorClasses.headerStyle}
     >
-      <h4 className="!m-0 text-white font-bold text-xl">{title}</h4>
+      <h4 className="m-0 text-white font-bold text-xl">{title}</h4>
 
       {/* Contenido personalizado del header entre el título y el botón de cerrar */}
       <div className="flex items-center gap-2">
@@ -81,23 +78,16 @@ const FullScreenModal = ({
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Content
-        className={`!p-0 !max-w-none !w-screen !h-screen !m-0 !rounded-none ${className}`}
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
+        className={`fullscreen-modal-content ${className}`}
       >
         {/* Card-like structure */}
-        <div className="h-full flex flex-col !bg-white">
+        <div className="h-full flex flex-col fullscreen-modal-bg">
           {/* Header */}
           {customHeader || defaultHeader}
 
           {/* Body */}
           <div className={`flex-1 overflow-auto ${bodyClassName}`}>
-            <div className="!px-6 !py-4" style={{ padding: '1rem 1.5rem' }}>
+            <div className="fullscreen-modal-body">
               <FullScreenContext.Provider value={{ setFooterContent }}>
                 <FullScreenHeaderContext.Provider value={{ setHeaderContent }}>
                   {children}
@@ -109,11 +99,8 @@ const FullScreenModal = ({
           {/* Footer */}
           {footerContent && (
             <div
-              className={`!px-4 !py-2 text-white flex justify-end items-center gap-2 ${colorClasses.footer}`}
-              style={{
-                ...colorClasses.footerStyle,
-                padding: '0.5rem 1rem',
-              }}
+              className={`fullscreen-modal-footer text-white flex justify-end items-center gap-2 ${colorClasses.footer}`}
+              style={colorClasses.footerStyle}
             >
               {footerContent}
             </div>
