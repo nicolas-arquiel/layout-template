@@ -1,90 +1,72 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { Tooltip } from '@radix-ui/themes'
-
 import { useSelector } from 'react-redux'
 
 /**
- * NavigationItem - Reactstrap/Bootstrap style
- * Clean, well-spaced navigation items with proper active states
+ * NavigationItem - Refactored to match Vuexy reference (Flat structure)
  */
 const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpanded = false, className, ...props }) => {
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
   const Icon = item.icon
 
   // Both states use menuCollapsed directly for IMMEDIATE response
-  // No delay - change to icons instantly when button is pressed
   const isLayoutCollapsed = menuCollapsed && !forceExpanded
-  const isContentCollapsed = menuCollapsed && !forceExpanded
 
-
+  // Helper simple para cortar texto si es muy largo (Fallback de seguridad)
+  const truncateText = (text, maxLength = 15) => {
+    if (!text) return ''
+    if (text.length <= maxLength) return text
+    return text.slice(0, maxLength) + '...'
+  }
 
   const linkContent = (
     <NavLink
       to={item.navLink}
       onClick={(e) => {
-        // Prevenir navegación si ya estamos en esta ruta
         const currentPath = window.location.pathname
         if (currentPath === item.navLink) {
           e.preventDefault()
           return
         }
-        // Ejecutar el onClick original si existe
         if (item.onClick) {
           item.onClick(e)
         }
       }}
       className={({ isActive }) =>
-        `flex items-center rounded-md min-h-[48px] transition-[width,translate,background-color] duration-200 ease-out text-[14px] tracking-[0.14px] font-medium !px-4 py-3 ${
+        `flex items-center rounded-md transition-all duration-200 ease-in-out min-h-[45px] ${
           isActive
-            ? 'text-white shadow-lg cursor-default'
-            : 'text-[var(--gray-11)] hover:bg-[var(--gray-3)] hover:translate-x-[5px] cursor-pointer'
+            ? 'text-white shadow-md bg-gradient-to-r from-[var(--accent-9)] to-[var(--accent-9)]/70 cursor-default'
+            : `text-[var(--gray-11)] hover:bg-[var(--gray-3)] cursor-pointer ${!isLayoutCollapsed ? 'hover:translate-x-[5px]' : ''}`
         } ${
           isLayoutCollapsed
-            ? 'w-[56px]'
-            : `w-full ${nested ? 'pl-10' : ''}`
+            ? 'justify-center px-2'
+            : `px-4 ${nested ? 'pl-8' : ''}`
         } ${className || ''}`
       }
       style={({ isActive }) => isActive ? {
-        backgroundImage: 'linear-gradient(118deg, var(--accent-9), color-mix(in srgb, var(--accent-9), transparent 30%))',
         boxShadow: '0 0 10px 1px color-mix(in srgb, var(--accent-9), transparent 30%)'
       } : {}}
       {...props}
     >
-      {/* Icon - ALWAYS VISIBLE */}
       {Icon && (
-        <span className="flex items-center justify-center transition-transform duration-300 flex-shrink-0 w-[24px] h-[24px]">
-          <Icon size={nested ? 14 : 20} />
-        </span>
+        <Icon 
+          size={nested ? 14 : 20} 
+          className={`flex-shrink-0 transition-all duration-200 ${isLayoutCollapsed ? '' : 'mr-3'}`}
+        />
       )}
 
-      {/* Text Container - Collapses smoothly */}
-      {/* Opacity uses isContentCollapsed (immediate) for instant fade, width uses isLayoutCollapsed (delayed) for smooth shrink */}
-      <div
-        className={`flex items-center whitespace-nowrap overflow-hidden transition-[width,margin] duration-300 ease-in-out ${isLayoutCollapsed ? "w-0 ml-0 border-none" : "w-auto flex-1 !ml-4"}`}
-      >
-        <div
-          className="flex items-center justify-between gap-2 w-full transition-[clip-path] duration-150 ease-in-out"
-          style={{
-            clipPath: isContentCollapsed 
-              ? 'inset(0 100% 0 0)' // Hidden: clipped from right
-              : 'inset(0 0 0 0)'    // Visible: full reveal
-          }}
-        >
-          <span className="truncate flex-1 text-[14px] font-medium">
-            {item.title}
-          </span>
-
-          {/* Chevron invisible para mantener alineación con grupos */}
-          <span className="w-[16px] h-[16px] flex-shrink-0 opacity-0 pointer-events-none" aria-hidden="true" />
-        </div>
-      </div>
+      {/* Text - Only render if not collapsed or if forced expanded */}
+      {!isLayoutCollapsed && (
+        <span className="truncate flex-1 text-[14px] font-medium leading-none min-w-0">
+          {truncateText(item.title)}
+        </span>
+      )}
     </NavLink>
   )
 
-  // Renderizar condicionalmente el Tooltip para evitar tooltips vacíos
   const content = (
-    <div className="outline-none w-full">
+    <div className="outline-none w-full mb-1">
       {linkContent}
     </div>
   )

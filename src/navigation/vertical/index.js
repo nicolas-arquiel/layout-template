@@ -83,7 +83,7 @@ const navigation = [
   },
   {
     id: 'reportes',
-    title: 'Reportes',
+    title: 'Reportesssssssssss',
     icon: BarChart3,
     // SIN permiso - para testear dropdown
     children: [
@@ -129,7 +129,7 @@ const navigation = [
   },
   {
     id: 'fullscreen_modal',
-    title: 'FullScreen Modal',
+    title: 'FullScreen Modalaaaaaaaaaaaaaaaaaa',
     icon: Maximize2,
     navLink: '/componentes/fullscreen-modal',
     // SIN permiso - para testear componente FullScreenModal

@@ -18,68 +18,58 @@ function hasActiveChild(children, currentPath) {
     return child.navLink === currentPath
   })
 }
+// Helper simple para cortar texto si es muy largo (Fallback de seguridad)
+const truncateText = (text, maxLength = 15) => {
+  if (!text) return ''
+  if (text.length <= maxLength) return text
+  return text.slice(0, maxLength) + '...'
+}
 
 /**
  * Shared Button Component for consistency
+ * Refactored to Flat Structure
  */
-const GroupButton = React.forwardRef(({ item, isActive, isOpen, isLayoutCollapsed, isContentCollapsed, nested, ...props }, ref) => {
+const GroupButton = React.forwardRef(({ item, isActive, isOpen, isLayoutCollapsed, nested, ...props }, ref) => {
   const Icon = item.icon
   return (
     <button
       ref={ref}
-      className={`flex items-center rounded-md min-h-[48px] cursor-pointer border-none outline-none transition-[width,translate,background-color] duration-200 ease-out !px-4 py-3 ${
-        isActive
-          ? 'text-[var(--accent-9)] bg-[color-mix(in_srgb,var(--accent-9),transparent_88%)]'
-          : 'text-[var(--gray-11)] bg-transparent hover:bg-[var(--gray-3)]'
-      } ${
-        !isLayoutCollapsed && !isActive ? 'hover:translate-x-[5px]' : ''
-      } ${
-        isLayoutCollapsed
-          ? 'w-[56px]'
-          : `w-full text-left ${nested ? 'pl-10' : ''}`
-      }`}
+      className={`flex items-center w-full rounded-md transition-all duration-200 ease-in-out min-h-[45px] relative cursor-pointer
+        ${isActive
+          ? 'text-[var(--accent-9)] bg-[var(--accent-3)]'
+          : `text-[var(--gray-11)] hover:bg-[var(--gray-3)] ${!isLayoutCollapsed ? 'hover:translate-x-[5px]' : ''}`
+        }
+        ${isLayoutCollapsed 
+          ? 'justify-center px-2' 
+          : `px-4 ${nested ? 'pl-8' : ''}`
+        }
+      `}
       {...props}
     >
-      {/* Icon - ALWAYS VISIBLE - Mismo estilo que NavigationItem */}
       {Icon && (
-        <span className="flex items-center justify-center transition-transform duration-300 flex-shrink-0 w-[24px] h-[24px]">
-          <Icon size={nested ? 14 : 20} />
-        </span>
+        <Icon 
+          size={nested ? 14 : 20} 
+          className={`flex-shrink-0 transition-all duration-200 ${isLayoutCollapsed ? '' : 'mr-3'}`} 
+        />
       )}
       
-      {/* Reveals from left to right */}
-      <div className={`flex items-center whitespace-nowrap overflow-hidden transition-[width,margin] duration-300 ease-in-out ${isLayoutCollapsed ? "w-0 ml-0 border-none" : "w-auto flex-1 !ml-4"}`}>
-          <div
-            className="flex items-center justify-between gap-2 w-full transition-[clip-path] duration-150 ease-in-out"
-            style={{
-              clipPath: isContentCollapsed 
-                ? 'inset(0 100% 0 0)' // Hidden: clipped from right
-                : 'inset(0 0 0 0)'    // Visible: full reveal
-            }}
-          >
-            <span className="flex-1 truncate text-[14px] font-medium">
-              {item.title}
-            </span>
-
-            {/* Chevron - Siempre presente para mantener alineación */}
-            <ChevronDown 
-              width="16" 
-              height="16" 
-              className={`transition-transform duration-300 flex-shrink-0 ${isOpen ? "rotate-180" : ""}`} 
-            />
-          </div>
-        </div>
+      {!isLayoutCollapsed && (
+        <>
+          <span className="truncate flex-1 text-left text-[14px] font-medium leading-none min-w-0">
+            {truncateText(item.title)}
+          </span>
+          <ChevronDown 
+            size={16}
+            className={`flex-shrink-0 transition-transform duration-200 ml-2 ${isOpen ? "rotate-180" : ""}`} 
+          />
+        </>
+      )}
     </button>
   )
 })
 
 /**
  * NavigationGroup - Grupos de menú con children
- * Behavior:
- * - Expanded: Permite múltiples grupos abiertos, solo cierra al cambiar de item activo
- * - Collapsed: Vertical Accordion (Icons only)
- * - Permite cerrar un grupo aunque tenga un hijo activo
- * - Soporta anidamiento recursivo con la misma lógica
  */
 const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle, nested = false, collapsed }) => {
   const location = useLocation()
@@ -87,10 +77,10 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle, nested
 
   const isActive = hasActiveChild(item.children, location.pathname)
 
-  // Estado para múltiples child groups abiertos (Set de IDs) - igual que NavigationItems
+  // Estado para múltiples child groups abiertos (Set de IDs)
   const [openChildGroupIds, setOpenChildGroupIds] = useState(new Set())
 
-  // Abrir automáticamente si contiene la ruta activa (solo la primera vez)
+  // Abrir automáticamente si contiene la ruta activa
   useEffect(() => {
     if (isActive && !isOpen && onToggle) {
       onToggle()
@@ -101,7 +91,6 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle, nested
   useEffect(() => {
     setOpenChildGroupIds((prevIds) => {
       const newIds = new Set(prevIds)
-      // Filtrar solo los child groups que contienen la ruta activa
       item.children.forEach((child) => {
         if (child.children && newIds.has(child.id)) {
           if (!hasActiveChild(child.children, location.pathname)) {
@@ -113,12 +102,8 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle, nested
     })
   }, [location.pathname])
 
-  // Both states use menuCollapsed directly for IMMEDIATE response
-  // No delay - change to icons instantly when button is pressed
   const isLayoutCollapsed = menuCollapsed && !forceExpanded
-  const isContentCollapsed = menuCollapsed && !forceExpanded
 
-  // Handler personalizado para el toggle que permite cerrar aunque tenga hijo activo
   const handleToggle = () => {
     if (onToggle) {
       onToggle()
@@ -132,18 +117,17 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle, nested
         isActive={isActive}
         isOpen={isOpen}
         isLayoutCollapsed={isLayoutCollapsed}
-        isContentCollapsed={isContentCollapsed}
         nested={nested}
       />
     </Collapsible.Trigger>
   )
 
   return (
-    <li className="list-none w-full">
+    <li className="list-none w-full mb-1">
       <Collapsible.Root
         open={isOpen}
         onOpenChange={handleToggle}
-        className={`w-full ${isLayoutCollapsed ? "flex flex-col items-center" : ""}`}
+        className="w-full"
       >
         {isLayoutCollapsed ? (
           <Tooltip content={item.title} side="right">
@@ -158,11 +142,10 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle, nested
         )}
 
         <Collapsible.Content
-          className={`overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up ${isLayoutCollapsed ? "w-full flex flex-col items-center" : "w-full"}`}
+          className="overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up w-full"
         >
-          <ul className={`w-full ${isLayoutCollapsed ? "flex flex-col items-center" : ""}`}>
+          <ul className="w-full flex flex-col gap-1">
             {item.children.map((child) => {
-              // Recursive check: if child has children, render NavigationGroup
               if (child.children && child.children.length > 0) {
                 return (
                   <NavigationGroup
@@ -186,7 +169,6 @@ const NavigationGroup = ({ item, forceExpanded = false, isOpen, onToggle, nested
                   />
                 )
               }
-              // Otherwise render Link
               return (
                 <NavigationLink
                   key={child.id}
