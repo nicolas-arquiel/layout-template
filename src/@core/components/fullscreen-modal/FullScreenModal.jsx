@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
-import { Minimize2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { Dialog, IconButton, Flex } from '@radix-ui/themes';
+import { X, Minimize2 } from 'lucide-react';
 import { useTheme } from '@src/hooks/useTheme';
 import { getColorClasses } from './utils/Utils';
 import { FullScreenContext } from './FullScreenFooter';
 import { FullScreenHeaderContext } from './FullScreenHeader';
 
 /**
- * FullScreenModal - Modal de pantalla completa usando ReactDOM.createPortal + Tailwind
+ * FullScreenModal - Modal de pantalla completa usando Radix Dialog + Tailwind
  *
  * @param {boolean} open - Estado de apertura del modal
  * @param {function} onOpenChange - Callback para cambiar el estado de apertura
@@ -19,7 +19,6 @@ import { FullScreenHeaderContext } from './FullScreenHeader';
  * @param {Component} closeIcon - Icono del botón de cerrar (por defecto Minimize2)
  * @param {string} className - Clase adicional para el contenedor
  * @param {string} bodyClassName - Clase adicional para el body
- * @param {number} zIndex - Z-index del modal (por defecto 1050)
  */
 const FullScreenModal = ({
   open = false,
@@ -32,7 +31,6 @@ const FullScreenModal = ({
   closeIcon: CloseIcon = Minimize2,
   className = "",
   bodyClassName = "",
-  zIndex = 1050,
 }) => {
   const [footerContent, setFooterContent] = useState(null);
   const [headerContent, setHeaderContent] = useState(null);
@@ -40,36 +38,6 @@ const FullScreenModal = ({
 
   // Obtener clases de color basadas en el tema
   const colorClasses = getColorClasses(color, themeSettings);
-
-  // Bloquear scroll del body cuando el modal está abierto
-  useEffect(() => {
-    if (open) {
-      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-      const originalStyles = {
-        overflow: document.body.style.overflow,
-        paddingRight: document.body.style.paddingRight
-      };
-      document.body.style.overflow = 'hidden';
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
-      return () => {
-        document.body.style.overflow = originalStyles.overflow;
-        document.body.style.paddingRight = originalStyles.paddingRight;
-      };
-    }
-  }, [open]);
-
-  // Manejar ESC key para cerrar
-  useEffect(() => {
-    const handleEsc = (event) => {
-      if (event.keyCode === 27 && open && onOpenChange) {
-        onOpenChange(false);
-      }
-    };
-    if (open) {
-      document.addEventListener('keydown', handleEsc);
-      return () => document.removeEventListener('keydown', handleEsc);
-    }
-  }, [open, onOpenChange]);
 
   const handleClose = () => {
     if (onOpenChange) {
@@ -79,10 +47,13 @@ const FullScreenModal = ({
 
   const defaultHeader = (
     <div
-      className={`px-4 py-3 text-white flex justify-between items-center ${colorClasses.header}`}
-      style={colorClasses.headerStyle}
+      className={`!px-4 !py-3 text-white flex justify-between items-center ${colorClasses.header}`}
+      style={{
+        ...colorClasses.headerStyle,
+        padding: '0.75rem 1rem',
+      }}
     >
-      <h4 className="m-0 text-white font-bold text-xl">{title}</h4>
+      <h4 className="!m-0 text-white font-bold text-xl">{title}</h4>
 
       {/* Contenido personalizado del header entre el título y el botón de cerrar */}
       <div className="flex items-center gap-2">
@@ -93,57 +64,64 @@ const FullScreenModal = ({
         )}
 
         {showCloseButton && (
-          <button
+          <IconButton
+            variant="soft"
+            color="gray"
+            size="2"
             onClick={handleClose}
-            className="flex items-center justify-center w-8 h-8 bg-white/20 hover:bg-white/30 text-white rounded transition-colors duration-200 cursor-pointer border-0"
-            aria-label="Cerrar modal"
+            className="!bg-white/20 hover:!bg-white/30 !text-white cursor-pointer"
           >
             <CloseIcon size={16} />
-          </button>
+          </IconButton>
         )}
       </div>
     </div>
   );
 
-  if (!open) return null;
+  return (
+    <Dialog.Root open={open} onOpenChange={onOpenChange}>
+      <Dialog.Content
+        className={`!p-0 !max-w-none !w-screen !h-screen !m-0 !rounded-none ${className}`}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+        }}
+      >
+        {/* Card-like structure */}
+        <div className="h-full flex flex-col !bg-white">
+          {/* Header */}
+          {customHeader || defaultHeader}
 
-  const modalContent = (
-    <div
-      className={`fixed top-0 left-0 right-0 bottom-0 w-full h-full bg-white ${className}`}
-      style={{
-        zIndex,
-      }}
-    >
-      {/* Card-like structure */}
-      <div className="h-full flex flex-col bg-white">
-        {/* Header */}
-        {customHeader || defaultHeader}
-
-        {/* Body */}
-        <div className={`flex-1 overflow-auto ${bodyClassName}`}>
-          <div className="px-6 py-4">
-            <FullScreenContext.Provider value={{ setFooterContent }}>
-              <FullScreenHeaderContext.Provider value={{ setHeaderContent }}>
-                {children}
-              </FullScreenHeaderContext.Provider>
-            </FullScreenContext.Provider>
+          {/* Body */}
+          <div className={`flex-1 overflow-auto ${bodyClassName}`}>
+            <div className="!px-6 !py-4" style={{ padding: '1rem 1.5rem' }}>
+              <FullScreenContext.Provider value={{ setFooterContent }}>
+                <FullScreenHeaderContext.Provider value={{ setHeaderContent }}>
+                  {children}
+                </FullScreenHeaderContext.Provider>
+              </FullScreenContext.Provider>
+            </div>
           </div>
+
+          {/* Footer */}
+          {footerContent && (
+            <div
+              className={`!px-4 !py-2 text-white flex justify-end items-center gap-2 ${colorClasses.footer}`}
+              style={{
+                ...colorClasses.footerStyle,
+                padding: '0.5rem 1rem',
+              }}
+            >
+              {footerContent}
+            </div>
+          )}
         </div>
-
-        {/* Footer */}
-        {footerContent && (
-          <div
-            className={`px-4 py-2 text-white flex justify-end items-center gap-2 ${colorClasses.footer}`}
-            style={colorClasses.footerStyle}
-          >
-            {footerContent}
-          </div>
-        )}
-      </div>
-    </div>
+      </Dialog.Content>
+    </Dialog.Root>
   );
-
-  return ReactDOM.createPortal(modalContent, document.body);
 };
 
 export default FullScreenModal;
