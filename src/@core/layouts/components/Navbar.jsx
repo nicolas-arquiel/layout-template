@@ -7,6 +7,7 @@ import { clearAuth } from '@/store/authSlice'
 import { toggleMobileMenu } from '@/store/layoutSlice'
 import HorizontalNav from './HorizontalNav'
 import { cn } from '@lib/utils'
+import { VITE_APP_ABR_BASENAME } from '@config'
 
 /**
  * Navbar - SOLO TAILWIND CLASSES
@@ -64,7 +65,7 @@ const Navbar = () => {
           </>
         ) : (
           <Text size="3" weight="medium" className="text-[var(--gray-12)]">
-            {import.meta.env.VITE_APP_NAME}
+            {VITE_APP_ABR_BASENAME || "Sistema"}
           </Text>
         )}
       </Flex>

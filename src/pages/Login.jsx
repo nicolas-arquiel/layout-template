@@ -6,6 +6,7 @@ import { LogIn, Mail, Lock, AlertCircle } from 'lucide-react'
 import { Box, Card, Heading, Text, TextField, Button, Flex, Callout } from '@radix-ui/themes'
 import { setAuth } from '@src/store/authSlice'
 import { generateMockJwt } from '@src/utils/jwtUtils'
+import { VITE_APP_BASENAME } from '@config'
 
 /**
  * Login - Página de inicio de sesión profesional
@@ -93,13 +94,13 @@ export default function Login() {
   }
 
   return (
-    <Box
+    <div
       style={{
         minHeight: '100vh',
-        backgroundColor: 'var(--gray-2)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        width: '100vw',
+        backgroundColor: 'var(--color-background)', // Usar color de fondo por defecto del tema
+        display: 'grid',
+        placeItems: 'center',
       }}
     >
       <Card
@@ -108,6 +109,8 @@ export default function Login() {
           width: '100%',
           maxWidth: '450px',
           margin: '1rem',
+          backgroundColor: 'var(--color-surface)', // O 'var(--gray-2)' si eso se prefiere para el card en este sistema
+          boxShadow: 'var(--shadow-4)',
         }}
       >
         {/* Header */}
@@ -121,12 +124,13 @@ export default function Login() {
                 height: '64px',
                 borderRadius: 'var(--radius-full)',
                 backgroundColor: 'var(--accent-9)',
+                marginBottom: '1rem',
               }}
             >
               <LogIn size={32} color="white" />
             </Flex>
             <Heading size="6" align="center">
-              Iniciar Sesión
+              {VITE_APP_BASENAME || "Iniciar Sesión"}
             </Heading>
             <Text size="2" color="gray" align="center">
               Ingresa tus credenciales para acceder al sistema
@@ -157,16 +161,16 @@ export default function Login() {
                 control={control}
                 rules={{
                   required: 'El email es requerido',
-                  pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: 'Formato de email inválido'
-                  }
+                  // pattern: {
+                  //   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  //   message: 'Formato de email inválido'
+                  // }
                 }}
                 render={({ field }) => (
                   <TextField.Root
                     id="email"
-                    type="email"
-                    placeholder="ejemplo@email.com"
+                    type="text"
+                    placeholder="admin@test.com"
                     size="3"
                     {...field}
                   >
@@ -253,20 +257,8 @@ export default function Login() {
             </Button>
           </Flex>
         </form>
-
-        {/* Footer - Descomentar si necesitas registro */}
-        {/* <Box mt="5" style={{ textAlign: 'center' }}>
-          <Text size="2" color="gray">
-            ¿No tienes cuenta?{' '}
-            <Link to="/register">
-              <Text size="2" weight="medium" color="blue">
-                Regístrate
-              </Text>
-            </Link>
-          </Text>
-        </Box> */}
       </Card>
-
+      
       {/* Spinner animation */}
       <style>{`
         @keyframes spin {
@@ -278,6 +270,6 @@ export default function Login() {
           }
         }
       `}</style>
-    </Box>
+    </div>
   )
 }

@@ -31,19 +31,21 @@ const truncateText = (text, maxLength = 15) => {
  */
 const GroupButton = React.forwardRef(({ item, isActive, isOpen, isLayoutCollapsed, nested, ...props }, ref) => {
   const Icon = item.icon
+
+  const baseClasses = "flex items-center w-full rounded-md transition-all duration-200 ease-in-out min-h-[45px] relative cursor-pointer"
+  
+  const activeClasses = isActive 
+    ? "text-[var(--accent-9)] bg-[var(--accent-3)]" 
+    : `text-[var(--gray-11)] hover:bg-[var(--gray-3)] ${!isLayoutCollapsed ? 'hover:translate-x-[5px]' : ''}`
+
+  const paddingClasses = isLayoutCollapsed 
+    ? "justify-center px-2" 
+    : `px-4 ${nested ? 'pl-8' : ''}`
+
   return (
     <button
       ref={ref}
-      className={`flex items-center w-full rounded-md transition-all duration-200 ease-in-out min-h-[45px] relative cursor-pointer
-        ${isActive
-          ? 'text-[var(--accent-9)] bg-[var(--accent-3)]'
-          : `text-[var(--gray-11)] hover:bg-[var(--gray-3)] ${!isLayoutCollapsed ? 'hover:translate-x-[5px]' : ''}`
-        }
-        ${isLayoutCollapsed 
-          ? 'justify-center px-2' 
-          : `px-4 ${nested ? 'pl-8' : ''}`
-        }
-      `}
+      className={`${baseClasses} ${activeClasses} ${paddingClasses}`}
       {...props}
     >
       {Icon && (

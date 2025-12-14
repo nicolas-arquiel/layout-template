@@ -1,0 +1,9 @@
+services:
+  ucugestionfront:
+    image: registry.ucu.edu.ar/prod/ucugestion-front:latest
+    container_name: ucugestionfront
+    restart: unless-stopped
+    ports:
+      - "80:80"    # Host 80 → Container 80
+    env_file:
+      - .env

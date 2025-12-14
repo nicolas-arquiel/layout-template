@@ -1,3 +1,4 @@
+import { VITE_APP_ABR_BASENAME } from '@config'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { X, ChevronRight, ChevronLeft } from 'lucide-react'
@@ -55,7 +56,7 @@ const Sidebar = () => {
                 : 'inset(0 0 0 0)'    // Visible: full reveal
             }}
           >
-            {import.meta.env.VITE_APP_NAME}
+            {VITE_APP_ABR_BASENAME || "Sistema"}
           </Heading>
         </div>
 

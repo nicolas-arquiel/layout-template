@@ -18,6 +18,7 @@ export default defineConfig({
       "@utils": path.resolve(__dirname, "./src/utils"),
       "@guards": path.resolve(__dirname, "./src/guards"),
       "@lib": path.resolve(__dirname, "./src/lib"),
+      "@config": path.resolve(__dirname, "src/config.js"),
     },
   },
 });
