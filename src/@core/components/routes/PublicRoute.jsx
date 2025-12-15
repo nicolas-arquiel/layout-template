@@ -60,8 +60,8 @@ const PublicRoute = ({ children, route }) => {
   // → Necesita autenticación, redirigir a login
   // ─────────────────────────────────────────────────────────────────────────────
   if (!user && isRestricted) {
-    console.log('[PublicRoute] Ruta restringida sin usuario → redirigiendo a /auth/login')
-    return <Navigate to="/auth/login" replace />
+    console.log('[PublicRoute] Ruta restringida sin usuario → redirigiendo a /login')
+    return <Navigate to="/login" replace />
   }
 
   // ─────────────────────────────────────────────────────────────────────────────

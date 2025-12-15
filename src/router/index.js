@@ -64,30 +64,30 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: '/auth',
     element: createElement(AuthLayout),
-    children: authRoutes.map(wrapRouteWithGuard),
-  },
-  // Misc Pages
-  {
-    path: '/not-authorized',
-    element: createElement(NotAuthorized),
-  },
-  {
-    path: '/error',
-    element: createElement(Error),
-  },
-  {
-    path: '/maintenance',
-    element: createElement(Maintenance),
-  },
-  {
-    path: '/coming-soon',
-    element: createElement(ComingSoon),
-  },
-  {
-    path: '*',
-    element: createElement(Navigate, { to: "/inicio", replace: true }),
+    children: [
+      ...authRoutes.map(wrapRouteWithGuard),
+      {
+        path: '/not-authorized',
+        element: createElement(NotAuthorized),
+      },
+      {
+        path: '/error',
+        element: createElement(Error),
+      },
+      {
+        path: '/maintenance',
+        element: createElement(Maintenance),
+      },
+      {
+        path: '/coming-soon',
+        element: createElement(ComingSoon),
+      },
+      {
+        path: '*',
+        element: createElement(Error),
+      },
+    ],
   },
 ])
 

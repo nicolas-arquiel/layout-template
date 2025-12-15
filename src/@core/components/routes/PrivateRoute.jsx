@@ -46,7 +46,7 @@ const PrivateRoute = ({ children, route }) => {
 
   // Si no hay usuario, redirigir a login
   if (!user) {
-    return <Navigate to="/auth/login" replace />
+    return <Navigate to="/login" replace />
   }
 
   // Verificaciones de ruta

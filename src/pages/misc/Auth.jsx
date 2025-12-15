@@ -37,7 +37,7 @@ const Auth = () => {
         navigate('/inicio')
       } else {
         // Si no hay usuario, volver al login
-        navigate('/auth/login')
+        navigate('/login')
       }
     }, 1000)
 

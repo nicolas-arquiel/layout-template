@@ -7,10 +7,6 @@ const Auth = lazy(() => import('@/pages/misc/Auth'))
 
 const authRoutes = [
   {
-    index: true,
-    element: <Navigate to="/auth/login" replace />,
-  },
-  {
     path: 'login',
     element: <Login />,
     meta: {

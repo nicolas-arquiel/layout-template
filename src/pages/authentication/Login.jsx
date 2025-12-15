@@ -30,7 +30,7 @@ export default function Login() {
     formState: { errors }
   } = useForm({ defaultValues })
 
-  const { isAuthenticated } = useSelector((state) => state.auth)
+
 
   useEffect(() => {
     dispatch(clearAuth())

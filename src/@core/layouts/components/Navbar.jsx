@@ -23,7 +23,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     dispatch(clearAuth())
-    navigate('/auth/login')
+    navigate('/login')
   }
 
   const getUserInitials = () => {
