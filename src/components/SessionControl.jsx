@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useCronToken from "@src/hooks/useCronToken";
 import { jwtDecode } from "jwt-decode";
+import {selectToken,selectCurrentUser} from "@src/store/authSlice";
 
 const SessionControl = ({ children, className }) => {
   const navigate = useNavigate();

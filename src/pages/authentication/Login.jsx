@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useForm, Controller } from 'react-hook-form'
 import { Mail, Lock, AlertCircle } from 'lucide-react'
 import { Box, Heading, Text, TextField, Button, Flex, Callout, Grid, Checkbox, Link } from '@radix-ui/themes'
-import { setAuth } from '@src/store/authSlice'
+import { setAuth, clearAuth } from '@src/store/authSlice'
 import { generateMockJwt } from '@src/utils/jwtUtils'
 
 /**
@@ -33,10 +33,8 @@ export default function Login() {
   const { isAuthenticated } = useSelector((state) => state.auth)
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/inicio')
-    }
-  }, [isAuthenticated, navigate])
+    dispatch(clearAuth())
+  }, [])
 
   /**
    * Submit handler - Simula login y navega
