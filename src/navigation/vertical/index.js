@@ -12,7 +12,8 @@ import {
   Layers,
   TableIcon,
   Bell,
-  Maximize2
+  Maximize2,
+  Clock
 } from 'lucide-react'
 
 /**
@@ -133,6 +134,12 @@ const navigation = [
     icon: Maximize2,
     navLink: '/componentes/fullscreen-modal',
     // SIN permiso - para testear componente FullScreenModal
+  },
+  {
+    id: 'countdown_test',
+    title: 'Countdown Test',
+    icon: Clock,
+    navLink: '/componentes/countdown-test',
   },
 
   {
