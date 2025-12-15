@@ -1,17 +1,21 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { Tooltip } from '@radix-ui/themes'
+import { Badge, Tooltip } from '@radix-ui/themes'
+import { cn } from '@lib/utils'
 import { useSelector } from 'react-redux'
 
 /**
- * NavigationItem - Refactored to match Vuexy reference (Flat structure)
+ * NavigationItem - Reactstrap/Bootstrap style
+ * Clean, well-spaced navigation items with proper active states
  */
 const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpanded = false, className, ...props }) => {
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
   const Icon = item.icon
 
   // Both states use menuCollapsed directly for IMMEDIATE response
+  // No delay - change to icons instantly when button is pressed
   const isLayoutCollapsed = menuCollapsed && !forceExpanded
+  const isContentCollapsed = menuCollapsed && !forceExpanded
 
   // Helper simple para cortar texto si es muy largo (Fallback de seguridad)
   const truncateText = (text, maxLength = 15) => {
@@ -20,53 +24,116 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
     return text.slice(0, maxLength) + '...'
   }
 
+  const getBadgeColor = (color) => {
+    switch (color) {
+      case 'error':
+        return 'red'
+      case 'success':
+        return 'green'
+      case 'primary':
+        return 'blue'
+      case 'warning':
+        return 'amber'
+      default:
+        return 'red'
+    }
+  }
+
   const linkContent = (
     <NavLink
       to={item.navLink}
       onClick={(e) => {
+        // Prevenir navegación si ya estamos en esta ruta
         const currentPath = window.location.pathname
         if (currentPath === item.navLink) {
           e.preventDefault()
           return
         }
+        // Ejecutar el onClick original si existe
         if (item.onClick) {
           item.onClick(e)
         }
       }}
       className={({ isActive }) =>
-        `flex items-center rounded-md transition-all duration-200 ease-in-out min-h-[45px] ${
+        cn(
+          // Layout base
+          'flex items-center rounded-md',
+          'min-h-[48px]',
+          
+          // Smooth transitions for width (collapse) and hover effects (translate, background)
+          'transition-[width,translate,background-color] duration-200 ease-out',
+
+          // Typography
+          'font-[Montserrat] text-[14px] tracking-[0.14px] font-medium',
+
+          // Active State - cambiar cursor si está activo
           isActive
-            ? 'text-white shadow-md bg-gradient-to-r from-[var(--accent-9)] to-[var(--accent-9)]/70 cursor-default'
-            : `text-[var(--gray-11)] hover:bg-[var(--gray-3)] cursor-pointer ${!isLayoutCollapsed ? 'hover:translate-x-[5px]' : ''}`
-        } ${
+            ? 'text-white shadow-lg cursor-default' // cursor-default para indicar que no se puede clickear
+            : 'text-[var(--gray-11)] hover:bg-[var(--gray-3)] hover:translate-x-[5px] cursor-pointer',
+
+          // Collapsed vs Expanded spacing & sizing
+          // Same padding in both states - icon stays in place
+          '!px-4 py-3',
           isLayoutCollapsed
-            ? 'justify-center px-2'
-            : `px-4 ${nested ? 'pl-8' : ''}`
-        } ${className || ''}`
+            ? 'w-[56px]' // Fixed width when collapsed (just enough for icon + padding)
+            : cn(
+                'w-full', // Full width when expanded
+                nested && 'pl-10' // Nested indentation only when expanded
+              ),
+
+          className
+        )
       }
       style={({ isActive }) => isActive ? {
+        backgroundImage: 'linear-gradient(118deg, var(--accent-9), color-mix(in srgb, var(--accent-9), transparent 30%))',
         boxShadow: '0 0 10px 1px color-mix(in srgb, var(--accent-9), transparent 30%)'
       } : {}}
       {...props}
     >
+      {/* Icon - ALWAYS VISIBLE */}
       {Icon && (
-        <Icon 
-          size={nested ? 14 : 20} 
-          className={`flex-shrink-0 transition-all duration-200 ${isLayoutCollapsed ? '' : 'mr-3'}`}
-        />
-      )}
-
-      {/* Text - Only render if not collapsed or if forced expanded */}
-      {!isLayoutCollapsed && (
-        <span className="truncate flex-1 text-[14px] font-medium leading-none min-w-0">
-          {truncateText(item.title)}
+        <span className={cn(
+          "flex items-center justify-center transition-transform duration-300 flex-shrink-0",
+          "w-[24px] h-[24px]"
+        )}>
+          <Icon size={nested ? 14 : 20} />
         </span>
       )}
+
+      {/* Text Container - Collapses smoothly */}
+      {/* Opacity uses isContentCollapsed (immediate) for instant fade, width uses isLayoutCollapsed (delayed) for smooth shrink */}
+      <div
+        className={cn(
+          "flex items-center whitespace-nowrap overflow-hidden transition-[width,margin] duration-300 ease-in-out",
+          isLayoutCollapsed ? "w-0 ml-0 border-none" : "w-auto flex-1 !ml-4"
+        )}
+      >
+        <div
+          className="flex items-center justify-between gap-2 w-full transition-[clip-path] duration-150 ease-in-out"
+          style={{
+            clipPath: isContentCollapsed 
+              ? 'inset(0 100% 0 0)' // Hidden: clipped from right
+              : 'inset(0 0 0 0)'    // Visible: full reveal
+          }}
+        >
+          <span className="truncate flex-1 font-[Montserrat] text-[14px] font-medium">
+            {truncateText(item.title)}
+          </span>
+          {item.badge && (
+            <Badge color={getBadgeColor(item.badgeColor)} variant="soft" size="1" className="flex-shrink-0">
+              {item.badge}
+            </Badge>
+          )}
+          {/* Chevron invisible para mantener alineación con grupos */}
+          <span className="w-[16px] h-[16px] flex-shrink-0 opacity-0 pointer-events-none" aria-hidden="true" />
+        </div>
+      </div>
     </NavLink>
   )
 
+  // Renderizar condicionalmente el Tooltip para evitar tooltips vacíos
   const content = (
-    <div className="outline-none w-full mb-1">
+    <div className="outline-none w-full">
       {linkContent}
     </div>
   )
