@@ -20,7 +20,7 @@ const AppContent = () => {
   const { themeSettings, colors } = useTheme()
 
   return (
-    <Theme 
+    <Theme
       appearance={themeSettings.appearance}
       accentColor={themeSettings.accentColor}
       grayColor={themeSettings.grayColor}

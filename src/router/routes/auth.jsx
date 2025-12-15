@@ -2,7 +2,7 @@ import { lazy } from 'react'
 import { Navigate } from 'react-router-dom'
 
 // Lazy load pages
-const Login = lazy(() => import('@/pages/Login'))
+const Login = lazy(() => import('@/pages/authentication/Login'))
 const Auth = lazy(() => import('@/pages/misc/Auth'))
 
 const authRoutes = [

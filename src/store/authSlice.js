@@ -1,5 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+
+const initialUser = () => {
+  const item = window.localStorage.getItem('user')
+  //** Parse stored json or if none return initialValue
+  return item ? JSON.parse(item) : null
+}
+
+const initialPermisos = () => {
+  const item = window.localStorage.getItem('permisos')
+  return item ? JSON.parse(item) : ''
+}
+
+const initialToken = () => {
+  const item = window.localStorage.getItem('token')
+  return item ? JSON.parse(item) : null
+}
+
 /**
  * Slice de Redux para manejar autenticación y permisos
  */
@@ -10,7 +27,7 @@ const authSlice = createSlice({
      * @type {Object|null}
      * Usuario autenticado
      */
-    user: null,
+    user: initialUser(),
 
     /**
      * @type {string}
@@ -18,19 +35,19 @@ const authSlice = createSlice({
      * Formato: "modulo:submodulo:accion" o "modulo:*" para wildcards
      * Ejemplo: "personas:ver,personas:editar,academica:*"
      */
-    permisos: '',
+    permisos: initialPermisos(),
 
     /**
      * @type {boolean}
      * Estado de autenticación
      */
-    isAuthenticated: false,
+    isAuthenticated: !!initialUser(),
 
     /**
      * @type {string|null}
      * Token de autenticación
      */
-    token: null,
+    token: initialToken(),
   },
   reducers: {
     /**
@@ -39,10 +56,15 @@ const authSlice = createSlice({
      * @param {Object} action - Action con payload {user, permisos, token}
      */
     setAuth: (state, action) => {
-      state.user = action.payload.user
-      state.permisos = action.payload.permisos || ''
-      state.token = action.payload.token
+      const { user, permisos, token } = action.payload;
+      state.user = user
+      state.permisos = permisos || ''
+      state.token = token
       state.isAuthenticated = true
+
+      localStorage.setItem('user', JSON.stringify(user))
+      localStorage.setItem('permisos', JSON.stringify(permisos))
+      localStorage.setItem('token', JSON.stringify(token))
     },
 
     /**
@@ -54,6 +76,10 @@ const authSlice = createSlice({
       state.permisos = ''
       state.token = null
       state.isAuthenticated = false
+
+      localStorage.removeItem('user')
+      localStorage.removeItem('permisos')
+      localStorage.removeItem('token')
     },
 
     /**
@@ -63,6 +89,7 @@ const authSlice = createSlice({
      */
     updatePermisos: (state, action) => {
       state.permisos = action.payload
+      localStorage.setItem('permisos', JSON.stringify(action.payload))
     },
 
     /**
@@ -72,6 +99,7 @@ const authSlice = createSlice({
      */
     updateUser: (state, action) => {
       state.user = { ...state.user, ...action.payload }
+      localStorage.setItem('user', JSON.stringify(state.user))
     },
 
     /**
@@ -83,6 +111,9 @@ const authSlice = createSlice({
       if (action.payload.currentData) {
         state.user = { ...state.user, ...action.payload.currentData.user }
         state.permisos = action.payload.currentData.permisos || state.permisos
+
+        localStorage.setItem('user', JSON.stringify(state.user))
+        localStorage.setItem('permisos', JSON.stringify(state.permisos))
       }
     },
   },

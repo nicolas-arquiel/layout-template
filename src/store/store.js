@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import rootReducer from '@src/store/rootReducer'
 import { baseApi } from '@src/store/api/baseApi'
+import { secondApi } from '@src/store/api/secondApi'
 
 const isProduction = import.meta.env.VITE_ENVIRONMENT === 'prod'
 
@@ -15,6 +16,7 @@ const store = configureStore({
       serializableCheck: false,
     }).concat([
       baseApi.middleware,
+      secondApi.middleware,
     ])
   },
   devTools: !isProduction,
