@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { clearAuth } from "@/store/authSlice";
+import { useDispatch } from "react-redux";
 
 function useCronToken(exp) {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  
   const handleLogout = () => {
     dispatch(clearAuth())
     navigate('/login')

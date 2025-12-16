@@ -20,7 +20,7 @@ const TanStackSearchInput = ({
                 onChange={(e) => onChange(e.target.value)}
                 style={{ flex: 1, minWidth: '200px' }}
             >
-                <TextField.Slot>
+                <TextField.Slot >
                     <Search size={16} />
                 </TextField.Slot>
             </TextField.Root>

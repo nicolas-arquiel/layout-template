@@ -26,7 +26,7 @@ const TanStackSortHeader = ({ header }) => {
                 header.getContext()
             )}
             {canSort && (
-                <div className="ml-auto flex flex-col">
+                <div className="ml-1 flex flex-col">
                     {isSorted ? (
                         isSorted === 'asc' ? (
                             <ChevronUp size={14} />

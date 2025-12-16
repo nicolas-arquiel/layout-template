@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Flex, TextField, Select, IconButton, Button, Badge } from '@radix-ui/themes';
 import { Search, X, Filter, Columns } from 'lucide-react';
 import TanStackColumnVisibility from './TanStackColumnVisibility';
@@ -43,6 +43,36 @@ const TanStackToolbar = ({
         onFiltersChange,
     });
 
+    const [localValue, setLocalValue] = useState(globalFilter ?? '');
+
+    // Sincronizar estado local si cambia desde fuera
+    useEffect(() => {
+        setLocalValue(globalFilter ?? '');
+    }, [globalFilter]);
+
+    const handleSearch = () => {
+        console.log("localValue---> ", localValue);
+        setGlobalFilter(localValue);
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
+    };
+
+    const handleClear = () => {
+        setLocalValue('');
+        setGlobalFilter('');
+    };
+
+    const handleChange = (e) => {
+        if (e.target.value === '') {
+            handleClear();
+        }
+        setLocalValue(e.target.value);
+    };
+
     const availableColumns = table
         .getAllLeafColumns()
         .filter((col) => col.id !== "select" && col.id !== "expand" && col.id !== "actions")
@@ -71,30 +101,34 @@ const TanStackToolbar = ({
                     <div style={{ position: 'relative', flex: 1 }}>
                         <TextField.Root
                             placeholder={searchPlaceholder}
-                            value={globalFilter ?? ''}
-                            onChange={(e) => setGlobalFilter(e.target.value)}
-                            style={{ width: '100%', paddingRight: '2.5rem' }}
+                            value={localValue}
+                            onChange={handleChange}
+                            onKeyDown={handleKeyDown}
+                            style={{ width: '100%' }}
                         >
-                            <TextField.Slot>
-                                <Search size={16} />
+                            <TextField.Slot side="right">
+                                <Flex gap="1" align="center">
+                                    {localValue && (
+                                        <IconButton
+                                            variant="ghost"
+                                            size="1"
+                                            onClick={handleClear}
+                                            style={{ color: 'var(--gray-10)', cursor: 'pointer' }}
+                                        >
+                                            <X size={14} />
+                                        </IconButton>
+                                    )}
+                                    <IconButton
+                                        variant="ghost"
+                                        size="1"
+                                        onClick={handleSearch}
+                                        style={{ cursor: 'pointer' }}
+                                    >
+                                        <Search size={16} />
+                                    </IconButton>
+                                </Flex>
                             </TextField.Slot>
                         </TextField.Root>
-                        {globalFilter && (
-                            <IconButton
-                                variant="ghost"
-                                size="1"
-                                style={{
-                                    position: 'absolute',
-                                    right: '8px',
-                                    top: '50%',
-                                    transform: 'translateY(-50%)',
-                                    color: 'var(--gray-10)'
-                                }}
-                                onClick={() => setGlobalFilter('')}
-                            >
-                                <X size={14} />
-                            </IconButton>
-                        )}
                     </div>
                 </Flex>
 

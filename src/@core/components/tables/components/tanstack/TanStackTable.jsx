@@ -6,61 +6,64 @@ import { ChevronRight, ChevronDown } from 'lucide-react';
 import TanStackSortHeader from './TanStackSortHeader';
 import TanStackSelectCheckbox from './TanStackSelectCheckbox';
 import TanStackSelectAllCheckbox from './TanStackSelectAllCheckbox';
-import TanStackRowActions from './TanStackRowActions';
 
-/**
- * Componente de tabla principal para TanStack Table
- * Renderiza la tabla con encabezados ordenables y cuerpo de datos
- * Soporta selección de filas mediante checkbox cuando enableRowSelection=true
- * Soporta filas colapsables cuando enableExpanding=true
- */
 const TanStackTable = ({
     table,
     enableRowSelection = false,
     enableExpanding = false,
-    enableRowActions = false,
-    actions = [],
-    customStyles = {}
+    customStyles = {},
 }) => {
+    // Columnas visibles “de datos” (no incluye expand/select/actions)
+    const leafCols = table.getVisibleLeafColumns();
+
     return (
         <Box
             style={{
                 border: '1px solid var(--gray-6)',
                 borderRadius: 'var(--radius-3)',
                 overflow: 'hidden',
-                ...customStyles
+                ...customStyles,
             }}
         >
-            <Table.Root variant="surface">
+            <Table.Root
+                variant="surface"
+                style={{
+                    tableLayout: 'fixed', // clave para que el colgroup mande
+                    width: '100%',
+                }}
+            >
+                <colgroup>
+                    {enableExpanding && <col style={{ width: '50px' }} />}
+                    {enableRowSelection && <col style={{ width: '50px' }} />}
+
+                    {leafCols.map(col => (
+                        <col
+                            key={col.id}
+                            style={{ width: col.columnDef.meta?.width ?? 'auto' }} // <-- '30%', '12%', etc
+                        />
+                    ))}
+                </colgroup>
+
                 <Table.Header>
                     {table.getHeaderGroups().map(headerGroup => (
                         <Table.Row key={headerGroup.id}>
-                            {/* Columna de expansión en el header */}
-                            {enableExpanding && (
-                                <Table.ColumnHeaderCell style={{ width: '50px' }} />
-                            )}
-                            {/* Columna de selección en el header */}
+                            {/* Expanding */}
+                            {enableExpanding && <Table.ColumnHeaderCell />}
+
+                            {/* Row selection */}
                             {enableRowSelection && (
-                                <Table.ColumnHeaderCell style={{ width: '50px' }}>
+                                <Table.ColumnHeaderCell>
                                     <TanStackSelectAllCheckbox table={table} />
                                 </Table.ColumnHeaderCell>
                             )}
+                            {/* Headers (sin width inline para no pisar el colgroup) */}
                             {headerGroup.headers.map(header => (
-                                <Table.ColumnHeaderCell
-                                    key={header.id}
-                                    style={{
-                                        width: header.getSize() !== 150 ? `${header.getSize()}px` : 'auto'
-                                    }}
-                                >
+                                <Table.ColumnHeaderCell key={header.id}>
                                     {header.isPlaceholder ? null : (
                                         <TanStackSortHeader header={header} />
                                     )}
                                 </Table.ColumnHeaderCell>
                             ))}
-                            {/* Columna de acciones en el header */}
-                            {enableRowActions && (
-                                <Table.ColumnHeaderCell style={{ width: '50px' }} />
-                            )}
                         </Table.Row>
                     ))}
                 </Table.Header>
@@ -71,8 +74,7 @@ const TanStackTable = ({
                                 colSpan={
                                     table.getVisibleFlatColumns().length +
                                     (enableRowSelection ? 1 : 0) +
-                                    (enableExpanding ? 1 : 0) +
-                                    (enableRowActions ? 1 : 0)
+                                    (enableExpanding ? 1 : 0)
                                 }
                                 style={{ textAlign: 'center', padding: '2rem' }}
                             >
@@ -83,7 +85,7 @@ const TanStackTable = ({
                         table.getRowModel().rows.map(row => (
                             <React.Fragment key={row.id}>
                                 <Table.Row>
-                                    {/* Columna de expansión en cada fila */}
+                                    {/* Expanding cell */}
                                     {enableExpanding && (
                                         <Table.Cell>
                                             <IconButton
@@ -92,44 +94,42 @@ const TanStackTable = ({
                                                 onClick={row.getToggleExpandedHandler()}
                                                 style={{ cursor: 'pointer' }}
                                             >
-                                                {row.getIsExpanded() ? (
-                                                    <ChevronDown size={16} />
-                                                ) : (
-                                                    <ChevronRight size={16} />
-                                                )}
+                                                {row.getIsExpanded() ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
                                             </IconButton>
                                         </Table.Cell>
                                     )}
-                                    {/* Columna de selección en cada fila */}
+
+                                    {/* Row selection cell */}
                                     {enableRowSelection && (
                                         <Table.Cell>
                                             <TanStackSelectCheckbox row={row} />
                                         </Table.Cell>
                                     )}
+
+                                    {/* Data cells */}
                                     {row.getVisibleCells().map(cell => (
-                                        <Table.Cell key={cell.id}>
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
+                                        <Table.Cell
+                                            key={cell.id}
+                                            style={{
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap',
+                                            }}
+                                            title={typeof cell.getValue?.() === 'string' ? cell.getValue() : undefined}
+                                        >
+                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </Table.Cell>
                                     ))}
-                                    {/* Columna de acciones en cada fila */}
-                                    {enableRowActions && (
-                                        <Table.Cell>
-                                            <TanStackRowActions row={row} actions={actions} />
-                                        </Table.Cell>
-                                    )}
                                 </Table.Row>
-                                {/* Fila de detalles expandible - Renderizada siempre si enableExpanding es true para permitir animación de cierre */}
+
+                                {/* Expanded row */}
                                 {enableExpanding && (
                                     <Table.Row className="expanded-row">
                                         <Table.Cell
                                             colSpan={
                                                 row.getVisibleCells().length +
                                                 (enableRowSelection ? 1 : 0) +
-                                                (enableExpanding ? 1 : 0) +
-                                                (enableRowActions ? 1 : 0)
+                                                (enableExpanding ? 1 : 0)
                                             }
                                             style={{ padding: 0, borderBottom: 'none' }}
                                         >
@@ -144,7 +144,7 @@ const TanStackTable = ({
                                                                             width: 8,
                                                                             height: 8,
                                                                             borderRadius: '50%',
-                                                                            backgroundColor: 'var(--accent-9)'
+                                                                            backgroundColor: 'var(--accent-9)',
                                                                         }}
                                                                     />
                                                                     <Text size="2" weight="bold" color="accent">
@@ -155,7 +155,12 @@ const TanStackTable = ({
                                                                     {Object.entries(row.original).map(([key, value]) => (
                                                                         <Card key={key} variant="surface">
                                                                             <Flex justify="between" align="center" gap="2">
-                                                                                <Text size="2" color="gray" weight="medium" style={{ textTransform: 'capitalize' }}>
+                                                                                <Text
+                                                                                    size="2"
+                                                                                    color="gray"
+                                                                                    weight="medium"
+                                                                                    style={{ textTransform: 'capitalize' }}
+                                                                                >
                                                                                     {key}:
                                                                                 </Text>
                                                                                 <Text size="2" weight="medium">

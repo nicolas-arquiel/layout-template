@@ -5,6 +5,7 @@ import {
   TableWithClientSideData,
   VirtualizedTableWithFilters,
   TanStackTableWithClientData,
+  TanStackRowActions,
   SearchFilter,
   BigDataSearchFilter,
   DateRangeFilter,
@@ -15,7 +16,6 @@ import {
 } from '@components/tables';
 import { Users, Database, Zap, LayoutGrid, Edit, Trash, Eye, Copy, Star, Tags } from 'lucide-react';
 import { BreadCrumbs } from '@components';
-import { createColumnHelper } from '@tanstack/react-table';
 
 // ===== DATOS DE EJEMPLO =====
 const generateMockUsers = (count) => {
@@ -45,50 +45,157 @@ const EjemploTablas = () => {
   const [data] = useState(() => generateMockUsers(100));
   const [largeData] = useState(() => generateMockUsers(10000));
 
-  // TanStack Table column definitions
-  const columnHelper = createColumnHelper();
+  // Definición de acciones para reutilizar
+  const actions = [
+    {
+      type: "item",
+      label: "Ver Detalles",
+      icon: Eye,
+      onClick: (row) => console.log("Ver:", row),
+    },
+    {
+      type: "item",
+      label: "Editar",
+      icon: Edit,
+      onClick: (row) => console.log("Editar:", row),
+      shortcut: "⌘E",
+    },
+    {
+      type: "item",
+      label: "Duplicar",
+      icon: Copy,
+      onClick: (row) => console.log("Duplicar:", row),
+    },
+    {
+      type: "separator",
+    },
+    {
+      type: "item",
+      label: "Marcar como Favorita",
+      icon: Star,
+      onClick: (row) => console.log("Toggle favorito:", row),
+    },
+    {
+      type: "submenu",
+      label: "Etiqueta",
+      icon: Tags,
+      value: "normal",
+      items: [
+        { value: "importante", label: "Importante" },
+        { value: "normal", label: "Normal" },
+        { value: "archivo", label: "Archivo" },
+      ],
+      onValueChange: (value, row) => console.log("Cambiar etiqueta:", row, value),
+    },
+    {
+      type: "separator",
+    },
+    {
+      type: "item",
+      label: "Eliminar",
+      icon: Trash,
+      onClick: (row) => console.log("Eliminar:", row),
+      shortcut: "⌘⌫",
+      color: "red",
+    },
+  ];
+
+  // Ejemplo de acciones como botones individuales
+  const actionButtons = [
+    {
+      type: "item",
+      label: "Ver",
+      icon: Eye,
+      onClick: (row) => console.log("Ver:", row),
+    },
+    {
+      type: "item",
+      label: "Editar",
+      icon: Edit,
+      onClick: (row) => console.log("Editar:", row),
+    },
+    {
+      type: "item",
+      label: "Eliminar",
+      icon: Trash,
+      onClick: (row) => console.log("Eliminar:", row),
+      color: "red",
+    },
+  ];
 
   const tanstackColumns = useMemo(() => [
-    columnHelper.accessor('id', {
+    {
+      accessorKey: 'id',
       header: 'ID',
       cell: info => info.getValue(),
-      size: 80
-    }),
-    columnHelper.accessor(row => `${row.nombre} ${row.apellido}`, {
+      meta: { width: '5%' },
+    },
+    {
       id: 'nombreCompleto',
+      accessorFn: row => `${row.nombre} ${row.apellido}`,
       header: 'Nombre Completo',
       cell: info => info.getValue(),
-    }),
-    columnHelper.accessor('email', {
+      meta: { width: '18%' },
+    },
+    {
+      accessorKey: 'email',
       header: 'Email',
       cell: info => info.getValue(),
-    }),
-    columnHelper.accessor('edad', {
+      meta: { width: '20%' },
+    },
+    {
+      accessorKey: 'edad',
       header: 'Edad',
       cell: info => info.getValue(),
-      size: 100
-    }),
-    columnHelper.accessor('ciudad', {
+      meta: { width: '8%' },
+    },
+    {
+      accessorKey: 'ciudad',
       header: 'Ciudad',
       cell: info => info.getValue(),
-    }),
-    columnHelper.accessor('estado', {
+      meta: { width: '12%' },
+    },
+    {
+      accessorKey: 'estado',
       header: 'Estado',
       cell: info => {
-        const estado = info.getValue();
-        const color = estado === 'activo' ? 'green' : estado === 'inactivo' ? 'red' : 'yellow';
-        return <Badge color={color}>{estado}</Badge>;
+        const estado = info.getValue()
+        const color =
+          estado === 'activo'
+            ? 'green'
+            : estado === 'inactivo'
+              ? 'red'
+              : 'yellow'
+        return <Badge color={color}>{estado}</Badge>
       },
-    }),
-    columnHelper.accessor('rol', {
+      meta: { width: '10%' },
+    },
+    {
+      accessorKey: 'rol',
       header: 'Rol',
       cell: info => info.getValue(),
-    }),
-    columnHelper.accessor('salario', {
+      meta: { width: '12%' },
+    },
+    {
+      accessorKey: 'salario',
       header: 'Salario',
       cell: info => `${info.getValue()}€`,
-    }),
-  ], [columnHelper]);
+      meta: { width: '10%' },
+    },
+    // Columna de acciones
+    {
+      id: 'actions',
+      header: 'Acciones',
+      cell: ({ row }) => (
+        <TanStackRowActions
+          row={row}
+          actions={actionButtons}
+          displayMode="buttons"
+        />
+      ),
+      meta: { width: '120px' },
+    },
+  ], [actionButtons])
 
   // Columnas básicas
   const basicColumns = useMemo(() => [
@@ -663,60 +770,6 @@ const [selectedRows, setSelectedRows] = useState([]);
                 initialPageSize={10}
                 filterDisplayMode="popover"
                 pageSizeOptions={[10, 20, 50, 100]}
-                enableRowActions={true}
-                actions={[
-                  {
-                    type: "item",
-                    label: "Ver Detalles",
-                    icon: Eye,
-                    onClick: (row) => console.log("Ver:", row),
-                  },
-                  {
-                    type: "item",
-                    label: "Editar",
-                    icon: Edit,
-                    onClick: (row) => console.log("Editar:", row),
-                    shortcut: "⌘E",
-                  },
-                  {
-                    type: "item",
-                    label: "Duplicar",
-                    icon: Copy,
-                    onClick: (row) => console.log("Duplicar:", row),
-                  },
-                  {
-                    type: "separator",
-                  },
-                  {
-                    type: "item",
-                    label: "Marcar como Favorita",
-                    icon: Star,
-                    onClick: (row) => console.log("Toggle favorito:", row),
-                  },
-                  {
-                    type: "submenu",
-                    label: "Etiqueta",
-                    icon: Tags,
-                    value: "normal",
-                    items: [
-                      { value: "importante", label: "Importante" },
-                      { value: "normal", label: "Normal" },
-                      { value: "archivo", label: "Archivo" },
-                    ],
-                    onValueChange: (value, row) => console.log("Cambiar etiqueta:", row, value),
-                  },
-                  {
-                    type: "separator",
-                  },
-                  {
-                    type: "item",
-                    label: "Eliminar",
-                    icon: Trash,
-                    onClick: (row) => console.log("Eliminar:", row),
-                    shortcut: "⌘⌫",
-                    color: "red",
-                  },
-                ]}
               />
 
               {/* Features Info */}

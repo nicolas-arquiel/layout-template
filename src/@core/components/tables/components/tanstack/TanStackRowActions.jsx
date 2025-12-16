@@ -10,12 +10,49 @@ import { MoreVertical, ChevronRight } from 'lucide-react';
  * @param {Object} row - Objeto de fila de TanStack Table
  * @param {Array|Function} actions - Array de acciones o función que retorna acciones
  */
-const TanStackRowActions = ({ row, actions = [] }) => {
+const TanStackRowActions = ({ row, actions = [], displayMode = 'menu' }) => {
     // Si actions es una función, ejecutarla con la fila actual
     const resolvedActions = typeof actions === 'function' ? actions(row) : actions;
 
     if (!resolvedActions || resolvedActions.length === 0) return null;
 
+    // Renderizado como botones individuales
+    if (displayMode === 'buttons') {
+        return (
+            <Flex gap="2" align="center">
+                {resolvedActions.map((action, index) => {
+                    if (action.type === 'separator') return null; // Separators don't make sense in button mode usually, or could be a vertical divider
+
+                    const IconComponent = action.icon;
+
+                    // Si es submenu, por ahora no lo soportamos bien en modo botones planos, 
+                    // o podríamos renderizar un dropdown solo para ese item. 
+                    // Para simplificar, asumimos items simples.
+                    if (action.type === 'submenu') return null;
+
+                    return (
+                        <IconButton
+                            key={index}
+                            variant="ghost"
+                            size="1"
+                            color={action.color}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                action.onClick?.(row.original);
+                            }}
+                            disabled={action.disabled}
+                            style={{ cursor: 'pointer' }}
+                            title={action.label} // Tooltip nativo simple
+                        >
+                            {IconComponent && <IconComponent size={16} />}
+                        </IconButton>
+                    );
+                })}
+            </Flex>
+        );
+    }
+
+    // Renderizado como Dropdown Menu (default)
     const renderAction = (action, index) => {
         // Separador
         if (action.type === "separator") {
@@ -29,7 +66,10 @@ const TanStackRowActions = ({ row, actions = [] }) => {
             return (
                 <DropdownMenu.Item
                     key={index}
-                    onClick={() => action.onClick?.(row.original)}
+                    onClick={(e) => {
+                        e.stopPropagation(); // Prevenir eventos de fila
+                        action.onClick?.(row.original);
+                    }}
                     disabled={action.disabled}
                     color={action.color} // Soporte para color (ej: 'red' para eliminar)
                     style={{ cursor: 'pointer' }}
@@ -39,12 +79,10 @@ const TanStackRowActions = ({ row, actions = [] }) => {
                             {IconComponent && (
                                 <IconComponent
                                     size={14}
-                                    style={{ color: action.color || "var(--gray-11)" }}
                                 />
                             )}
                             <Text
                                 size="2"
-                                style={{ color: action.color || "inherit" }}
                             >
                                 {action.label}
                             </Text>
@@ -53,7 +91,6 @@ const TanStackRowActions = ({ row, actions = [] }) => {
                         {action.shortcut && (
                             <Text
                                 size="1"
-                                color="gray"
                                 style={{
                                     fontFamily: "var(--font-mono)",
                                     letterSpacing: "0.1em"
@@ -78,7 +115,6 @@ const TanStackRowActions = ({ row, actions = [] }) => {
                             {IconComponent && (
                                 <IconComponent
                                     size={14}
-                                    style={{ color: "var(--gray-11)" }}
                                 />
                             )}
                             <Text size="2">{action.label}</Text>
