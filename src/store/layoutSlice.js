@@ -1,18 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit'
+import {
+  LAYOUT_MENU_COLLAPSED_KEY,
+  LAYOUT_DIRECTION_KEY,
+  LAYOUT_SKIN_KEY,
+  LAYOUT_MENU_LAYOUT_KEY
+} from '@src/config/storageKeys'
 
 // ** Funciones de inicialización desde localStorage
 const initialMenuCollapsed = () => {
-  const item = window.localStorage.getItem('menuCollapsed')
+  const item = window.localStorage.getItem(LAYOUT_MENU_COLLAPSED_KEY)
   return item ? JSON.parse(item) : false
 }
 
 const initialDirection = () => {
-  const item = window.localStorage.getItem('direction')
+  const item = window.localStorage.getItem(LAYOUT_DIRECTION_KEY)
   return item ? JSON.parse(item) : false
 }
 
 const initialSkin = () => {
-  const item = window.localStorage.getItem('skin')
+  const item = window.localStorage.getItem(LAYOUT_SKIN_KEY)
   return item ? JSON.parse(item) : 'light'
 }
 
@@ -33,7 +39,7 @@ export const layoutSlice = createSlice({
     menuHidden: false,
     contentWidth: 'boxed',
     navbarColor: 'default',
-    
+
     /**
      * @type {boolean}
      * Estado del overlay en mobile (sidebar visible u oculto)
@@ -43,11 +49,11 @@ export const layoutSlice = createSlice({
   reducers: {
     handleRTL: (state, action) => {
       state.isRTL = action.payload
-      window.localStorage.setItem('direction', JSON.stringify(action.payload))
+      window.localStorage.setItem(LAYOUT_DIRECTION_KEY, JSON.stringify(action.payload))
     },
     handleSkin: (state, action) => {
       state.skin = action.payload
-      window.localStorage.setItem('skin', JSON.stringify(action.payload))
+      window.localStorage.setItem(LAYOUT_SKIN_KEY, JSON.stringify(action.payload))
     },
     handleLayout: (state, action) => {
       state.menuLayout = action.payload
@@ -72,9 +78,9 @@ export const layoutSlice = createSlice({
     },
     handleMenuCollapsed: (state, action) => {
       state.menuCollapsed = action.payload
-      window.localStorage.setItem('menuCollapsed', JSON.stringify(action.payload))
+      window.localStorage.setItem(LAYOUT_MENU_COLLAPSED_KEY, JSON.stringify(action.payload))
     },
-    
+
     /**
      * Toggle del sidebar en mobile
      * @param {Object} state - Estado actual
@@ -99,7 +105,7 @@ export const layoutSlice = createSlice({
     setMenuLayout: (state, action) => {
       state.menuLayout = action.payload
       if (typeof window !== 'undefined') {
-        localStorage.setItem('menu-layout', action.payload)
+        localStorage.setItem(LAYOUT_MENU_LAYOUT_KEY, action.payload)
       }
     },
   },

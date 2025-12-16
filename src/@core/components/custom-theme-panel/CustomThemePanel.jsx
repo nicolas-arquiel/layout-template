@@ -4,6 +4,15 @@ import { Card, Flex, Text, Select, Separator, IconButton, Tooltip, Grid, Button,
 import { Settings, X, Moon, Sun, Monitor } from 'lucide-react'
 import { setMenuLayout } from '@src/store/layoutSlice'
 import { useTheme } from '@src/hooks/useTheme'
+import {
+  ACCESSIBILITY_REDUCED_MOTION_KEY,
+  ACCESSIBILITY_HIGH_CONTRAST_KEY,
+  ACCESSIBILITY_SEPIA_MODE_KEY,
+  ACCESSIBILITY_GRAYSCALE_MODE_KEY,
+  ACCESSIBILITY_DYSLEXIC_SPACING_KEY,
+  ACCESSIBILITY_BIG_CURSOR_KEY,
+  ACCESSIBILITY_UNDERLINE_LINKS_KEY
+} from '@src/config/storageKeys'
 
 // Opciones de configuración de Radix
 const accentColors = ['tomato', 'red', 'ruby', 'crimson', 'pink', 'plum', 'purple', 'violet', 'iris', 'indigo', 'blue', 'cyan', 'teal', 'jade', 'green', 'grass', 'brown', 'orange', 'sky', 'mint', 'lime', 'yellow', 'amber', 'gold', 'bronze', 'gray']
@@ -28,23 +37,23 @@ const CustomThemePanel = () => {
   const dispatch = useDispatch()
   const menuLayout = useSelector((state) => state.layout.menuLayout)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
-  
+
   const [isOpen, setIsOpen] = useState(false)
-  
-  const [reducedMotion, setReducedMotion] = useState(() => localStorage.getItem('reduced-motion') === 'true')
-  const [highContrast, setHighContrast] = useState(() => localStorage.getItem('high-contrast') === 'true')
-  const [sepiaMode, setSepiaMode] = useState(() => localStorage.getItem('sepia-mode') === 'true')
-  const [grayscaleMode, setGrayscaleMode] = useState(() => localStorage.getItem('grayscale-mode') === 'true')
-  const [textSpacing, setTextSpacing] = useState(() => localStorage.getItem('dyslexic-spacing') === 'true')
-  const [bigCursor, setBigCursor] = useState(() => localStorage.getItem('big-cursor') === 'true')
-  const [underlineLinks, setUnderlineLinks] = useState(() => localStorage.getItem('underline-links') === 'true')
+
+  const [reducedMotion, setReducedMotion] = useState(() => localStorage.getItem(ACCESSIBILITY_REDUCED_MOTION_KEY) === 'true')
+  const [highContrast, setHighContrast] = useState(() => localStorage.getItem(ACCESSIBILITY_HIGH_CONTRAST_KEY) === 'true')
+  const [sepiaMode, setSepiaMode] = useState(() => localStorage.getItem(ACCESSIBILITY_SEPIA_MODE_KEY) === 'true')
+  const [grayscaleMode, setGrayscaleMode] = useState(() => localStorage.getItem(ACCESSIBILITY_GRAYSCALE_MODE_KEY) === 'true')
+  const [textSpacing, setTextSpacing] = useState(() => localStorage.getItem(ACCESSIBILITY_DYSLEXIC_SPACING_KEY) === 'true')
+  const [bigCursor, setBigCursor] = useState(() => localStorage.getItem(ACCESSIBILITY_BIG_CURSOR_KEY) === 'true')
+  const [underlineLinks, setUnderlineLinks] = useState(() => localStorage.getItem(ACCESSIBILITY_UNDERLINE_LINKS_KEY) === 'true')
 
   // Detectar cambios de tamaño de pantalla
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth < 768
       setIsMobile(mobile)
-      
+
       // Si es mobile y está en horizontal, forzar vertical
       if (mobile && menuLayout === 'horizontal') {
         dispatch(setMenuLayout('vertical'))
@@ -52,7 +61,7 @@ const CustomThemePanel = () => {
     }
 
     window.addEventListener('resize', handleResize)
-    
+
     // Check inicial
     handleResize()
 
@@ -85,7 +94,7 @@ const CustomThemePanel = () => {
 
   const toggleMotion = (checked) => {
     setReducedMotion(checked)
-    localStorage.setItem('reduced-motion', checked)
+    localStorage.setItem(ACCESSIBILITY_REDUCED_MOTION_KEY, checked)
     if (checked) {
       document.documentElement.classList.add('reduce-motion')
     } else {
@@ -95,7 +104,7 @@ const CustomThemePanel = () => {
 
   const toggleContrast = (checked) => {
     setHighContrast(checked)
-    localStorage.setItem('high-contrast', checked)
+    localStorage.setItem(ACCESSIBILITY_HIGH_CONTRAST_KEY, checked)
     if (checked) {
       document.documentElement.classList.add('high-contrast')
     } else {
@@ -105,7 +114,7 @@ const CustomThemePanel = () => {
 
   const toggleSepia = (checked) => {
     setSepiaMode(checked)
-    localStorage.setItem('sepia-mode', checked)
+    localStorage.setItem(ACCESSIBILITY_SEPIA_MODE_KEY, checked)
     if (checked) {
       document.documentElement.classList.add('sepia-mode')
     } else {
@@ -115,7 +124,7 @@ const CustomThemePanel = () => {
 
   const toggleGrayscale = (checked) => {
     setGrayscaleMode(checked)
-    localStorage.setItem('grayscale-mode', checked)
+    localStorage.setItem(ACCESSIBILITY_GRAYSCALE_MODE_KEY, checked)
     if (checked) {
       document.documentElement.classList.add('grayscale-mode')
     } else {
@@ -125,7 +134,7 @@ const CustomThemePanel = () => {
 
   const toggleSpacing = (checked) => {
     setTextSpacing(checked)
-    localStorage.setItem('dyslexic-spacing', checked)
+    localStorage.setItem(ACCESSIBILITY_DYSLEXIC_SPACING_KEY, checked)
     if (checked) {
       document.documentElement.classList.add('dyslexic-spacing')
     } else {
@@ -135,7 +144,7 @@ const CustomThemePanel = () => {
 
   const toggleCursor = (checked) => {
     setBigCursor(checked)
-    localStorage.setItem('big-cursor', checked)
+    localStorage.setItem(ACCESSIBILITY_BIG_CURSOR_KEY, checked)
     if (checked) {
       document.documentElement.classList.add('big-cursor')
     } else {
@@ -145,7 +154,7 @@ const CustomThemePanel = () => {
 
   const toggleLinks = (checked) => {
     setUnderlineLinks(checked)
-    localStorage.setItem('underline-links', checked)
+    localStorage.setItem(ACCESSIBILITY_UNDERLINE_LINKS_KEY, checked)
     if (checked) {
       document.documentElement.classList.add('underline-links')
     } else {
@@ -156,14 +165,14 @@ const CustomThemePanel = () => {
   if (!isOpen) {
     return (
       <Tooltip content="Configuración del Tema">
-        <IconButton 
-          size="3" 
-          radius="full" 
+        <IconButton
+          size="3"
+          radius="full"
           onClick={() => setIsOpen(true)}
-          style={{ 
-            position: 'fixed', 
-            bottom: '20px', 
-            right: '20px', 
+          style={{
+            position: 'fixed',
+            bottom: '20px',
+            right: '20px',
             zIndex: 9999,
             boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
           }}
@@ -175,12 +184,12 @@ const CustomThemePanel = () => {
   }
 
   return (
-    <Card 
-      size="2" 
-      style={{ 
-        position: 'fixed', 
-        bottom: '20px', 
-        right: '20px', 
+    <Card
+      size="2"
+      style={{
+        position: 'fixed',
+        bottom: '20px',
+        right: '20px',
         zIndex: 9999,
         width: '320px',
         maxHeight: '80vh',
@@ -202,27 +211,27 @@ const CustomThemePanel = () => {
       {/* Content Scrollable */}
       <ScrollArea type="hover" scrollbars="vertical" style={{ height: '100%', maxHeight: 'calc(80vh - 50px)' }}>
         <Flex direction="column" gap="4" p="3">
-          
+
           {/* 1. Modo (Appearance) */}
           <Flex direction="column" gap="2">
             <Text size="1" weight="bold" color="gray">MODO</Text>
             <Grid columns="3" gap="2">
-              <Button 
-                variant={settings.appearance === 'light' ? 'solid' : 'soft'} 
+              <Button
+                variant={settings.appearance === 'light' ? 'solid' : 'soft'}
                 onClick={() => onUpdate('appearance', 'light')}
                 style={{ justifyContent: 'center' }}
               >
                 <Sun /> Light
               </Button>
-              <Button 
-                variant={settings.appearance === 'dark' ? 'solid' : 'soft'} 
+              <Button
+                variant={settings.appearance === 'dark' ? 'solid' : 'soft'}
                 onClick={() => onUpdate('appearance', 'dark')}
                 style={{ justifyContent: 'center' }}
               >
                 <Moon /> Dark
               </Button>
-              <Button 
-                variant={settings.appearance === 'inherit' ? 'solid' : 'soft'} 
+              <Button
+                variant={settings.appearance === 'inherit' ? 'solid' : 'soft'}
                 onClick={() => onUpdate('appearance', 'inherit')}
                 style={{ justifyContent: 'center' }}
               >
@@ -237,20 +246,20 @@ const CustomThemePanel = () => {
           <Flex direction="column" gap="2">
             <Text size="1" weight="bold" color="gray">LAYOUT DEL MENÚ</Text>
             <Grid columns="2" gap="2">
-              <Button 
-                variant={menuLayout === 'vertical' ? 'solid' : 'soft'} 
+              <Button
+                variant={menuLayout === 'vertical' ? 'solid' : 'soft'}
                 onClick={() => dispatch(setMenuLayout('vertical'))}
                 style={{ justifyContent: 'center' }}
               >
                 Vertical (Sidebar)
               </Button>
-              
+
               <Tooltip content={isMobile ? "No disponible en móviles" : "Barra de navegación superior"}>
-                <Button 
-                  variant={menuLayout === 'horizontal' ? 'solid' : 'soft'} 
+                <Button
+                  variant={menuLayout === 'horizontal' ? 'solid' : 'soft'}
                   onClick={() => !isMobile && dispatch(setMenuLayout('horizontal'))}
                   disabled={isMobile}
-                  style={{ 
+                  style={{
                     justifyContent: 'center',
                     opacity: isMobile ? 0.5 : 1,
                     cursor: isMobile ? 'not-allowed' : 'pointer'
@@ -292,93 +301,93 @@ const CustomThemePanel = () => {
           {/* 3.5 Colores Semánticos */}
           <Flex direction="column" gap="3">
             <Text size="1" weight="bold" color="gray">COLORES SEMÁNTICOS</Text>
-            
+
             {/* Success */}
             <Flex direction="column" gap="1">
-               <Text size="1">Success</Text>
-               <Grid columns="5" gap="1">
-                  {successColors.map(color => (
-                    <Tooltip content={color} key={color}>
-                      <button
-                        onClick={() => onUpdate('successColor', color)}
-                        style={{
-                          width: '100%',
-                          height: '24px',
-                          borderRadius: 'var(--radius-1)',
-                          backgroundColor: `var(--${color}-9)`,
-                          border: settings.successColor === color ? '2px solid var(--color-text)' : 'none',
-                          cursor: 'pointer'
-                        }}
-                      />
-                    </Tooltip>
-                  ))}
-               </Grid>
+              <Text size="1">Success</Text>
+              <Grid columns="5" gap="1">
+                {successColors.map(color => (
+                  <Tooltip content={color} key={color}>
+                    <button
+                      onClick={() => onUpdate('successColor', color)}
+                      style={{
+                        width: '100%',
+                        height: '24px',
+                        borderRadius: 'var(--radius-1)',
+                        backgroundColor: `var(--${color}-9)`,
+                        border: settings.successColor === color ? '2px solid var(--color-text)' : 'none',
+                        cursor: 'pointer'
+                      }}
+                    />
+                  </Tooltip>
+                ))}
+              </Grid>
             </Flex>
 
             {/* Danger */}
             <Flex direction="column" gap="1">
-               <Text size="1">Danger</Text>
-               <Grid columns="5" gap="1">
-                  {dangerColors.map(color => (
-                    <Tooltip content={color} key={color}>
-                      <button
-                        onClick={() => onUpdate('dangerColor', color)}
-                        style={{
-                          width: '100%',
-                          height: '24px',
-                          borderRadius: 'var(--radius-1)',
-                          backgroundColor: `var(--${color}-9)`,
-                          border: settings.dangerColor === color ? '2px solid var(--color-text)' : 'none',
-                          cursor: 'pointer'
-                        }}
-                      />
-                    </Tooltip>
-                  ))}
-               </Grid>
+              <Text size="1">Danger</Text>
+              <Grid columns="5" gap="1">
+                {dangerColors.map(color => (
+                  <Tooltip content={color} key={color}>
+                    <button
+                      onClick={() => onUpdate('dangerColor', color)}
+                      style={{
+                        width: '100%',
+                        height: '24px',
+                        borderRadius: 'var(--radius-1)',
+                        backgroundColor: `var(--${color}-9)`,
+                        border: settings.dangerColor === color ? '2px solid var(--color-text)' : 'none',
+                        cursor: 'pointer'
+                      }}
+                    />
+                  </Tooltip>
+                ))}
+              </Grid>
             </Flex>
 
             {/* Warning */}
             <Flex direction="column" gap="1">
-               <Text size="1">Warning</Text>
-               <Grid columns="5" gap="1">
-                  {warningColors.map(color => (
-                    <Tooltip content={color} key={color}>
-                      <button
-                        onClick={() => onUpdate('warningColor', color)}
-                        style={{
-                          width: '100%',
-                          height: '24px',
-                          borderRadius: 'var(--radius-1)',
-                          backgroundColor: `var(--${color}-9)`,
-                          border: settings.warningColor === color ? '2px solid var(--color-text)' : 'none',
-                          cursor: 'pointer'
-                        }}
-                      />
-                    </Tooltip>
-                  ))}
-               </Grid>
+              <Text size="1">Warning</Text>
+              <Grid columns="5" gap="1">
+                {warningColors.map(color => (
+                  <Tooltip content={color} key={color}>
+                    <button
+                      onClick={() => onUpdate('warningColor', color)}
+                      style={{
+                        width: '100%',
+                        height: '24px',
+                        borderRadius: 'var(--radius-1)',
+                        backgroundColor: `var(--${color}-9)`,
+                        border: settings.warningColor === color ? '2px solid var(--color-text)' : 'none',
+                        cursor: 'pointer'
+                      }}
+                    />
+                  </Tooltip>
+                ))}
+              </Grid>
             </Flex>
 
             {/* Info */}
             <Flex direction="column" gap="1">
-               <Text size="1">Info</Text>
-               <Grid columns="5" gap="1">
-                  {infoColors.map(color => (
-                    <Tooltip content={color} key={color}>
-                      <button
-                        onClick={() => onUpdate('infoColor', color)}
-                        style={{
-                          width: '100%',
-                          height: '24px',
-                          borderRadius: 'var(--radius-1)',
-                          backgroundColor: `var(--${color}-9)`,
-                          border: settings.infoColor === color ? '2px solid var(--color-text)' : 'none',
-                          cursor: 'pointer'
-                        }}
-                      />
-                    </Tooltip>
-                  ))}
-               </Grid>
+              <Text size="1">Info</Text>
+              <Grid columns="5" gap="1">
+                {infoColors.map(color => (
+                  <Tooltip content={color} key={color}>
+                    <button
+                      onClick={() => onUpdate('infoColor', color)}
+                      style={{
+                        width: '100%',
+                        height: '24px',
+                        borderRadius: 'var(--radius-1)',
+                        backgroundColor: `var(--${color}-9)`,
+                        border: settings.infoColor === color ? '2px solid var(--color-text)' : 'none',
+                        cursor: 'pointer'
+                      }}
+                    />
+                  </Tooltip>
+                ))}
+              </Grid>
             </Flex>
           </Flex>
 
@@ -428,7 +437,7 @@ const CustomThemePanel = () => {
           {/* 5. Accesibilidad Funcional */}
           <Flex direction="column" gap="4">
             <Text size="1" weight="bold" color="indigo">ACCESIBILIDAD</Text>
-            
+
             {/* Reducción de Movimiento */}
             <Flex justify="between" align="center">
               <Flex direction="column">

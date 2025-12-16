@@ -1,8 +1,14 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { clearAuth } from "@/store/authSlice";
 
 function useCronToken(exp) {
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(clearAuth())
+    navigate('/login')
+  }
 
   useEffect(() => {
     const checkTokenExpiration = () => {
@@ -10,10 +16,8 @@ function useCronToken(exp) {
 
       if (!exp || isNaN(exp) || exp * 1000 <= currentTime) {
         // Token ha caducado, limpiar datos y redirigir a la página de inicio de sesión
-        localStorage.removeItem('userData');
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('autogestion_activo');
-        navigate("/login");
+
+        handleLogout()
       }
     };
 

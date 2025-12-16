@@ -1,4 +1,5 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { AUTH_TOKEN_KEY } from '@src/config/storageKeys'
 
 /**
  * Crea una configuración base para RTK Query con headers de autenticación comunes
@@ -9,7 +10,7 @@ export const createBaseQuery = (baseUrl) => {
     return fetchBaseQuery({
         baseUrl,
         prepareHeaders: (headers) => {
-            const token = localStorage.getItem("token")
+            const token = localStorage.getItem(AUTH_TOKEN_KEY)
 
             if (token) {
                 try {
@@ -28,3 +29,4 @@ export const createBaseQuery = (baseUrl) => {
         },
     })
 }
+

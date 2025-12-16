@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { ThemeContext } from './ThemeContext';
+import { THEME_SETTINGS_KEY } from '@src/config/storageKeys';
 
 export const ThemeProvider = ({ children }) => {
   // Estado inicial cargado desde localStorage o valores por defecto
   const [themeSettings, setThemeSettings] = useState(() => {
-    const saved = localStorage.getItem('app-theme-settings');
+    const saved = localStorage.getItem(THEME_SETTINGS_KEY);
     return saved ? JSON.parse(saved) : {
       appearance: 'inherit',
       accentColor: 'indigo',
@@ -21,7 +22,7 @@ export const ThemeProvider = ({ children }) => {
 
   // Guardar en localStorage cada vez que cambia
   useEffect(() => {
-    localStorage.setItem('app-theme-settings', JSON.stringify(themeSettings));
+    localStorage.setItem(THEME_SETTINGS_KEY, JSON.stringify(themeSettings));
   }, [themeSettings]);
 
   const updateTheme = (key, value) => {

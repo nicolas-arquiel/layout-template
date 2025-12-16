@@ -1,20 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { encryptData, decryptData } from '@src/@core/utils/encryption'
+import {
+  AUTH_USER_KEY,
+  AUTH_TOKEN_KEY,
+  AUTH_PERMISOS_KEY
+} from '@src/config/storageKeys'
 
 const initialUser = () => {
-  const item = window.localStorage.getItem('user')
+  const item = window.localStorage.getItem(AUTH_USER_KEY)
   //** Parse stored json or if none return initialValue
   return item ? JSON.parse(item) : null
 }
 
 const initialPermisos = () => {
   // Ahora los permisos vienen de sessionStorage y están encriptados
-  const item = window.sessionStorage.getItem('permisos')
+  const item = window.sessionStorage.getItem(AUTH_PERMISOS_KEY)
   return item || ''
 }
 
 const initialToken = () => {
-  const item = window.localStorage.getItem('token')
+  const item = window.localStorage.getItem(AUTH_TOKEN_KEY)
   return item ? JSON.parse(item) : null
 }
 
@@ -52,16 +57,16 @@ const authSlice = createSlice({
       const { user, permisos, token } = action.payload;
       state.user = user
       state.token = token
-      
+
       // Encriptar permisos antes de guardar en estado y storage
       const permisosEncriptados = encryptData(permisos || '')
       state.permisos = permisosEncriptados
 
-      localStorage.setItem('user', JSON.stringify(user))
-      localStorage.setItem('token', JSON.stringify(token))
-      
+      localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user))
+      localStorage.setItem(AUTH_TOKEN_KEY, JSON.stringify(token))
+
       // Guardar permisos en sessionStorage (encriptados)
-      sessionStorage.setItem('permisos', permisosEncriptados)
+      sessionStorage.setItem(AUTH_PERMISOS_KEY, permisosEncriptados)
     },
 
     /**
@@ -73,10 +78,10 @@ const authSlice = createSlice({
       state.permisos = ''
       state.token = null
 
-      localStorage.removeItem('user')
-      localStorage.removeItem('token')
-      localStorage.removeItem('permisos') // Limpiar también de local por si quedó algun residuo antiguo
-      sessionStorage.removeItem('permisos')
+      localStorage.removeItem(AUTH_USER_KEY)
+      localStorage.removeItem(AUTH_TOKEN_KEY)
+      localStorage.removeItem(AUTH_PERMISOS_KEY) // Limpiar también de local por si quedó algun residuo antiguo
+      sessionStorage.removeItem(AUTH_PERMISOS_KEY)
     },
 
     /**
@@ -87,7 +92,7 @@ const authSlice = createSlice({
     updatePermisos: (state, action) => {
       const permisosEncriptados = encryptData(action.payload)
       state.permisos = permisosEncriptados
-      sessionStorage.setItem('permisos', permisosEncriptados)
+      sessionStorage.setItem(AUTH_PERMISOS_KEY, permisosEncriptados)
     },
 
     /**
@@ -97,7 +102,7 @@ const authSlice = createSlice({
      */
     updateUser: (state, action) => {
       state.user = { ...state.user, ...action.payload }
-      localStorage.setItem('user', JSON.stringify(state.user))
+      localStorage.setItem(AUTH_USER_KEY, JSON.stringify(state.user))
     },
 
     /**
@@ -108,14 +113,14 @@ const authSlice = createSlice({
     refreshUserData: (state, action) => {
       if (action.payload.currentData) {
         state.user = { ...state.user, ...action.payload.currentData.user }
-        
+
         if (action.payload.currentData.permisos) {
-           const permisosEncriptados = encryptData(action.payload.currentData.permisos)
-           state.permisos = permisosEncriptados
-           sessionStorage.setItem('permisos', permisosEncriptados)
+          const permisosEncriptados = encryptData(action.payload.currentData.permisos)
+          state.permisos = permisosEncriptados
+          sessionStorage.setItem(AUTH_PERMISOS_KEY, permisosEncriptados)
         }
 
-        localStorage.setItem('user', JSON.stringify(state.user))
+        localStorage.setItem(AUTH_USER_KEY, JSON.stringify(state.user))
       }
     },
   },
