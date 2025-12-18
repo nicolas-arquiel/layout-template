@@ -26,7 +26,7 @@ const NavigationHeader = ({ title, forceExpanded = false, collapsed }) => {
   if (isLayoutCollapsed) {
     return (
       <li className="navigation-header list-none">
-        <div className="flex items-center justify-center pt-6 pb-2">
+        <div className="flex items-center justify-center">
           <Text
             size="1"
             weight="bold"
@@ -41,7 +41,7 @@ const NavigationHeader = ({ title, forceExpanded = false, collapsed }) => {
 
   return (
     <li className="navigation-header list-none">
-      <div className="flex items-center justify-between !px-3 pt-6 pb-2">
+      <div className="flex items-center justify-between !px-3">
         <Text
           size="1"
           weight="bold"

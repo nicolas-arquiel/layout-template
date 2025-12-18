@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { Badge, Tooltip } from '@radix-ui/themes'
+import { Badge, Tooltip, Text } from '@radix-ui/themes'
 import { cn } from '@lib/utils'
 import { useSelector } from 'react-redux'
 
@@ -18,7 +18,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
   const isContentCollapsed = menuCollapsed && !forceExpanded
 
   // Helper simple para cortar texto si es muy largo (Fallback de seguridad)
-  const truncateText = (text, maxLength = 15) => {
+  const truncateText = (text, maxLength = 18) => {
     if (!text) return ''
     if (text.length <= maxLength) return text
     return text.slice(0, maxLength) + '...'
@@ -64,7 +64,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
           'transition-[width,translate,background-color] duration-200 ease-out',
 
           // Typography
-          'font-[Montserrat] text-[14px] tracking-[0.14px] font-medium',
+          'font-[Montserrat] tracking-[0.14px] font-medium',
 
           // Active State - cambiar cursor si está activo
           isActive
@@ -73,7 +73,7 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
 
           // Collapsed vs Expanded spacing & sizing
           // Same padding in both states - icon stays in place
-          '!px-4 py-3',
+          '!px-4 py-2',
           isLayoutCollapsed
             ? 'w-[56px]' // Fixed width when collapsed (just enough for icon + padding)
             : cn(
@@ -116,9 +116,14 @@ const NavigationItem = ({ item, nested = false, showTooltip = false, forceExpand
               : 'inset(0 0 0 0)'    // Visible: full reveal
           }}
         >
-          <span className="truncate flex-1 font-[Montserrat] text-[14px] font-medium">
+          <Text
+            as="span"
+            size="2"
+            className="truncate flex-1 font-[Montserrat] font-medium"
+            style={{ fontSize: 'calc(var(--font-size-2) * 0.93)' }}
+          >
             {truncateText(item.title)}
-          </span>
+          </Text>
           {item.badge && (
             <Badge color={getBadgeColor(item.badgeColor)} variant="soft" size="1" className="flex-shrink-0">
               {item.badge}

@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { ChevronDown } from 'lucide-react'
 import * as Collapsible from '@radix-ui/react-collapsible'
 import { useSelector } from 'react-redux'
-import { Badge, Tooltip } from '@radix-ui/themes'
+import { Badge, Tooltip, Text } from '@radix-ui/themes'
 import NavigationLink from './NavigationLink'
 import { cn } from '@lib/utils'
 
@@ -20,7 +20,7 @@ function hasActiveChild(children, currentPath) {
 }
 
 // Helper simple para cortar texto si es muy largo (Fallback de seguridad)
-const truncateText = (text, maxLength = 15) => {
+const truncateText = (text, maxLength = 22) => {
   if (!text) return ''
   if (text.length <= maxLength) return text
   return text.slice(0, maxLength) + '...'
@@ -51,7 +51,7 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isLayoutCollapse
         
         // Collapsed vs Expanded spacing & sizing
         // Same padding in both states - icon stays in place
-        '!px-4 py-3',
+        '!px-4 py-2',
         isLayoutCollapsed
           ? 'w-[56px]' // Fixed width when collapsed (just enough for icon + padding)
           : cn(
@@ -84,9 +84,14 @@ const GroupButton = React.forwardRef(({ item, isActive, isOpen, isLayoutCollapse
                 : 'inset(0 0 0 0)'    // Visible: full reveal
             }}
           >
-            <span className="flex-1 truncate font-[Montserrat] text-[14px] font-medium">
+            <Text
+              as="span"
+              size="2"
+              className="flex-1 truncate font-[Montserrat] font-medium"
+              style={{ fontSize: 'calc(var(--font-size-2) * 0.93)' }}
+            >
               {truncateText(item.title)}
-            </span>
+            </Text>
             {/* Badge - Mismo estilo que NavigationItem */}
             {item.badge && (
               <Badge size="1" variant="soft" className="flex-shrink-0">
