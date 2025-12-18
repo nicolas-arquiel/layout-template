@@ -96,7 +96,7 @@ const Sidebar = () => {
           type="hover"
           scrollbars="vertical"
         >
-          <div className="py-4 px-2">
+          <div className="pt-0 pb-32 px-2">
             <nav>
               <NavigationItems items={navigation} forceExpanded={isMobile} />
             </nav>

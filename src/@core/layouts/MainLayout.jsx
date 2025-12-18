@@ -22,6 +22,7 @@ import SessionControl from '@src/components/SessionControl'
  */
 const MainLayout = () => {
   const dispatch = useDispatch()
+  const location = useLocation() // Para resetear ErrorBoundary en cada ruta
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
   const mobileMenuOpen = useSelector((state) => state.layout.mobileMenuOpen)
   const menuLayout = useSelector((state) => state.layout.menuLayout)
@@ -96,7 +97,8 @@ const MainLayout = () => {
                   paddingBottom: 'var(--content-padding)',
                   minHeight: '100vh' 
                 }}>
-                  <ErrorBoundary>
+                  {/* ErrorBoundary con key basada en la ruta para resetear en cada navegación */}
+                  <ErrorBoundary key={location.pathname}>
                     <Outlet />
                   </ErrorBoundary>
                 </div>
