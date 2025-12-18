@@ -37,3 +37,8 @@
 @import "tailwindcss";
 @source "src/**/*.{js,jsx,ts,tsx,html}";
 
+@theme {
+  --font-sans: 'Montserrat', Helvetica, Arial, serif;
+  --font-mono: 'Montserrat', Helvetica, Arial, serif;
+}
+
