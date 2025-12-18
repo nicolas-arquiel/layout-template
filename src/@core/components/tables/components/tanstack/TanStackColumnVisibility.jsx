@@ -24,11 +24,16 @@ const TanStackColumnVisibility = ({ table }) => {
                     if (!column.columnDef.header) return null;
 
                     return (
-                        <DropdownMenu.Item key={column.id} onSelect={(e) => e.preventDefault()}>
-                            <Flex gap="2" align="center" style={{ cursor: 'pointer' }}>
+                        <DropdownMenu.Item key={column.id} onSelect={(e) => {
+                            column.toggleVisibility()
+                            e.preventDefault()
+                        }}
+                            style={{
+                                cursor: 'pointer'
+                            }}>
+                            <Flex gap="2" align="center" >
                                 <Checkbox
                                     checked={column.getIsVisible()}
-                                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
                                 />
                                 <Text size="2">
                                     {typeof column.columnDef.header === 'string'
@@ -40,10 +45,14 @@ const TanStackColumnVisibility = ({ table }) => {
                     );
                 })}
                 <DropdownMenu.Separator />
-                <DropdownMenu.Item onSelect={() => table.toggleAllColumnsVisible(true)}>
+                <DropdownMenu.Item style={{
+                    cursor: 'pointer'
+                }} onSelect={() => table.toggleAllColumnsVisible(true)}>
                     <Text size="2">Mostrar todas</Text>
                 </DropdownMenu.Item>
-                <DropdownMenu.Item onSelect={() => table.toggleAllColumnsVisible(false)}>
+                <DropdownMenu.Item style={{
+                    cursor: 'pointer'
+                }} onSelect={() => table.toggleAllColumnsVisible(false)}>
                     <Text size="2">Ocultar todas</Text>
                 </DropdownMenu.Item>
             </DropdownMenu.Content>
