@@ -7,6 +7,11 @@ import { Box, Heading, Text, TextField, Button, Flex, Callout, Grid, Checkbox, L
 import { handleLogin, handleLogout, handlePermisos } from '@src/store/auth/authSlice'
 import { generateMockJwt } from '@src/utils/jwtUtils'
 import { VITE_APP_BASENAME } from '@config'
+import {
+  AUTH_USER_DATA_KEY,
+  AUTH_TOKEN_KEY,
+  AUTH_USER_PERMISOS_KEY
+} from '@src/config/storageKeys'
 
 /**
  * Login - Página de inicio de sesión profesional
@@ -33,9 +38,17 @@ export default function Login() {
 
 
 
+  // Limpiar sesión al montar el componente de login
   useEffect(() => {
+    // Limpiar SOLO los datos de autenticación
+    // Las configuraciones de tema, layout y accesibilidad se mantienen
+    localStorage.removeItem(AUTH_USER_DATA_KEY)
+    localStorage.removeItem(AUTH_TOKEN_KEY)
+    sessionStorage.removeItem(AUTH_USER_PERMISOS_KEY)
+    
+    // Dispatch logout para limpiar el estado de Redux
     dispatch(handleLogout())
-  }, [])
+  }, [dispatch])
 
   /**
    * Submit handler - Simula login y navega

@@ -1,26 +1,45 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { encryptData, decryptData } from '@src/@core/utils/encryption';
+import { encryptData, decryptData } from '@src/@core/utils/encryption'
+import {
+  AUTH_USER_DATA_KEY,
+  AUTH_TOKEN_KEY,
+  AUTH_USER_PERMISOS_KEY
+} from '@src/config/storageKeys'
+
+
 
 
 const initialUser = () => {
-    const item = window.localStorage.getItem('userData')
-    return item ? JSON.parse(item) : {}
+    const item = window.localStorage.getItem(AUTH_USER_DATA_KEY)
+    if (!item) return null
+    
+    try {
+        const parsed = JSON.parse(item)
+        // Verificar que sea un objeto válido con datos de usuario
+        if (parsed && typeof parsed === 'object' && (parsed.id || parsed.email)) {
+            return parsed
+        }
+        return null
+    } catch (error) {
+        console.error('[authSlice] Error parsing user data:', error)
+        return null
+    }
 }
 
 const authSlice = createSlice({
     name: 'auth',
     initialState: {
         dataUser: initialUser(),
-        access_token: localStorage.getItem('access_token'),
-        permisos: sessionStorage.getItem('userPermisos'),
+        access_token: localStorage.getItem(AUTH_TOKEN_KEY) || null,
+        permisos: sessionStorage.getItem(AUTH_USER_PERMISOS_KEY) || null,
     },
     reducers: {
         handleLogin: (state, action) => {
             const { dataUser, access_token } = action.payload
             state.dataUser = dataUser
             state.access_token = access_token
-            localStorage.setItem('userData', JSON.stringify(dataUser))
-            localStorage.setItem('access_token', access_token)
+            localStorage.setItem(AUTH_USER_DATA_KEY, JSON.stringify(dataUser))
+            localStorage.setItem(AUTH_TOKEN_KEY, access_token)
         },
         handlePermisos: (state, action) => {
             const {
@@ -45,22 +64,25 @@ const authSlice = createSlice({
             console.log('permisosEncriptados',permisosEncriptados);
 
             state.permisos = permisosEncriptados;
-            sessionStorage.setItem('userPermisos', permisosEncriptados);
+            sessionStorage.setItem(AUTH_USER_PERMISOS_KEY, permisosEncriptados);
 
 
         },
         handleLogout: state => {
             state.dataUser = null
             state.access_token = null
-            state.permisos = {}
-            localStorage.removeItem('userData')
-            localStorage.removeItem('access_token'),
-            sessionStorage.removeItem('userPermisos')
+            state.permisos = null
+            
+            // Limpiar SOLO los datos de autenticación
+            // Las configuraciones de tema, layout y accesibilidad se mantienen
+            localStorage.removeItem(AUTH_USER_DATA_KEY)
+            localStorage.removeItem(AUTH_TOKEN_KEY)
+            sessionStorage.removeItem(AUTH_USER_PERMISOS_KEY)
         },
         refreshUserData: (state, action) => {
             const { currentData } = action.payload
             state.dataUser = currentData
-            localStorage.setItem('userData', JSON.stringify(currentData))
+            localStorage.setItem(AUTH_USER_DATA_KEY, JSON.stringify(currentData))
         }
     }
 })

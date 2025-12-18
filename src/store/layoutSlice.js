@@ -22,6 +22,11 @@ const initialSkin = () => {
   return item ? JSON.parse(item) : 'light'
 }
 
+const initialMenuLayout = () => {
+  const item = window.localStorage.getItem(LAYOUT_MENU_LAYOUT_KEY)
+  return item || 'vertical'
+}
+
 /**
  * Slice de Redux para manejar el estado del layout
  * Controla el sidebar, tema, y otras configuraciones de UI
@@ -31,7 +36,7 @@ export const layoutSlice = createSlice({
   initialState: {
     skin: initialSkin(),
     isRTL: initialDirection(),
-    menuLayout: 'vertical',
+    menuLayout: initialMenuLayout(),
     lastLayout: 'vertical',
     menuCollapsed: initialMenuCollapsed(),
     footerType: 'static',

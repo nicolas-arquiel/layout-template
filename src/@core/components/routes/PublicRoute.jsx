@@ -41,6 +41,9 @@ const PublicRoute = ({ children, route }) => {
   const user = useSelector(selectCurrentUser)
   const { tienePermiso } = usePermisos()
 
+  // Verificar si el usuario es válido (tiene id o email)
+  const isValidUser = user && (user.id || user.email)
+  
   // Extraer metadata de la ruta
   const isRestricted = route?.meta?.restricted ?? false
   const permiso = route?.meta?.permiso
@@ -50,7 +53,7 @@ const PublicRoute = ({ children, route }) => {
   // CASO 1: Usuario autenticado en ruta pública NO restringida (ej: login)
   // → No tiene sentido mostrar login si ya está logueado, redirigir a inicio
   // ─────────────────────────────────────────────────────────────────────────────
-  if (user && !isRestricted) {
+  if (isValidUser && !isRestricted) {
     console.log('[PublicRoute] Usuario autenticado en ruta pública → redirigiendo a /inicio')
     return <Navigate to="/inicio" replace />
   }
@@ -59,7 +62,7 @@ const PublicRoute = ({ children, route }) => {
   // CASO 2: Usuario NO autenticado en ruta restringida
   // → Necesita autenticación, redirigir a login
   // ─────────────────────────────────────────────────────────────────────────────
-  if (!user && isRestricted) {
+  if (!isValidUser && isRestricted) {
     console.log('[PublicRoute] Ruta restringida sin usuario → redirigiendo a /login')
     return <Navigate to="/login" replace />
   }
@@ -77,7 +80,7 @@ const PublicRoute = ({ children, route }) => {
   // CASO 4: Ruta requiere permiso específico
   // → Verificar si el usuario tiene el permiso necesario
   // ─────────────────────────────────────────────────────────────────────────────
-  if (permiso && user) {
+  if (permiso && isValidUser) {
     const esRuta = true
     const tieneAcceso = tienePermiso(permiso, esRuta)
     console.log('[PublicRoute] Verificando permiso:', { permiso, tieneAcceso })

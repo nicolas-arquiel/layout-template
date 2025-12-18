@@ -44,9 +44,11 @@ const PrivateRoute = ({ children, route }) => {
   //   validateUserToken()
   // }, [])
 
-  // Si no hay usuario, redirigir a login
-  if (!user) {
-    console.log('[PrivateRoute] No hay usuario - redirigiendo a login')
+  // Si no hay usuario o el usuario no tiene datos válidos, redirigir a login
+  const isValidUser = user && (user.id || user.email)
+  
+  if (!isValidUser) {
+    console.log('[PrivateRoute] No hay usuario válido - redirigiendo a login', { user })
     return <Navigate to="/login" replace />
   }
 

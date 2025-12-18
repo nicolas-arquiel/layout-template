@@ -6,13 +6,13 @@
 // ================================
 // AUTENTICACIÓN (localStorage)
 // ================================
-export const AUTH_USER_KEY = 'user'
-export const AUTH_TOKEN_KEY = 'token'
+export const AUTH_USER_DATA_KEY = 'userData'
+export const AUTH_TOKEN_KEY = 'access_token'
 
 // ================================
 // AUTENTICACIÓN (sessionStorage)
 // ================================
-export const AUTH_PERMISOS_KEY = 'permisos'
+export const AUTH_USER_PERMISOS_KEY = 'userPermisos'
 
 // ================================
 // LAYOUT (localStorage)
@@ -42,8 +42,8 @@ export const ACCESSIBILITY_UNDERLINE_LINKS_KEY = 'underline-links'
 // GRUPOS DE CLAVES (útil para limpiezas selectivas)
 // ================================
 export const AUTH_KEYS = {
-    localStorage: [AUTH_USER_KEY, AUTH_TOKEN_KEY],
-    sessionStorage: [AUTH_PERMISOS_KEY],
+    localStorage: [AUTH_USER_DATA_KEY, AUTH_TOKEN_KEY],
+    sessionStorage: [AUTH_USER_PERMISOS_KEY],
 }
 
 export const LAYOUT_KEYS = [
