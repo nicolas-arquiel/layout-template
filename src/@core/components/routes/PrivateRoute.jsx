@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { selectCurrentUser } from '@/store/authSlice'
+import { selectCurrentUser } from '@/store/auth/authSlice'
 import { usePermisos } from '@hooks/usePermisos'
 import NotAuthorized from '@/pages/misc/NotAuthorized'
 

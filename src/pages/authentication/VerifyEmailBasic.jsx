@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { VITE_APP_BASENAME } from '@config'
 import { Box, Card, Heading, Text, Button, Flex, Link as RadixLink } from '@radix-ui/themes'
 
 const VerifyEmailBasic = () => {
@@ -16,7 +17,7 @@ const VerifyEmailBasic = () => {
       <Card size="4" style={{ width: '100%', maxWidth: '400px' }}>
         <Flex direction="column" align="center" gap="4" mb="4">
           <Heading size="6" style={{ color: 'var(--accent-9)' }}>
-            Sistema de Caja UCU
+            {VITE_APP_BASENAME}
           </Heading>
           <Box style={{ textAlign: 'center' }}>
             <Heading size="5" mb="2">

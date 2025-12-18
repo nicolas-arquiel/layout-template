@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { VITE_APP_BASENAME } from '@config'
 import { Facebook, Twitter, Mail, Github, Lock } from 'lucide-react'
 import { Box, Heading, Text, TextField, Button, Flex, Grid, Checkbox, Link as RadixLink, Separator } from '@radix-ui/themes'
 
@@ -20,7 +21,7 @@ const LoginCover = () => {
         {/* Brand Logo */}
         <Box style={{ position: 'absolute', top: '2rem', left: '2rem', zIndex: 1 }}>
           <Heading size="6" style={{ color: 'var(--accent-9)' }}>
-            Sistema de Caja UCU
+            {VITE_APP_BASENAME}
           </Heading>
         </Box>
 
@@ -42,7 +43,7 @@ const LoginCover = () => {
       >
         <Box style={{ width: '100%', maxWidth: '400px' }}>
           <Heading size="6" mb="2" weight="bold">
-            Bienvenido a Sistema de Caja! 👋
+            Bienvenido a {VITE_APP_BASENAME}! 👋
           </Heading>
           <Text size="2" color="gray" mb="5" as="p">
             Por favor inicia sesión en tu cuenta y comienza la aventura

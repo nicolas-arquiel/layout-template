@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { VITE_APP_BASENAME } from '@config'
 import { ChevronLeft, Lock } from 'lucide-react'
 import { Box, Heading, Text, TextField, Button, Flex, Grid, Link as RadixLink } from '@radix-ui/themes'
 
@@ -20,7 +21,7 @@ const ResetPasswordCover = () => {
         {/* Brand Logo */}
         <Box style={{ position: 'absolute', top: '2rem', left: '2rem', zIndex: 1 }}>
           <Heading size="6" style={{ color: 'var(--accent-9)' }}>
-            Sistema de Caja UCU
+            {VITE_APP_BASENAME}
           </Heading>
         </Box>
 

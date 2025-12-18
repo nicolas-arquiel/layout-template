@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import { selectPermisos, selectCurrentUser } from '@/store/authSlice'
+import { selectCurrentUser, selectPermisos } from '@/store/auth/authSlice'
 
 /**
  * Hook para verificar permisos del usuario
@@ -12,8 +12,9 @@ import { selectPermisos, selectCurrentUser } from '@/store/authSlice'
  * - tienePermiso('academica:materias:editar') -> verifica permiso específico
  */
 export const usePermisos = () => {
-  const permisosData = useSelector(selectPermisos)
   const user = useSelector(selectCurrentUser)
+  // Ahora usamos selector que ya desencripta
+  const permisosData = useSelector(selectPermisos)
   
   // Verificamos entorno de producción desde variable de entorno
   const isProduction = import.meta.env.VITE_ENVIRONMENT === 'prod'
@@ -26,7 +27,10 @@ export const usePermisos = () => {
     
     // Verificamos si permisosData existe y es un string
     if (!permisosData || typeof permisosData !== 'string') {
-      console.warn('[tienePermiso] Formato de permisos inválido:', permisosData)
+      // Solo warn si se requiere un permiso específico pero no hay permisos cargados
+      if (permisoRequerido) {
+         console.warn('[tienePermiso] No hay permisos cargados o formato inválido')
+      }
       return false
     }
     

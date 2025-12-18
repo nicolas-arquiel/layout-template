@@ -3,12 +3,12 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useCronToken from "@src/hooks/useCronToken";
 import { jwtDecode } from "jwt-decode";
-import {selectToken,selectCurrentUser} from "@src/store/authSlice";
+import { selectCurrentToken, selectCurrentUser } from "@src/store/auth/authSlice";
 
 const SessionControl = ({ children, className }) => {
   const navigate = useNavigate();
-  const userData = useSelector((state) => state.auth.user);
-  const token = useSelector((state) => state.auth.token);
+  const userData = useSelector(selectCurrentUser);
+  const token = useSelector(selectCurrentToken);
 
   // Decodificar token para obtener exp
   let tokenExp = null;

@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { DropdownMenu, Button, Flex, Text, Badge, IconButton } from '@radix-ui/themes'
 import { Menu, ChevronRight } from 'lucide-react'
 import { canViewMenuItem, canViewMenuGroup } from '@utils/permissions'
+import { selectCurrentUser, selectPermisos } from '@/store/auth/authSlice'
 import navigation from '@/navigation/vertical'
 import { cn } from '@lib/utils'
 
@@ -12,7 +13,8 @@ import { cn } from '@lib/utils'
  * Muestra un dropdown con todo el menú + el item activo actual
  */
 const HorizontalNav = () => {
-  const permisos = useSelector((state) => state.auth.permisos)
+  const permisos = useSelector(selectPermisos)
+  const user = useSelector(selectCurrentUser)
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -51,9 +53,9 @@ const HorizontalNav = () => {
 
     // Check permissions
     if (item.children) {
-      if (!canViewMenuGroup(item, permisos)) return null
+      if (!canViewMenuGroup(item, permisos, user)) return null
     } else {
-      if (!canViewMenuItem(item, permisos)) return null
+      if (!canViewMenuItem(item, permisos, user)) return null
     }
 
     const active = item.navLink && isActiveLink(item.navLink)

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
+import { selectCurrentUser, selectPermisos } from '@/store/auth/authSlice'
 
 import NavigationHeader from './NavigationHeader'
 import NavigationLink from './NavigationLink'
@@ -19,7 +20,8 @@ import { canViewMenuItem, canViewMenuGroup } from '@utils/permissions'
  * @returns {JSX.Element}
  */
 const NavigationItems = ({ items = [], className, forceExpanded = false, collapsed }) => {
-  const permisos = useSelector((state) => state.auth.permisos)
+  const permisos = useSelector(selectPermisos)
+  const user = useSelector(selectCurrentUser)
   const menuCollapsed = useSelector((state) => state.layout.menuCollapsed)
   const location = useLocation()
 
@@ -66,7 +68,7 @@ const NavigationItems = ({ items = [], className, forceExpanded = false, collaps
     // Grupos con children
     if (item.children && item.children.length > 0) {
       // Verificar si el usuario puede ver el grupo
-      if (!canViewMenuGroup(item, permisos)) {
+      if (!canViewMenuGroup(item, permisos, user)) {
         return null
       }
 
@@ -94,7 +96,7 @@ const NavigationItems = ({ items = [], className, forceExpanded = false, collaps
 
     // Items individuales (links)
     // Verificar si el usuario puede ver el item
-    if (!canViewMenuItem(item, permisos)) {
+    if (!canViewMenuItem(item, permisos, user)) {
       return null
     }
 

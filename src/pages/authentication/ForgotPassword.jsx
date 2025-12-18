@@ -2,10 +2,12 @@ import { Link, Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { ChevronLeft, Mail } from 'lucide-react'
 import { Box, Heading, Text, TextField, Button, Flex, Grid, Link as RadixLink } from '@radix-ui/themes'
-import { selectIsAuthenticated } from '@src/store/authSlice'
+import { selectCurrentUser } from '@src/store/auth/authSlice'
+import { VITE_APP_BASENAME } from '@config'
 
 const ForgotPassword = () => {
-  const isAuthenticated = useSelector(selectIsAuthenticated)
+  const user = useSelector(selectCurrentUser)
+  const isAuthenticated = !!user
 
   if (isAuthenticated) {
     return <Navigate to='/' />
@@ -28,7 +30,7 @@ const ForgotPassword = () => {
         {/* Brand Logo */}
         <Box style={{ position: 'absolute', top: '2rem', left: '2rem', zIndex: 1 }}>
           <Heading size="6" style={{ color: 'var(--accent-9)' }}>
-            Sistema de Caja UCU
+            {VITE_APP_BASENAME}
           </Heading>
         </Box>
 

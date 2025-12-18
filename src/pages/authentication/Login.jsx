@@ -4,8 +4,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useForm, Controller } from 'react-hook-form'
 import { Mail, Lock, AlertCircle } from 'lucide-react'
 import { Box, Heading, Text, TextField, Button, Flex, Callout, Grid, Checkbox, Link } from '@radix-ui/themes'
-import { setAuth, clearAuth } from '@src/store/authSlice'
+import { handleLogin, handleLogout, handlePermisos } from '@src/store/auth/authSlice'
 import { generateMockJwt } from '@src/utils/jwtUtils'
+import { VITE_APP_BASENAME } from '@config'
 
 /**
  * Login - Página de inicio de sesión profesional
@@ -33,7 +34,7 @@ export default function Login() {
 
 
   useEffect(() => {
-    dispatch(clearAuth())
+    dispatch(handleLogout())
   }, [])
 
   /**
@@ -64,13 +65,21 @@ export default function Login() {
         user: mockUser,
       });
 
-      const userData = {
-        user: mockUser,
-        permisos: 'personas:*,inscripcion:*,reportes:*,configuracion:*,recursos:*',
-        token: token,
-      }
+      // Dispatch login
+      dispatch(handleLogin({
+        dataUser: mockUser,
+        access_token: token
+      }))
 
-      dispatch(setAuth(userData))
+      // Dispatch permisos
+      dispatch(handlePermisos({
+        todos_permisos: 'personas:*,inscripcion:*,reportes:*,configuracion:*,recursos:*',
+        // Otros campos requeridos por el reducer si son usados, aunque en el snippet solo usaba todos_permisos para encryptData
+        roles_descripcion: [],
+        id_roles: [],
+        todos_permisos_id: []
+      }))
+
       navigate('/inicio')
     } catch (err) {
       console.error('Error en login:', err)
@@ -101,7 +110,7 @@ export default function Login() {
         {/* Brand Logo */}
         <Box style={{ position: 'absolute', top: '2rem', left: '2rem', zIndex: 1 }}>
           <Heading size="6" style={{ color: 'var(--accent-9)' }}>
-            Sistema de Caja UCU
+            {VITE_APP_BASENAME}
           </Heading>
         </Box>
 
@@ -123,7 +132,7 @@ export default function Login() {
       >
         <Box style={{ width: '100%', maxWidth: '400px' }}>
           <Heading size="6" mb="1" weight="bold">
-            Sistema de Caja
+            {VITE_APP_BASENAME}
           </Heading>
 
           {/* Error Alert */}

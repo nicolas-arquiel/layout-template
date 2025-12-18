@@ -1,121 +1,174 @@
-/**
- * Verifica si un usuario tiene un permiso específico
- * Soporta wildcards para permisos jerárquicos
- *
- * @param {string} requiredPermiso - Permiso requerido (ej: "inscripcion:aspirante:crear")
- * @param {Array<string>} userPermisos - Array de permisos del usuario
- * @returns {boolean} true si el usuario tiene el permiso
- *
- * @example
- * hasMenuPermission('inscripcion:aspirante:crear', ['inscripcion:*'])
- * // returns true
- *
- * hasMenuPermission('personas:editar', ['personas:ver', 'personas:editar'])
- * // returns true
- *
- * hasMenuPermission('admin:usuarios', ['*'])
- * // returns true
- */
-export function hasMenuPermission(requiredPermiso, userPermisos = []) {
-  // Si no hay permiso requerido, permitir acceso
-  if (!requiredPermiso) {
-    return true
-  }
+import { hasMenuPermission as checkPermission } from './permissions' // Self reference? No.
 
-  // Si no hay permisos de usuario, denegar acceso
-  if (!userPermisos || userPermisos.length === 0) {
-    return false
-  }
+const isProduction = import.meta.env.VITE_ENVIRONMENT === 'prod'
+const DEBUG = !isProduction;
 
-  // Si el usuario tiene permiso global (*), permitir todo
-  if (userPermisos.includes('*')) {
-    return true
-  }
-
-  // Verificar coincidencia exacta
-  if (userPermisos.includes(requiredPermiso)) {
-    return true
-  }
-
-  // Verificar wildcards jerárquicos
-  const requiredParts = requiredPermiso.split(':')
-
-  for (const userPermiso of userPermisos) {
-    // Si el permiso del usuario termina en *, verificar prefijo
-    if (userPermiso.endsWith(':*')) {
-      const userPrefix = userPermiso.slice(0, -2) // Remover ':*'
-      const userParts = userPrefix.split(':')
-
-      // Verificar si el permiso requerido comienza con el prefijo del usuario
-      let matches = true
-      for (let i = 0; i < userParts.length; i++) {
-        if (userParts[i] !== requiredParts[i]) {
-          matches = false
-          break
-        }
-      }
-
-      if (matches) {
-        return true
-      }
+const log = (message, data = null) => {
+  if (DEBUG) {
+    if (data) {
+      console.log(`[NavAuth] ${message}:`, data);
+    } else {
+      console.log(`[NavAuth] ${message}`);
     }
   }
+};
 
-  return false
-}
+// Función para normalizar strings
+const normalizeString = (str) => {
+  if (!str) return '';
+  return str
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+};
 
-/**
- * Verifica si un item de menú individual puede ser visto por el usuario
- *
- * @param {Object} item - Item de navegación
- * @param {Array<string>} userPermisos - Array de permisos del usuario
- * @returns {boolean} true si el usuario puede ver el item
- */
-export function canViewMenuItem(item, userPermisos = []) {
-  // Si el item no tiene permiso requerido, es visible para todos
-  if (!item.permiso) {
-    return true
+// Función para verificar permisos de un ítem de menú
+export const hasMenuPermission = (permiso, permisosArray = []) => {
+  if (!permiso) return true;
+  
+  // log('Verificando permiso de menú:', { permiso, permisosDisponibles: permisosArray });
+  
+  const normalizedPermiso = normalizeString(permiso);
+  
+  // Si el permiso no contiene ':', debemos verificar '*' o 'ver'
+  if (!normalizedPermiso.includes(':')) {
+    const tienePermiso = permisosArray.some(userPermiso => {
+      const normalizedUserPermiso = normalizeString(userPermiso);
+      return normalizedUserPermiso === `${normalizedPermiso}:*` || 
+             normalizedUserPermiso === `${normalizedPermiso}:ver`;
+    });
+    
+    // log(`Resultado verificación permiso básico: ${tienePermiso}`);
+    return tienePermiso;
   }
-
-  return hasMenuPermission(item.permiso, userPermisos)
-}
-
-/**
- * Verifica si un grupo de menú puede ser visto por el usuario
- * Un grupo es visible si al menos uno de sus hijos es visible
- *
- * @param {Object} item - Item de navegación con children
- * @param {Array<string>} userPermisos - Array de permisos del usuario
- * @returns {boolean} true si el usuario puede ver el grupo
- */
-export function canViewMenuGroup(item, userPermisos = []) {
-  // Si no tiene hijos, tratarlo como item individual
-  if (!item.children || item.children.length === 0) {
-    return canViewMenuItem(item, userPermisos)
-  }
-
-  // Si el grupo tiene permiso propio, verificarlo primero
-  if (item.permiso && !hasMenuPermission(item.permiso, userPermisos)) {
-    return false
-  }
-
-  // Verificar si al menos un hijo es visible
-  return item.children.some(child => {
-    if (child.children) {
-      return canViewMenuGroup(child, userPermisos)
+  
+  // Para permisos con formato complejo (con ':')
+  const tienePermiso = permisosArray.some(userPermiso => {
+    const normalizedUserPermiso = normalizeString(userPermiso);
+    
+    // Dividir los permisos en sus partes
+    const permisoPartes = normalizedPermiso.split(':');
+    const userPermisoPartes = normalizedUserPermiso.split(':');
+    
+    // Verificar coincidencia exacta
+    if (normalizedUserPermiso === normalizedPermiso) {
+      return true;
     }
-    return canViewMenuItem(child, userPermisos)
-  })
-}
+    
+    // Verificar permisos especiales
+    const moduloBase = permisoPartes[0];
+    
+    // Si el usuario tiene el wildcard del módulo
+    if (normalizedUserPermiso === `${moduloBase}:*`) {
+      return true;
+    }
+    
+    // Si es un permiso de ver y el usuario tiene el permiso de ver del módulo
+    if (permisoPartes[permisoPartes.length - 1] === 'ver' && 
+        normalizedUserPermiso === `${moduloBase}:ver`) {
+      return true;
+    }
+    
+    // Verificar wildcards en diferentes niveles
+    let isMatch = true;
+    for (let i = 0; i < permisoPartes.length; i++) {
+      if (i >= userPermisoPartes.length) {
+        isMatch = false;
+        break;
+      }
+      
+      if (userPermisoPartes[i] === '*') {
+        return true;
+      }
+      
+      if (permisoPartes[i] !== userPermisoPartes[i]) {
+        isMatch = false;
+        break;
+      }
+    }
+    
+    return isMatch;
+  });
+
+  // log(`Resultado verificación permiso: ${tienePermiso}`);
+  return tienePermiso;
+};
+
+// Función para verificar si se puede mostrar un grupo de menú
+export const canViewMenuGroup = (item, permisosData, user) => {
+  // log('Verificando grupo de menú:', { itemId: item.id });
+
+  // Si es superadmin, tiene acceso total
+  if (user?.isSuperAdmin) {
+    // log('Es superadmin - acceso permitido');
+    return true;
+  }
+
+  // Convertir los permisos a array
+  const permisosArray = typeof permisosData === 'string' 
+    ? permisosData.split(',').map(p => p.trim())
+    : Array.isArray(permisosData) ? permisosData : [];
+
+  // Verificar permiso del grupo
+  if (item.permiso && !hasMenuPermission(item.permiso, permisosArray)) {
+    // log('Grupo sin permiso necesario');
+    return false;
+  }
+
+  // Si el grupo tiene hijos, verificar si al menos uno es visible
+  if (item.children?.length) {
+    const hasVisibleChild = item.children.some(child => {
+      // Si el hijo tiene roles, debería verificarse también, pero aquí solo miramos permiso
+      if (child.permiso) {
+        return hasMenuPermission(child.permiso, permisosArray);
+      }
+      return true; // Si el hijo no tiene permiso específico, es visible
+    });
+
+    // log(`Grupo tiene hijo visible: ${hasVisibleChild}`);
+    return hasVisibleChild;
+  }
+
+  return true;
+};
+
+// Función para verificar si se puede mostrar un ítem de menú
+export const canViewMenuItem = (item, permisosData, user) => {
+  
+  // log('Verificando ítem de menú:', { itemId: item.id });
+
+  // Si es superadmin, tiene acceso total
+  if (user?.isSuperAdmin) {
+    // log('Es superadmin - acceso permitido');
+    return true;
+  }
+
+  // Convertir los permisos a array
+  const permisosArray = typeof permisosData === 'string' 
+    ? permisosData.split(',').map(p => p.trim())
+    : Array.isArray(permisosData) ? permisosData : [];
+
+  // Verificar permiso del ítem
+  if (item.permiso) {
+    const tienePermiso = hasMenuPermission(item.permiso, permisosArray);
+    // log(`Resultado verificación ítem: ${tienePermiso}`);
+    return tienePermiso;
+  }
+
+  // Si no tiene permiso específico, es visible
+  return true;
+};
 
 /**
  * Filtra items de navegación basándose en permisos del usuario
  *
  * @param {Array<Object>} navItems - Array de items de navegación
- * @param {Array<string>} userPermisos - Array de permisos del usuario
+ * @param {string|Array} permisosData - Permisos del usuario
+ * @param {Object} user - Objeto de usuario
  * @returns {Array<Object>} Items filtrados que el usuario puede ver
  */
-export function filterNavigationByPermissions(navItems = [], userPermisos = []) {
+export function filterNavigationByPermissions(navItems = [], permisosData, user) {
   return navItems.filter(item => {
     // Headers siempre visibles
     if (item.header) {
@@ -124,10 +177,10 @@ export function filterNavigationByPermissions(navItems = [], userPermisos = []) 
 
     // Items con children
     if (item.children) {
-      return canViewMenuGroup(item, userPermisos)
+      return canViewMenuGroup(item, permisosData, user)
     }
 
     // Items individuales
-    return canViewMenuItem(item, userPermisos)
+    return canViewMenuItem(item, permisosData, user)
   })
 }

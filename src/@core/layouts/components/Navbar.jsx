@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { User, Settings, LogOut, Menu } from 'lucide-react'
 import { Flex, Text, Avatar, DropdownMenu, Separator, IconButton } from '@radix-ui/themes'
-import { clearAuth } from '@/store/authSlice'
+import { handleLogout, selectCurrentUser } from '@/store/auth/authSlice'
 import { toggleMobileMenu } from '@/store/layoutSlice'
 import HorizontalNav from './HorizontalNav'
 import { cn } from '@lib/utils'
@@ -18,11 +18,11 @@ import { VITE_APP_ABR_BASENAME } from '@config'
 const Navbar = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const user = useSelector((state) => state.auth.user)
+  const user = useSelector(selectCurrentUser)
   const menuLayout = useSelector((state) => state.layout.menuLayout)
 
-  const handleLogout = () => {
-    dispatch(clearAuth())
+  const onLogout = () => {
+    dispatch(handleLogout())
     navigate('/login')
   }
 
@@ -122,7 +122,7 @@ const Navbar = () => {
 
             <Separator size="4" />
 
-            <DropdownMenu.Item onSelect={handleLogout} color="red">
+            <DropdownMenu.Item onSelect={onLogout} color="red">
               <Flex align="center" gap="2">
                 <LogOut size={16} />
                 <Text>Cerrar Sesión</Text>

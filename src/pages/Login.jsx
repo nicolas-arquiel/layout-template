@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { useForm, Controller } from 'react-hook-form'
 import { LogIn, Mail, Lock, AlertCircle } from 'lucide-react'
 import { Box, Card, Heading, Text, TextField, Button, Flex, Callout } from '@radix-ui/themes'
-import { setAuth } from '@src/store/authSlice'
+import { handleLogin, handlePermisos } from '@src/store/auth/authSlice'
 import { generateMockJwt } from '@src/utils/jwtUtils'
 import { VITE_APP_BASENAME } from '@config'
 
@@ -68,13 +68,17 @@ export default function Login() {
         // Agregamos exp extra si se necesita, aunque generateMockJwt ya lo pone
       });
 
-      const userData = {
-        user: mockUser,
-        permisos: 'personas:*,inscripcion:*,reportes:*,configuracion:*,recursos:*',
-        token: token,
-      }
-
-      dispatch(setAuth(userData))
+      dispatch(handleLogin({
+        dataUser: mockUser,
+        access_token: token
+      }))
+      
+      dispatch(handlePermisos({
+        todos_permisos: 'personas:*,inscripcion:*,reportes:*,configuracion:*,recursos:*',
+        roles_descripcion: [],
+        id_roles: [],
+        todos_permisos_id: []
+      }))
       
       // TODO: Obtener permisos del usuario si es necesario
       // const permisosUser = await getPermisos(userData.user.id).unwrap()

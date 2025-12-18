@@ -1,7 +1,7 @@
 // ** Reducers Imports
 import navbar from '@src/store/navbar'
 import layout from '@src/store/layoutSlice'
-import authReducer from '@src/store/authSlice'
+import authReducer from '@src/store/auth/authSlice'
 import { baseApi } from '@src/store/api/baseApi'
 import { secondApi } from '@src/store/api/secondApi'
 
