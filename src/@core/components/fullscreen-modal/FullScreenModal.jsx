@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { IconButton, Theme, Heading } from '@radix-ui/themes';
+import { IconButton, Theme, Heading, Button } from '@radix-ui/themes';
 import { Minimize2 } from 'lucide-react';
 import { useTheme } from '@src/hooks/useTheme';
 import { getColorClasses } from './utils/Utils';
@@ -85,16 +85,15 @@ const FullScreenModal = ({
         )}
 
         {showCloseButton && (
-          <IconButton
-            variant="surface"
+            <Button
+              variant="soft"
             color="gray"
-            size="3"
-            highContrast
-            onClick={handleClose}
-            className="!h-10 !w-auto !px-5 rounded-xl shadow-md cursor-pointer bg-white"
-          >
-            <CloseIcon size={20} />
-          </IconButton>
+              size="2"
+              onClick={handleClose}
+              className="!bg-white/50 hover:!bg-white/30 cursor-pointer !rounded-xl !h-10 !w-auto !px-4"
+            >
+              <CloseIcon size={18} />
+            </Button>
         )}
       </div>
     </div>
