@@ -1,5 +1,5 @@
 import React from 'react';
-import { DropdownMenu, IconButton, Flex, Checkbox, Text } from '@radix-ui/themes';
+import { DropdownMenu, IconButton, Flex, Checkbox, Text, Button } from '@radix-ui/themes';
 import { MoreVertical } from 'lucide-react';
 
 /**
@@ -7,12 +7,29 @@ import { MoreVertical } from 'lucide-react';
  * Dropdown con checkboxes para mostrar/ocultar columnas
  */
 const TanStackColumnVisibility = ({ table }) => {
+    // Detectar si es móvil (menos de 768px)
+    const [isMobile, setIsMobile] = React.useState(false);
+
+    React.useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     return (
         <DropdownMenu.Root>
             <DropdownMenu.Trigger>
-                <IconButton variant="ghost" size="2">
-                    <MoreVertical size={16} />
-                </IconButton>
+                {isMobile ? (
+                    <Button variant="outline" style={{ width: '100%', cursor: 'pointer' }}>
+                        <MoreVertical size={16} />
+                        Columnas
+                    </Button>
+                ) : (
+                    <IconButton variant="ghost" size="2" style={{ cursor: 'pointer' }}>
+                        <MoreVertical size={16} />
+                    </IconButton>
+                )}
             </DropdownMenu.Trigger>
             <DropdownMenu.Content align="end">
                 <DropdownMenu.Label>
@@ -56,7 +73,7 @@ const TanStackColumnVisibility = ({ table }) => {
                     <Text size="2">Ocultar todas</Text>
                 </DropdownMenu.Item>
             </DropdownMenu.Content>
-        </DropdownMenu.Root>
+        </DropdownMenu.Root >
     );
 };
 

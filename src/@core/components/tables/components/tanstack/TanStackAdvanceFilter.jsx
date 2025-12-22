@@ -8,6 +8,7 @@ import {
     TextField,
     IconButton,
     Popover,
+    Dialog,
     Badge
 } from '@radix-ui/themes';
 import { Filter, Plus, Trash2, X, Calendar as CalendarIcon, Columns } from 'lucide-react';
@@ -592,6 +593,16 @@ const TanStackAdvanceFilter = ({
         activeFilters,
     } : internalState;
 
+    // Detectar si es móvil (menos de 768px)
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     const filterContent = (
         <FilterContent
             filters={state.draftFilters}
@@ -606,21 +617,56 @@ const TanStackAdvanceFilter = ({
     );
 
     if (mode === 'popover') {
+        const triggerButton = (
+            <Button
+                variant={state.hasActiveFilters ? 'solid' : 'outline'}
+                style={{ cursor: 'pointer' }}
+                onClick={() => state.setIsOpen(true)}
+            >
+                <Filter size={16} />
+                Filtros
+                {state.hasActiveFilters && (
+                    <Badge size="1" color="gray" variant="solid" ml="1">
+                        {state.activeFilters.length}
+                    </Badge>
+                )}
+            </Button>
+        );
+
+        if (isMobile) {
+            return (
+                <Dialog.Root open={state.isOpen} onOpenChange={state.setIsOpen}>
+                    <Dialog.Trigger>
+                        {triggerButton}
+                    </Dialog.Trigger>
+                    <Dialog.Content style={{
+                        width: '95vw',
+                        maxWidth: '100vw',
+                        height: '90vh',
+                        maxHeight: '90vh',
+                        display: 'flex',
+                        flexDirection: 'column'
+                    }}>
+                        <Flex justify="between" align="center" mb="2">
+                            <Dialog.Title>Filtros Avanzados</Dialog.Title>
+                            <Dialog.Close>
+                                <IconButton variant="ghost" color="gray">
+                                    <X size={18} />
+                                </IconButton>
+                            </Dialog.Close>
+                        </Flex>
+                        <Box style={{ flex: 1, overflowY: 'auto' }}>
+                            {filterContent}
+                        </Box>
+                    </Dialog.Content>
+                </Dialog.Root>
+            );
+        }
+
         return (
             <Popover.Root open={state.isOpen} onOpenChange={state.setIsOpen}>
                 <Popover.Trigger>
-                    <Button
-                        variant={state.hasActiveFilters ? 'solid' : 'outline'}
-                        style={{ cursor: 'pointer' }}
-                    >
-                        <Filter size={16} />
-                        Filtros
-                        {state.hasActiveFilters && (
-                            <Badge size="1" color="gray" variant="solid" ml="1">
-                                {state.activeFilters.length}
-                            </Badge>
-                        )}
-                    </Button>
+                    {triggerButton}
                 </Popover.Trigger>
                 <Popover.Content
                     side="bottom"

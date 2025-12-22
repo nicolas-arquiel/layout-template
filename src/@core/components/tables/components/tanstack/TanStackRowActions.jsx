@@ -16,19 +16,48 @@ const TanStackRowActions = ({ row, actions = [], displayMode = 'menu' }) => {
 
     if (!resolvedActions || resolvedActions.length === 0) return null;
 
+    // Detectar si es móvil (menos de 768px)
+    const [isMobile, setIsMobile] = React.useState(false);
+
+    React.useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     // Renderizado como botones individuales
     if (displayMode === 'buttons') {
         return (
-            <Flex gap="2" align="center">
+            <Flex gap="2" align="center" style={{ width: isMobile ? '100%' : 'auto' }}>
                 {resolvedActions.map((action, index) => {
-                    if (action.type === 'separator') return null; // Separators don't make sense in button mode usually, or could be a vertical divider
+                    if (action.type === 'separator') return null;
 
                     const IconComponent = action.icon;
 
-                    // Si es submenu, por ahora no lo soportamos bien en modo botones planos, 
-                    // o podríamos renderizar un dropdown solo para ese item. 
-                    // Para simplificar, asumimos items simples.
                     if (action.type === 'submenu') return null;
+
+                    if (isMobile) {
+                        return (
+                            <IconButton
+                                key={index}
+                                variant="soft"
+                                size="3"
+                                color={action.color}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    action.onClick?.(row.original);
+                                }}
+                                disabled={action.disabled}
+                                style={{ cursor: 'pointer', flex: 1 }}
+                            >
+                                <Flex gap="2" align="center">
+                                    {IconComponent && <IconComponent size={18} />}
+                                    {action.label}
+                                </Flex>
+                            </IconButton>
+                        );
+                    }
 
                     return (
                         <IconButton
@@ -42,7 +71,7 @@ const TanStackRowActions = ({ row, actions = [], displayMode = 'menu' }) => {
                             }}
                             disabled={action.disabled}
                             style={{ cursor: 'pointer' }}
-                            title={action.label} // Tooltip nativo simple
+                            title={action.label}
                         >
                             {IconComponent && <IconComponent size={16} />}
                         </IconButton>

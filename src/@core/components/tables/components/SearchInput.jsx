@@ -10,7 +10,12 @@ const SearchInput = ({
   title
 }) => {
   return (
-    <Flex align="center" gap="2" className="w-100">
+    <Flex
+      align={{ initial: 'stretch', sm: 'center' }}
+      direction={{ initial: 'column', sm: 'row' }}
+      gap="2"
+      className="w-100"
+    >
       {(titleComponentSearch || title) && (
         <Text size="2" weight="medium">
           {titleComponentSearch || title || "Buscar"}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Flex, TextField, Select, IconButton, Button, Badge } from '@radix-ui/themes';
+import { Flex, TextField, Select, IconButton, Button, Badge, Box } from '@radix-ui/themes';
 import { Search, X, Filter, Columns } from 'lucide-react';
 import TanStackColumnVisibility from './TanStackColumnVisibility';
 import TanStackAdvanceFilter, { useAdvancedFilters } from './TanStackAdvanceFilter';
@@ -44,6 +44,14 @@ const TanStackToolbar = ({
     });
 
     const [localValue, setLocalValue] = useState(globalFilter ?? '');
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     // Sincronizar estado local si cambia desde fuera
     useEffect(() => {
@@ -83,22 +91,40 @@ const TanStackToolbar = ({
 
     return (
         <Flex direction="column" gap="3" style={{ width: '100%' }}>
-            <Flex gap="2" align="center" wrap="wrap" style={{ width: '100%' }}>
-                {/* Selector de columna y búsqueda */}
-                <Flex align="center" gap="2" style={{ flex: 1, minWidth: '300px' }}>
-                    <Select.Root value={searchColumn} onValueChange={setSearchColumn}>
-                        <Select.Trigger style={{ width: '180px' }} placeholder="Buscar en..." />
-                        <Select.Content>
-                            <Select.Item value="all">Todas las columnas</Select.Item>
-                            {availableColumns.map((col) => (
-                                <Select.Item key={col.id} value={col.id}>
-                                    {col.name}
-                                </Select.Item>
-                            ))}
-                        </Select.Content>
-                    </Select.Root>
+            {/* Selector de columna (fila completa en móvil) */}
+            <Box style={{ width: isMobile ? '100%' : 'auto', display: isMobile ? 'block' : 'none' }}>
+                <Select.Root value={searchColumn} onValueChange={setSearchColumn}>
+                    <Select.Trigger style={{ width: '100%' }} placeholder="Buscar en..." />
+                    <Select.Content>
+                        <Select.Item value="all">Todas las columnas</Select.Item>
+                        {availableColumns.map((col) => (
+                            <Select.Item key={col.id} value={col.id}>
+                                {col.name}
+                            </Select.Item>
+                        ))}
+                    </Select.Content>
+                </Select.Root>
+            </Box>
 
-                    <div style={{ position: 'relative', flex: 1 }}>
+            <Flex gap="2" align="center" wrap="wrap" style={{ width: '100%' }}>
+                {/* Selector de columna y búsqueda (desktop) */}
+                <Flex align="center" gap="2" wrap="wrap" style={{ flex: 1, minWidth: isMobile ? '0' : '300px' }}>
+                    {/* Selector solo visible en desktop */}
+                    {!isMobile && (
+                        <Select.Root value={searchColumn} onValueChange={setSearchColumn}>
+                            <Select.Trigger style={{ width: '180px' }} placeholder="Buscar en..." />
+                            <Select.Content>
+                                <Select.Item value="all">Todas las columnas</Select.Item>
+                                {availableColumns.map((col) => (
+                                    <Select.Item key={col.id} value={col.id}>
+                                        {col.name}
+                                    </Select.Item>
+                                ))}
+                            </Select.Content>
+                        </Select.Root>
+                    )}
+
+                    <div style={{ position: 'relative', minWidth: '300px', flex: isMobile ? 1 : 0 }}>
                         <TextField.Root
                             placeholder={searchPlaceholder}
                             value={localValue}
@@ -132,33 +158,47 @@ const TanStackToolbar = ({
                     </div>
                 </Flex>
 
-                {/* Botón de filtros o Popover según el modo */}
-                {filterDisplayMode === 'popover' ? (
-                    <TanStackAdvanceFilter
-                        mode="popover"
-                        data={data}
-                        table={table}
-                        {...advancedFilterState}
-                    />
-                ) : (
-                    <Button
-                        variant={showAdvancedFilters || advancedFilterState.hasActiveFilters ? "solid" : "outline"}
-                        onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                        style={{ cursor: 'pointer' }}
-                    >
-                        <Filter size={16} />
-                        Filtros
-                        {advancedFilterState.hasActiveFilters && (
-                            <Badge size="1" color="gray" variant="solid" ml="1">
-                                {advancedFilterState.activeFilters.length}
-                            </Badge>
-                        )}
-                    </Button>
-                )}
+                {/* Contenedor de botones (Filtros y Columnas) */}
+                <Flex
+                    gap="2"
+                    align="center"
+                    style={{
+                        width: isMobile ? '100%' : 'auto',
+                        marginTop: isMobile ? '8px' : '0'
+                    }}
+                >
+                    {/* Botón de filtros o Popover según el modo */}
+                    {filterDisplayMode === 'popover' ? (
+                        <Box style={{ flex: isMobile ? 2 : '0 0 auto' }}>
+                            <TanStackAdvanceFilter
+                                mode="popover"
+                                data={data}
+                                table={table}
+                                {...advancedFilterState}
+                            />
+                        </Box>
+                    ) : (
+                        <Button
+                            variant={showAdvancedFilters || advancedFilterState.hasActiveFilters ? "solid" : "outline"}
+                            onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                            style={{ cursor: 'pointer', flex: isMobile ? 2 : '0 0 auto' }}
+                        >
+                            <Filter size={16} />
+                            Filtros
+                            {advancedFilterState.hasActiveFilters && (
+                                <Badge size="1" color="gray" variant="solid" ml="1">
+                                    {advancedFilterState.activeFilters.length}
+                                </Badge>
+                            )}
+                        </Button>
+                    )}
 
-                {showColumnVisibility && (
-                    <TanStackColumnVisibility table={table} />
-                )}
+                    {showColumnVisibility && (
+                        <Box style={{ flex: isMobile ? 1 : '0 0 auto' }}>
+                            <TanStackColumnVisibility table={table} />
+                        </Box>
+                    )}
+                </Flex>
             </Flex>
 
             {/* Filtros avanzados en modo inline */}

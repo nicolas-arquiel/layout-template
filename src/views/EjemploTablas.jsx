@@ -465,7 +465,7 @@ const EjemploTablas = () => {
       </Flex>
 
       <Tabs.Root defaultValue="simple">
-        <Tabs.List>
+        <Tabs.List style={{ flexWrap: 'wrap' }}>
           <Tabs.Trigger value="simple">Tabla Simple</Tabs.Trigger>
           <Tabs.Trigger value="search">Con Búsqueda</Tabs.Trigger>
           <Tabs.Trigger value="bigdata">BigData Search</Tabs.Trigger>

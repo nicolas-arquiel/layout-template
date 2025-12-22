@@ -16,19 +16,27 @@ const TanStackFooter = ({
     const { pageIndex, pageSize } = table.getState().pagination;
 
     return (
-        <Flex justify="between" align="center" wrap="wrap" gap="4" mt="4">
-            <Text size="2" color="gray">
+        <Flex justify={{ initial: 'center', md: 'between' }} align="center" wrap="wrap" gap="4" mt="4">
+            <Text size="2" color="gray" style={{ display: 'var(--display-row-count)' }}>
                 {selectedCount > 0 && <span>{selectedCount} fila(s) seleccionada(s). </span>}
                 Mostrando {dataLength === 0 ? 0 : pageIndex * pageSize + 1} a{" "}
                 {Math.min((pageIndex + 1) * pageSize, dataLength)} de {dataLength}
             </Text>
+            <style>{`
+                @media (max-width: 768px) {
+                    :root { --display-row-count: none; }
+                }
+                @media (min-width: 769px) {
+                    :root { --display-row-count: block; }
+                }
+            `}</style>
 
             <Flex align="center" gap="2">
                 {enablePagination && (
                     <>
                         <IconButton
                             variant="outline"
-                            size="1"
+                            size={{ initial: '3', md: '1' }}
                             onClick={() => table.setPageIndex(0)}
                             disabled={!table.getCanPreviousPage()}
                         >
@@ -37,7 +45,7 @@ const TanStackFooter = ({
 
                         <IconButton
                             variant="outline"
-                            size="1"
+                            size={{ initial: '3', md: '1' }}
                             onClick={() => table.previousPage()}
                             disabled={!table.getCanPreviousPage()}
                         >
@@ -53,7 +61,7 @@ const TanStackFooter = ({
 
                         <IconButton
                             variant="outline"
-                            size="1"
+                            size={{ initial: '3', md: '1' }}
                             onClick={() => table.nextPage()}
                             disabled={!table.getCanNextPage()}
                         >
@@ -62,14 +70,14 @@ const TanStackFooter = ({
 
                         <IconButton
                             variant="outline"
-                            size="1"
+                            size={{ initial: '3', md: '1' }}
                             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
                             disabled={!table.getCanNextPage()}
                         >
                             <ChevronsRight size={16} />
                         </IconButton>
 
-                        <Flex align="center" gap="2" ml="4" pl="4" style={{ borderLeft: '1px solid var(--gray-6)' }}>
+                        <Flex align="center" gap="2" ml="4" pl="4" display={{ initial: 'none', md: 'flex' }} style={{ borderLeft: '1px solid var(--gray-6)' }}>
                             <Text size="2" color="gray">Filas por página:</Text>
                             <Select.Root
                                 value={String(pageSize)}

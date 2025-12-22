@@ -74,16 +74,16 @@ const TanStackPagination = ({
     return (
         <Flex direction="column" gap="3">
             {/* Row Count Info */}
-            <Flex justify="between" align="center">
+            <Flex justify="between" align="center" wrap="wrap" gap="2" display={{ initial: 'none', md: 'flex' }}>
                 <Text size="2" color="gray">
                     Mostrando {startRow} a {endRow} de {totalRows} registros
                 </Text>
             </Flex>
 
             {/* Pagination Buttons with Page Size Selector */}
-            <Flex justify="end" align="center" gap="2">
+            <Flex justify={{ initial: 'center', md: 'end' }} align="center" gap="2" wrap="wrap">
                 {/* Page Size Selector */}
-                <Flex gap="2" align="center">
+                <Flex gap="2" align="center" display={{ initial: 'none', md: 'flex' }}>
                     <Text size="2" color="gray">Filas por página:</Text>
                     <Select.Root value={pageSize} onValueChange={(value) => table.setPageSize(Number(value))}>
                         <Select.Trigger color="indigo" variant="soft" />
@@ -99,10 +99,10 @@ const TanStackPagination = ({
                     </Select.Root>
                 </Flex>
                 {/* Navigation Buttons */}
-                <Flex gap="1" align="center">
+                <Flex gap="1" align="center" wrap="wrap">
                     {/* First Page Button */}
                     <Button
-                        size="1"
+                        size={{ initial: '4', md: '1' }}
                         variant="ghost"
                         onClick={() => table.setPageIndex(0)}
                         disabled={!table.getCanPreviousPage()}
@@ -113,7 +113,7 @@ const TanStackPagination = ({
 
                     {/* Previous Page Button */}
                     <Button
-                        size="1"
+                        size={{ initial: '4', md: '1' }}
                         variant="ghost"
                         onClick={() => table.previousPage()}
                         disabled={!table.getCanPreviousPage()}
@@ -129,10 +129,11 @@ const TanStackPagination = ({
                         ) : (
                             <Button
                                 key={page}
-                                size="1"
+                                size={{ initial: '4', md: '1' }}
                                 variant={pageIndex === page ? "solid" : "ghost"}
                                 onClick={() => table.setPageIndex(page)}
                                 style={{ minWidth: '32px' }}
+                                className={page !== pageIndex ? "hidden-mobile" : ""}
                             >
                                 {page + 1}
                             </Button>
@@ -141,7 +142,7 @@ const TanStackPagination = ({
 
                     {/* Next Page Button */}
                     <Button
-                        size="1"
+                        size={{ initial: '4', md: '1' }}
                         variant="ghost"
                         onClick={() => table.nextPage()}
                         disabled={!table.getCanNextPage()}
@@ -152,7 +153,7 @@ const TanStackPagination = ({
 
                     {/* Last Page Button */}
                     <Button
-                        size="1"
+                        size={{ initial: '4', md: '1' }}
                         variant="ghost"
                         onClick={() => table.setPageIndex(pageCount - 1)}
                         disabled={!table.getCanNextPage()}
@@ -162,6 +163,13 @@ const TanStackPagination = ({
                     </Button>
                 </Flex>
             </Flex>
+            <style jsx global>{`
+                @media (max-width: 600px) {
+                    .hidden-mobile {
+                        display: none;
+                    }
+                }
+            `}</style>
         </Flex>
     );
 };
