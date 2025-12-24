@@ -80,6 +80,16 @@ const navigation = [
   },
 
   {
+    header: 'ANÁLISIS',
+  },
+  {
+    id: 'analytical_cube',
+    title: 'Cubo Analítico',
+    icon: Box,
+    navLink: '/componentes/analytical-cube',
+  },
+  
+  {
     header: 'GESTIÓN',
   },
   {
