@@ -146,6 +146,12 @@ const navigation = [
     // SIN permiso - para testear componente FullScreenModal
   },
   {
+    id: 'action_list_example',
+    title: 'ActionList Example',
+    icon: TableIcon,
+    navLink: '/componentes/action-list-example',
+  },
+  {
     id: 'countdown_test',
     title: 'Countdown Test',
     icon: Clock,

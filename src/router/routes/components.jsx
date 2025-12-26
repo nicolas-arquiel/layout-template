@@ -4,6 +4,7 @@ import { lazy } from 'react'
 const FullScreenModalExamples = lazy(() => import('@/views/FullScreenModalExamples'))
 const CountdownTest = lazy(() => import('@/views/CountdownTest'))
 const AnalyticalCubeDemo = lazy(() => import('@/views/AnalyticalCubeDemo'))
+const AccionListExample = lazy(() => import('@/views/action-list-example'))
 
 // Skeleton
 import GenericSkeleton from '@/@core/components/skeletons/GenericSkeleton'
@@ -21,6 +22,15 @@ const componentRoutes = [
   {
     path: 'componentes/analytical-cube',
     element: <AnalyticalCubeDemo />,
+    meta: {
+      publicRoute: true,
+      restricted: true,
+      skeleton: <GenericSkeleton />,
+    },
+  },
+  {
+    path: 'componentes/action-list-example',
+    element: <AccionListExample />,
     meta: {
       publicRoute: true,
       restricted: true,
