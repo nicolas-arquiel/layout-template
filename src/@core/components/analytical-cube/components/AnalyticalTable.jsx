@@ -126,7 +126,7 @@ const AnalyticalTable = ({ rows, columnsFinal, dimensionsRow, dimensionsCol, mea
               className={cn(
                 "sticky left-0 top-0 z-[5]",
                 "bg-gray-100 dark:bg-gray-900",
-                "px-4 py-3 text-left",
+                "px-4 py-3 text-center",
                 "border-b border-r border-gray-200 dark:border-gray-700",
                 "min-w-[250px]"
               )}
@@ -142,7 +142,7 @@ const AnalyticalTable = ({ rows, columnsFinal, dimensionsRow, dimensionsCol, mea
                 className={cn(
                   "sticky top-0 z-[3]",
                   "bg-gray-100 dark:bg-gray-900",
-                  "px-4 py-3 text-right",
+                  "px-4 py-3 text-center",
                   "border-b border-gray-200 dark:border-gray-700",
                   "min-w-[110px]",
                   idx > 0 && "border-l border-gray-200 dark:border-gray-700"
@@ -177,7 +177,7 @@ const AnalyticalTable = ({ rows, columnsFinal, dimensionsRow, dimensionsCol, mea
               "sticky left-0 top-0 z-[5]",
               "bg-gray-100 dark:bg-gray-900",
               "border-b border-r border-gray-200 dark:border-gray-700",
-              "min-w-[250px] w-[250px]"
+              "min-w-[250px] w-[250px] text-center"
             )}
           >
             <div className="px-4 py-3">
@@ -253,7 +253,7 @@ const AnalyticalTable = ({ rows, columnsFinal, dimensionsRow, dimensionsCol, mea
         <th 
           key={`measure-${col.id}`}
           className={cn(
-            "sticky z-[3] text-right px-4",
+            "sticky z-[3] text-center px-4",
             "bg-gray-50 dark:bg-gray-900/80",
             "border-b border-gray-200 dark:border-gray-700",
             "h-10 min-w-[110px]",
