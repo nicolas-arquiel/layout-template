@@ -1,7 +1,5 @@
-
-import React, { useState, useMemo } from 'react';
-
-import { Trash2, Layout as LayoutIcon, Download } from 'lucide-react';
+import React, { useState, useMemo, useCallback } from 'react';
+import { Trash2, Layout as LayoutIcon, Download, BarChart3 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { Button, Text, Heading, Flex, Box } from '@radix-ui/themes';
 import SidebarTree from './components/SidebarTree';
@@ -12,14 +10,13 @@ import {
   generarColumnasJerarquicas,
   obtenerColumnasFinales
 } from './cube-utils';
-import { cn } from '@utils/cn';
 
 const AnalyticalCube = ({ 
   data = [], 
   dimensions = [], 
   measures = [], 
   title = "Cubo Analítico",
-  onGetChildren = null, // Callback para cargar hijos bajo demanda
+  onGetChildren = null,
   initialConfig = {}
 }) => {
   const [cuboConfig, setCuboConfig] = useState({
@@ -31,48 +28,46 @@ const AnalyticalCube = ({
   });
   const [expandedGroups, setExpandedGroups] = useState({});
   
-  // Procesamiento de datos (Calculado)
-  const processedData = useMemo(() => { // Renamed cubeData to processedData
+  // Procesamiento de datos optimizado con useMemo
+  const processedData = useMemo(() => {
+    // Early return si no hay datos o medidas
+    if (!data?.length || !cuboConfig.medidas.length) return null;
+
     // 1. Filtrar por Filtros Globales
-    let dataFiltrada = data.filter(item => {
-      // Agrupar filtros por dimensión
-      const filtersByDim = cuboConfig.filtros.reduce((acc, f) => {
-        if (!acc[f.dimension]) acc[f.dimension] = [];
-        acc[f.dimension].push(f.value);
-        return acc;
-      }, {});
+    const filtersByDim = cuboConfig.filtros.reduce((acc, f) => {
+      if (!acc[f.dimension]) acc[f.dimension] = [];
+      acc[f.dimension].push(f.value);
+      return acc;
+    }, {});
 
-      // El item debe cumplir con todos los grupos de filtros (AND entre dimensiones, OR entre valores de la misma dim)
-      return Object.entries(filtersByDim).every(([dimId, values]) => {
-        const dim = dimensions.find(d => d.id === dimId);
-        if (!dim) return true;
-        return values.includes(item[dim.idCampo]);
-      });
-    });
+    const dataFiltrada = Object.keys(filtersByDim).length === 0 
+      ? data 
+      : data.filter(item => {
+          return Object.entries(filtersByDim).every(([dimId, values]) => {
+            const dim = dimensions.find(d => d.id === dimId);
+            if (!dim) return true;
+            return values.includes(item[dim.idCampo]);
+          });
+        });
 
-    if (!dataFiltrada || dataFiltrada.length === 0 || cuboConfig.medidas.length === 0) return null;
+    if (dataFiltrada.length === 0) return null;
 
-    // Obtener definiciones completas de lo seleccionado
+    // Obtener definiciones completas
     const dimsRow = cuboConfig.filas.map(id => dimensions.find(d => d.id === id)).filter(Boolean);
     const dimsCol = cuboConfig.columnas.map(id => dimensions.find(d => d.id === id)).filter(Boolean);
     const meds = cuboConfig.medidas.map(id => measures.find(m => m.id === id)).filter(Boolean);
 
-    // Generar Estructura
-    let filasJerarquicas;
-    
-    // Si no hay dimensiones de fila, crear una fila de "Total" con todos los datos
-    if (dimsRow.length === 0) {
-      filasJerarquicas = [{
-        id: 'total',
-        nombre: 'Total',
-        dimension: 'total',
-        nivel: 0,
-        items: dataFiltrada,
-        totalesPorColumna: {}
-      }];
-    } else {
-      filasJerarquicas = generarFilasJerarquicas(dataFiltrada, dimsRow);
-    }
+    // Generar Estructura de filas
+    const filasJerarquicas = dimsRow.length === 0
+      ? [{
+          id: 'total',
+          nombre: 'Total',
+          dimension: 'total',
+          nivel: 0,
+          items: dataFiltrada,
+          totalesPorColumna: {}
+        }]
+      : generarFilasJerarquicas(dataFiltrada, dimsRow);
     
     const columnasJerarquicas = generarColumnasJerarquicas(dataFiltrada, dimsCol);
     const columnasFinales = obtenerColumnasFinales(columnasJerarquicas, meds);
@@ -83,58 +78,37 @@ const AnalyticalCube = ({
       dimensionsRow: dimsRow,
       dimensionsCol: dimsCol,
       measures: meds,
-      dataFiltrada: dataFiltrada // Agregamos los datos filtrados para el export
+      dataFiltrada
     };
   }, [data, dimensions, measures, cuboConfig]);
 
-  // Extracted hierarchical rows for clarity in AnalyticalTable
-  const hierarchicalData = processedData?.rows || [];
-
-  const handleClear = () => {
+  // Limpiar configuración
+  const handleClear = useCallback(() => {
     setCuboConfig({ medidas: [], filas: [], columnas: [], filtros: [] });
-  };
+  }, []);
 
-  // Función para exportar con headers jerárquicos
-  const exportToExcel = (dataToExport, config) => { // Renamed handleExport to exportToExcel and adjusted params
-    if (!dataToExport) return;
+  // Exportar a Excel
+  const exportToExcel = useCallback(() => {
+    if (!processedData) return;
     
-    // Preparar estructura de datos para Excel con headers jerárquicos
-    const numDimensionsCol = dataToExport.dimensionsCol.length;
-    const numHeaderRows = numDimensionsCol + 1; // +1 para la fila de medidas
-    
-    // Crear array de arrays para el worksheet
+    const { dimensionsCol, columnsFinal, rows } = processedData;
+    const numDimensionsCol = dimensionsCol.length;
     const wsData = [];
     
-    // ===== GENERAR HEADERS JERÁRQUICOS =====
-    
-    // Generar filas de headers de columnas
+    // Generar headers jerárquicos
     for (let level = 0; level < numDimensionsCol; level++) {
-      const headerRow = [];
-      
-      // Primera celda: "Dimensiones" (con rowspan)
-      if (level === 0) {
-        headerRow.push('Dimensiones');
-      } else {
-        headerRow.push(''); // Celda vacía para merge posterior
-      }
-      
-      // Agrupar columnas por path completo hasta este nivel
+      const headerRow = [level === 0 ? 'Dimensiones' : ''];
       const groupsAtLevel = {};
       const orderedGroups = [];
       const seenKeys = new Set();
       
-      dataToExport.columnsFinal.forEach(col => {
+      columnsFinal.forEach(col => {
         if (col.path[level]) {
           const pathKey = col.path.slice(0, level + 1).map(p => p.id).join('|');
-          
           if (!groupsAtLevel[pathKey]) {
-            groupsAtLevel[pathKey] = {
-              nombre: col.path[level].nombre,
-              count: 0
-            };
+            groupsAtLevel[pathKey] = { nombre: col.path[level].nombre, count: 0 };
           }
           groupsAtLevel[pathKey].count++;
-          
           if (!seenKeys.has(pathKey)) {
             seenKeys.add(pathKey);
             orderedGroups.push(groupsAtLevel[pathKey]);
@@ -142,110 +116,62 @@ const AnalyticalCube = ({
         }
       });
       
-      // Agregar headers de este nivel con repetición para colspan
       orderedGroups.forEach(group => {
         headerRow.push(group.nombre);
-        // Agregar celdas vacías para simular colspan
-        for (let i = 1; i < group.count; i++) {
-          headerRow.push('');
-        }
+        for (let i = 1; i < group.count; i++) headerRow.push('');
       });
       
       wsData.push(headerRow);
     }
     
-    // Última fila de headers: medidas
+    // Fila de medidas
     const measureRow = [''];
-    dataToExport.columnsFinal.forEach(col => {
-      measureRow.push(col.medida.nombre);
-    });
+    columnsFinal.forEach(col => measureRow.push(col.medida.nombre));
     wsData.push(measureRow);
     
-    // ===== GENERAR DATOS =====
-    
+    // Datos
     const flattenRow = (row, level = 0) => {
-      const rowData = [];
+      const rowData = ['  '.repeat(level) + row.nombre];
       
-      // Columna de dimensión con indentación
-      const indent = '  '.repeat(level);
-      rowData.push(`${indent}${row.nombre}`);
-      
-      // Valores de cada columna
-      dataToExport.columnsFinal.forEach(col => {
+      columnsFinal.forEach(col => {
         const items = row.items || [];
-        const filteredItems = items.filter(item => {
-          return col.path.every(p => {
-            const dim = dataToExport.dimensionsCol.find(d => d.id === p.dimension);
+        const filteredItems = items.filter(item => 
+          col.path.every(p => {
+            const dim = dimensionsCol.find(d => d.id === p.dimension);
             return item[dim.idCampo] === p.id;
-          });
-        });
+          })
+        );
         
-        // Agregar valor
-        const val = filteredItems.reduce((sum, item) => {
-          const value = parseFloat(item[col.medida.campo]) || 0;
-          return sum + value;
-        }, 0);
-        
+        const val = filteredItems.reduce((sum, item) => 
+          sum + (parseFloat(item[col.medida.campo]) || 0), 0
+        );
         rowData.push(val);
       });
       
       wsData.push(rowData);
-      
-      // Procesar hijos recursivamente
-      if (row.hijos && row.hijos.length > 0) {
-        row.hijos.forEach(hijo => flattenRow(hijo, level + 1));
-      }
+      row.hijos?.forEach(hijo => flattenRow(hijo, level + 1));
     };
     
-    // Procesar todas las filas
-    dataToExport.rows.forEach(row => flattenRow(row, 0));
+    rows.forEach(row => flattenRow(row, 0));
     
-    // ===== CREAR WORKSHEET Y APLICAR MERGES =====
-    
+    // Crear worksheet con merges
     const ws = XLSX.utils.aoa_to_sheet(wsData);
+    const numHeaderRows = numDimensionsCol + 1;
+    const merges = [{ s: { r: 0, c: 0 }, e: { r: numHeaderRows - 1, c: 0 } }];
     
-    // ===== APLICAR ESTILOS A HEADERS =====
-    
-    // Función para obtener la referencia de celda (ej: "A1", "B2")
-    const getCellRef = (row, col) => {
-      return XLSX.utils.encode_cell({ r: row, c: col });
-    };
-    
-    // Estilo para headers (Note: XLSX styling requires Pro version or specific libraries, 
-    // basic XLSX community edition only supports structure. We keep structure logic)
-    
-    // Aplicar merges para headers
-    const merges = [];
-    
-    // Merge para "Dimensiones" (primera columna, todas las filas de header)
-    merges.push({
-      s: { r: 0, c: 0 }, // start
-      e: { r: numHeaderRows - 1, c: 0 } // end
-    });
-    
-    // Merges para headers de columnas jerárquicos
     for (let level = 0; level < numDimensionsCol; level++) {
       const headerRow = wsData[level];
-      let colIdx = 1; // Empezar después de "Dimensiones"
+      let colIdx = 1;
       
       while (colIdx < headerRow.length) {
-        const cellValue = headerRow[colIdx];
-        
-        if (cellValue !== '') {
-          // Contar cuántas celdas vacías siguen (colspan)
+        if (headerRow[colIdx] !== '') {
           let colspan = 1;
           while (colIdx + colspan < headerRow.length && headerRow[colIdx + colspan] === '') {
             colspan++;
           }
-          
-          // Si hay colspan > 1, crear merge
           if (colspan > 1) {
-            merges.push({
-              s: { r: level, c: colIdx },
-              e: { r: level, c: colIdx + colspan - 1 }
-            });
+            merges.push({ s: { r: level, c: colIdx }, e: { r: level, c: colIdx + colspan - 1 } });
           }
-          
           colIdx += colspan;
         } else {
           colIdx++;
@@ -254,64 +180,54 @@ const AnalyticalCube = ({
     }
     
     ws['!merges'] = merges;
+    ws['!cols'] = [{ wch: 30 }, ...columnsFinal.map(() => ({ wch: 12 }))];
     
-    // Aplicar estilos (opcional - ancho de columnas)
-    const colWidths = [{ wch: 30 }]; // Primera columna más ancha
-    dataToExport.columnsFinal.forEach(() => {
-      colWidths.push({ wch: 12 });
-    });
-    ws['!cols'] = colWidths;
-    
-    // Crear workbook y exportar
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Cubo Analítico');
     
     const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
-    const fileName = `cubo_analitico_${timestamp}.xlsx`;
-    
-    XLSX.writeFile(wb, fileName);
-  };
+    XLSX.writeFile(wb, `cubo_analitico_${timestamp}.xlsx`);
+  }, [processedData]);
 
-  // Handler to catch drops outside of zones (removal)
-  const handleGlobalDrop = (e) => {
+  // Handler para drops globales (eliminar al arrastrar fuera)
+  const handleGlobalDrop = useCallback((e) => {
     e.preventDefault();
     try {
       const dataStr = e.dataTransfer.getData('application/json');
       if (!dataStr) return;
       
-      const data = JSON.parse(dataStr);
+      const dropData = JSON.parse(dataStr);
       
-      // Only handle ZONE_ITEM drops (items dragged from a zone)
-      if (data.type === 'ZONE_ITEM') {
-        const { zoneId, index } = data;
-        
-        // Remove the item from the config
+      if (dropData.type === 'ZONE_ITEM') {
+        const { zoneId, index } = dropData;
         setCuboConfig(prev => {
-            const newList = [...prev[zoneId]];
-            newList.splice(index, 1);
-            return {
-                ...prev,
-                [zoneId]: newList
-            };
+          const newList = [...prev[zoneId]];
+          newList.splice(index, 1);
+          return { ...prev, [zoneId]: newList };
         });
       }
     } catch (err) {
-      // Ignore errors
+      // Ignorar errores
     }
-  };
+  }, []);
 
-  const handleGlobalDragOver = (e) => {
-    e.preventDefault(); // allow drop
-    e.dataTransfer.dropEffect = 'move'; // indicate move/remove possibility
-  };
+  const handleGlobalDragOver = useCallback((e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  }, []);
+
+  const isConfigEmpty = cuboConfig.filas.length === 0 && 
+                        cuboConfig.columnas.length === 0 && 
+                        cuboConfig.medidas.length === 0 && 
+                        cuboConfig.filtros.length === 0;
 
   return (
     <div 
-        className="flex flex-row min-h-screen overflow-hidden bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700" 
-        onDrop={handleGlobalDrop}
-        onDragOver={handleGlobalDragOver}
+      className="flex flex-row h-full overflow-hidden bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700"
+      onDrop={handleGlobalDrop}
+      onDragOver={handleGlobalDragOver}
     >
-      {/* Sidebar de Elementos */}
+      {/* Sidebar */}
       <SidebarTree 
         dimensions={dimensions} 
         measures={measures} 
@@ -322,34 +238,34 @@ const AnalyticalCube = ({
 
       {/* Área Principal */}
       <Box className="flex-1 flex flex-col overflow-hidden bg-gray-50/30 dark:bg-gray-900/50">
-        {/* Header de Configuración */}
-        <Box p="4" className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
+        {/* Header */}
+        <Box p="4" className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 flex-shrink-0">
           <Flex justify="between" align="center" mb="4">
-             <Flex align="center" gap="2">
-                <Box className="p-1.5 bg-primary/10 rounded-lg text-primary">
-                    <LayoutIcon size={18} />
-                </Box>
-                <Heading size="3" weight="medium">{title}</Heading>
-             </Flex>
-             <Flex gap="2">
-                <Button 
-                    variant="soft" 
-                    color="gray"
-                    onClick={() => setCuboConfig({ filas: [], columnas: [], medidas: [], filtros: [] })}
-                    disabled={cuboConfig.filas.length === 0 && cuboConfig.columnas.length === 0 && cuboConfig.medidas.length === 0 && cuboConfig.filtros.length === 0}
-                >
-                    <Trash2 size={14} />
-                    Limpiar
-                </Button>
-                <Button 
-                    variant="classic" 
-                    onClick={() => exportToExcel(processedData, cuboConfig)}
-                    disabled={!processedData} // Check if processedData is null
-                >
-                    <Download size={14} />
-                    Exportar
-                </Button>
-             </Flex>
+            <Flex align="center" gap="2">
+              <Box className="p-1.5 bg-primary/10 rounded-lg text-primary">
+                <LayoutIcon size={18} />
+              </Box>
+              <Heading size="3" weight="medium">{title}</Heading>
+            </Flex>
+            <Flex gap="2">
+              <Button 
+                variant="soft" 
+                color="gray"
+                onClick={handleClear}
+                disabled={isConfigEmpty}
+              >
+                <Trash2 size={14} />
+                Limpiar
+              </Button>
+              <Button 
+                variant="classic" 
+                onClick={exportToExcel}
+                disabled={!processedData}
+              >
+                <Download size={14} />
+                Exportar
+              </Button>
+            </Flex>
           </Flex>
 
           <ConfigurationZones 
@@ -361,19 +277,21 @@ const AnalyticalCube = ({
         </Box>
 
         {/* Tabla de Resultados */}
-        <Box className="flex-1 p-5 overflow-hidden flex flex-col">
+        <Box className="flex-1 p-5 overflow-hidden flex flex-col min-h-0">
           {processedData ? (
             <AnalyticalTable 
-              rows={hierarchicalData} 
+              rows={processedData.rows} 
               columnsFinal={processedData.columnsFinal}
               dimensionsRow={processedData.dimensionsRow}
               dimensionsCol={processedData.dimensionsCol}
-              measures={cuboConfig.medidas.map(m => typeof m === 'object' ? m : measures.find(me => me.id === m))}
+              measures={processedData.measures}
             />
           ) : (
             <Flex direction="column" align="center" justify="center" className="flex-1">
-              <Box className="text-center opacity-75 max-w-sm p-6 bg-transparent">
-                <Text size="8" className="mb-4 opacity-25 grayscale block">📊</Text>
+              <Box className="text-center opacity-75 max-w-sm p-6">
+                <Box className="mb-4 opacity-25 flex justify-center">
+                  <BarChart3 size={64} strokeWidth={1} />
+                </Box>
                 <Heading size="4" weight="bold" className="mb-2">Diseña tu Informe</Heading>
                 <Text as="p" size="2" color="gray">
                   Arrastra dimensiones a filas/columnas y medidas para visualizar los resultados.

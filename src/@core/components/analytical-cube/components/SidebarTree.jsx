@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
-import { ChevronRight, ChevronDown, Search, Database } from 'lucide-react';
+import React, { useState, useCallback, memo } from 'react';
+import { ChevronRight, ChevronDown, Search, Database, Circle } from 'lucide-react';
 import { Text, Flex, TextField, ScrollArea, Box } from '@radix-ui/themes';
 import { cn } from '@utils/cn';
 
-const SidebarTreeItem = ({ item, level = 0, isGroup = false, onToggle, isExpanded, childrenOptions = [], isLoadingChildren = false }) => {
+// Memoizado para evitar re-renders innecesarios
+const SidebarTreeItem = memo(({ 
+  item, 
+  level = 0, 
+  isGroup = false, 
+  onToggle, 
+  isExpanded, 
+  childrenOptions = [], 
+  isLoadingChildren = false 
+}) => {
   const hasChildren = isGroup && item.expandable;
 
-  const handleDragStart = (e) => {
+  const handleDragStart = useCallback((e) => {
     const dragData = {
       id: item.id,
       nombre: item.nombre || item.label,
@@ -20,6 +29,38 @@ const SidebarTreeItem = ({ item, level = 0, isGroup = false, onToggle, isExpande
       value: item.value
     };
     e.dataTransfer.setData('application/json', JSON.stringify(dragData));
+    e.dataTransfer.effectAllowed = 'copy';
+  }, [item]);
+
+  const handleToggleClick = useCallback((e) => {
+    e.stopPropagation();
+    onToggle?.(item.id);
+  }, [item.id, onToggle]);
+
+  // Renderizar icono
+  const renderIcon = () => {
+    if (item.icono) {
+      // Si es un componente React
+      if (typeof item.icono === 'object' && item.icono.$$typeof) {
+        return item.icono;
+      }
+      // Si es string, mostrar como texto (compatibilidad)
+      if (typeof item.icono === 'string') {
+        return <Text size="1" className="opacity-80">{item.icono}</Text>;
+      }
+    }
+    // Fallback: icono Circle
+    return <Circle size={8} className="text-primary opacity-60" />;
+  };
+
+  // Calcular padding basado en nivel
+  const getPaddingClass = () => {
+    switch (level) {
+      case 0: return 'pl-2';
+      case 1: return 'pl-6';
+      case 2: return 'pl-10';
+      default: return `pl-[${(level * 16) + 8}px]`;
+    }
   };
 
   return (
@@ -27,35 +68,33 @@ const SidebarTreeItem = ({ item, level = 0, isGroup = false, onToggle, isExpande
       <Flex 
         align="center"
         className={cn(
-          "py-1.5 px-2 rounded cursor-grab transition-colors hover:bg-gray-100 dark:hover:bg-gray-800",
-          level === 0 ? "font-semibold pl-2" : level === 1 ? "font-normal pl-5" : level === 2 ? "pl-8" : `pl-[${(level * 12) + 8}px]`
+          "py-1.5 px-2 rounded cursor-grab transition-colors",
+          "hover:bg-gray-100 dark:hover:bg-gray-800",
+          "active:cursor-grabbing",
+          getPaddingClass(),
+          level === 0 && "font-medium"
         )}
         draggable
         onDragStart={handleDragStart}
       >
         {hasChildren ? (
           <span 
-            onClick={(e) => {
-                e.stopPropagation();
-                onToggle(item.id);
-            }} 
-            className="mr-1 flex items-center justify-center w-4 h-4 cursor-pointer hover:text-primary transition-colors"
+            onClick={handleToggleClick}
+            className="mr-1.5 flex items-center justify-center w-4 h-4 cursor-pointer hover:text-primary transition-colors"
           >
             {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
           </span>
         ) : (
-          <span className="mr-1 w-4" />
+          <span className="mr-1.5 w-4" />
         )}
         
-        {item.icono && <Text size="1" className="mr-2 opacity-80">{item.icono}</Text>}
+        <span className="mr-2 flex items-center">{renderIcon()}</span>
+        
         <Text
-             className={cn(
-               "truncate flex-grow",
-               level === 0 ? "tracking-wider uppercase" : ""
-             )}
-             size={level === 0 ? "1" : "2"}
-             weight={level === 0 ? "medium" : "regular"}
-             color={level === 0 ? 'gray' : undefined}
+          className="truncate flex-grow"
+          size={level === 0 ? "2" : "2"}
+          weight={level === 0 ? "medium" : "regular"}
+          color={level > 0 ? 'gray' : undefined}
         >
           {item.nombre || item.label}
         </Text>
@@ -63,7 +102,11 @@ const SidebarTreeItem = ({ item, level = 0, isGroup = false, onToggle, isExpande
 
       {isExpanded && hasChildren && (
         <div className="flex flex-col">
-          {isLoadingChildren && <div className="pl-8 py-1 text-xs text-gray-400 italic">Cargando...</div>}
+          {isLoadingChildren && (
+            <div className="pl-10 py-1.5 text-xs text-gray-400 italic">
+              Cargando...
+            </div>
+          )}
           {childrenOptions.map(opt => (
             <SidebarTreeItem 
               key={opt.value} 
@@ -75,7 +118,9 @@ const SidebarTreeItem = ({ item, level = 0, isGroup = false, onToggle, isExpande
       )}
     </Box>
   );
-};
+});
+
+SidebarTreeItem.displayName = 'SidebarTreeItem';
 
 const SidebarTree = ({ 
   dimensions, 
@@ -86,66 +131,116 @@ const SidebarTree = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const toggleExpand = (id) => {
+  const toggleExpand = useCallback((id) => {
     setExpandedGroups(prev => ({ ...prev, [id]: !prev[id] }));
     if (!expandedGroups[id] && onGetChildren) {
       onGetChildren(id);
     }
-  };
+  }, [expandedGroups, onGetChildren, setExpandedGroups]);
 
-  const filteredDimensions = dimensions.filter(d => d.nombre.toLowerCase().includes(searchTerm.toLowerCase()));
-  const filteredMeasures = measures.filter(m => m.nombre.toLowerCase().includes(searchTerm.toLowerCase()));
+  const handleSearchChange = useCallback((e) => {
+    setSearchTerm(e.target.value);
+  }, []);
+
+  // Filtrado memoizado
+  const searchLower = searchTerm.toLowerCase();
+  const filteredDimensions = searchTerm 
+    ? dimensions.filter(d => d.nombre.toLowerCase().includes(searchLower))
+    : dimensions;
+  const filteredMeasures = searchTerm
+    ? measures.filter(m => m.nombre.toLowerCase().includes(searchLower))
+    : measures;
 
   return (
-    <aside className="w-64 min-w-[16rem] flex flex-col bg-gray-50/50 dark:bg-gray-800/30 h-full">
-      <Box p="4" className="flex justify-between items-center">
+    <aside className="w-64 min-w-[16rem] flex-shrink-0 flex flex-col bg-gray-50/50 dark:bg-gray-800/30 border-r border-gray-200 dark:border-gray-700">
+      {/* Header */}
+      <Box p="4" className="flex-shrink-0 border-b border-gray-100 dark:border-gray-800">
         <Flex align="center" gap="2">
           <Database size={18} className="text-primary" />
           <Text weight="medium" size="2">Elementos</Text>
         </Flex>
       </Box>
       
-      <Box px="4" pb="2">
+      {/* Search */}
+      <Box px="4" py="3" className="flex-shrink-0">
         <TextField.Root
-            placeholder="Buscar..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Buscar..."
+          value={searchTerm}
+          onChange={handleSearchChange}
+          size="2"
         >
-            <TextField.Slot>
-                <Search size={14} />
-            </TextField.Slot>
+          <TextField.Slot>
+            <Search size={14} className="text-gray-400" />
+          </TextField.Slot>
         </TextField.Root>
       </Box>
 
-      <ScrollArea className="p-3 flex-1">
-        <Box mb="4">
-          <Text size="1" weight="medium" color="gray" className="uppercase tracking-wider px-2 mb-2 block">Dimensiones</Text>
-          <Flex direction="column" gap="1">
-            {filteredDimensions.map((dim) => (
+      {/* Tree Content - ScrollArea fuera de los items */}
+      <ScrollArea 
+        type="auto" 
+        scrollbars="vertical" 
+        className="flex-1"
+      >
+        <Box p="3">
+          {/* Dimensiones */}
+          <Box mb="4">
+            <Text 
+              size="1" 
+              weight="medium" 
+              color="gray" 
+              className="uppercase tracking-wider px-2 mb-2 block"
+            >
+              Dimensiones
+            </Text>
+            <Flex direction="column" gap="0">
+              {filteredDimensions.map((dim) => (
                 <SidebarTreeItem 
-                key={dim.id} 
-                item={dim} 
-                isGroup={true} 
-                isExpanded={expandedGroups[dim.id]}
-                onToggle={toggleExpand}
-                childrenOptions={dim.options || []}
-                isLoadingChildren={dim.loading}
+                  key={dim.id} 
+                  item={dim} 
+                  isGroup={true} 
+                  isExpanded={expandedGroups[dim.id]}
+                  onToggle={toggleExpand}
+                  childrenOptions={dim.options || []}
+                  isLoadingChildren={dim.loading}
                 />
-            ))}
-          </Flex>
-        </Box>
+              ))}
+              {filteredDimensions.length === 0 && (
+                <Text size="1" color="gray" className="px-2 py-2 italic">
+                  No hay dimensiones
+                </Text>
+              )}
+            </Flex>
+          </Box>
 
-        <Box mb="2">
-          <Text size="1" weight="medium" color="gray" className="uppercase tracking-wider px-2 mb-2 block">Medidas</Text>
-          <Flex direction="column" gap="1">
-            {filteredMeasures.map((med) => (
-                <SidebarTreeItem key={med.id} item={med} isGroup={false} />
-            ))}
-          </Flex>
+          {/* Medidas */}
+          <Box>
+            <Text 
+              size="1" 
+              weight="medium" 
+              color="gray" 
+              className="uppercase tracking-wider px-2 mb-2 block"
+            >
+              Medidas
+            </Text>
+            <Flex direction="column" gap="0">
+              {filteredMeasures.map((med) => (
+                <SidebarTreeItem 
+                  key={med.id} 
+                  item={med} 
+                  isGroup={false} 
+                />
+              ))}
+              {filteredMeasures.length === 0 && (
+                <Text size="1" color="gray" className="px-2 py-2 italic">
+                  No hay medidas
+                </Text>
+              )}
+            </Flex>
+          </Box>
         </Box>
       </ScrollArea>
     </aside>
   );
 };
 
-export default SidebarTree;
+export default memo(SidebarTree);
