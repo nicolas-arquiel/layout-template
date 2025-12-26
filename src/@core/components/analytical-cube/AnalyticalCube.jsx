@@ -3,7 +3,7 @@ import React, { useState, useMemo } from 'react';
 
 import { Trash2, Layout as LayoutIcon, Download } from 'lucide-react';
 import * as XLSX from 'xlsx';
-import { Button, Text, Heading, Flex, Card, Box } from '@radix-ui/themes';
+import { Button, Text, Heading, Flex, Box } from '@radix-ui/themes';
 import SidebarTree from './components/SidebarTree';
 import ConfigurationZones from './components/ConfigurationZones';
 import AnalyticalTable from './components/AnalyticalTable';
@@ -306,9 +306,8 @@ const AnalyticalCube = ({
   };
 
   return (
-    <Card 
-        className="flex flex-col md:flex-row h-[calc(100vh-120px)] overflow-hidden" 
-        style={{ padding: 0, display: 'flex', flexDirection: 'row' }} // Reverted to Flex for stability
+    <div 
+        className="flex flex-row min-h-screen overflow-hidden bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700" 
         onDrop={handleGlobalDrop}
         onDragOver={handleGlobalDragOver}
     >
@@ -374,7 +373,7 @@ const AnalyticalCube = ({
           ) : (
             <Flex direction="column" align="center" justify="center" className="flex-1">
               <Box className="text-center opacity-75 max-w-sm p-6 bg-transparent">
-                <Text size="8" className="mb-4 opacity-25 grayscale" style={{ display: 'block' }}>📊</Text>
+                <Text size="8" className="mb-4 opacity-25 grayscale block">📊</Text>
                 <Heading size="4" weight="bold" className="mb-2">Diseña tu Informe</Heading>
                 <Text as="p" size="2" color="gray">
                   Arrastra dimensiones a filas/columnas y medidas para visualizar los resultados.
@@ -384,7 +383,7 @@ const AnalyticalCube = ({
           )}
         </Box>
       </Box>
-    </Card>
+    </div>
   );
 };
 

@@ -169,10 +169,10 @@ const ConfigurationZones = ({ cuboConfig, setCuboConfig, dimensionesDisponibles,
         </Badge>
       </Flex>
       
-      <Flex wrap="wrap" gap="2" align="center" style={{ minHeight: '50px' }}>
+      <Flex wrap="wrap" gap="2" align="center" className="min-h-[50px]">
         {items.length === 0 ? (
           <Flex justify="center" align="center" width="100%" height="100%" py="2">
-            <Text size="1" color="gray" style={{ fontStyle: 'italic' }}>
+            <Text size="1" color="gray" className="italic">
                 Arrastra aquí
             </Text>
           </Flex>

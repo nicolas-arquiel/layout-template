@@ -28,11 +28,10 @@ const SidebarTreeItem = ({ item, level = 0, isGroup = false, onToggle, isExpande
         align="center"
         className={cn(
           "py-1.5 px-2 rounded cursor-grab transition-colors hover:bg-gray-100 dark:hover:bg-gray-800",
-          level === 0 ? "font-semibold" : "font-normal"
+          level === 0 ? "font-semibold pl-2" : level === 1 ? "font-normal pl-5" : level === 2 ? "pl-8" : `pl-[${(level * 12) + 8}px]`
         )}
         draggable
         onDragStart={handleDragStart}
-        style={{ paddingLeft: `${(level * 12) + 8}px` }}
       >
         {hasChildren ? (
           <span 
@@ -50,10 +49,12 @@ const SidebarTreeItem = ({ item, level = 0, isGroup = false, onToggle, isExpande
         
         {item.icono && <Text size="1" className="mr-2 opacity-80">{item.icono}</Text>}
         <Text
-             className="truncate flex-grow"
+             className={cn(
+               "truncate flex-grow",
+               level === 0 ? "tracking-wider uppercase" : ""
+             )}
              size={level === 0 ? "1" : "2"}
              weight={level === 0 ? "medium" : "regular"}
-             style={{ letterSpacing: level === 0 ? '0.05em' : 'normal', textTransform: level === 0 ? 'uppercase' : 'none' }}
              color={level === 0 ? 'gray' : undefined}
         >
           {item.nombre || item.label}

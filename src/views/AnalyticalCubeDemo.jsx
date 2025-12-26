@@ -128,20 +128,18 @@ const AnalyticalCubeDemo = () => {
   }, []);
 
   return (
-    <div className="p-4 h-full w-full">
-      <AnalyticalCube 
-        title="Demo Cubo Académico"
-        data={data}
-        dimensions={dimensions}
-        measures={measures}
-        initialConfig={{
-            medidas: ['inscriptos'],
-            filas: ['carrera', 'plan'],
-            columnas: ['anio_cursada'],
-            filtros: []
-        }}
-      />
-    </div>
+    <AnalyticalCube 
+      title="Demo Cubo Académico"
+      data={data}
+      dimensions={dimensions}
+      measures={measures}
+      initialConfig={{
+          medidas: ['inscriptos'],
+          filas: ['carrera', 'plan'],
+          columnas: ['anio_cursada'],
+          filtros: []
+      }}
+    />
   );
 };
 
