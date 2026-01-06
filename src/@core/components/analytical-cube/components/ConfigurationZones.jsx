@@ -144,8 +144,7 @@ const ConfigurationZones = ({ cuboConfig, setCuboConfig, dimensionesDisponibles,
           className={cn(
             "flex items-center gap-1.5 px-2.5 py-1.5 m-1",
             "cursor-grab active:cursor-grabbing",
-            "transition-all shadow-sm text-white",
-            "hover:scale-105 hover:shadow-md",
+            "shadow-sm text-white",
             isMeasure 
               ? "bg-emerald-500 hover:bg-emerald-600" 
               : "bg-violet-500 hover:bg-violet-600"
