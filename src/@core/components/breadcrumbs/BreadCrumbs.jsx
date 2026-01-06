@@ -57,7 +57,7 @@ const BreadCrumbs = ({ data, title }) => {
         {data && data.length > 0 && (
           <>
             <div 
-              className="h-6 w-px flex-shrink-0 mx-2" 
+              className="h-6 w-px flex-shrink-0" 
               style={{ backgroundColor: 'var(--gray-6)' }}
             />
             
