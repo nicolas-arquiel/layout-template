@@ -18,13 +18,7 @@ import {
     Separator,
     Badge
 } from '@radix-ui/themes';
-import {
-    Cross1Icon,
-    ChevronRightIcon,
-    DoubleArrowRightIcon,
-    InfoCircledIcon
-} from '@radix-ui/react-icons';
-import { AlertTriangle, CheckCircle2, FileText, User } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, FileText, User, X, ChevronRight, ChevronsRight, Info } from 'lucide-react';
 
 // --- CONFIGURACIÓN DE PANELES ---
 const MAIN_PANEL_WIDTH = 520;
@@ -263,10 +257,10 @@ function MainFormContent({
                         size="2"
                         onClick={() => onAction('preview')}
                     >
-                        Vista Previa {activeView === 'preview' && <DoubleArrowRightIcon />}
+                        Vista Previa {activeView === 'preview' && <ChevronsRight size={16} />}
                     </Button>
                     <IconButton variant="ghost" onClick={onClose}>
-                        <Cross1Icon />
+                        <X size={16} />
                     </IconButton>
                 </Flex>
             </Flex>
@@ -492,10 +486,10 @@ function MainFormContent({
                         onClick={() => onAction('help')}
                     >
                         <Flex align="center" gap="2">
-                            <InfoCircledIcon />
+                            <Info size={16} />
                             ¿Necesitas ayuda?
                         </Flex>
-                        <ChevronRightIcon />
+                        <ChevronRight size={16} />
                     </Button>
                     <Button type="submit" form="main-form" style={{ width: '100%' }}>
                         Guardar
@@ -518,7 +512,7 @@ function PreviewContent({ onClose, data }) {
             >
                 <Heading size="4">Vista Previa</Heading>
                 <IconButton variant="ghost" onClick={onClose} color="gray">
-                    <ChevronRightIcon width="20" height="20" />
+                    <ChevronRight size={20} />
                 </IconButton>
             </Flex>
             <Box p="4" flexGrow="1" style={{ overflowY: 'auto' }}>
@@ -601,7 +595,7 @@ function HelpContent({ onClose }) {
             <Flex justify="between" align="center" p="4">
                 <Heading size="4">Ayuda</Heading>
                 <IconButton variant="ghost" onClick={onClose} color="gray">
-                    <ChevronRightIcon width="20" height="20" />
+                    <ChevronRight size={20} />
                 </IconButton>
             </Flex>
             <Box px="4" pb="6">

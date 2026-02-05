@@ -458,7 +458,7 @@ const EjemploTablas = () => {
       />
 
       <Flex direction="column" gap="4" mb="6" mt="4">
-        <Heading size="8">Sistema de Tablas - Ejemplos</Heading>
+        <Heading color="gray" weight="regular" size="8">Sistema de Tablas - Ejemplos</Heading>
         <Text size="3" color="gray">
           Ejemplos completos del sistema de tablas con filtros avanzados migrado a Radix UI
         </Text>
@@ -714,7 +714,7 @@ const EjemploTablas = () => {
           <Tabs.Content value="tanstack">
             <Flex direction="column" gap="4">
               <Box>
-                <Heading size="5" mb="2">TanStack Table (React Table v8)</Heading>
+                <Heading weight="medium" size="5" mb="2">TanStack Table (React Table v8)</Heading>
                 <Text size="2" color="gray" mb="4">
                   Ejemplo usando @tanstack/react-table con componentes reutilizables para ordenamiento, paginación y filtrado.
                 </Text>

@@ -2,6 +2,7 @@ import { lazy } from 'react'
 
 // Lazy load pages
 const FullScreenModalExamples = lazy(() => import('@/views/FullScreenModalExamples'))
+const FormDialogExamples = lazy(() => import('@/views/FormDialogExamples'))
 const CountdownTest = lazy(() => import('@/views/CountdownTest'))
 const AnalyticalCubeDemo = lazy(() => import('@/views/AnalyticalCubeDemo'))
 const AccionListExample = lazy(() => import('@/views/action-list-example'))
@@ -13,6 +14,15 @@ const componentRoutes = [
   {
     path: 'componentes/fullscreen-modal',
     element: <FullScreenModalExamples />,
+    meta: {
+      publicRoute: true,
+      restricted: true,
+      skeleton: <GenericSkeleton />,
+    },
+  },
+  {
+    path: 'componentes/form-dialog',
+    element: <FormDialogExamples />,
     meta: {
       publicRoute: true,
       restricted: true,

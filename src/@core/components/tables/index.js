@@ -9,6 +9,7 @@ export { default as TableWithAsyncData } from './tables/TableWithAsyncData';
 export { default as TableWithClientSideData } from './tables/TableWithClientSideData';
 export { default as VirtualizedTableWithFilters } from './tables/VirtualizedTableWithFilters';
 export { default as TanStackTableWithClientData } from './tables/TanStackTableWithClientData';
+export { default as TanStackTableServer } from './tables/TanStackTableServer';
 
 // Filtros autónomos
 export { default as BigDataSearchFilter } from './filters/BigDataSearchFilter';
@@ -30,6 +31,7 @@ export { default as useDataFilter } from './hooks/useDataFilter';
 export { default as useDataExport } from './hooks/useDataExport';
 export { default as useFilterHandlers } from './hooks/useFilterHandlers';
 export { useFilterOperators } from './hooks/useFilterOperators';
+export { useTanStackQuery } from './hooks/useTanStackQuery';
 
 // Utils
 export { objetoAQueryString } from './utils/queryStringUtils';

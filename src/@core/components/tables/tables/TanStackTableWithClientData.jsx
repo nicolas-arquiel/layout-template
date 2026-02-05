@@ -133,6 +133,15 @@ const TanStackTableWithClientData = ({
         enableRowSelection: enableRowSelection,
         enableExpanding: enableExpanding,
         getRowCanExpand: () => true,
+        // Controlar qué columnas se incluyen en el filtro global según la selección del usuario
+        getColumnCanGlobalFilter: (column) => {
+            // Si hay una columna específica seleccionada, solo permitir esa
+            if (searchColumn !== 'all' && column.id !== searchColumn) {
+                return false;
+            }
+            // Por defecto permitir
+            return true;
+        },
         initialState: {
             pagination: {
                 pageSize: initialPageSize,

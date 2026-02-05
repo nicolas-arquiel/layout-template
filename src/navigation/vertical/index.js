@@ -13,7 +13,8 @@ import {
   TableIcon,
   Bell,
   Maximize2,
-  Clock
+  Clock,
+  FileEdit
 } from 'lucide-react'
 
 /**
@@ -88,7 +89,7 @@ const navigation = [
     icon: Box,
     navLink: '/componentes/analytical-cube',
   },
-  
+
   {
     header: 'GESTIÓN',
   },
@@ -144,6 +145,13 @@ const navigation = [
     icon: Maximize2,
     navLink: '/componentes/fullscreen-modal',
     // SIN permiso - para testear componente FullScreenModal
+  },
+  {
+    id: 'form_dialog',
+    title: 'Form Dialog',
+    icon: FileEdit,
+    navLink: '/componentes/form-dialog',
+    // SIN permiso - para testear componente FormDialog
   },
   {
     id: 'action_list_example',

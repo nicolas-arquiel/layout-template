@@ -26,12 +26,16 @@
    ======================================== */
 /* Modo Claro */
 .radix-themes:where(.light, .light-theme) {
-  --bg-primary: #F4F4F4;        /* Fondo general actualizado */
-  --bg-secondary: #FFFFFF;      /* Sidebar, navbar, footer (blanco) */
-  --content-bg: #FFFFFF;        /* Content cards (blanco) */
+  --bg-primary: #F4F4F4;
+  /* Fondo general actualizado */
+  --bg-secondary: #FFFFFF;
+  /* Sidebar, navbar, footer (blanco) */
+  --content-bg: #FFFFFF;
+  /* Content cards (blanco) */
   --navbar-bg: #FFFFFF;
   --sidebar-bg: #FFFFFF;
-  --text-color: #6E6B7B;        /* Color de texto general */
+  --text-color: #6E6B7B;
+  /* Color de texto general */
   --border-color: rgba(0, 0, 0, 0.04);
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
@@ -40,12 +44,16 @@
 
 /* Modo Oscuro */
 .radix-themes:where(.dark, .dark-theme) {
-  --bg-primary: #161D31;        /* Fondo general actualizado */
-  --bg-secondary: #283046;      /* Sidebar, navbar, footer */
-  --content-bg: #283046;        /* Content cards */
+  --bg-primary: #161D31;
+  /* Fondo general actualizado */
+  --bg-secondary: #283046;
+  /* Sidebar, navbar, footer */
+  --content-bg: #283046;
+  /* Content cards */
   --navbar-bg: #283046;
   --sidebar-bg: #283046;
-  --text-color: #ADB0B7;        /* Color de texto general */
+  --text-color: #ADB0B7;
+  /* Color de texto general */
   --border-color: rgba(255, 255, 255, 0.04);
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
@@ -57,15 +65,18 @@
    ======================================== */
 
 /* Override Jade to MediumSeaGreen (#3CB371) for Success */
-:root, .radix-themes {
+:root,
+.radix-themes {
   /* Solid Backgrounds */
   --jade-9: #3CB371;
   --jade-9-alpha: rgba(60, 179, 113, 1);
-  --jade-10: #35a065; /* Hover state */
-  
+  --jade-10: #35a065;
+  /* Hover state */
+
   /* Text Colors */
-  --jade-11: #2E8B57; /* Darker for text */
-  
+  --jade-11: #2E8B57;
+  /* Darker for text */
+
   /* Backgrounds (Surface/Soft) */
   --jade-3: rgba(60, 179, 113, 0.15);
   --jade-4: rgba(60, 179, 113, 0.25);
@@ -74,18 +85,26 @@
 
 /* ========== VUEXY EXACT VARIABLES ========== */
 :root {
-  --content-padding: 2rem;        /* 32px - Vuexy $content-padding */
-  --navbar-height: 4.45rem;       /* 71px - Vuexy $navbar-height */
-  --footer-height: 3.35rem;       /* 54px - Vuexy $footer-height */
-  --floating-nav-margin: 1.3rem;  /* 21px - Vuexy $floating-nav-margin */
-  --menu-width: 260px;            /* Vuexy $menu-expanded-width */
-  --menu-collapsed: 80px;         /* Vuexy $menu-collapsed-width */
+  --content-padding: 2rem;
+  /* 32px - Vuexy $content-padding */
+  --navbar-height: 4.45rem;
+  /* 71px - Vuexy $navbar-height */
+  --footer-height: 3.35rem;
+  /* 54px - Vuexy $footer-height */
+  --floating-nav-margin: 1.3rem;
+  /* 21px - Vuexy $floating-nav-margin */
+  --menu-width: 260px;
+  /* Vuexy $menu-expanded-width */
+  --menu-collapsed: 80px;
+  /* Vuexy $menu-collapsed-width */
 }
 
 :root {
   /* Global Colors */
-  --body-bg-light: #f8f8f8;  /* Actualizado a Vuexy default */
-  --body-bg-dark: #161D31;   /* Actualizado */
+  --body-bg-light: #f8f8f8;
+  /* Actualizado a Vuexy default */
+  --body-bg-dark: #161D31;
+  /* Actualizado */
   --card-bg-light: #FFFFFF;
   --card-bg-dark: #283046;
 
@@ -99,6 +118,15 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
 
-
+/* ========================================
+   RADIX UI THEMES - FONT WEIGHT TOKENS
+   Valores optimizados para Montserrat
+   ======================================== */
+.radix-themes {
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 600;
+  --font-weight-bold: 700;
 }
